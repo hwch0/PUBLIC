@@ -32,10 +32,6 @@ public class UserController {
 	
 	@GetMapping("/{userId}")
 	public String userInfo(Model model, @PathVariable String userId) {
-//		UserDTO user = UserDTO.builder()
-//				.userId(userId)
-//				.build();
-//		UserDTO result = userService.getUser(user);
 		UserDTO result = userService.getUser(userId);
 		model.addAttribute("result", result);
 		return "/user/userList";

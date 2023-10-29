@@ -1,5 +1,7 @@
 package com.kr.pub.dto;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +16,6 @@ public class UserDTO {
 	private String password;
 	private String uname;
 	private String birthdate;
+	private Date regDate;
 	
 }

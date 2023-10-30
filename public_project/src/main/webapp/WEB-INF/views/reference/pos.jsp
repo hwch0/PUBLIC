@@ -6,8 +6,8 @@
 <meta charset="UTF-8">
 <title>좌석</title>
 </head>
-<link rel="stylesheet" href="/css/reference.css">
-<link rel="stylesheet" href="/js/reference.js">
+<link rel="stylesheet" href="css/reference02.css">
+<script src="js/reference.js"></script>
 <body>
  <div class="header">
         <!-- ********** 상단 왼쪽 영역 시작 ********** -->
@@ -20,10 +20,10 @@
             <div class="dtn_toggle">
                 <ul>
                     <li class="btn btn_pos">
-                        <a href="admin_main_02.html">POS</a>
+                        <a href="/pos">POS</a>
                     </li>
                     <li class="btn btn_ERP on">
-                        <a href="admin_main.html">ERP</a>
+                        <a href="#">ERP</a>
                     </li>
                 </ul>
             </div>

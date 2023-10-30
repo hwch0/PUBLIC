@@ -6,15 +6,15 @@
 <meta charset="UTF-8">
 <title>좌석</title>
 </head>
-<link rel="stylesheet" href="css/reference.css">
-<link rel="stylesheet" href="js/reference.js">
+<link rel="stylesheet" href="/css/reference.css">
+<link rel="stylesheet" href="/js/reference.js">
 <body>
  <div class="header">
         <!-- ********** 상단 왼쪽 영역 시작 ********** -->
         <div class="hd hd_lft">
             <!-- 로고 영역 -->
             <div class="logo">
-                <img src="logo_w.png" alt="로고">
+                <img src="/images/logo_p.png" alt="로고">
             </div>
             <!-- 화면 전화 버튼 영역 -->
             <div class="dtn_toggle">

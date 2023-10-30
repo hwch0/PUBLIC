@@ -1,5 +1,8 @@
 package com.kr.pub.dao;
 
-public class UserHistoryDAO {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface UserHistoryDAO {
 
 }

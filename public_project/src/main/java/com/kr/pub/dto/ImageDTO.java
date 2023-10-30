@@ -2,7 +2,15 @@ package com.kr.pub.dto;
 
 import java.util.Date;
 
-// 혜원
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ImageDTO {
 	private String imgId;
 	private Date regDate;

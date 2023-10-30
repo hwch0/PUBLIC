@@ -1,5 +1,8 @@
 package com.kr.pub.dao;
 
-public class ImageDAO {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface ImageDAO {
 
 }

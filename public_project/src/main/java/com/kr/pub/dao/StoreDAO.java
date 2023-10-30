@@ -1,5 +1,8 @@
 package com.kr.pub.dao;
 
-public class StoreDAO {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface StoreDAO {
 
 }

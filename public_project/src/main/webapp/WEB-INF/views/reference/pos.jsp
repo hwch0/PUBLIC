@@ -6,7 +6,8 @@
 <meta charset="UTF-8">
 <title>erp</title>
 </head>
-<link rel="stylesheet" href="css/reference.css">
+<link rel="stylesheet" href="css/reference02.css">
+<script src="js/reference.js"></script>
 <body>
 	<div class="wrap">
         <!-- ########## 상단 헤더 영역 끝 ########## -->
@@ -21,10 +22,10 @@
                 <div class="dtn_toggle">
                     <ul>
                         <li class="btn btn_pos on">
-                            <a href="admin_main_02.html">POS</a>
+                            <a href="/pos">POS</a>
                         </li>
                         <li class="btn btn_ERP">
-                            <a href="admin_main.html">ERP</a>
+                            <a href="#">ERP</a>
                         </li>
                     </ul>
                 </div>

@@ -339,6 +339,7 @@
         font-size: 20px;
         cursor: pointer;
     }
+
 /*채팅부분 css*/
 main{
 	width:400px;
@@ -433,3 +434,4 @@ main footer a{
 	margin-top:5px;
 	float: left;
 }
+

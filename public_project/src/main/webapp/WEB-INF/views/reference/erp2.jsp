@@ -6,9 +6,6 @@
 <meta charset="UTF-8">
 <title>좌석</title>
 <link rel="stylesheet" href="css/reference.css">
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
 <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
@@ -18,7 +15,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker3.min.css">
 
 </head>
-
 <body>
  <div class="header">
         <!-- ********** 상단 왼쪽 영역 시작 ********** -->
@@ -28,7 +24,7 @@
                 <img src="/images/logo_w.png" alt="로고">
             </div>
             <!-- 화면 전화 버튼 영역 -->
-            <div class="btn_toggle">
+            <div class="dtn_toggle">
                 <ul>
                     <li class="btn btn_pos">
                         <a href="/pos">POS</a>
@@ -59,34 +55,20 @@
         <!-- ########## 네비게이션 영역 시작 ########## -->
         <div class="nav">
             <ul class="main_nav">
-                <li>
-                    <em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-
-                    <a href="javascript:void(0);" onclick="navOn(this);">재고관리</a>
-                   	<ul class="sub_nav">
-		                <li><a href="#">품목</a></li>
-		                <li><a href="#">입고현황</a></li>
-		                <li><a href="#">출고현황</a></li>
-		            </ul>
-                </li>
                 <li class="on">
-                	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="javascript:void(0);" onclick="navOn(this);">매출관리</a>
-                    <ul class="sub_nav">
-		                <li><a href="#">품목</a></li>
-		                <li><a href="#">입고현황</a></li>
-		                <li><a href="#">출고현황</a></li>
-		            </ul>
+                    <em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
+                    <a href="#">재고관리</a>                  
                 </li>
                 <li>
-                	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="javascript:void(0);" onclick="navOn(this);">회원관리</a>
-                    <ul class="sub_nav">
-		                <li><a href="#">품목</a></li>
-		                <li><a href="#">입고현황</a></li>
-		                <li><a href="#">출고현황</a></li>
-		            </ul>
+                    <a href="erp2">매출관리</a>
                 </li>
+                <li>
+                    <a href="#">회원관리</a>
+                </li>
+            </ul>
+            <ul class="sub_nav">
+                <li><a href="#">재고내역</a></li>
+                <li><a href="#">입·출고 내역</a></li>
             </ul>
         </div>
         <!-- ########## 네비게이션 영역 끝 ########## -->
@@ -107,7 +89,7 @@
                        <td style="padding: 0 30px;">
 					    <div class="container">
 					        <div class="input-group date">
-					            <input type="text" class="form-control" readonly>
+					            <input type="text" class="form-control">
 					            <span class="input-group-addon">
 			            			<img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 				            	</span>
@@ -220,17 +202,5 @@
         </div>
     </div>
 </body>
-
-
-<script>
-function navOn(element) {
-    const navLi = $(element).parent();
-    $(".main_nav li.on").removeClass("on");
-    $(navLi).addClass("on");
-}
-</script>
-
-
 <script src="js/erpmain.js"></script>
-
 </html>

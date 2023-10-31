@@ -7,7 +7,6 @@
 <title>erp</title>
 </head>
 <link rel="stylesheet" href="css/reference02.css">
-<script src="js/reference.js"></script>
 <body>
 	<div class="wrap">
         <!-- ########## 상단 헤더 영역 끝 ########## -->
@@ -36,8 +35,8 @@
             <div class="hd hd_rgt">
                 <div class="btn_grp">
                     <ul>
-                        <li class="on"><a href="javascript:void(0);">알림</a></li>
-                        <li><a href="javascript:void(0);">채팅</a></li>
+                        <li id = "alertBtn" class="on"><a href="javascript:void(0);">알림</a></li>
+                        <li id ="chatBtn"><a href="javascript:void(0);">채팅</a></li>
                         <li><a href="javascript:void(0);">좌석</a></li>
                         <li><a href="javascript:void(0);">대시보드</a></li>
                         <li><a href="javascript:void(0);">설정</a></li>
@@ -364,6 +363,9 @@
         <div class="wrap_chat">
             채팅창 영역임 ㅋ ㅋ ㅋ
         </div>
+        <div class="wrap_alert">
+            알림 영역임 ㅋ ㅋ ㅋ
+        </div>
     </div>
 
     
@@ -377,4 +379,5 @@
         </div>
     </div>
 </body>
+<script src="js/reference.js"></script>
 </html>

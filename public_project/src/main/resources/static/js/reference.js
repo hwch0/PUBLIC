@@ -21,11 +21,16 @@ window.addEventListener('click', (event) => {
         modal.style.display = 'none';
     }
 });
+$('#alertBtn').on('click', function(){
+	$(".wrap_alert").classList.toggle("on");
+});
 
-document.addEventListener("DOMContentLoaded", function() {
+
+/*document.addEventListener("DOMContentLoaded", function() {
     const listSeat = document.querySelectorAll(".seat_grp ul li");
     const wrapCont = document.querySelector(".wrap_cont");
     const wrapChat = document.querySelector(".wrap_chat");
+    const wrapAlert = document.querySelector(".wrap_alert");
     const modal = document.getElementById('modal');
 
     listChat.forEach((li) => {
@@ -34,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
             modal.classList.add("on");
             wrapCont.classList.add("lft");
             wrapChat.classList.add("on");
+            wrapAlert.classList.add("on");
         });
     });
-});
+});*/

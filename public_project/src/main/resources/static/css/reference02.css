@@ -177,6 +177,7 @@
         animation: fadeInRight 1s;
         background-color: #fff;
     }
+    
     .wrap_alert {
         display: none;
     }

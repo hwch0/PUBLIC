@@ -21,11 +21,17 @@ window.addEventListener('click', (event) => {
         modal.style.display = 'none';
     }
 });
-$('#alertBtn').on('click', function(){
-	$(".wrap_alert").classList.toggle("on");
-});
 
 
+function alert(){
+	$('.wrap_cont').addClass("lft");
+	$(".wrap_alert").addClass("on");
+}
+
+function chat(){
+	$('.wrap_cont').addClass("lft");
+	$(".wrap_chat").addClass("on");
+}
 /*document.addEventListener("DOMContentLoaded", function() {
     const listSeat = document.querySelectorAll(".seat_grp ul li");
     const wrapCont = document.querySelector(".wrap_cont");

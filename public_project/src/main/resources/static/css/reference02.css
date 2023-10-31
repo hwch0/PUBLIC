@@ -339,3 +339,145 @@
         font-size: 20px;
         cursor: pointer;
     }
+
+/*채팅부분 css*/
+main{
+	width:400px;
+	height:800px;
+	display:inline-block;
+	font-size:15px;
+	vertical-align:top;
+}
+
+#chat{
+	padding-left:0;
+	margin:0;
+	list-style-type:none;
+	overflow-y:scroll;
+	height:535px;
+	border-top:2px solid #fff;
+	border-bottom:2px solid #fff;
+}
+#chat li{
+	padding:10px 30px;
+}
+#chat h2,#chat h3{
+	display:inline-block;
+	font-size:13px;
+	font-weight:normal;
+}
+#chat h3{
+	color:#bbb;
+}
+#chat .entete{
+	margin-bottom:5px;
+}
+#chat .message{
+	padding:20px;
+	line-height:25px;
+	max-width:90%;
+	display:inline-block;
+	text-align:left;
+	border-radius:5px;
+}
+#chat .me{
+	text-align:right;
+}
+#chat .you .message{
+	background-color:#450877;
+	color: white;
+}
+#chat .me .message{
+	background-color:#ddd;
+	color: black;
+}
+#chat .triangle{
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 10px 10px 10px;
+}
+#chat .you .triangle{
+		border-color: transparent transparent #450877 transparent;
+		margin-left:15px;
+}
+#chat .me .triangle{
+		border-color: transparent transparent #ddd transparent;
+		margin-left:300px;
+}
+
+main footer{
+	height:20%;
+}
+main footer textarea{
+	resize:none;
+	border:none;
+	width:70%;
+	height:100%;
+	border-radius:3px;
+	padding:20px;
+	font-size:13px;
+	margin-bottom:13px;
+	float: left;
+}
+main footer textarea::placeholder{
+	color:#ddd;
+}
+main footer a{
+	text-decoration:none;
+	text-transform:uppercase;
+	font-weight:bold;
+	color:#450877;
+	line-height: 9;
+    margin-left: 10px;
+	margin-top:5px;
+	float: left;
+}
+
+/*채팅끝
+아코디언 시작
+*/
+.accordion {
+	background-color: #eee;
+	color: #444;
+	cursor: pointer;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+	transition: .4s;
+	padding: 18px;
+}
+
+.active,
+.accordion:hover {
+	background-color: #ccc;
+}
+
+.accordion:after {
+	content: '\00276F';
+	/*❯*/
+	float: right;
+	margin-left: 5px;
+	transform: rotate(90deg);
+}
+
+.active:after {
+	content: "\00276F";
+	transform: rotate(270deg);
+}
+
+.panel {
+	background-color: #FFF;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height .2s ease-out;
+	padding: 0 18px;
+}
+.p-hide {
+	display: none
+}
+.p-show {
+	display: block
+}

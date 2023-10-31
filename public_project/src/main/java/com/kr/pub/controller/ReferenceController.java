@@ -15,4 +15,8 @@ public class ReferenceController {
 	public String erp(Model model) {
 		return "/reference/erp";
 	}
+	@GetMapping("/erp2")
+	public String erp2(Model model) {
+		return "/reference/erp2";
+	}
 }

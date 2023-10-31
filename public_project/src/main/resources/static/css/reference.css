@@ -70,8 +70,8 @@
         height: auto;
     }
 
-    /* 화면 전환 버튼 */
-    .dtn_toggle {
+     /* 화면 전환 버튼 */
+    .btn_toggle {
         margin:35px 0 0 200px;
         width: 200px;
         height: 30px;
@@ -79,12 +79,12 @@
         box-shadow: 0 0 10px 5px rgba(0,0,0,0.2);
     }
 
-    .dtn_toggle li {
+    .btn_toggle li {
         float: left;
         width: 100px;
         height: 30px;
     }
-    .dtn_toggle li a {
+    .btn_toggle li a {
         display: block;
         line-height: 30px;
         font-weight: 700;
@@ -93,7 +93,7 @@
         text-align: center;
     }
 
-    .dtn_toggle li.on a, .dtn_toggle li:hover a {
+    .btn_toggle li.on a, .dtn_toggle li:hover a {
         color: #fff;
         background-color: #450877;
     }
@@ -154,22 +154,36 @@
         height: 100px;
         box-sizing: border-box;
     }
-
-    .main_nav li {
+	.nav:before {
+		content: "";
+		position: absolute;
+        top: 100px;
+        left: 0;
+        padding: 0 400px;
+        width: 100%;
+        height: 50px;
+        box-sizing: border-box;
+        background-color: #450877;
+	}
+    .main_nav > li {
         position: relative;
         float: left;
         width: 33.333%;
         height: 100px;
     }
 
-    .nav li .arrow {
+	.nav li .arrow {
+		display: none;
+	}
+    .nav li.on .arrow {
         position: absolute;
+        display: block;
         bottom: -8px;
         left: 50%;
         margin-left: -15px;
     }
 
-    .main_nav li a {
+    .main_nav > li > a {
         display: block;
         line-height: 100px;
         text-align: center;
@@ -178,28 +192,29 @@
         color: #a49f9f;
     }
 
-    .main_nav li.on a {
+    .main_nav > li.on > a {
         color: #450877;
     }
 
-    .main_nav li:hover a {
+    .main_nav > li:hover > a {
         color: #450877;
     }
+    .main_nav .sub_nav {
+		display: none;
+	}
 
-    .sub_nav {
-        position: absolute;
-        top: 100px;
-        left: 0;
-        padding: 0 400px;
-        width: 100%;
-        height: 50px;
-        box-sizing: border-box;
-        background-color: #450877;
-    }
-
+	.main_nav li.on .sub_nav {
+		position: absolute;
+		display: block;
+		top: 100px;
+		left: 0;
+		width: 450px;
+		
+	}
     .sub_nav li {
         float: left;
         width: 150px;
+        height:50px;
     }
 
     .sub_nav li a {
@@ -477,16 +492,6 @@
         margin: 25px 0;
         width: 100%;
         height: 100px;
-    }
-
-    .cont_top::after {
-        content: "";
-        position: absolute;
-        top: 25%;
-        left: 48%;
-        width: 2px;
-        height: 50px;
-        background-color: #fff;
     }
 
     .cont_top p {

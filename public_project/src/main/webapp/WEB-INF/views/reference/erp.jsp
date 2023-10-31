@@ -7,6 +7,7 @@
 <title>좌석</title>
 </head>
 <link rel="stylesheet" href="css/reference.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
  <div class="header">
         <!-- ********** 상단 왼쪽 영역 시작 ********** -->
@@ -16,7 +17,7 @@
                 <img src="/images/logo_w.png" alt="로고">
             </div>
             <!-- 화면 전화 버튼 영역 -->
-            <div class="dtn_toggle">
+            <div class="btn_toggle">
                 <ul>
                     <li class="btn btn_pos">
                         <a href="#">POS</a>
@@ -47,23 +48,35 @@
         <!-- ########## 네비게이션 영역 시작 ########## -->
         <div class="nav">
             <ul class="main_nav">
-                <li class="on">
+                <li>
                     <em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="#">재고관리</a>
-                   
+                    <a href="javascript:void(0);" onclick="navOn(this);">재고관리</a>
+                   	<ul class="sub_nav">
+		                <li><a href="#">품목</a></li>
+		                <li><a href="#">입고현황</a></li>
+		                <li><a href="#">출고현황</a></li>
+		            </ul>
+                </li>
+                <li class="on">
+                	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
+                    <a href="javascript:void(0);" onclick="navOn(this);">매출관리</a>
+                    <ul class="sub_nav">
+		                <li><a href="#">품목</a></li>
+		                <li><a href="#">입고현황</a></li>
+		                <li><a href="#">출고현황</a></li>
+		            </ul>
                 </li>
                 <li>
-                    <a href="#">매출관리</a>
-                </li>
-                <li>
-                    <a href="#">회원관리</a>
+                	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
+                    <a href="javascript:void(0);" onclick="navOn(this);">회원관리</a>
+                    <ul class="sub_nav">
+		                <li><a href="#">품목</a></li>
+		                <li><a href="#">입고현황</a></li>
+		                <li><a href="#">출고현황</a></li>
+		            </ul>
                 </li>
             </ul>
-            <ul class="sub_nav">
-                <li><a href="#">품목</a></li>
-                <li><a href="#">입고현황</a></li>
-                <li><a href="#">출고현황</a></li>
-            </ul>
+            
         </div>
         <!-- ########## 네비게이션 영역 끝 ########## -->
     </div>
@@ -193,4 +206,13 @@
         </div>
     </div>
 </body>
+
+<script>
+function navOn(element) {
+    const navLi = $(element).parent();
+    $(".main_nav li.on").removeClass("on");
+    $(navLi).addClass("on");
+}
+</script>
+
 </html>

@@ -7,6 +7,7 @@
 <title>좌석</title>
 </head>
 <link rel="stylesheet" href="css/reference.css">
+
 <body>
  <div class="header">
         <!-- ********** 상단 왼쪽 영역 시작 ********** -->

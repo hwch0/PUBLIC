@@ -366,6 +366,7 @@
     </div>
     <script src="js/reference.js"></script>
 </body>
+<script src="js/reference.js"></script>
 <script>
 	function alert(){
 		$('.wrap_cont').addClass("lft");

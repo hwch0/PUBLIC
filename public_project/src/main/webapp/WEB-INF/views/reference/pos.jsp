@@ -259,90 +259,103 @@
 				</div>
 			</div>
 		</div>
-		<div class="wrap_alert">알림 영역임 ㅋ ㅋ ㅋ</div>
+		<div class="wrap_alert">
+			<button class="accordion">Section 1</button>
+			<div class="panel">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+					do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+					enim ad minim veniam, quis nostrud exercitation ullamco laboris
+					nisi ut aliquip ex ea commodo consequat.</p>
+			</div>
+
+			<button class="accordion">Section 2</button>
+			<div class="panel">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+					do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+					enim ad minim veniam, quis nostrud exercitation ullamco laboris
+					nisi ut aliquip ex ea commodo consequat.</p>
+			</div>
+
+			<button class="accordion">Section 3</button>
+			<div class="panel">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+					do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+					enim ad minim veniam, quis nostrud exercitation ullamco laboris
+					nisi ut aliquip ex ea commodo consequat.</p>
+			</div>
+		</div>
 
 		<div class="wrap_chat">
-		<main>
-		<ul id="chat">
-			<li class="you">
-				<div class="entete">
-					<span class="status green"></span>
-					<h2>Vincent</h2>
-					<h3>10:12AM, Today</h3>
-				</div>
-				<div class="triangle"></div>
-				<div class="message">
-					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-				</div>
-			</li>
-			<li class="me">
-				<div class="entete">
-					<h3>10:12AM, Today</h3>
-					<h2>Vincent</h2>
-					<span class="status blue"></span>
-				</div>
-				<div class="triangle"></div>
-				<div class="message">
-					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-				</div>
-			</li>
-			<li class="me">
-				<div class="entete">
-					<h3>10:12AM, Today</h3>
-					<h2>Vincent</h2>
-					<span class="status blue"></span>
-				</div>
-				<div class="triangle"></div>
-				<div class="message">
-					OK
-				</div>
-			</li>
-			<li class="you">
-				<div class="entete">
-					<span class="status green"></span>
-					<h2>Vincent</h2>
-					<h3>10:12AM, Today</h3>
-				</div>
-				<div class="triangle"></div>
-				<div class="message">
-					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-				</div>
-			</li>
-			<li class="me">
-				<div class="entete">
-					<h3>10:12AM, Today</h3>
-					<h2>Vincent</h2>
-					<span class="status blue"></span>
-				</div>
-				<div class="triangle"></div>
-				<div class="message">
-					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-				</div>
-			</li>
-			<li class="me">
-				<div class="entete">
-					<h3>10:12AM, Today</h3>
-					<h2>Vincent</h2>
-					<span class="status blue"></span>
-				</div>
-				<div class="triangle"></div>
-				<div class="message">
-					OK
-				</div>
-			</li>
-		</ul>
-		<footer>
-			<textarea placeholder="Type your message"></textarea>
-			<a href="#">Send</a>
-		</footer>
-	</main>
-
-			
-  		</div>
-</div>
+			<main>
+				<ul id="chat">
+					<li class="you">
+						<div class="entete">
+							<span class="status green"></span>
+							<h2>Vincent</h2>
+							<h3>10:12AM, Today</h3>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">Lorem ipsum dolor sit amet,
+							consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
+					</li>
+					<li class="me">
+						<div class="entete">
+							<h3>10:12AM, Today</h3>
+							<h2>Vincent</h2>
+							<span class="status blue"></span>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">Lorem ipsum dolor sit amet,
+							consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
+					</li>
+					<li class="me">
+						<div class="entete">
+							<h3>10:12AM, Today</h3>
+							<h2>Vincent</h2>
+							<span class="status blue"></span>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">OK</div>
+					</li>
+					<li class="you">
+						<div class="entete">
+							<span class="status green"></span>
+							<h2>Vincent</h2>
+							<h3>10:12AM, Today</h3>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">Lorem ipsum dolor sit amet,
+							consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
+					</li>
+					<li class="me">
+						<div class="entete">
+							<h3>10:12AM, Today</h3>
+							<h2>Vincent</h2>
+							<span class="status blue"></span>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">Lorem ipsum dolor sit amet,
+							consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
+					</li>
+					<li class="me">
+						<div class="entete">
+							<h3>10:12AM, Today</h3>
+							<h2>Vincent</h2>
+							<span class="status blue"></span>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">OK</div>
+					</li>
+				</ul>
+				<footer>
+					<textarea placeholder="Type your message"></textarea>
+					<a href="#">Send</a>
+				</footer>
+			</main>
 
 
-
+		</div>
+	</div>
 	<!-- 모달 창 영역 -->
     <div id="modal" class="modal">
         <div class="modal-content">
@@ -362,6 +375,19 @@
 	function chat(){
 		$('.wrap_cont').addClass("lft");
 		$(".wrap_chat").addClass("on");
+	}
+	let acc = document.querySelectorAll(".accordion");
+	for (let i = 0; i < acc.length; i++) {
+	  acc[i].addEventListener("click", function() {
+		alert('a');
+	    this.classList.toggle("active");
+	    var panel = this.nextElementSibling;
+	    if (panel.style.maxHeight){
+	      panel.style.maxHeight = null;
+	    } else {
+	      panel.style.maxHeight = panel.scrollHeight + "px";
+	    } 
+	  });
 	}
 </script>
 </html>

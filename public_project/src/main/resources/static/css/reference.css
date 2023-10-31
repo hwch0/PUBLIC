@@ -129,22 +129,22 @@
         text-indent: -999em;
         line-height: 100px;
         overflow: hidden;
-        background: url('/public_project/src/main/resources/static/images/allim.png') no-repeat center;
+        background: url('/images/allim.png') no-repeat center;
         background-size: 70px;
     }
 
     .btn_grp li:nth-child(2) a {
-        background-image: url(chat.png);
+        background-image: url('/images/chat.png');
     }
     .btn_grp li:nth-child(3) a {
         display: none;
-        background-image: url(seat.png);
+        background-image: url('/images/seat.png');
     }
     .btn_grp li:nth-child(4) a {
-        background-image: url(chart.png);
+        background-image: url('/images/chart.png');
     }
     .btn_grp li:nth-child(5) a {
-        background-image: url(setting.png);
+        background-image: url('/images/setting.png');
     }
 
     .nav {
@@ -369,22 +369,22 @@
         text-indent: -999em;
         line-height: 100px;
         overflow: hidden;
-        background: url(allim.png) no-repeat center;
+        background: url('/images/allim.png') no-repeat center;
         background-size: 70px;
     }
 
     .btn_grp li:nth-child(2) a {
-        background-image: url(chat.png);
+        background-image: url('/images/chat.png');
     }
     .btn_grp li:nth-child(3) a {
         display: none;
-        background-image: url(seat.png);
+        background-image: url('/images/seat.png');
     }
     .btn_grp li:nth-child(4) a {
-        background-image: url(chart.png);
+        background-image: url('/images/chart.png');
     }
     .btn_grp li:nth-child(5) a {
-        background-image: url(setting.png);
+        background-image: url('/images/setting.png');
     }
     
     .lft {

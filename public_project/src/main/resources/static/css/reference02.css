@@ -177,6 +177,17 @@
         animation: fadeInRight 1s;
         background-color: #fff;
     }
+    .wrap_alert {
+        display: none;
+    }
+    .wrap_alert.on {
+        display: block;
+        float: right;
+        width: 400px;
+        height: calc(100vh - 100px);
+        animation: fadeInRight 1s;
+        background-color: #fff;
+    }
 
 
     @keyframes fadeInRight {

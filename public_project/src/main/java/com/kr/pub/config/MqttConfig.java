@@ -32,7 +32,7 @@ import com.kr.pub.service.MqttService;
 public class MqttConfig {
 	/*
 	 * 메시지 발행  
-	 * mosquitto_pub -h www.chocomungco.store -p 1883 -t /public/# -u chocomungco -P choco11 -m "메시지"
+	 * mosquitto_pub -h www.chocomungco.store -p 1883 -t /public/ -u chocomungco -P choco11 -m "메시지"
 	 * 메시지 구독 
 	 * mosquitto_sub -h www.chocomungco.store -p 1883 -t /public/# -u chocomungco -P choco11
 	 */

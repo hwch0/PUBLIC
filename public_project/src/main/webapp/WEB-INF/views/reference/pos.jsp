@@ -7,6 +7,7 @@
 <title>erp</title>
 </head>
 <link rel="stylesheet" href="css/reference02.css">
+<link rel="stylesheet" href="css/chat.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 <body>
@@ -287,66 +288,8 @@
 		</div>
 
 		<div class="wrap_chat">
-			<main>
-				<ul id="chat">
-					<li class="you">
-						<div class="entete">
-							<span class="status green"></span>
-							<h2>Vincent</h2>
-							<h3>10:12AM, Today</h3>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">Lorem ipsum dolor sit amet,
-							consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
-					</li>
-					<li class="me">
-						<div class="entete">
-							<h3>10:12AM, Today</h3>
-							<h2>Vincent</h2>
-							<span class="status blue"></span>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">Lorem ipsum dolor sit amet,
-							consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
-					</li>
-					<li class="me">
-						<div class="entete">
-							<h3>10:12AM, Today</h3>
-							<h2>Vincent</h2>
-							<span class="status blue"></span>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">OK</div>
-					</li>
-					<li class="you">
-						<div class="entete">
-							<span class="status green"></span>
-							<h2>Vincent</h2>
-							<h3>10:12AM, Today</h3>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">Lorem ipsum dolor sit amet,
-							consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
-					</li>
-					<li class="me">
-						<div class="entete">
-							<h3>10:12AM, Today</h3>
-							<h2>Vincent</h2>
-							<span class="status blue"></span>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">Lorem ipsum dolor sit amet,
-							consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
-					</li>
-					<li class="me">
-						<div class="entete">
-							<h3>10:12AM, Today</h3>
-							<h2>Vincent</h2>
-							<span class="status blue"></span>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">OK</div>
-					</li>
+			<div class="wrap_chat_main">
+				<ul id="chatList">
 				</ul>
 				<footer>
 					<textarea placeholder="Type your message"  id="chatInputBox"></textarea>
@@ -355,10 +298,9 @@
 					</select>
 					<a href="javascript:void(0);" id="send_chat_button">Send</a>
 				</footer>
-			</main>
-
-
+			</div>
 		</div>
+		
 	</div>
 	<!-- 모달 창 영역 -->
 	<div id="modal" class="modal">

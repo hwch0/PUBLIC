@@ -44,6 +44,7 @@ const mqtt_host = "www.chocomungco.store";
   //서버에 메시지를 전송한다
     const sendMessage = () => {
     	if(!isNaN($('#seatSelector option:selected').val())){
+			const seatNo = $('#seatSelector option:selected').val();
     		const message = $("#chatInputBox").val();
             mqttClient.publish(mqtt_topic, JSON.stringify({
             	type:'CHAT',
@@ -52,12 +53,24 @@ const mqtt_host = "www.chocomungco.store";
             	message:message
             	}));
             $("#chatInputBox").val("");
+            $("#chatList").append(
+					 `<li class="me">
+					<div class="entete">
+						<h3>10:12AM, Today</h3>
+						<h2>좌석 ${seatNo}님에게 보냄</h2>
+						<span class="status blue"></span>
+					</div>
+					<div class="triangle"></div>
+					<div class="message">${message}</div>
+				</li>`
+				 );
+			$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
     	}else{alert('좌석을 선택해주세요')};
     };
     //메세지 수신한 데이터를 삽입
     const recvMessage = recv =>  {
   	  console.log(recv);
-    $("#chat").append(
+    $("#chatList").append(
 		`<li class="you">
 						<div class="entete">
 							<span class="status green"></span>
@@ -67,7 +80,8 @@ const mqtt_host = "www.chocomungco.store";
 						<div class="triangle"></div>
 						<div class="message">${recv.message}</div>
 					</li>`
-		); 
+		);
+	$("#chatList").scrollTop($("#chatList")[0].scrollHeight);//채팅이오면 스크롤 내려오게
     }
     //설정 및 메서드 끝
     

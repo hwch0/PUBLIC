@@ -354,7 +354,7 @@
     }
 
 /*채팅부분 css*/
-main{
+/*.wrap_chat_main{
 	width:400px;
 	height:800px;
 	display:inline-block;
@@ -419,10 +419,10 @@ main{
 		margin-left:300px;
 }
 
-main footer{
+.wrap_chat_main footer{
 	height:20%;
 }
-main footer textarea{
+.wrap_chat_main footer textarea{
 	resize:none;
 	border:none;
 	width:70%;
@@ -433,10 +433,10 @@ main footer textarea{
 	margin-bottom:13px;
 	float: left;
 }
-main footer textarea::placeholder{
+.wrap_chat_main footer textarea::placeholder{
 	color:#ddd;
 }
-main footer a{
+.wrap_chat_main footer a{
 	text-decoration:none;
 	text-transform:uppercase;
 	font-weight:bold;
@@ -445,7 +445,7 @@ main footer a{
     margin-left: 10px;
 	margin-top:5px;
 	float: left;
-}
+}*/
 
 /*채팅끝
 아코디언 시작

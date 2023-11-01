@@ -670,7 +670,25 @@
 	height: 20px;
     width: 200px;
 }
+
 /*select*/
 .itemSelect{
 	width: 200px;
+}
+
+.itemTbody{
+	text-align: center;
+}
+
+.itemTbody .amount-cell {
+    text-align: end;
+    padding: 0 12px;
+}
+
+.paymTbody{
+	text-align: center;
+}
+.paymTbody .amount-cell {
+    text-align: end;
+    padding: 0 12px;
 }

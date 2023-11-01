@@ -4,8 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>좌석</title>
+<title>매출관리</title>
 <link rel="stylesheet" href="css/reference.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
 <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
@@ -15,6 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker3.min.css">
 
 </head>
+
 <body>
  <div class="header">
         <!-- ********** 상단 왼쪽 영역 시작 ********** -->
@@ -55,20 +59,22 @@
         <!-- ########## 네비게이션 영역 시작 ########## -->
         <div class="nav">
             <ul class="main_nav">
-                <li class="on">
+                <li>
                     <em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="#">재고관리</a>                  
+                    <a href="/erp" onclick="navOn(this);">재고관리</a>                 
+                </li>
+                <li class="on">
+                	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
+                    <a href="/erp2" onclick="navOn(this);">매출관리</a>
+                    <ul class="sub_nav">
+		                <li><a href="#">매출내역</a></li>
+		                <li><a href="#">주문내역</a></li>
+		            </ul>
                 </li>
                 <li>
-                    <a href="erp2">매출관리</a>
+                	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
+                    <a href="javascript:void(0);" onclick="navOn(this);">회원관리</a>
                 </li>
-                <li>
-                    <a href="#">회원관리</a>
-                </li>
-            </ul>
-            <ul class="sub_nav">
-                <li><a href="#">재고내역</a></li>
-                <li><a href="#">입·출고 내역</a></li>
             </ul>
         </div>
         <!-- ########## 네비게이션 영역 끝 ########## -->
@@ -77,57 +83,65 @@
 
     <div class="content">
         <div class="cont_top" style="height: 100%;">
+        <div class="header-content">
             <h2>
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
                 재고관리
             </h2>
-
+			<div class="button-group">
+	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
+	            <button id="check">조회</button>
+	            <button id="Excel">엑셀</button>
+	            <button id="delete">삭제</button>
+	        </div>
+		</div>
+		
             <div class="inquiry">
                 <table>
                     <tr>
-                       <td class="tr_th">등록일</td>
-                       <td style="padding: 0 30px;">
-					    <div class="container">
-					        <div class="input-group date">
-					            <input type="text" class="form-control">
-					            <span class="input-group-addon">
-			            			<img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
-				            	</span>
-					        </div>
-					    </div>
-                       </td>
+                       <td class="tr_th">매출일자</td>
+			            <td style="padding:0 10px;">
+						    <div class="input-group date" style="display: inline-block; ">
+						        <input type="text" class="form-control" id="startDate" readonly>
+						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
+						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
+						        </span>
+						    </div>
+						    
+						    <div style="display: inline-block; margin: 0 10px;">~</div>
+						    
+						    <div class="input-group date" style="display: inline-block;">
+						        <input type="text" class="form-control" id="endDate" readonly>
+						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
+						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
+						        </span>
+						    </div>
+						 </td>
 
 
-                        <td class="tr_th">검색조건</td>
+                        <td class="tr_th">매출전표코드</td>
                         <td style="padding: 0 30px;">
-                            <select>
-                                <option value="1">선택 1</option>
-                                <option value="2">선택 2</option>
-                                <option value="3">선택 3</option>
-                            </select>
+                            <input type="text" class="paymName">
+                            <button id="check">조회</button>
                         </td>
 
                     </tr>
 
 
                     <tr>
-                        <td class="tr_th">검색조건</td>
+                        <td class="tr_th">매출유형상세</td>
                         <td style="padding: 0 30px;">
-                            <select>
-                                <option value="1">선택 1</option>
-                                <option value="2">선택 2</option>
-                                <option value="3">선택 3</option>
+                            <select class="itemSelect">
+                                <option value="1">PC이용</option>
+                                <option value="2">상품</option>
+                                <option value="3">기타</option>
                             </select>
                         </td>
 
 
-                        <td class="tr_th">검색조건</td>
+                        <td class="tr_th">회원이름</td>
                         <td style="padding: 0 30px;">
-                            <label>선택</label>
-                            <input type="radio">
-
-                            <label>선택</label>
-                            <input type="radio">
+                        	<input type="text" class="userName">                       	
                         </td>
                     </tr>
                 </table>
@@ -138,22 +152,37 @@
         <div class="cont_area">
             <h2>
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
-                재고관리
+                재고품목
             </h2>
             <table style="width: 100%;border-color: #a49f9f;">
                 <thead>
-                    <th style="width: 10%;">컬럼</th>
-                    <th style="width: 50%;">컬럼</th>
-                    <th style="width: 20%;">컬럼</th>
-                    <th style="width: 20%;">컬럼</th>
+                    <th style="width: 5%;">순번</th>
+                    <th style="width: 20%;">매출전표코드</th>
+                    <th style="width: 15%;">매출일자</th>
+                    <th style="width: 15%;">매출유형</th>
+                    <th style="width: 15%;">매출유형상세</th>
+                    <th style="width: 15%;">회원이름</th>
+                    <th style="width: 15%;" class="amount-cell">매출액(단위 원)</th>
                 </thead>
 
-                <tbody>
+                <tbody class="paymTbody">
                     <tr>
-                        <td>내용</td>
-                        <td>내용</td>
-                        <td>내용</td>
-                        <td>내용</td>
+                        <td>1</td>
+                        <td>PAYM000001</td>
+                        <td>2023-11-01</td>
+                        <td>매출</td>
+                        <td>상품</td>
+                        <td>유성오</td>
+                        <td class="amount-cell">￦3,000</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>ITEM000002</td>
+                        <td></td>
+                        <td>비품</td>
+                        <td>2020-03-01</td>
+                        <td>51EA</td>
+                        <td class="amount-cell">￦100,000</td>
                     </tr>
                     <tr>
                         <td>내용</td>
@@ -191,16 +220,46 @@
                         <td>내용</td>
                         <td>내용</td>
                     </tr>
+					<tr>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                    </tr>
                     <tr>
                         <td>내용</td>
                         <td>내용</td>
                         <td>내용</td>
                         <td>내용</td>
                     </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                    </tr>                                        
                  </tbody>
             </table>
         </div>
     </div>
 </body>
+
+
+<script>
+function navOn(element) {
+    const navLi = $(element).parent();
+    $(".main_nav li.on").removeClass("on");
+    $(navLi).addClass("on");
+}
+</script>
+
+
 <script src="js/erpmain.js"></script>
+
 </html>

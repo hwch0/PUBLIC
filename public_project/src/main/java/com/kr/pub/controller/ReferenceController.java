@@ -15,6 +15,10 @@ public class ReferenceController {
 	public String erp(Model model) {
 		return "/reference/erp";
 	}
+	@GetMapping("/inventoryStatus")
+	public String inventoryStatus(Model model) {
+	    return "/reference/inventoryStatus";
+	}
 	@GetMapping("/erp2")
 	public String erp2(Model model) {
 		return "/reference/erp2";

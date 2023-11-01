@@ -59,19 +59,17 @@
         <!-- ########## 네비게이션 영역 시작 ########## -->
         <div class="nav">
             <ul class="main_nav">
-                <li>
+                <li class="on">
                     <em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-
-                    <a href="javascript:void(0);" onclick="navOn(this);">재고관리</a>
+                    <a href="/erp" onclick="navOn(this);">재고관리</a>
                    	<ul class="sub_nav">
 		                <li><a href="#">품목</a></li>
-		                <li><a href="#">입고현황</a></li>
-		                <li><a href="#">출고현황</a></li>
+		                <li><a href="#">입·출고현황</a></li>
 		            </ul>
                 </li>
-                <li class="on">
+                <li>
                 	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="javascript:void(0);" onclick="navOn(this);">매출관리</a>
+                    <a href="erp2" onclick="navOn(this);">매출관리</a>
                     <ul class="sub_nav">
 		                <li><a href="#">품목</a></li>
 		                <li><a href="#">입고현황</a></li>
@@ -95,57 +93,66 @@
 
     <div class="content">
         <div class="cont_top" style="height: 100%;">
+        <div class="header-content">
             <h2>
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
                 재고관리
             </h2>
-
+			<div class="button-group">
+	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
+	            <button id="check">조회</button>
+	            <button id="Excel">엑셀</button>
+	            <button id="delete">삭제</button>
+	        </div>
+		</div>
+		
             <div class="inquiry">
                 <table>
                     <tr>
                        <td class="tr_th">등록일</td>
-                       <td style="padding: 0 30px;">
-					    <div class="container">
-					        <div class="input-group date">
-					            <input type="text" class="form-control" readonly>
-					            <span class="input-group-addon">
-			            			<img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
-				            	</span>
-					        </div>
-					    </div>
-                       </td>
+			            <td style="padding:0 10px;">
+						    <div class="input-group date" style="display: inline-block; ">
+						        <input type="text" class="form-control" id="startDate" readonly>
+						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
+						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
+						        </span>
+						    </div>
+						    
+						    <div style="display: inline-block; margin: 0 10px;">~</div>
+						    
+						    <div class="input-group date" style="display: inline-block;">
+						        <input type="text" class="form-control" id="endDate" readonly>
+						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
+						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
+						        </span>
+						    </div>
+						 </td>
 
 
-                        <td class="tr_th">검색조건</td>
+                        <td class="tr_th">품목명</td>
                         <td style="padding: 0 30px;">
-                            <select>
-                                <option value="1">선택 1</option>
-                                <option value="2">선택 2</option>
-                                <option value="3">선택 3</option>
-                            </select>
+                            <input type="text" class="itemName">
                         </td>
 
                     </tr>
 
 
                     <tr>
-                        <td class="tr_th">검색조건</td>
+                        <td class="tr_th">품목유형</td>
                         <td style="padding: 0 30px;">
-                            <select>
-                                <option value="1">선택 1</option>
-                                <option value="2">선택 2</option>
-                                <option value="3">선택 3</option>
+                            <select class="itemSelect">
+                                <option value="1">상품</option>
+                                <option value="2">비품</option>
+                                <option value="3">소모품</option>
                             </select>
                         </td>
 
 
-                        <td class="tr_th">검색조건</td>
+                        <td class="tr_th">재고량</td>
                         <td style="padding: 0 30px;">
-                            <label>선택</label>
-                            <input type="radio">
-
-                            <label>선택</label>
-                            <input type="radio">
+						    <label style="font-size: 13px"><input type="radio" name="stockOption" checked> 모두 보기</label>
+                            <label style="font-size: 13px"><input type="radio" name="stockOption"> 현재 재고</label>
+						    <label style="font-size: 13px"><input type="radio" name="stockOption"> 전월 재고</label>
                         </td>
                     </tr>
                 </table>
@@ -156,22 +163,40 @@
         <div class="cont_area">
             <h2>
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
-                재고관리
+                재고품목
             </h2>
             <table style="width: 100%;border-color: #a49f9f;">
                 <thead>
-                    <th style="width: 10%;">컬럼</th>
-                    <th style="width: 50%;">컬럼</th>
-                    <th style="width: 20%;">컬럼</th>
-                    <th style="width: 20%;">컬럼</th>
+                    <th style="width: 5%;">순번</th>
+                    <th style="width: 15%;">품목코드</th>
+                    <th style="width: 25%;">품목명</th>
+                    <th style="width: 8%;">품목유형</th>
+                    <th style="width: 12%;">등록일</th>
+                    <th style="width: 10%;">현재재고</th>
+                    <th style="width: 10%;">전월재고</th>
+                    <th style="width: 15%;">평균단가(단위 원)</th>
                 </thead>
 
-                <tbody>
+                <tbody class="itemTbody">
                     <tr>
-                        <td>내용</td>
-                        <td>내용</td>
-                        <td>내용</td>
-                        <td>내용</td>
+                        <td>1</td>
+                        <td>ITEM000001</td>
+                        <td>인텔 코어 i7-13세대 14700K</td>
+                        <td>비품</td>
+                        <td>2020-03-01</td>
+                        <td>150EA</td>
+                        <td>30EA</td>
+                        <td>￦350,000</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>ITEM000002</td>
+                        <td>삼성전자 DDR4-3200(16G)</td>
+                        <td>비품</td>
+                        <td>2020-03-01</td>
+                        <td>51EA</td>
+                        <td>50EA</td>
+                        <td>￦250,000</td>
                     </tr>
                     <tr>
                         <td>내용</td>
@@ -209,12 +234,30 @@
                         <td>내용</td>
                         <td>내용</td>
                     </tr>
+					<tr>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                    </tr>
                     <tr>
                         <td>내용</td>
                         <td>내용</td>
                         <td>내용</td>
                         <td>내용</td>
                     </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                        <td>내용</td>
+                    </tr>                                        
                  </tbody>
             </table>
         </div>

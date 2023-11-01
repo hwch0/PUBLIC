@@ -8,7 +8,7 @@ function loadPage(pageUrl) {
         type: 'GET',
         success: function (data) {
             // jQuery를 사용하여 특정 클래스를 가진 부분만 선택
-            const dynamicContent = $(data).filter('.content');
+            const dynamicContent = $(data).filter('.content').find('.cont_top, .cont_area');
 
             console.log('Dynamic Content:', dynamicContent.html());
 

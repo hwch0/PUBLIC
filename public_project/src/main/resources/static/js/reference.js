@@ -25,7 +25,23 @@ $('.close').on('click', function(e){
 	 modal.style.display = 'none';
 });
 
+let admimPageChange = true;
 
+function changeAdminPage() {
+	if(admimPageChange) {
+		$('.admin_main').css("display", "none");
+		$('.admin_dash').css("display", "block");
+		$('.btn_grp li:nth-child(3) a').css("display", "block");
+		$('.btn_grp li:nth-child(4) a').css("display", "none");
+		admimPageChange = false;
+	} else {
+		$('.admin_main').css("display", "block");
+		$('.admin_dash').css("display", "none");
+		$('.btn_grp li:nth-child(3) a').css("display", "none");
+		$('.btn_grp li:nth-child(4) a').css("display", "block");
+		admimPageChange = true;
+	}
+}
 
 
 function showAlert(){

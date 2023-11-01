@@ -4,47 +4,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>erp</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
-    />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css" />
-    <!-- Ionicons -->
-    <link
-      rel="stylesheet"
-      href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
-    />
-    <!-- Tempusdominus Bootstrap 4 -->
-    <link
-      rel="stylesheet"
-      href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"
-    />
-    <!-- iCheck -->
-    <link
-      rel="stylesheet"
-      href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css"
-    />
-    <!-- JQVMap -->
-    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css" />
-    <!-- Theme style -->
-    <link rel="stylesheet" href="/dist/css/adminlte.min.css" />
-    <!-- overlayScrollbars -->
-    <link
-      rel="stylesheet"
-      href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css"
-    />
-    <!-- Daterange picker -->
-    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css" />
-    <!-- summernote -->
-    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css" />
+<title>Admin</title>
 
 </head>
-<link rel="stylesheet" href="css/reference02.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<jsp:include page="/WEB-INF/views/common/commonCSS.jsp"></jsp:include>
+
+<!-- 관리자 좌석현황 영역 CSS -->
+<link rel="stylesheet" href="css/reference02.css"> 
+
 <body>
 	<div class="wrap">
         <!-- ########## 상단 헤더 영역 끝 ########## -->
@@ -73,9 +40,9 @@
             <div class="hd hd_rgt">
                 <div class="btn_grp">
                     <ul>
-                        <li class="on"><a href="javascript:void(0);" onClick="alert();">알림</a></li>
-                        <li><a href="javascript:void(0);" onClick="chat();">채팅</a></li>
-                        <li><a href="javascript:void(0);">좌석</a></li>
+                        <li class="on"><a href="javascript:void(0);" onClick="showAlert()">알림</a></li>
+						<li><a href="javascript:void(0);" onClick="showChat()">채팅</a></li>
+                        <li><a href="javascript:void(0);" onclick="changeAdminPage();">좌석</a></li>
                         <li><a href="javascript:void(0);" onclick="changeAdminPage();">대시보드</a></li>
                         <li><a href="javascript:void(0);">설정</a></li>
                     </ul>
@@ -85,62 +52,30 @@
         </div>
         <!-- ########## 상단 헤더 영역 끝 ########## -->
 
-		<div class="wrap_cont">
-		
 		<!-- 좌석현황, 대시보드 출력되는 영역 -->
-		<jsp:include page="adminMain.jsp"></jsp:include>
-		<jsp:include page="adminDashboard.jsp"></jsp:include>
-		
+		<div class="wrap_cont">
+			<jsp:include page="adminMain.jsp"></jsp:include>
+			<jsp:include page="adminDashboard.jsp"></jsp:include>
 		</div>
 
-
+		<!-- 관리자 알림창 영역 -->
         <div class="wrap_alert">
-            알림 영역임 ㅋ ㅋ ㅋ
+            <jsp:include page="adminAlert.jsp"></jsp:include>
         </div>
         
+        <!-- 관리자 채팅창 영역 -->
         <div class="wrap_chat">
-        	채팅 영역임 ㅋ
+            <jsp:include page="adminChatting.jsp"></jsp:include>
         </div>
     </div>
-
     
 
     <!-- 모달 창 영역 -->
     <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModalBtn">&times;</span>
-            <h2>모달 제목</h2>
-            <p>모달 내용</p>
-        </div>
+         <jsp:include page="adminModal.jsp"></jsp:include>
     </div>
 </body>
-<script src="js/reference.js"></script>
-<script src="js/admin.js"></script>
-<script>
-let admimPageChange = true;
 
-	function changeAdminPage() {
-		if(admimPageChange) {
-			$('.cont_top').css("display", "none");
-			$('.seat_grp').css("display", "none");
-			$('.wrap_dash').css("display", "block");
-			admimPageChange = false;
-		} else {
-			$('.cont_top').css("display", "block");
-			$('.seat_grp').css("display", "block");
-			$('.wrap_dash').css("display", "none");
-			admimPageChange = true;
-		}
-	}
+<jsp:include page="/WEB-INF/views/common/commonJS.jsp"></jsp:include>
 
-	function alert(){
-		$('.wrap_cont').addClass("lft");
-		$(".wrap_alert").addClass("on");
-	}
-	
-	function chat(){
-		$('.wrap_cont').addClass("lft");
-		$(".wrap_chat").addClass("on");
-	}
-</script>
 </html>

@@ -24,7 +24,7 @@
                 <img src="/images/logo_w.png" alt="로고">
             </div>
             <!-- 화면 전화 버튼 영역 -->
-            <div class="dtn_toggle">
+            <div class="btn_toggle">
                 <ul>
                     <li class="btn btn_pos">
                         <a href="/pos">POS</a>

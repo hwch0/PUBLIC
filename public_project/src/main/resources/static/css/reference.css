@@ -78,11 +78,20 @@
         border: 1px solid #450877;
         box-shadow: 0 0 10px 5px rgba(0,0,0,0.2);
     }
-
+	.btn_toggle ul {
+		margin: -1px 0 0 0;
+		padding: 0;
+		width: 200px;
+		height: 30px;
+	}
+	
     .btn_toggle li {
+		margin: 0;
+		padding: 0;
         float: left;
         width: 100px;
         height: 30px;
+        box-sizing: border-box;
     }
     .btn_toggle li a {
         display: block;
@@ -326,30 +335,30 @@
     /*포스기 영역*/
     /* 화면 전환 버튼 */
     .dtn_toggle {
-        margin:35px 0 0 200px;
-        width: 200px;
-        height: 30px;
-        border: 1px solid #fff;
-        box-shadow: 0 0 10px 5px rgba(255,255,255,0.2);
+        margin:35px 0 0 200px !important;
+        width: 200px !important;
+        height: 30px !important;
+        border: 1px solid #fff !important;
+        box-shadow: 0 0 10px 5px rgba(255,255,255,0.2) !important;
     }
 
     .dtn_toggle li {
-        float: left;
-        width: 100px;
-        height: 30px;
+        float: left !important;
+        width: 100px !important;
+        height: 30px !important;
     }
     .dtn_toggle li a {
-        display: block;
-        line-height: 30px;
-        font-weight: 700;
-        font-size: 18px;
-        color: rgba(255,255,255,0.6);
-        text-align: center;
+        display: block !important;
+        line-height: 30px !important;
+        font-weight: 700 !important;
+        font-size: 18px !important;
+        color: rgba(255,255,255,0.6) !important;
+        text-align: center !important;
     }
 
     .dtn_toggle li.on a, .dtn_toggle li:hover a {
-        color: #450877;
-        background-color: #fff;
+        color: #450877 !important;
+        background-color: #fff !important;
     }
 
     /* 버튼 리스트 */

@@ -236,8 +236,45 @@
     .content {
         padding: 70px 400px;
         width: 100%;
-        box-sizing: border-box;
-    }
+	    box-sizing: border-box;
+	}
+	
+	.header-content {
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	}
+	
+	.custom-h2 {
+	    margin-right: 20px;
+	}
+	
+	.button-group {
+	    display: flex;
+	}
+	
+	.button-group button {
+	    margin-left: 10px;
+	}
+	
+	.cont_top {
+	    height: 40px;
+	}
+	
+	.cont_top .custom-h2 {
+	    line-height: 40px;
+	    text-indent: 10px;
+	    font-size: 22px;
+	    color: #333;
+	}
+	
+	.cont_top .custom-h2 em {
+	    float: left;
+	}
+	
+	.cont_top .custom-h2 em img {
+	    display: block;
+	}
 
     .cont_top {
         height: 40px;
@@ -271,7 +308,7 @@
     }
 
     .tr_th {
-        width: 150px;
+        width: 130px;
         height: 40px;
         text-align: center;
         background-color: #e1dcdc;
@@ -581,7 +618,7 @@
     position: relative;
     z-index: 2;
     float: left;
-    width: 82px;
+    width: 75px;
     margin-bottom: 0
 }
 .datepicker-dropdown{
@@ -626,3 +663,14 @@
     box-sizing: border-box
 }
 
+/*input박스*/
+.itemName,
+.paymName,
+.userName {
+	height: 20px;
+    width: 200px;
+}
+/*select*/
+.itemSelect{
+	width: 200px;
+}

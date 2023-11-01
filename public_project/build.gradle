@@ -46,6 +46,13 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
+	
+	//MQTT 관련 의존성
+	implementation 'org.springframework.integration:spring-integration-mqtt:6.1.4'
+	implementation 'org.apache.commons:commons-lang3:3.13.0'
+	//json 관련 의존성
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.16.0-rc1'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0-rc1'
 }
 
 tasks.named('test') {

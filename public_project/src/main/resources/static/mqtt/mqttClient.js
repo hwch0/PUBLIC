@@ -43,7 +43,6 @@
     }
   //서버에 메시지를 전송한다
     const sendMessage = () => {
-    	if(!isNaN($('#seatSelector option:selected').val())){
     		const message = $("#chatInputBox").val();
             mqttClient.publish(mqtt_topic, JSON.stringify({
             	type:'CHAT',
@@ -52,7 +51,6 @@
             	message:message
             	}));
             $("#chatInputBox").val("");
-    	}else{alert('좌석을 선택해주세요')};
     };
     //메세지 수신한 데이터를 삽입
     const recvMessage = recv =>  {
@@ -73,8 +71,7 @@
         // message is Buffer
         //console.log("mqtt message receive :", message.toString())
         	const data = JSON.parse(message.toString())
-        	//if(data.receiver)
-        	if(data.sender === "admin"){
+        	if(data.receiver === "2"){//좌석에따라 수동적으로 바뀌는거 필요함
         		recvMessage(data);
         	}
     })

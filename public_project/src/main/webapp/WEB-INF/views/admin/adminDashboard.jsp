@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
- <div class="wrap_dash" style="display:none">
+ <div class="admin_dash" style="display:none;">
  
 <div class="dashboard" style="padding: 50px 100px 0px 100px">
       <div class="row">

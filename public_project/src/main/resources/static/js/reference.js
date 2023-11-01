@@ -25,7 +25,19 @@ $('.close').on('click', function(e){
 	 modal.style.display = 'none';
 });
 
+let admimPageChange = true;
 
+function changeAdminPage() {
+	if(admimPageChange) {
+		$('.admin_main').css("display", "none");
+		$('.admin_dash').css("display", "block");
+		admimPageChange = false;
+	} else {
+		$('.admin_main').css("display", "block");
+		$('.admin_dash').css("display", "none");
+		admimPageChange = true;
+	}
+}
 
 
 function showAlert(){

@@ -30,19 +30,12 @@ import com.kr.pub.service.MqttService;
 @Configuration
 @EnableIntegration
 public class MqttConfig {
-	
 	/*
-	 * windows 10에서 mosquitto 프로그램 설치 후 
-	 * 환경설정 변수에 mosquitt 폴더 프로그램이 설치된 폴더 추가 
-	 * 
-	 * cmd 창에서 
-	 * 메시지 구독 
-	 * mosquitto_sub -h www.masungil.shop -p 51883  -t /team1/sub/# -u team1 -P 1004team1
-	 * 
 	 * 메시지 발행  
 	 * mosquitto_pub -h www.chocomungco.store -p 1883 -t /public/# -u chocomungco -P choco11 -m "메시지"
+	 * 메시지 구독 
+	 * mosquitto_sub -h www.chocomungco.store -p 1883 -t /public/# -u chocomungco -P choco11
 	 */
-	
   private final String topic = "/public/";
   private static final String USERNAME = "chocomungco";
   private static final String PASSWORD = "choco11";

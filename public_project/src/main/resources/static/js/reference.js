@@ -15,39 +15,73 @@ onSeat.forEach((li) => {
     });
 });
 
-
+//회원정보 모달창 닫기
 window.addEventListener('click', (event) => {
     if (event.target === modal) {
         modal.style.display = 'none';
     }
 });
+$('.close').on('click', function(e){
+	 modal.style.display = 'none';
+});
 
 
-function alert(){
-	$('.wrap_cont').addClass("lft");
-	$(".wrap_alert").addClass("on");
+
+
+function showAlert(){
+	if($(".wrap_chat").hasClass('on')){
+		$(".wrap_chat").removeClass("on");
+		$(".wrap_alert").toggleClass('on');
+	}else{
+		$('.wrap_cont').toggleClass('lft');
+		$(".wrap_alert").toggleClass('on');
+	}
 }
 
-function chat(){
-	$('.wrap_cont').addClass("lft");
-	$(".wrap_chat").addClass("on");
+function showChat(){
+	if($(".wrap_alert").hasClass('on')){
+		$(".wrap_alert").removeClass("on");
+		$(".wrap_chat").toggleClass('on');
+	}else{
+		$('.wrap_cont').toggleClass("lft");
+		$(".wrap_chat").toggleClass("on");
+	}
 }
-/*document.addEventListener("DOMContentLoaded", function() {
-    const listSeat = document.querySelectorAll(".seat_grp ul li");
-    const wrapCont = document.querySelector(".wrap_cont");
-    const wrapChat = document.querySelector(".wrap_chat");
-    const wrapAlert = document.querySelector(".wrap_alert");
-    const modal = document.getElementById('modal');
-
-    listChat.forEach((li) => {
-        li.addEventListener("click", function() {
-            
-            modal.classList.add("on");
-            wrapCont.classList.add("lft");
-            wrapChat.classList.add("on");
-            wrapAlert.classList.add("on");
-        });
-    });
-});*/
 /* 아코디언 */
+let acc = document.querySelectorAll(".accordion");
+	for (let i = 0; i < acc.length; i++) {
+	  acc[i].addEventListener("click", function() {
+	    this.classList.toggle("active");
+	    var panel = this.nextElementSibling;
+	    if (panel.style.maxHeight){
+	      panel.style.maxHeight = null;
+	    } else {
+	      panel.style.maxHeight = panel.scrollHeight + "px";
+	    } 
+	  });
+	}
+	
+/* 탭 메뉴 */
+$(document).ready(function() {
+  // 초기에 첫 번째 탭을 활성화
+  $(".tab__item:first").addClass("active");
+  $(".tab__content:first").addClass("active");
 
+  // 탭을 클릭했을 때 내용 변경
+  $(".tab__item").click(function(e) {
+    e.preventDefault(); // 링크의 기본 동작 방지
+
+    // 모든 탭 내용 부분을 숨김
+    $(".tab__content").removeClass("active");
+
+    // 모든 탭 버튼 비활성화
+    $(".tab__item").removeClass("active");
+
+    // 클릭한 탭에 active 클래스 추가
+    $(this).addClass("active");
+
+    // 클릭한 탭과 동일한 인덱스의 탭 내용을 표시
+    var index = $(this).index();
+    $(".tab__content:eq(" + index + ")").addClass("active");
+  });
+});

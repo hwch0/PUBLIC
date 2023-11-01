@@ -7,9 +7,7 @@
 <title>erp</title>
 </head>
 <link rel="stylesheet" href="css/reference02.css">
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
 <body>
 	<div class="wrap">
@@ -36,8 +34,8 @@
 				<div class="btn_grp">
 					<ul>
 						<li class="on"><a href="javascript:void(0);"
-							onClick="alert();">알림</a></li>
-						<li><a href="javascript:void(0);" onClick="chat();">채팅</a></li>
+							onClick="showAlert()">알림</a></li>
+						<li><a href="javascript:void(0);" onClick="showChat()">채팅</a></li>
 						<li><a href="javascript:void(0);">좌석</a></li>
 						<li><a href="javascript:void(0);">대시보드</a></li>
 						<li><a href="javascript:void(0);">설정</a></li>
@@ -260,20 +258,22 @@
 			</div>
 		</div>
 		<div class="wrap_alert">
-			<button class="accordion">Section 1</button>
+			<button class="accordion">11번 좌석 주문내역 : 콜라 1개, 커피 1개</button>
 			<div class="panel">
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
 					do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
 					enim ad minim veniam, quis nostrud exercitation ullamco laboris
 					nisi ut aliquip ex ea commodo consequat.</p>
+					<button>주문 확인</button>
 			</div>
 
-			<button class="accordion">Section 2</button>
+			<button class="accordion">22번 좌석 주문내역 : 콜라 1개, 커피 2개</button>
 			<div class="panel">
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
 					do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
 					enim ad minim veniam, quis nostrud exercitation ullamco laboris
 					nisi ut aliquip ex ea commodo consequat.</p>
+					<button>주문 확인</button>
 			</div>
 
 			<button class="accordion">Section 3</button>
@@ -282,6 +282,7 @@
 					do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
 					enim ad minim veniam, quis nostrud exercitation ullamco laboris
 					nisi ut aliquip ex ea commodo consequat.</p>
+					<button>주문 확인</button>
 			</div>
 		</div>
 
@@ -357,38 +358,72 @@
 		</div>
 	</div>
 	<!-- 모달 창 영역 -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModalBtn">&times;</span>
-            <h2>모달 제목</h2>
-            <p>모달 내용</p>
-        </div>
-    </div>
-    <script src="js/reference.js"></script>
+	<div id="modal" class="modal">
+		<div class="modal-content">
+			<span class="close" id="closeModalBtn">&times;</span>
+
+			<ul class="tab">
+				<li class="tab__item active">회원정보</li>
+				<li class="tab__item">주문내역</li>
+			</ul>
+			<div class="tab__content-wrapper">
+				<div id="tab1" class="tab__content active">
+					<table class="table-fill">
+						<thead>
+							<tr>
+								<th class="text-left">좌석번호</th>
+								<th class="text-left">데이터</th>
+							</tr>
+						</thead>
+						<tbody class="table-hover">
+							<tr>
+								<td class="text-left">회원아이디</td>
+								<td class="text-left">데이터</td>
+							</tr>
+							<tr>
+								<td class="text-left">시작시간</td>
+								<td class="text-left">데이터</td>
+							</tr>
+							<tr>
+								<td class="text-left">잔여시간</td>
+								<td class="text-left">데이터</td>
+							</tr>
+							<tr>
+								<td class="text-left">사용시간</td>
+								<td class="text-left">데이터</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="tab2" class="tab__content">
+				<table class="table-fill">
+						<thead>
+							<tr>
+								<th>판매시간</th>
+								<th>품목 이름</th>
+								<th>수량</th>
+								<th>총금액</th>
+							</tr>
+						</thead>
+						<tbody class="table-hover">
+							<tr>
+								<td class="text-left">2023-10-10</td>
+								<td class="text-left">라면</td>
+								<td class="text-left">3</td>
+								<td class="text-left">15000</td>
+							</tr>
+							<tr>
+								<td class="text-left">2023-10-10</td>
+								<td class="text-left">라면</td>
+								<td class="text-left">3</td>
+								<td class="text-left">15000</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 <script src="js/reference.js"></script>
-<script>
-	function alert(){
-		$('.wrap_cont').addClass("lft");
-		$(".wrap_alert").addClass("on");
-	}
-	
-	function chat(){
-		$('.wrap_cont').addClass("lft");
-		$(".wrap_chat").addClass("on");
-	}
-	let acc = document.querySelectorAll(".accordion");
-	for (let i = 0; i < acc.length; i++) {
-	  acc[i].addEventListener("click", function() {
-		alert('a');
-	    this.classList.toggle("active");
-	    var panel = this.nextElementSibling;
-	    if (panel.style.maxHeight){
-	      panel.style.maxHeight = null;
-	    } else {
-	      panel.style.maxHeight = panel.scrollHeight + "px";
-	    } 
-	  });
-	}
-</script>
 </html>

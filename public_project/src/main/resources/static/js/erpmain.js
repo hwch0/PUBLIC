@@ -1,4 +1,4 @@
-//날자 관련 코드
+//날자 관련 
 $(function(){
         $('.input-group.date').datepicker({
             calendarWeeks: false,

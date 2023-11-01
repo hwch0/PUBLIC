@@ -57,7 +57,17 @@ const mqtt_host = "www.chocomungco.store";
     //메세지 수신한 데이터를 삽입
     const recvMessage = recv =>  {
   	  console.log(recv);
-    //  $("#message_list").prepend('<li class="list-group-item" >[' + recv.sender + '] - ' + recv.message + '</li>'); 
+    $("#chat").append(
+		`<li class="you">
+						<div class="entete">
+							<span class="status green"></span>
+							<h2>${recv.sender}</h2>
+							<h3>10:12AM, Today</h3>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">${recv.message}</div>
+					</li>`
+		); 
     }
     //설정 및 메서드 끝
     

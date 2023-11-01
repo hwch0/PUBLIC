@@ -26,7 +26,7 @@
         src: url(https://fonts.gstatic.com/s/notosanskr/v13/PbykFmXiEBPT4ITbgNA5Cgm203Tq4JJWq209pU0DPdWuqxJFA4GNDCBYtw.0.woff2)
             format("woff2");
     }
-
+	
     * {
         margin: 0;
         padding: 0;
@@ -42,7 +42,9 @@
         overflow: hidden;
         background-color: #222;
     }
-
+	p, ul{
+		margin-bottom: 0;
+	}
     .wrap {
         width: 100%;
         background-color: #222;
@@ -84,31 +86,41 @@
     }
 
     /* 화면 전환 버튼 */
-    .dtn_toggle {
-        margin:35px 0 0 200px;
-        width: 200px;
-        height: 30px;
-        border: 1px solid #fff;
-        box-shadow: 0 0 10px 5px rgba(255,255,255,0.2);
+    .btn_toggle {
+        margin:35px 0 0 200px !important;
+        width: 200px !important;
+        height: 30px !important;
+        border: 1px solid #fff !important;
+        box-shadow: 0 0 10px 5px rgba(255,255,255,0.2) !important;
+    }
+    
+	.btn_toggle ul {
+		margin: -1px 0 0 -1px;
+		padding: 0;
+		width: 200px;
+		height: 30px;
+		box-sizing: border-box;	
+	}
+	
+    .btn_toggle li {
+		margin: 0;
+		padding: 0;
+        float: left !important;
+        width: 100px !important;
+        height: 30px !important;
+    }
+    .btn_toggle li a {
+        display: block !important;
+        line-height: 30px !important;
+        font-weight: 700 !important;
+        font-size: 18px !important;
+        color: rgba(255,255,255,0.6) !important;
+        text-align: center !important;
     }
 
-    .dtn_toggle li {
-        float: left;
-        width: 100px;
-        height: 30px;
-    }
-    .dtn_toggle li a {
-        display: block;
-        line-height: 30px;
-        font-weight: 700;
-        font-size: 18px;
-        color: rgba(255,255,255,0.6);
-        text-align: center;
-    }
-
-    .dtn_toggle li.on a, .dtn_toggle li:hover a {
-        color: #450877;
-        background-color: #fff;
+    .btn_toggle li.on a, .btn_toggle li:hover a {
+        color: #450877 !important;
+        background-color: #fff !important;
     }
 
     /* 버튼 리스트 */

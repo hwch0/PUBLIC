@@ -11,14 +11,18 @@ public class ReferenceController {
 	public String pos(Model model) {
 		return "/reference/pos";
 	}
+//	@GetMapping("/erp")
+//	public String erp(Model model) {
+//		return "/reference/erp";
+//	}
 	@GetMapping("/erp")
 	public String erp(Model model) {
-		return "/reference/erp";
+		return "/reference/erpLayout";
 	}
-	@GetMapping("/inventoryStatus")
-	public String inventoryStatus(Model model) {
-	    return "/reference/inventoryStatus";
-	}
+//	@GetMapping("/inventoryStatus")
+//	public String inventoryStatus(Model model) {
+//	    return "/reference/inventoryStatus";
+//	}
 	@GetMapping("/erp2")
 	public String erp2(Model model) {
 		return "/reference/erp2";

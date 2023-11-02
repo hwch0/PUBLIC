@@ -148,25 +148,24 @@
             </div>
         </div>
 
-
         <div class="cont_area">
             <h2>
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
                 재고품목
             </h2>
-            <table style="width: 100%;border-color: #a49f9f;">
+            <table style="width: 100%;border-color: #a49f9f; border-collapse:collapse; display:block;">
                 <thead>
-			        <th style="width: 5%;">순번</th>
-			        <th style="width: 15%;" class="sortable" data-sort="품목코드">품목코드</th>
-			        <th style="width: 25%;" class="sortable" data-sort="품목명">품목명</th>
-			        <th style="width: 8%;">품목유형</th>
-			        <th style="width: 12%;" class="sortable" data-sort="등록일">등록일</th>
-			        <th style="width: 10%;" class="sortable" data-sort="현재재고">현재재고</th>
-			        <th style="width: 10%;" class="sortable" data-sort="전월재고">전월재고</th>
-			        <th style="width: 15%;" class="sortable amount-cell" data-sort="평균단가">평균단가(단위 원)</th>
+			        <th style="width: 45px;">순번</th>
+			        <th style="width: 135px;" class="sortable" data-sort="품목코드">품목코드</th>
+			        <th style="width: 236px;" class="sortable" data-sort="품목명">품목명</th>
+			        <th style="width: 71px;">품목유형</th>
+			        <th style="width: 109px;" class="sortable" data-sort="등록일">등록일</th>
+			        <th style="width: 90px;" class="sortable" data-sort="현재재고">현재재고</th>
+			        <th style="width: 90px;" class="sortable" data-sort="전월재고">전월재고</th>
+			        <th style="width: 128px;" class="sortable amount-cell" data-sort="평균단가">평균단가(단위 원)</th>
 			    </thead>
 
-                <tbody class="itemTbody">
+                <tbody class="itemTbody itemScroll">
                     <tr>
                         <td>1</td>
                         <td>ITEM000001</td>

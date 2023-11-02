@@ -354,9 +354,9 @@
         border-left: 1px dashed #9d9a9a;
     }
 
-    .cont_area table td +  .cont_area table td {
-        border-left: 1px dashed #9d9a9a;
-    }
+	.cont_area table td + td {
+	    border-left: 1px dashed #9d9a9a;
+	}
 
     .cont_area table tr:nth-child(even) {
        background-color: #e1dcdc;
@@ -678,7 +678,19 @@
 
 .itemTbody{
 	text-align: center;
+	max-height: 187px; 
+	overflow-y: auto;
+	display: block;
 }
+
+.itemScroll > tr > td:nth-child(1) { width: 45px; }
+.itemScroll > tr > td:nth-child(2) { width: 135px; }
+.itemScroll > tr > td:nth-child(3) { width: 236px; }
+.itemScroll > tr > td:nth-child(4) { width: 71px; }
+.itemScroll > tr > td:nth-child(5) { width: 109px; }
+.itemScroll > tr > td:nth-child(6) { width: 90px; }
+.itemScroll > tr > td:nth-child(7) { width: 90px; }
+.itemScroll > tr > td:nth-child(8) { width: 86px; }
 
 .itemTbody .amount-cell {
     text-align: end;

@@ -91,7 +91,7 @@
 			<div class="button-group">
 	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
 	            <button id="check">조회</button>
-	            <button id="Excel">엑셀</button>
+	            <button id="uplode">등록</button>
 	            <button id="delete">삭제</button>
 	        </div>
 		</div>
@@ -158,7 +158,8 @@
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
                 목록
             </h2>
-            <table style="width: 100%;border-color: #a49f9f;">
+
+            <table style="width: 100%; border-color: #a49f9f;  border-collapse: collapse; overflow-x: auto;">
                 <thead>
 			        <th style="width: 5%;">순번</th>
 			        <th style="width: 5%;">품목코드</th>
@@ -174,25 +175,37 @@
 			        <th style="width: 5%;">공급단가</th>
 			        <th style="width: 5%;">입고단가</th>
 			        <th style="width: 5%;">출고단가</th>
-			        <th style="width: 5%;">부가세</th>
-			        <th style="width: 5%;">총금액</th>
+			        <th style="width: 15%;">부가세</th>
+			        <th style="width: 15%;">총금액</th>
 			    </thead>
 
-                <tbody class="itemTbody">
+                <tbody class="paymTbody">
                     <tr>
                         <td>1</td>
-                        <td>ITEM000001</td>
-
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
+                        <td>ITEM00000</td>
                     </tr>
                     <tr>
                         <td>2</td>
                         <td>ITEM000001</td>
-
                     </tr>
                  </tbody>
             </table>
+           </div>           
         </div>
-    </div>
 </body>
 
 

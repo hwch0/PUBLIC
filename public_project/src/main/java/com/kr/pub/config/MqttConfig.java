@@ -3,6 +3,7 @@ package com.kr.pub.config;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +40,8 @@ public class MqttConfig {
   private final String topic = "/public/";
   private static final String USERNAME = "chocomungco";
   private static final String PASSWORD = "choco11";
-	
+  private static final String MQTT_SUB_CLIENT_ID = MqttAsyncClient.generateClientId();	
+  private static final String MQTT_PUB_CLIENT_ID = MqttAsyncClient.generateClientId();	
   @Bean
   public MqttConnectOptions getReceiverMqttConnectOptions() {
       MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
@@ -66,8 +68,8 @@ public class MqttConfig {
 
   @Bean
   public MessageProducer inbound() {
-      String clientId = "uuid-" + UUID.randomUUID().toString();
-      MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(clientId,
+      //String clientId = "uuid-" + UUID.randomUUID().toString();
+      MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(MQTT_SUB_CLIENT_ID,
               mqttClientFactory(), topic + "#");
       adapter.setCompletionTimeout(20000);
       adapter.setConverter(new DefaultPahoMessageConverter());
@@ -105,9 +107,9 @@ public class MqttConfig {
   @Bean
   @ServiceActivator(inputChannel = "mqttOutboundChannel")
   public MessageHandler mqttOutbound() {
-      MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler("testClient", mqttClientFactory());
+      MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(MQTT_PUB_CLIENT_ID, mqttClientFactory());
       messageHandler.setAsync(true);
-      messageHandler.setDefaultTopic("testTopic");
+      messageHandler.setDefaultTopic("/public/");
       return messageHandler;
   }
 

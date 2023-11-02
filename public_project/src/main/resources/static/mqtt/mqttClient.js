@@ -43,7 +43,6 @@
     }
   //서버에 메시지를 전송한다
     const sendMessage = () => {
-    	if(!isNaN($('#seatSelector option:selected').val())){
     		const message = $("#chatInputBox").val();
             mqttClient.publish(mqtt_topic, JSON.stringify({
             	type:'CHAT',
@@ -52,12 +51,34 @@
             	message:message
             	}));
             $("#chatInputBox").val("");
-    	}else{alert('좌석을 선택해주세요')};
+            	$("#chatList").append(//h2변경 필요
+					`<li class="me">
+					<div class="entete">
+						<h3>10:12AM, Today</h3>
+						<h2>client</h2>
+						<span class="status blue"></span>
+					</div>
+					<div class="triangle"></div>
+					<div class="message">${message}</div>
+				</li>`
+				 );
+			$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
     };
     //메세지 수신한 데이터를 삽입
     const recvMessage = recv =>  {
   	  console.log(recv);
-    //  $("#message_list").prepend('<li class="list-group-item" >[' + recv.sender + '] - ' + recv.message + '</li>'); 
+     $("#chatList").append(
+		`<li class="you">
+						<div class="entete">
+							<span class="status green"></span>
+							<h2>${recv.sender}</h2>
+							<h3>10:12AM, Today</h3>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">${recv.message}</div>
+					</li>`
+		);
+	$("#chatList").scrollTop($("#chatList")[0].scrollHeight);//채팅이오면 스크롤 내려오게
     }
     //설정 및 메서드 끝
     
@@ -73,8 +94,7 @@
         // message is Buffer
         //console.log("mqtt message receive :", message.toString())
         	const data = JSON.parse(message.toString())
-        	//if(data.receiver)
-        	if(data.sender === "admin"){
+        	if(data.receiver === "2"){//좌석에따라 수동적으로 바뀌는거 필요함
         		recvMessage(data);
         	}
     })

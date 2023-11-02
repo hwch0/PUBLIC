@@ -19,6 +19,8 @@
 			</footer>
 		</div>
 	</div>
+	
+	<button id="orderBtn">주문 버튼</button>
 </body>
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>
 </html>

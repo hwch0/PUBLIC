@@ -36,7 +36,7 @@ public class UserController {
 		model.addAttribute("result", result);
 		return "/user/userList";
 	}
-	@GetMapping("/userChatTest")
+	@GetMapping("/userTest")
 	public String userChatTest() {
 		return "/user/userTest";
 	}

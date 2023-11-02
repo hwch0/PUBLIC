@@ -67,7 +67,6 @@ public class MqttConfig {
   @Bean
   public MessageProducer inbound() {
       String clientId = "uuid-" + UUID.randomUUID().toString();
-      // /team1/sub : mqtt 경로
       MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(clientId,
               mqttClientFactory(), topic + "#");
       adapter.setCompletionTimeout(20000);

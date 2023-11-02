@@ -46,7 +46,7 @@ const mqtt_host = "www.chocomungco.store";
     	if(!isNaN($('#seatSelector option:selected').val())){
 			const seatNo = $('#seatSelector option:selected').val();
     		const message = $("#chatInputBox").val();
-            mqttClient.publish(mqtt_topic, JSON.stringify({
+            mqttClient.publish(mqtt_topic+"chat", JSON.stringify({
             	type:'CHAT',
             	sender : "admin",
             	receiver :$('#seatSelector option:selected').val(),
@@ -83,6 +83,16 @@ const mqtt_host = "www.chocomungco.store";
 		);
 	$("#chatList").scrollTop($("#chatList")[0].scrollHeight);//채팅이오면 스크롤 내려오게
     }
+    const recvOrder = recv =>  {
+		console.log(recv);
+		$('#orderList').append(
+			`<button class="accordion">${recv.sender}번 좌석 주문내역 : ${recv.orderList}</button>
+				<div class="panel">
+					<p>${recv.orderList}</p>
+					<button>주문 확인</button>
+				</div>`
+		)
+	}//주문리스트 받기
     //설정 및 메서드 끝
     
     mqttClient.on('connect', () => {
@@ -98,9 +108,11 @@ const mqtt_host = "www.chocomungco.store";
         //console.log("mqtt message receive :", message.toString())
         	const data = JSON.parse(message.toString())
         	//if(data.receiver)
-        	if(data.receiver === "admin"){
+        	if(data.receiver === "admin" && data.type ==="CHAT"){
         		recvMessage(data);
-        	}
+        	}else{
+			recvOrder(data);
+		}
     })
       
     $("#chatInputBox").on("keydown", e => {

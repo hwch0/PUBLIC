@@ -29,7 +29,7 @@
     
   //구독을 등록
     const subscribe = () => {
-    	  mqttClient.subscribe(mqtt_topic+"#", err => {
+    	  mqttClient.subscribe(mqtt_topic+"chat", err => {
     		  console.log("Subscribe to a topic=>" +mqtt_topic);
     		  if (!err) {
     			  console.log("error", err);
@@ -44,7 +44,7 @@
   //서버에 메시지를 전송한다
     const sendMessage = () => {
     		const message = $("#chatInputBox").val();
-            mqttClient.publish(mqtt_topic, JSON.stringify({
+            mqttClient.publish(mqtt_topic+"chat", JSON.stringify({
             	type:'CHAT',
             	sender : "client",
             	receiver :"admin",
@@ -107,4 +107,16 @@
     });
     $("#send_chat_button").on("click", e => {
         sendMessage();
+    });
+    $("#orderBtn").on("click", e => {
+            mqttClient.publish("/public/order", JSON.stringify({
+            	type:'ORDER',
+            	sender : "client",
+            	receiver :"admin",
+            	orderList:[
+					{"ramen" : 1},
+					{"coke":2},
+					{"rice":3},
+					{"bread":2,}]
+            	}));
     });

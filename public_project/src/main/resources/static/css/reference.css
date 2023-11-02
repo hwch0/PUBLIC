@@ -676,9 +676,10 @@
 	width: 200px;
 }
 
+/*Scroll*/
 .itemTbody{
 	text-align: center;
-	max-height: 187px; 
+	max-height: 232px; 
 	overflow-y: auto;
 	display: block;
 }
@@ -697,10 +698,76 @@
     padding: 0 12px;
 }
 
-.paymTbody{
+/*Scroll*/
+.statusTbody{
 	text-align: center;
+	max-height: 232px;  
+	overflow-y: auto;
+	display: block;
 }
-.paymTbody .amount-cell {
+
+.statusScroll > tr > td:nth-child(1) { width: 45px; }
+.statusScroll > tr > td:nth-child(2) { width: 100px; }
+.statusScroll > tr > td:nth-child(3) { width: 236px; }
+.statusScroll > tr > td:nth-child(4) { width: 100px; }
+.statusScroll > tr > td:nth-child(5) { width: 90px; }
+.statusScroll > tr > td:nth-child(6) { width: 90px; }
+.statusScroll > tr > td:nth-child(7) { width: 90px; }
+.statusScroll > tr > td:nth-child(8) { width: 90px; }
+.statusScroll > tr > td:nth-child(9) { width: 90px; }
+
+.statusTbody .amount-cell {
     text-align: end;
     padding: 0 12px;
+}
+
+/*품목 정렬 css*/
+.sortable {
+    cursor: pointer;
+}
+
+.sortable:hover {
+    background-color: #f2f2f2; 
+}
+
+.statusSortable.asc::after {
+    content: ' ▲';
+    color: #450877; 
+}
+
+.statusSortable.desc::after {
+    content: ' ▼';
+    color: #450877; 
+}
+
+.statusSortable.reset::after {
+    content: '';
+    color: initial; 
+}
+
+.itemSortable.asc::after {
+    content: ' ▲';
+    color: #450877 !important; 
+}
+
+.itemSortable.desc::after {
+    content: ' ▼';
+    color: #450877; 
+}
+
+.itemSortable.reset::after {
+    content: ''; 
+    color: initial; 
+}
+
+/*로딩중*/
+.loading-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    display: block;
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
 }

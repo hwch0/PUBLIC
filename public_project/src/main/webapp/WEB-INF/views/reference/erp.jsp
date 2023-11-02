@@ -6,82 +6,10 @@
 <meta charset="UTF-8">
 <title>재고관리</title>
 <link rel="stylesheet" href="css/reference.css">
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<!-- jquery -->
-<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
-<script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
-<!-- 날자관련 링크 -->
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker3.min.css">
-
 </head>
 
 <body>
- <div class="header">
-        <!-- ********** 상단 왼쪽 영역 시작 ********** -->
-        <div class="hd hd_lft">
-            <!-- 로고 영역 -->
-            <div class="logo">
-                <img src="/images/logo_w.png" alt="로고">
-            </div>
-            <!-- 화면 전화 버튼 영역 -->
-            <div class="btn_toggle">
-                <ul>
-                    <li class="btn btn_pos">
-                        <a href="/pos">POS</a>
-                    </li>
-                    <li class="btn btn_ERP on">
-                        <a href="/erp">ERP</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!-- ********** 상단 왼쪽 영역 끝 ********** -->
-
-        <!-- ********** 상단 오른쪽 영역 시작 ********** -->
-        <div class="hd hd_rgt">
-            <div class="btn_grp">
-                <ul>
-                    <li class="on"><a href="javascript:void(0);">알림</a></li>
-                    <li><a href="javascript:void(0);">채팅</a></li>
-                    <li><a href="javascript:void(0);">좌석</a></li>
-                    <li><a href="javascript:void(0);">대시보드</a></li>
-                    <li><a href="javascript:void(0);">설정</a></li>
-                </ul>
-            </div>
-        </div>
-        <!-- ********** 상단 오른쪽 영역 끝 ********** -->
-
-
-        <!-- ########## 네비게이션 영역 시작 ########## -->
-        <div class="nav">
-            <ul class="main_nav">
-                <li class="on">
-                    <em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="/erp" onclick="navOn(this);">재고관리</a>
-                   	<ul class="sub_nav">
-		                <li><a href="javascript:void(0);" onclick="loadPage('/erp');">품목</a></li>
-		                <li><a href="javascript:void(0);" onclick="loadPage('/inventoryStatus');">입·출고현황</a></li>
-		            </ul>
-                </li>
-                <li>
-                	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="/erp2" onclick="navOn(this);">매출관리</a>
-                </li>
-                <li>
-                	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="javascript:void(0);" onclick="navOn(this);">회원관리</a>
-                </li>
-            </ul>
-        </div>
-        <!-- ########## 네비게이션 영역 끝 ########## -->
-    </div>
-
-
-    <div class="content" id="dynamicContent">
+    <div class="content" id="item" style="display:block;">
         <div class="cont_top" style="height: 100%;">
         <div class="header-content">
             <h2>
@@ -90,8 +18,10 @@
             </h2>
 			<div class="button-group">
 	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
-	            <button id="check">조회</button>
-	            <button id="Excel">엑셀</button>
+	            <button class="check" id="itemCheck" onclick="loading()">조회</button>
+	            <button id="Excel">
+					 <img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 엑셀
+				</button>
 	        </div>
 		</div>
 		
@@ -139,9 +69,9 @@
 
                         <td class="tr_th">재고량</td>
                         <td style="padding: 0 30px;">
-						    <label style="font-size: 13px"><input type="radio" name="stockOption" checked> 모두 보기</label>
-                            <label style="font-size: 13px"><input type="radio" name="stockOption"> 현재 재고</label>
-						    <label style="font-size: 13px"><input type="radio" name="stockOption"> 전월 재고</label>
+						    <label style="font-size: 13px"><input type="radio" name="itemStockOption" checked> 모두 보기</label>
+                            <label style="font-size: 13px"><input type="radio" name="itemStockOption"> 현재 재고</label>
+						    <label style="font-size: 13px"><input type="radio" name="itemStockOption"> 전월 재고</label>
                         </td>
                     </tr>
                 </table>
@@ -156,13 +86,13 @@
             <table style="width: 100%;border-color: #a49f9f; border-collapse:collapse; display:block;">
                 <thead>
 			        <th style="width: 45px;">순번</th>
-			        <th style="width: 135px;" class="sortable" data-sort="품목코드">품목코드</th>
-			        <th style="width: 236px;" class="sortable" data-sort="품목명">품목명</th>
+			        <th style="width: 135px;" class="sortable itemSortable" data-sort="품목코드">품목코드</th>
+			        <th style="width: 236px;" class="sortable itemSortable" data-sort="품목명">품목명</th>
 			        <th style="width: 71px;">품목유형</th>
-			        <th style="width: 109px;" class="sortable" data-sort="등록일">등록일</th>
-			        <th style="width: 90px;" class="sortable" data-sort="현재재고">현재재고</th>
-			        <th style="width: 90px;" class="sortable" data-sort="전월재고">전월재고</th>
-			        <th style="width: 128px;" class="sortable amount-cell" data-sort="평균단가">평균단가(단위 원)</th>
+			        <th style="width: 109px;" class="sortable itemSortable" data-sort="등록일">등록일</th>
+			        <th style="width: 90px;" class="sortable itemSortable" data-sort="현재재고">현재재고</th>
+			        <th style="width: 90px;" class="sortable itemSortable" data-sort="전월재고">전월재고</th>
+			        <th style="width: 128px;" class="sortable itemSortable amount-cell" data-sort="평균단가">평균단가</th>
 			    </thead>
 
                 <tbody class="itemTbody itemScroll">
@@ -293,7 +223,7 @@ function navOn(element) {
 </script>
 
 
-<script src="js/erpmain.js"></script>
-<script src="js/erpitem.js"></script>
+<!-- <script src="js/erpmain.js"></script> -->
+<!-- <script src="js/erpitem.js"></script> -->
 
 </html>

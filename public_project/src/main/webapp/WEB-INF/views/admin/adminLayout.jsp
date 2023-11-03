@@ -44,7 +44,7 @@
 						<li><a href="javascript:void(0);" onClick="showChat()">채팅</a></li>
                         <li><a href="javascript:void(0);" onclick="changeAdminPage();">좌석</a></li>
                         <li><a href="javascript:void(0);" onclick="changeAdminPage();">대시보드</a></li>
-                        <li><a href="javascript:void(0);">설정</a></li>
+                        <li><a href="javascript:void(0);" onclick="addFoodPage();">설정</a></li>
                     </ul>
                 </div>
             </div>
@@ -56,6 +56,7 @@
 		<div class="wrap_cont">
 			<jsp:include page="adminMain.jsp"></jsp:include>
 			<jsp:include page="adminDashboard.jsp"></jsp:include>
+			<jsp:include page="adminFood.jsp"></jsp:include>
 		</div>
 
 		<!-- 관리자 알림창 영역 -->

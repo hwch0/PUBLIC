@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css" />
     <!-- summernote -->
     <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css" />
+    
+<!-- ********** 관리자 메뉴판 관리 ********** -->
+	
 
 <!-- ********** 채팅 ********** -->
 

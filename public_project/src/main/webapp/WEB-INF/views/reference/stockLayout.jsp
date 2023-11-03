@@ -54,7 +54,7 @@
             <ul class="main_nav">
                 <li class="on">
                     <em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="/erp" onclick="navOn(this);">재고관리</a>
+                    <a href="/stock" onclick="navOn(this);">재고관리</a>
                    	<ul class="sub_nav">
 		                <li><a href="javascript:void(0);" onclick="changeItemPage();">재고</a></li>
 		                <li><a href="javascript:void(0);" onclick="changeInventoryStatusPage();">입·출고현황</a></li>
@@ -62,7 +62,7 @@
                 </li>
                 <li>
                 	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="/erp2" onclick="navOn(this);">매출관리</a>
+                    <a href="/sales" onclick="navOn(this);">매출관리</a>
                 </li>
                 <li>
                 	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
@@ -73,15 +73,10 @@
         <!-- ########## 네비게이션 영역 끝 ########## -->
     </div>
 
-		<!-- erp영역 영역 -->
-<!-- 		<div class="content"> -->
-			<jsp:include page="erp.jsp"></jsp:include>
+			<!-- 재고 관리 영역 -->			
+			<jsp:include page="item.jsp"></jsp:include>
 			<jsp:include page="inventoryStatus.jsp"></jsp:include>
-<!-- 		</div> -->
-
-		
-
-    
+			
 
     <!-- 모달 창 영역 -->
 

@@ -201,6 +201,26 @@
         animation: fadeInRight 1s;
         background-color: #fff;
     }
+    
+        
+    .admin_main {
+		display: none;
+	}
+    .admin_main.on {
+		display: block;
+	}
+    .admin_dash {
+		display: none;
+	}
+    .admin_dash.on {
+		display: block;
+	}
+    .admin_food {
+		display: none;
+	}
+    .admin_food.on {
+		display: block;
+	}
 
 
     @keyframes fadeInRight {

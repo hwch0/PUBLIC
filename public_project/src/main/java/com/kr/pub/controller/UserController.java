@@ -60,7 +60,7 @@ public class UserController {
 	}
 	@GetMapping("/userTest")
 	public String userTest() throws Exception {
-		mqttService.publishMessage("안녕하세요","/public/order");
+		//mqttService.publishMessage("안녕하세요","/public/order");
 		/*
 		 * 순서:
 		 * 1.사용자가 주문 버튼 누름

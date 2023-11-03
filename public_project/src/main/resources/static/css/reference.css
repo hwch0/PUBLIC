@@ -580,7 +580,9 @@
     }
 
     .modal.on {
-        width: calc(100vw - 400px);
+        /*width: calc(100vw - 400px);*/
+        width: 100vw;
+        display: block;
     }
     .modal-content {
         position: absolute;
@@ -616,9 +618,11 @@
 }
 .input-group .form-control {
     position: relative;
+    outline: none;
+    font-size: 13px;
     z-index: 2;
     float: left;
-    width: 75px;
+    width: 76px;
     margin-bottom: 0
 }
 .datepicker-dropdown{
@@ -676,7 +680,7 @@
 	width: 200px;
 }
 
-/*Scroll*/
+/*item Tbody Css*/
 .itemTbody{
 	text-align: center;
 	max-height: 232px; 
@@ -698,7 +702,7 @@
     padding: 0 12px;
 }
 
-/*Scroll*/
+/*status Tbody Css*/
 .statusTbody{
 	text-align: center;
 	max-height: 232px;  
@@ -707,16 +711,38 @@
 }
 
 .statusScroll > tr > td:nth-child(1) { width: 45px; }
-.statusScroll > tr > td:nth-child(2) { width: 100px; }
-.statusScroll > tr > td:nth-child(3) { width: 236px; }
-.statusScroll > tr > td:nth-child(4) { width: 100px; }
-.statusScroll > tr > td:nth-child(5) { width: 90px; }
+.statusScroll > tr > td:nth-child(2) { width: 132px; }
+.statusScroll > tr > td:nth-child(3) { width: 237px; }
+.statusScroll > tr > td:nth-child(4) { width: 109px; }
+.statusScroll > tr > td:nth-child(5) { width: 71px; }
 .statusScroll > tr > td:nth-child(6) { width: 90px; }
-.statusScroll > tr > td:nth-child(7) { width: 90px; }
-.statusScroll > tr > td:nth-child(8) { width: 90px; }
-.statusScroll > tr > td:nth-child(9) { width: 90px; }
+.statusScroll > tr > td:nth-child(7) { width: 74px; }
+.statusScroll > tr > td:nth-child(8) { width: 80px; }
+
 
 .statusTbody .amount-cell {
+    text-align: end;
+    padding: 0 12px;
+}
+
+/*paym Tbody Css*/
+.paymTbody{
+	text-align: center;
+	max-height: 232px;  
+	overflow-y: auto;
+	display: block;
+}
+
+.paymScroll > tr > td:nth-child(1) { width: 45px; }
+.paymScroll > tr > td:nth-child(2) { width: 130px; }
+.paymScroll > tr > td:nth-child(3) { width: 130px; }
+.paymScroll > tr > td:nth-child(4) { width: 110px; }
+.paymScroll > tr > td:nth-child(5) { width: 110px; }
+.paymScroll > tr > td:nth-child(6) { width: 86px; }
+.paymScroll > tr > td:nth-child(7) { width: 86px; }
+.paymScroll > tr > td:nth-child(8) { width: 117px; }
+
+.paymTbody .amount-cell {
     text-align: end;
     padding: 0 12px;
 }

@@ -30,7 +30,7 @@
                        <td class="tr_th">일자</td>
 			            <td style="padding:0 10px;">
 						    <div class="input-group date" style="display: inline-block; ">
-						        <input type="text" class="form-control" id="startDate2" readonly>
+						        <input type="text" class="form-control" id="startDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -39,7 +39,7 @@
 						    <div style="display: inline-block; margin: 0 10px;">~</div>
 						    
 						    <div class="input-group date" style="display: inline-block;">
-						        <input type="text" class="form-control" id="endDate2" readonly>
+						        <input type="text" class="form-control" id="endDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -90,14 +90,13 @@
             <table style="width: 100%; border-color: #a49f9f;  border-collapse: collapse; display:block;">
                 <thead>
 			        <th style="width: 45px;">순번</th>
-			        <th style="width: 100px;" class="sortable statusSortable" data-sort="품목코드">품목코드</th>
+			        <th style="width: 132px;" class="sortable statusSortable" data-sort="품목코드">품목코드</th>
 			        <th style="width: 236px;" class="sortable statusSortable" data-sort="품목명">품목명</th>
-			        <th style="width: 100px;" class="sortable statusSortable" data-sort="일자">일자</th>
-			        <th style="width: 90px;" class="sortable statusSortable" data-sort="입·출고상세">상세</th>
+			        <th style="width: 109px;" class="sortable statusSortable" data-sort="일자">일자</th>
+			        <th style="width: 71px;" class="sortable statusSortable" data-sort="입·출고상세">상세</th>
 			        <th style="width: 90px;" class="sortable statusSortable" data-sort="입·출고수량">수량</th>
-			        <th style="width: 90px;" class="sortable statusSortable amount-cell" data-sort="입·출고단가">단가</th>
-			        <th style="width: 90px;">부가세</th>
-			        <th style="width: 90px;"class="sortable statusSortable amount-cell" data-sort="총금액">총금액</th>
+			        <th style="width: 99px;" class="sortable statusSortable amount-cell" data-sort="입·출고단가">단가</th>
+			        <th style="width: 120px;"class="sortable statusSortable amount-cell" data-sort="총금액">총금액</th>
 			    </thead>
 
                 <tbody class="statusTbody statusScroll">
@@ -109,7 +108,6 @@
                         <td>판매</td>
                         <td>1EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦1,500</td>
                     </tr>
                     <tr>
@@ -120,7 +118,6 @@
                         <td>입고</td>
                         <td>10EA</td>
                         <td class="amount-cell">￦73,000</td>
-                        <td class="amount-cell">￦7,000</td>
                         <td class="amount-cell">￦80,000</td>
                     </tr>
                     <tr>
@@ -131,7 +128,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦1,500</td>
                     </tr>
                     <tr>
@@ -142,7 +138,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦100,000</td>
-                        <td class="amount-cell">￦10,000</td>
                         <td class="amount-cell">￦110,000</td>
                     </tr>
                     <tr>
@@ -153,7 +148,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦235,000</td>
-                        <td class="amount-cell">￦23,500</td>
                         <td class="amount-cell">￦258,500</td>
                     </tr>
                     <tr>
@@ -164,7 +158,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦1,500</td>
                     </tr>
                     <tr>
@@ -175,7 +168,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦1,500</td>
                     </tr>
                     <tr>
@@ -186,7 +178,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦1,500</td>
                     </tr>
                     <tr>
@@ -197,7 +188,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦120</td>
                     </tr>
                     <tr>
@@ -208,7 +198,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦200</td>
                     </tr>
                     <tr>
@@ -219,7 +208,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦350,000</td>
                     </tr>
                     <tr>
@@ -230,7 +218,6 @@
                         <td>판매</td>
                         <td>2EA</td>
                         <td class="amount-cell">￦1,450</td>
-                        <td class="amount-cell">￦150</td>
                         <td class="amount-cell">￦720</td>
                     </tr>
                  </tbody>
@@ -238,17 +225,4 @@
            </div>           
         </div>
 </body>
-
-
-<script>
-function navOn(element) {
-    const navLi = $(element).parent();
-    $(".main_nav li.on").removeClass("on");
-    $(navLi).addClass("on");
-}
-</script>
-
-
-<!-- <script src="js/erpmain.js"></script> -->
-
 </html>

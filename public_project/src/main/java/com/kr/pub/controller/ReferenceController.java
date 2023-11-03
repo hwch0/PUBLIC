@@ -11,20 +11,19 @@ public class ReferenceController {
 	public String pos(Model model) {
 		return "/reference/pos";
 	}
-//	@GetMapping("/erp")
-//	public String erp(Model model) {
-//		return "/reference/erp";
-//	}
-	@GetMapping("/erp")
+
+	@GetMapping("/stock")
 	public String erp(Model model) {
-		return "/reference/erpLayout";
+		return "/reference/stockLayout";
 	}
-//	@GetMapping("/inventoryStatus")
-//	public String inventoryStatus(Model model) {
-//	    return "/reference/inventoryStatus";
+
+	@GetMapping("/sales")
+	public String sales(Model model) {
+		return "/reference/salesLayout";
+	}
+
+	//	@GetMapping("/erp2")
+//	public String erp2(Model model) {
+//		return "/reference/erp2";
 //	}
-	@GetMapping("/erp2")
-	public String erp2(Model model) {
-		return "/reference/erp2";
-	}
 }

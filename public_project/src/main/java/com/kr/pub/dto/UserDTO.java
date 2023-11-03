@@ -1,6 +1,7 @@
 package com.kr.pub.dto;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +21,8 @@ public class UserDTO {
 	private String address;
 	private String email;
 	private int loginFailure;
-	private Date loginTime;
-	private Date logoutTime;
+	private Timestamp loginTime;
+	private Timestamp logoutTime;
 	private Date regDate;
 	private int remainingTime;
 	private String roleId;

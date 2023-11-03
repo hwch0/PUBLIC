@@ -1,12 +1,12 @@
-const listSeat = document.querySelectorAll('.seat_grp ul li');
+const listSeat = $('.seat_grp ul li');
 const onSeat = document.querySelectorAll('.seat_grp ul li.on');
 const modal = document.getElementById('modal');
 const listChat = document.querySelectorAll('.btn_grp ul li');
 
-listSeat.forEach((li, index) => {
-    const em = document.createElement('em');
-    em.textContent = index + 1; 
-    li.insertBefore(em, li.querySelector('a')); 
+listSeat.each(function(index, li) {
+    const em = $('<em>').text(index + 1);
+    $(li).find('a').before(em);
+    $(li).attr("data-seatNo", index+1);
 });
 
 onSeat.forEach((li) => {

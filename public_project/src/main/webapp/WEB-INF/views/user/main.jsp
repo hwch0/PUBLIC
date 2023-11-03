@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>사용자 화면</title>
 </head>
-<link rel="stylesheet" href="css/user.css">
+<link rel="stylesheet" href="/css/user.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
     <div class="body-wrap">
@@ -20,6 +20,7 @@
     </div>
 </body>
 <script>
+
 // 시간 js
 var remainingTimeElement = document.getElementById("remainingTime");
 
@@ -39,7 +40,7 @@ function updateCountdown(remainingTime) {
             updateCountdown(remainingTime);
         }, 1000);
     } else {
-        location.href = "/user/main";
+        location.href = "/user/login";
     }
 }
 
@@ -53,7 +54,7 @@ function updateRemainingTime() {
         remainingTime = remainingTime - Math.floor(durationTime / 1000);
         updateCountdown(remainingTime);
     } else {
-        location.href = "/user/main";
+        location.href = "/user/login";
     }
 }
 

@@ -1,5 +1,6 @@
 package com.kr.pub.controller;
 
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -14,28 +15,26 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dto.ImageDTO;
 import com.kr.pub.service.ImageService;
-
 import jakarta.servlet.http.HttpServletResponse;
+import com.kr.pub.service.AdminService;
 
-@Controller("/admin")
+@Controller
 public class AdminController {
-	
 	@Autowired
 	private ImageService imageService;
 	
-	@GetMapping("/")
+	@Autowired
+	AdminService adminService;
+	@GetMapping("/admin")
 	public String adminMain() {
-		
 		return "/admin/adminLayout";
 	}
 	
 	@ResponseBody
 	@PostMapping("/addMenu")
 	public Map<String, Object> addMenu(MultipartHttpServletRequest multipartRequest, HttpServletResponse res) throws IOException {
-		
 		Map<String,Object> result = new HashMap<>();
 		List<ImageDTO> image = imageService.imageProcess(multipartRequest);
-		
 		
 		
 		return result;

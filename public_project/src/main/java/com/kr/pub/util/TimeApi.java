@@ -22,10 +22,9 @@ public class TimeApi {
         String time = (String) jsonObject.get("time") +":" + seconds;
         return time;
     }
-    
     // ZonedDateTime을 Timestamp로 변환하는 함수
     public static Timestamp encodingTime(ZonedDateTime zoneTime) {
-    	Timestamp timeStamp = Timestamp.from(zoneTime.toInstant());
-    	return timeStamp;
+       Timestamp timeStamp = Timestamp.from(zoneTime.toInstant());
+       return timeStamp;
     }
 }

@@ -23,9 +23,44 @@
   display: none;
 }
 
+.addMenuBnt {
+	height: 100%;
+	width: 100%;
+	border-radius:calc(.25rem - 0);
+}
+
 </style>
 
  <div class="admin_food">
+ 
+           
+  <!-- 모달 창 영역 -->
+	<div id="menuModal" class="modal">
+    <div class="modal-content">
+    	<span class="close" id="closeModalBtn">&times;</span>
+    	
+    	
+    	<form name="menuForm" id=menuForm" method="multipart/form-data">
+			<select class="form-select" aria-label="Default select example">
+			  <option selected>메뉴 카테고리 선택</option>
+			  <option value="1">밥</option>
+			  <option value="2">라면</option>
+			  <option value="3">음료</option>
+			  <option value="4">스낵</option>
+			</select>    
+				
+	    	<div class="input-group mb-3">
+			  <input type="file" class="form-control" id="inputGroupFile02">
+			  <label class="input-group-text" for="inputGroupFile02">Upload</label>
+			  <img id="preview" src="" alt="Image Preview" style="max-width: 80%; height: auto; display: none;">
+			</div>
+			
+			<button class="" id="" type="button">메뉴등록</button>
+    	
+    	</form>
+    
+    </div>
+   </div>
   
   <!-- Section-->
     <section class="py-5">
@@ -33,6 +68,17 @@
         <div
           class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
         >
+        
+          <!-- 메뉴 추가  -->        
+          <div class="col mb-5">
+	          <div class="card h-100">
+	          	<button class="openMenuController">+</button>
+	          	
+	          </div>
+          </div>
+
+
+        
           <div class="col mb-5">
             <div class="card h-100">
               <!-- Product image-->
@@ -419,7 +465,7 @@
 	          	<div class="card-body p-4">
 	          		<div class="text-center">
 	          			<h5 class="fw-bolder">품목이름</h5>
-	          			1,000원
+	          			가격
 	          		</div>
 	          	</div>
     	        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">

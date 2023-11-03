@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ImageDTO {
 	private String imgId;
 	private Date regDate;
-	private int length;
+	private long length;
 	private String imgNameReal;
 	private char deleted;
 	private String contentType;

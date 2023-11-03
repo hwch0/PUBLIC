@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.MqttService;
@@ -29,59 +31,88 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private MqttService mqttService;
-	
-	@GetMapping("/")
+   
+   @Autowired
+   private UserService userService;
+   @Autowired
+   private MqttService mqttService;
+   
+   @GetMapping("/")
     public String login() {
         return "/user/login";
     }
-	
+   
     @GetMapping("/main")
-  	public String Main() {
-  		return "/user/main";
-  	}
+     public String Main() {
+        return "/user/main";
+     }
     
-	@GetMapping("/list")
-	public String userList(Model model) {
-		List<UserDTO> result = userService.getUserList();
-		System.out.println(result);
-		model.addAttribute("result",  result);
-		return "/user/userList";
-	}
+   @GetMapping("/list")
+   public String userList(Model model) {
+      List<UserDTO> result = userService.getUserList();
+      System.out.println(result);
+      model.addAttribute("result",  result);
+      return "/user/userList";
+   }
+   
+   public String getLocation(HttpServletRequest request) {
+		String ip = request.getHeader("X-Forwarded-For");
+		if (ip == null) {
+           ip = request.getHeader("Proxy-Client-IP");
+           System.out.println(">>>> Proxy-Client-IP : " + ip);
+       }
+       if (ip == null) {
+           ip = request.getHeader("WL-Proxy-Client-IP"); // 웹로직
+           System.out.println(">>>> WL-Proxy-Client-IP : " + ip);
+       }
+       if (ip == null) {
+           ip = request.getHeader("HTTP_CLIENT_IP");
+           System.out.println(">>>> HTTP_CLIENT_IP : " + ip);
+       }
+       if (ip == null) {
+           ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+           System.out.println(">>>> HTTP_X_FORWARDED_FOR : " + ip);
+       }
+       if (ip == null) {
+           ip = request.getRemoteAddr();
+       }
+       
+       System.out.println(">>>> Result : IP Address : "+ip);
+
+       return ip;
+
+   }
 	
-	@GetMapping("/{userId}")
-	public String userInfo(Model model, @PathVariable String userId) {
-		UserDTO result = userService.getUser(userId);
-		model.addAttribute("result", result);
-		return "/user/userList";
-	}
-	@GetMapping("/userTest")
-	public String userTest(Model model) throws Exception {
-		model.addAttribute("time" ,TimeApi.getTime());
-		//mqttService.publishMessage(TimeApi.getTime(),"/public/order");
-		/*
-		 * 순서:
-		 * 1.사용자가 주문 버튼 누름
-		 * 2.DB에 insert하는 api호출
-		 * 3.Admin에게 알림 보내기
-		 * 4.Admin측에서 알림이 오면 Ajax로 api호출해서
-		 * update되지 않은 데이터 모두 가져와서 뷰단에 동적으로 출력
-		 * 
-		 * 주문이 DB에 insert 되면 Admin에게 알림 보내서
-		 * insert된 Data를 Admin측에서 select
-		 * select할때 화면상에 위치하는 가장 위의 데이터 보다
-		 * 최근인 데이터들만 가져와서 뷰단에 동적으로 출력 
-		 * */
-		
-		return "/user/userTest";
-	}
 	
-	
-	// 로그인
+   @GetMapping("/{userId}")
+   public String userInfo(Model model, @PathVariable String userId) {
+      UserDTO result = userService.getUser(userId);
+      model.addAttribute("result", result);
+      return "/user/userList";
+   }
+   @GetMapping("/userTest")
+   public String userTest(Model model) throws Exception {
+      model.addAttribute("time" ,TimeApi.getTime());
+      //mqttService.publishMessage(TimeApi.getTime(),"/public/order");
+      /*
+       * 순서:
+       * 1.사용자가 주문 버튼 누름
+       * 2.DB에 insert하는 api호출
+       * 3.Admin에게 알림 보내기
+       * 4.Admin측에서 알림이 오면 Ajax로 api호출해서
+       * update되지 않은 데이터 모두 가져와서 뷰단에 동적으로 출력
+       * 
+       * 주문이 DB에 insert 되면 Admin에게 알림 보내서
+       * insert된 Data를 Admin측에서 select
+       * select할때 화면상에 위치하는 가장 위의 데이터 보다
+       * 최근인 데이터들만 가져와서 뷰단에 동적으로 출력 
+       * */
+      
+      return "/user/userTest";
+   }
+   
+   
+   // 로그인
     @PostMapping("/login")
     @ResponseBody
     public Map<String, Object> login(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
@@ -89,8 +120,12 @@ public class UserController {
         Map<String, Object> map = new HashMap<>();
 
         // 현재시간 
-        Timestamp loginTime = new Timestamp(System.currentTimeMillis());
-
+        //ZonedDateTime loginTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        
+        Timestamp timestamp = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+        
+        System.out.println("로그인 타임(변환) !!!!" + timestamp);
+        
         UserDTO rs = userService.login(user);
 
         // 잔여시간
@@ -100,13 +135,16 @@ public class UserController {
         
         if (rs != null) {
             session.setAttribute("remainingTime", remainingTime);
-            session.setAttribute("LoginTime", loginTime);
+            session.setAttribute("LoginTime", timestamp);
             session.setAttribute("LoginMember", rs);
             map.put("rs", rs);
             map.put("message", "로그인 성공했습니다.");
             
+            
+            getLocation(request);
+            
             // 로그인 성공 시 loginTime 삽입
-            rs.setLoginTime(loginTime);
+            rs.setLoginTime(timestamp);
             userService.updateLoginTime(rs);
         } else {
             map.put("message", "로그인 실패했습니다.");
@@ -114,72 +152,72 @@ public class UserController {
         return map;
     }
     
-	// 로그아웃
-    @GetMapping("/logout")
-    @ResponseBody
-    public String logout(HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
-        
-        // 세션에서 LoginMember 속성 가져오기
-        UserDTO loginMember = (UserDTO) session.getAttribute("LoginMember");
-        if(loginMember != null) {
-	        int remainingTime = (int) session.getAttribute("remainingTime");
-	        
-	        // 입장시간
-	        Timestamp loginTime = loginMember.getLoginTime();
-	        // 퇴장시간
-	        Timestamp logoutTime = new Timestamp(System.currentTimeMillis());
-	        // 입장시간 - 퇴장시간
-	        Duration duration = Duration.between(loginTime.toInstant(), logoutTime.toInstant());
-	        // 잔여시간 - 사용시간
-	        int seconds = (int) duration.getSeconds();
-	        
-	        remainingTime = (remainingTime - seconds);
-	        
-	        UserDTO updateMember = new UserDTO();
-	        
-	        updateMember.setUserId(loginMember.getUserId());
-	        updateMember.setLogoutTime(loginTime);
-	        updateMember.setRemainingTime(remainingTime);
-	        
-	        
-	        System.out.println("업데이트 된 목록 : " + updateMember);
-	        
-	        userService.updateAllTime(updateMember);
-        } 
-        session.removeAttribute("LoginMember");
-        session.removeAttribute("LoginTime");
-        session.removeAttribute("remainingTime");
-
-        return "/user/login";
-    }
+//   // 로그아웃
+//    @GetMapping("/logout")
+//    @ResponseBody
+//    public String logout(HttpServletRequest request) throws Exception {
+//        HttpSession session = request.getSession();
+//        
+//        // 세션에서 LoginMember 속성 가져오기
+//        UserDTO loginMember = (UserDTO) session.getAttribute("LoginMember");
+//        if(loginMember != null) {
+//           int remainingTime = (int) session.getAttribute("remainingTime");
+//           
+//           // 입장시간
+//           ZonedDateTime loginTime = loginMember.getLoginTime();
+//           // 퇴장시간
+//           ZonedDateTime logoutTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+//           // 입장시간 - 퇴장시간
+//           Duration duration = Duration.between(loginTime, logoutTime);
+//           // 잔여시간 - 사용시간
+//           int seconds = (int) duration.getSeconds();
+//           
+//           remainingTime = (remainingTime - seconds);
+//           
+//           UserDTO updateMember = new UserDTO();
+//           
+//           updateMember.setUserId(loginMember.getUserId());
+//           updateMember.setLogoutTime(loginTime);
+//           updateMember.setRemainingTime(remainingTime);
+//           
+//           userService.updateAllTime(updateMember);
+//        } 
+//        session.removeAttribute("LoginMember");
+//        session.removeAttribute("LoginTime");
+//        session.removeAttribute("remainingTime");
+//
+//        return "/user/login";
+//    }
+//    
+//    // 시간계산 
+//    @GetMapping("/getRemainingTime")
+//    @ResponseBody
+//    public Map<String, Integer> getRemainingTime(HttpServletRequest request) {
+//        HttpSession session = request.getSession();
+//        Map<String, Integer> response = new HashMap<>();
+//
+//        UserDTO loginMember = (UserDTO) session.getAttribute("LoginMember");
+//        if (loginMember != null) {
+//           
+//           ZonedDateTime loginTime = loginMember.getLoginTime();
+//           ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+//
+//            // 입장 시간부터 현재 시간까지의 시간 차이 계산
+//           Duration duration = Duration.between(loginTime, now);
+//            int seconds = (int) duration.getSeconds();
+//
+//            // 현재 잔여 시간에서 사용된 시간을 뺀 값 전송
+//            int remainingTime = loginMember.getRemainingTime() - seconds;
+//            response.put("remainingTime", remainingTime);
+//        } else {
+//            // 사용자가 로그인하지 않은 경우 처리
+//            response.put("remainingTime", 0);
+//        }
+//
+//        return response;
+//    }
     
-    // 시간계산 
-    @GetMapping("/getRemainingTime")
-    @ResponseBody
-    public Map<String, Integer> getRemainingTime(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Map<String, Integer> response = new HashMap<>();
 
-        UserDTO loginMember = (UserDTO) session.getAttribute("LoginMember");
-        if (loginMember != null) {
-            Timestamp loginTime = loginMember.getLoginTime();
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-
-            // 입장 시간부터 현재 시간까지의 시간 차이 계산
-            Duration duration = Duration.between(loginTime.toInstant(), now.toInstant());
-            int seconds = (int) duration.getSeconds();
-
-            // 현재 잔여 시간에서 사용된 시간을 뺀 값 전송
-            int remainingTime = loginMember.getRemainingTime() - seconds;
-            response.put("remainingTime", remainingTime);
-        } else {
-            // 사용자가 로그인하지 않은 경우 처리
-            response.put("remainingTime", 0);
-        }
-
-        return response;
-    }
 
 
 }

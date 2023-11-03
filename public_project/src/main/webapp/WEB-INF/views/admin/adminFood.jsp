@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!--     <link rel="stylesheet" href="/css/food.css"/> -->
+<link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href="/docs/5.0/assets/css/docs.css" rel="stylesheet">
 
 <style>
 .card.h-100 {
@@ -52,10 +54,9 @@
 	    	<div class="input-group mb-3">
 			  <input type="file" class="form-control" id="inputGroupFile02">
 			  <label class="input-group-text" for="inputGroupFile02">Upload</label>
-			  <img id="preview" src="" alt="Image Preview" style="max-width: 80%; height: auto; display: none;">
+			  <img id="preview" src="" alt="Image Preview" style="max-width: 80%; height: auto; display: block;">
 			</div>
-			
-			<button class="" id="" type="button">메뉴등록</button>
+		    <button class="btn btn-outline-dark mt-auto" id="addMenuBnt" type="button">메뉴등록</button>
     	
     	</form>
     

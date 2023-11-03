@@ -86,7 +86,7 @@ public class UserController {
         HttpSession session = request.getSession();
         Map<String, Object> map = new HashMap<>();
 
-        // 현재시간 (서울 기준)
+        // 현재시간 
         Timestamp loginTime = new Timestamp(System.currentTimeMillis());
 
         UserDTO rs = userService.login(user);
@@ -149,7 +149,7 @@ public class UserController {
         session.removeAttribute("LoginTime");
         session.removeAttribute("remainingTime");
 
-        return "/user/";
+        return "/user/login";
     }
     
     // 시간계산 
@@ -178,5 +178,6 @@ public class UserController {
 
         return response;
     }
+
 
 }

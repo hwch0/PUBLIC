@@ -9,7 +9,6 @@ makeCalendar = () => {
     })
 }
 
-
 $(document).ready(() => {
 
 	$.fn.datepicker.dates['kr'] = {
@@ -36,6 +35,19 @@ function changeInventoryStatusPage() {
 		$('#inventoryStatus').css("display", "block");
 		resetInputs();
 }             
+
+//매출내역 주문내역
+function changeSalesPage() {
+		$('#sales').css("display", "block");
+		$('#order').css("display", "none");
+		resetInputs();
+}      
+
+function changeOrderPage() {
+		$('#sales').css("display", "none");
+		$('#order').css("display", "block");
+		resetInputs();
+}     
 
 //버튼 클릭 시 초기화
 function resetInputs(){

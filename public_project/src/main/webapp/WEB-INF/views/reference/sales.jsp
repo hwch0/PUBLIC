@@ -10,7 +10,7 @@
 </head>
 <body>
 
-    <div class="content">
+    <div class="content" id="sales" style="display:block;">
         <div class="cont_top" style="height: 100%;">
         <div class="header-content">
             <h2>

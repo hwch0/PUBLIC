@@ -669,7 +669,8 @@
 /*input박스*/
 .itemName,
 .paymName,
-.userName {
+.userName,
+.orderName {
 	height: 20px;
     width: 200px;
 }
@@ -701,7 +702,7 @@
     padding: 0 12px;
 }
 
-/*status Tbody Css*/
+/*status Tbody css*/
 .statusTbody{
 	text-align: center;
 	max-height: 232px;  
@@ -724,7 +725,7 @@
     padding: 0 12px;
 }
 
-/*paym Tbody Css*/
+/*paym Tbody css*/
 .paymTbody{
 	text-align: center;
 	max-height: 232px;  
@@ -742,6 +743,28 @@
 .paymScroll > tr > td:nth-child(8) { width: 117px; }
 
 .paymTbody .amount-cell {
+    text-align: end;
+    padding: 0 12px;
+}
+
+/*order Tbody css*/
+.orderTbody{
+	text-align: center;
+	max-height: 232px;  
+	overflow-y: auto;
+	display: block;
+}
+
+.orderScroll > tr > td:nth-child(1) { width: 45px; }
+.orderScroll > tr > td:nth-child(2) { width: 130px; }
+.orderScroll > tr > td:nth-child(3) { width: 130px; }
+.orderScroll > tr > td:nth-child(4) { width: 177px; }
+.orderScroll > tr > td:nth-child(5) { width: 90px; }
+.orderScroll > tr > td:nth-child(6) { width: 100px; }
+.orderScroll > tr > td:nth-child(7) { width: 98px; }
+.orderScroll > tr > td:nth-child(8) { width: 92px; }
+
+.orderTbody .amount-cell {
     text-align: end;
     padding: 0 12px;
 }

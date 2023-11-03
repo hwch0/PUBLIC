@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>erp</title>
+<title>매출 관리</title>
 
 </head>
 <%-- <jsp:include page="/WEB-INF/views/common/commonCSS.jsp"></jsp:include> --%>
@@ -60,7 +60,7 @@
                 	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
                     <a href="/sales" onclick="navOn(this);">매출관리</a>
                    	<ul class="sub_nav">
-		                <li><a href="javascript:void(0);" onclick="changesalesPage();">매출 내역</a></li>
+		                <li><a href="javascript:void(0);" onclick="changeSalesPage();">매출 내역</a></li>
 		                <li><a href="javascript:void(0);" onclick="changeOrderPage();">주문 내역</a></li>
 		            </ul>
                 </li>

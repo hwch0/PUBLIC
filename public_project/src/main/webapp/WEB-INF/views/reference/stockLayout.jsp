@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>erp</title>
+<title>재고 관리</title>
 
 </head>
 <%-- <jsp:include page="/WEB-INF/views/common/commonCSS.jsp"></jsp:include> --%>

@@ -10,7 +10,19 @@
 <script src="js/reference.js"></script>
 
 <!-- ********** 관리자 대시보드 ********** -->
-<script src="js/admin.js"></script>
+<script src="/js/admin.js"></script>
+<!-- jQuery -->
+<script src="/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="/plugins/chart.js/Chart.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/dist/js/adminlte.min.js"></script>
+
+
+<!-- ********** 관리자 메뉴판 관리 ********** -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- ********** 채팅 ********** -->
 

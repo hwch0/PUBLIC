@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
- <div class="admin_dash" style="display:none;">
- 
+ <div class="admin_dash">
 <div class="dashboard" style="padding: 50px 100px 0px 100px">
       <div class="row">
         <div class="col-md-2">전일 사용자</div>
@@ -376,17 +375,17 @@
  
  
  
-    <!-- jQuery -->
-    <script src="/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="/plugins/chart.js/Chart.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="/dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="/dist/js/demo.js"></script>
-    <!-- Page specific script -->
+<!--     jQuery -->
+<!--     <script src="/plugins/jquery/jquery.min.js"></script> -->
+<!--     Bootstrap 4 -->
+<!--     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+<!--     ChartJS -->
+<!--     <script src="/plugins/chart.js/Chart.min.js"></script> -->
+<!--     AdminLTE App -->
+<!--     <script src="/dist/js/adminlte.min.js"></script> -->
+<!--     AdminLTE for demo purposes -->
+<!--     <script src="/dist/js/demo.js"></script> -->
+<!--     Page specific script -->
 
     <script>
       $(function () {
@@ -705,3 +704,4 @@
         addDataToTable();
       });
     </script>
+    

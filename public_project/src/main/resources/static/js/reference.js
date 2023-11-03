@@ -25,7 +25,7 @@ $('.close').on('click', function(e){
 	 modal.style.display = 'none';
 });
 
-let admimPageChange = true;
+/*let admimPageChange = true;
 
 function changeAdminPage() {
 	if(admimPageChange) {
@@ -41,8 +41,31 @@ function changeAdminPage() {
 		$('.btn_grp li:nth-child(4) a').css("display", "block");
 		admimPageChange = true;
 	}
+}*/
+
+
+function changeAdminPage() {
+	if($(".admin_main").hasClass('on')) {
+		$(".admin_main").removeClass('on');
+		$(".admin_dash").toggleClass('on');
+		$(".admin_food").removeClass('on');
+	}else if($(".admin_food").hasClass('on')) {
+		$(".admin_food").removeClass('on');
+		$(".admin_main").addClass('on');
+	}
+	else{
+		$(".admin_main").toggleClass('on');
+		$(".admin_dash").toggleClass('on');
+	}
 }
 
+
+function addFoodPage() {
+	$(".admin_food").addClass('on')
+	$(".admin_main").removeClass('on');
+	$(".admin_dash").removeClass('on');
+	}
+	
 
 function showAlert(){
 	if($(".wrap_chat").hasClass('on')){

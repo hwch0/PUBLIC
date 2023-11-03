@@ -16,3 +16,7 @@ $(window).on('click', function(event) {
         Modal.classList.remove('on'); 
     }
 });
+
+$('.close').on('click', function(e){
+	 Modal.classList.remove('on'); 
+});

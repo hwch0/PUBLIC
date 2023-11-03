@@ -233,7 +233,7 @@
             </table>
         </div>
     </div>
-    
+   
    <div id="erpModal" class="modal">
   	 <div class="modal-content">
 	   <span class="close" id="closeModalBtn">&times;</span> 

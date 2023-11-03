@@ -88,3 +88,10 @@ function closeLoadingWithMask(){
 	$('#mask, #loadingImg').hide();
 	$('#mask, #loadingImg').empty();
 }
+
+//화살표 위치
+function navOn(element) {
+    const navLi = $(element).parent();
+    $(".main_nav li.on").removeClass("on");
+    $(navLi).addClass("on");
+}

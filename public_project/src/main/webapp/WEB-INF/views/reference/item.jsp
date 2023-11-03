@@ -14,7 +14,7 @@
         <div class="header-content">
             <h2>
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
-                재고관리
+                재고 관리
             </h2>
 			<div class="button-group">
 	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
@@ -30,8 +30,8 @@
                     <tr>
                        <td class="tr_th">등록일</td>
 			            <td style="padding:0 10px;">
-						    <div class="input-group date" style="display: inline-block; ">
-						        <input type="text" class="form-control" id="startDate" readonly>
+						    <div class="input-group date" style="display: inline-block;">
+						        <input type="text" class="form-control" id="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -40,7 +40,7 @@
 						    <div style="display: inline-block; margin: 0 10px;">~</div>
 						    
 						    <div class="input-group date" style="display: inline-block;">
-						        <input type="text" class="form-control" id="endDate" readonly>
+						        <input type="text" class="form-control" id="endDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -81,7 +81,7 @@
         <div class="cont_area">
             <h2>
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
-                재고품목
+                재고 목록
             </h2>
             <table style="width: 100%;border-color: #a49f9f; border-collapse:collapse; display:block;">
                 <thead>
@@ -212,18 +212,4 @@
         </div>
     </div>
 </body>
-
-
-<script>
-function navOn(element) {
-    const navLi = $(element).parent();
-    $(".main_nav li.on").removeClass("on");
-    $(navLi).addClass("on");
-}
-</script>
-
-
-<!-- <script src="js/erpmain.js"></script> -->
-<!-- <script src="js/erpitem.js"></script> -->
-
 </html>

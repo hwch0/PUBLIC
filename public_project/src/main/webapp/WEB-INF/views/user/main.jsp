@@ -20,9 +20,8 @@
     </div>
 </body>
 <script>
-//시간 js
+// 시간 js
 var remainingTimeElement = document.getElementById("remainingTime");
-var remainingTime = ${sessionScope.remainingTime};
 
 function formatTime(seconds) {
     var hours = Math.floor(seconds / 3600);
@@ -32,40 +31,35 @@ function formatTime(seconds) {
     return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
 }
 
-function updateCountdown() {
+function updateCountdown(remainingTime) {
     remainingTimeElement.textContent = formatTime(remainingTime);
     if (remainingTime > 0) {
-        remainingTime--; 
+        remainingTime--;
         setTimeout(function () {
-            updateCountdown();
-        }, 1000); // 
+            updateCountdown(remainingTime);
+        }, 1000);
     } else {
         location.href = "/user/main";
     }
 }
 
 function updateRemainingTime() {
-    // 서버에 잔여 시간을 요청
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/user/getRemainingTime", true);
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            remainingTime = response.remainingTime; 
-            if (remainingTime >= 0) {
-                updateCountdown();
-            } else {
-                location.href = "/user/main";
-            }
-        }
-    };
-    xhr.send();
+    var remainingTime = ${sessionScope.remainingTime}; 
+
+    if (remainingTime >= 0) {
+        var now = new Date().getTime();
+        var loginTime = new Date("${sessionScope.LoginMember.loginTime}").getTime();
+        var durationTime = now - loginTime;
+        remainingTime = remainingTime - Math.floor(durationTime / 1000);
+        updateCountdown(remainingTime);
+    } else {
+        location.href = "/user/main";
+    }
 }
 
 window.onload = function () {
-    updateCountdown();
     updateRemainingTime();
-};
-
+}
 </script>
+
 </html>

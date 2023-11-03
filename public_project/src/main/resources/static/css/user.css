@@ -1,0 +1,296 @@
+@charset "UTF-8";
+/* 폰트 */
+@font-face {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/notosanskr/v13/PbykFmXiEBPT4ITbgNA5Cgm203Tq4JJWq209pU0DPdWuqxJFA4GNDCBYtw.0.woff2)
+        format("woff2");
+}
+
+@font-face {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/notosanskr/v13/PbykFmXiEBPT4ITbgNA5Cgm203Tq4JJWq209pU0DPdWuqxJFA4GNDCBYtw.0.woff2)
+        format("woff2");
+}
+
+@font-face {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/notosanskr/v13/PbykFmXiEBPT4ITbgNA5Cgm203Tq4JJWq209pU0DPdWuqxJFA4GNDCBYtw.0.woff2)
+        format("woff2");
+}
+
+*  {
+    padding: 0;
+    margin: 0;
+    font-family: "Noto Sans KR";
+    font-weight: 600;
+    list-style: none;
+    text-decoration: none;
+}
+
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-image: url('/images/bg_login.jpg');
+    background-size: cover;
+}
+
+.logo {
+    position: absolute;
+    width: 200px;
+    top: 50px;
+    left: 50px;
+}
+
+.logo img {
+    width: 100%;
+    height: auto;
+}
+
+.login_content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -275px 0 0 -250px;
+    padding: 50px 75px;
+    width: 500px;
+    height: 550px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.id_pw_form h2 {
+    font-size: 28px;
+    color: #fff;
+}
+
+.ipt {
+    position: relative;
+}
+
+.ipt + .ipt {
+    margin-top: 20px;
+}
+
+label {
+    display: none;
+}
+
+.ipt span {
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 10px;
+    margin-top: -15px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/id_on.png');
+    background-size: cover;
+}
+
+.ipt_pwd span {
+    background-image: url('/images/key_off.png');
+}
+
+.id_pw_form form {
+    margin-top: 30px;
+}
+
+.id_pw_form input {
+    padding: 0 20px;
+    width: 350px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    text-indent: 30px;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #333;
+    color: #fff;
+}
+
+.login_btn {
+    margin-top: 50px;
+    width: 350px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #440977;
+}
+
+.kakao_btn {
+    margin-top: 20px;
+    width: 350px;
+    height: 50px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.kakao_btn a {
+    display: block;
+    height: 50px;
+}
+
+.kakao_btn a img {
+    width: 100%;
+}
+
+.li_login {
+    margin-top: 20px;
+    width: 350px;
+    height: 30px;
+}
+
+.li_login li {
+    float: left;
+    width: 50%;
+}
+
+.li_login li a {
+    display: block;
+    line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+}
+
+.pay_content {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -275px 0 0 -250px;
+    padding: 50px 75px;
+    width: 500px;
+    height: 550px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.pay_content h2 {
+    font-size: 28px;
+    color: #fff;
+}
+
+.pay_form {
+    margin-top: 30px;
+}
+
+.pay_form li {
+    position: relative;
+    height: 30px;
+    color: #fff;
+}
+
+.pay_form li:last-child {
+    height: 60px;
+}
+
+.pay_form li + li {
+    margin-top: 30px;
+}
+
+.pay_form p {
+    width: 110px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.pay_form li:first-child em {
+    float: left;
+    display: block;
+    width: 110px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 18px;
+    font-style: normal;  
+    color: #fff;          
+}
+
+.pay_form li input {
+    padding: 0 20px;
+    width: 200px;
+    height: 30px;
+    border: none;
+}
+
+.pay_form li .btn_charge {
+    position: absolute;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.pay_form li .btn_charge a {
+    display: block;
+    line-height: 30px;
+}
+.pay_form li .charge_time {
+    text-align: center;
+}
+.li_pay ul {
+    padding: 0;
+}
+
+.li_pay li {
+    margin-top: 30px;
+    width: 350px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: #440977;
+}
+.li_pay a {
+    display: block;
+    line-height: 50px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+}
+
+
+.body-wrap {
+    width: 100vw;
+    height: 100vh;
+    background-image: url("images/bg_common.jpg");
+    background-size: auto 100%;
+    background-position: center bottom;
+}
+.nav-wrap {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+.chat-wrap {
+    position: fixed;
+    bottom: 40px;
+    right: 25px;
+    width: 400px;
+    height: 500px;
+    border-radius: 10px;
+    background-color: #fff;
+}

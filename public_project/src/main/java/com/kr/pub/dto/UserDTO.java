@@ -1,7 +1,7 @@
 package com.kr.pub.dto;
 
 
-import java.time.ZonedDateTime;
+import java.sql.Timestamp;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,18 +13,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-   private String userId;
-   private String password;
-   private String uname;
-   private String birthdate;
-   private String phonenumber;
-   private String address;
-   private String email;
-   private int loginFailure;
-   private ZonedDateTime loginTime;
-   private ZonedDateTime logoutTime;
-   private Date regDate;
-   private int remainingTime;
-   private String roleId;
-   
+	private String userId;
+	private String password;
+	private String uname;
+	private String birthdate;
+	private String phonenumber;
+	private String address;
+	private String email;
+	private int loginFailure;
+	private Timestamp loginTime;
+	private Timestamp logoutTime;
+	private Date regDate;
+	private int remainingTime;
+	private String roleId;
+	
 }

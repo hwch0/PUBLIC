@@ -25,5 +25,23 @@ public class UserService {
 	public UserDTO getUser(String userId) {
 		return userDAO.getUser(userId);
 	}
+	
+	// 로그인 + 시간
+	public UserDTO login(UserDTO user) {
+        return userDAO.login(user);
+    }
+    
+    public void updateLoginTime(UserDTO user) {
+    	userDAO.updateLoginTime(user);
+    }
+    
+    public int getRemainingTime(UserDTO user) {
+    	return userDAO.getRemainingTime(user);
+    }
+
+	public void updateAllTime(UserDTO user) {
+		userDAO.updateAllTime(user);
+		
+	}
 
 }

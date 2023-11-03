@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
+import com.kr.pub.util.TimeApi;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -59,8 +60,9 @@ public class UserController {
 		return "/user/userList";
 	}
 	@GetMapping("/userTest")
-	public String userTest() throws Exception {
-		//mqttService.publishMessage("안녕하세요","/public/order");
+	public String userTest(Model model) throws Exception {
+		model.addAttribute("time" ,TimeApi.getTime());
+		//mqttService.publishMessage(TimeApi.getTime(),"/public/order");
 		/*
 		 * 순서:
 		 * 1.사용자가 주문 버튼 누름

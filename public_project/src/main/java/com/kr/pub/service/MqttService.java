@@ -13,12 +13,14 @@ public class MqttService {
 	@Autowired
 	MqttConfig.OutboundGateway outboundGateway;
 	
+	public void publishMessage(String message, String topic) throws Exception {
+		outboundGateway.sendToMqtt(message, topic);
+    }
+	
 	public void execute(String topic, String payload) {
     String [] cmdParams = StringUtils.split(topic, "/");
     System.out.println("topic = " + topic);
     System.out.println("payload = " + payload);
 	}
-	public void publishMessage(String topic, String message) throws Exception {
-		outboundGateway.sendToMqtt(message, topic);
-    }
+	
 }

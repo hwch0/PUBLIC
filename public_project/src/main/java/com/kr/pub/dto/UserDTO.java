@@ -2,6 +2,7 @@ package com.kr.pub.dto;
 
 
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

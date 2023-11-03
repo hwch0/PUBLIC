@@ -2,8 +2,6 @@ package com.kr.pub.controller;
 
 import java.sql.Timestamp;
 import java.time.Duration;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
-import com.kr.pub.util.TimeApi;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -60,8 +57,8 @@ public class UserController {
 		return "/user/userList";
 	}
 	@GetMapping("/userTest")
-	public String userTest(Model model) throws Exception {
-		model.addAttribute("time" ,TimeApi.getTime());
+	public String userTest(Model model, HttpServletRequest request) throws Exception {
+		//model.addAttribute("time" ,TimeApi.getTime());
 		//mqttService.publishMessage(TimeApi.getTime(),"/public/order");
 		/*
 		 * 순서:

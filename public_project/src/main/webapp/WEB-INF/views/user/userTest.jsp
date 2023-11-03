@@ -26,7 +26,7 @@
 	
 	<input type="text" id="inputTime" placeholder="HH:MM:SS">
     <button id="startTimer">Start Timer</button>
-    <h1 id="countdown">00:00:00</h1>
+    <h1 id="countdown">${time}</h1>
 
     <script>
     </script>

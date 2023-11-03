@@ -31,5 +31,10 @@
 		SET logout_time = #{logoutTime}, remaining_time = #{remainingTime}
 		WHERE user_id = #{userId}
 	</update>
+	<update id="updateSeat">
+		UPDATE seat
+		SET used = 'Y', user_id = #{userId}
+		WHERE seat_no = #{seatNo}
+	</update>
 	
 </mapper>

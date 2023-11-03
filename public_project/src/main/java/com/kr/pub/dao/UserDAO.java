@@ -22,4 +22,7 @@ public interface UserDAO {
 	
 	public void updateAllTime(UserDTO user);
 
+	public void updateSeat(UserDTO user);
+
+
 }

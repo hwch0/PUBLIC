@@ -43,5 +43,9 @@ public class UserService {
 		userDAO.updateAllTime(user);
 		
 	}
+	public void updateSeat(UserDTO user) {
+		userDAO.updateSeat(user);
+	}
+
 
 }

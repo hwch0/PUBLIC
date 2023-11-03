@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
-import com.kr.pub.util.TimeApi;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -62,8 +61,8 @@ public class UserController {
 	}
 
 	@GetMapping("/userTest")
-	public String userTest(Model model) throws Exception {
-		model.addAttribute("time" ,TimeApi.getTime());
+	public String userTest(Model model, HttpServletRequest request) throws Exception {
+		//model.addAttribute("time" ,TimeApi.getTime());
 		//mqttService.publishMessage(TimeApi.getTime(),"/public/order");
 		/*
 		 * 순서:

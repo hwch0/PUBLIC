@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+	annotationProcessor 'org.projectlombok:lombok'
 	
 	// Spring Boot에서 JSP 사용을 위한 의존성
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'

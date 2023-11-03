@@ -9,30 +9,30 @@ const mqtt_host = "www.chocomungco.store";
 		password : 'choco11',
 		clean : true,
 	}//mqtt 연결 설정
-	console.log('Connecting mqtt client ');
-	console.log('mqtt_topic -> ', mqtt_topic);
+	//console.log('Connecting mqtt client ');
+	//console.log('mqtt_topic -> ', mqtt_topic);
 
 	const mqttClient = mqtt.connect(options);//mqtt 연결
-	console.log('mqttClient -> ', mqttClient);
+	//console.log('mqttClient -> ', mqttClient);
 	const disconnect = () => {
-        console.log('mqtt 연결 끊음');
+        //console.log('mqtt 연결 끊음');
         mqttClient.end();//mqtt연결 해제
    }  
 	mqttClient.on('error', (err) => {
-        console.log('Connection error: ', err)
+        //console.log('Connection error: ', err)
         mqttClient.end()
     });
       
     mqttClient.on('reconnect', () => {
-        console.log('Reconnecting...')
+        //console.log('Reconnecting...')
     });//mqtt 디버깅
     
   //구독을 등록
     const subscribe = () => {
     	  mqttClient.subscribe(mqtt_topic+"#", err => {
-    		  console.log("Subscribe to a topic=>" +mqtt_topic);
+    		  //console.log("Subscribe to a topic=>" +mqtt_topic);
     		  if (!err) {
-    			  console.log("error", err);
+    			  //console.log("error", err);
           } else {
           }
         })
@@ -69,7 +69,7 @@ const mqtt_host = "www.chocomungco.store";
     };
     //메세지 수신한 데이터를 삽입
     const recvMessage = recv =>  {
-  	  console.log(recv);
+  	  //console.log(recv);
     $("#chatList").append(
 		`<li class="you">
 						<div class="entete">
@@ -84,7 +84,7 @@ const mqtt_host = "www.chocomungco.store";
 	$("#chatList").scrollTop($("#chatList")[0].scrollHeight);//채팅이오면 스크롤 내려오게
     }
     const recvOrder = recv =>  {
-		console.log(recv);
+		//console.log(recv);
 		$('#orderList').append(
 			`<button class="accordion">${recv.sender}번 좌석 주문내역 : ${recv.orderList}</button>
 				<div class="panel">
@@ -93,10 +93,26 @@ const mqtt_host = "www.chocomungco.store";
 				</div>`
 		)
 	}//주문리스트 받기
+	const recvLogin = recv => {
+		const data = {userId : recv.userId};
+		//console.log("recvLogin=>" + data);
+		$.ajax({
+			url: 'http://localhost:8282/user/getUser',
+			method: 'POST', 
+			data: JSON.stringify(data),
+			contentType: 'application/json', 
+			success: function(response) {
+				console.log("response=>" + response);
+				$(`li[data-seatNo=${recv.seatNo}]`).addClass('on');
+			},
+		});
+	}//로그인시 관리자에게 알림주기(좌석 동적으로 변경하기 위해)
+	
+	
     //설정 및 메서드 끝
     
     mqttClient.on('connect', () => {
-    	console.log('Connected')
+    	//console.log('Connected')
         //구독 메시지 등록 
         //메시지 수신 이벤트 핸들러 등록
         subscribe();
@@ -105,12 +121,16 @@ const mqtt_host = "www.chocomungco.store";
  // 구독 메시지 수신 
     mqttClient.on('message', function (topic, message) {
         // message is Buffer
-        //console.log("mqtt message receive :", message.toString())
+        ////console.log("mqtt message receive :", message.toString())
         	const data = JSON.parse(message.toString())
+        	console.log(data);
         	//if(data.receiver)
         	if(data.receiver === "admin" && data.type ==="CHAT"){
         		recvMessage(data);
-        	}else{
+        	}else if(data.receiver === "admin" && data.type ==="LOGIN"){
+			recvLogin(data);
+			}
+        	else{
 			recvOrder(data);
 		}
     })

@@ -2,6 +2,8 @@ package com.kr.pub.controller;
 
 import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
+import com.kr.pub.util.TimeApi;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -56,6 +59,7 @@ public class UserController {
 		model.addAttribute("result", result);
 		return "/user/userList";
 	}
+
 	@GetMapping("/userTest")
 	public String userTest(Model model, HttpServletRequest request) throws Exception {
 		//model.addAttribute("time" ,TimeApi.getTime());
@@ -85,9 +89,9 @@ public class UserController {
         HttpSession session = request.getSession();
         Map<String, Object> map = new HashMap<>();
 
-        // 현재시간 
-        Timestamp loginTime = new Timestamp(System.currentTimeMillis());
-
+        Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+        
+        
         UserDTO rs = userService.login(user);
 
         // 잔여시간
@@ -125,12 +129,13 @@ public class UserController {
 	        // 입장시간
 	        Timestamp loginTime = loginMember.getLoginTime();
 	        // 퇴장시간
-	        Timestamp logoutTime = new Timestamp(System.currentTimeMillis());
-	        // 입장시간 - 퇴장시간
-	        Duration duration = Duration.between(loginTime.toInstant(), logoutTime.toInstant());
-	        // 잔여시간 - 사용시간
-	        int seconds = (int) duration.getSeconds();
+	        Timestamp logoutTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
 	        
+	        // 입장시간 - 퇴장시간
+	        Duration setDuration = Duration.between(loginTime.toInstant(), logoutTime.toInstant());
+
+	        // 잔여시간 - 사용시간
+	        int seconds = (int) setDuration.getSeconds();
 	        remainingTime = (remainingTime - seconds);
 	        
 	        UserDTO updateMember = new UserDTO();
@@ -138,9 +143,6 @@ public class UserController {
 	        updateMember.setUserId(loginMember.getUserId());
 	        updateMember.setLogoutTime(loginTime);
 	        updateMember.setRemainingTime(remainingTime);
-	        
-	        
-	        System.out.println("업데이트 된 목록 : " + updateMember);
 	        
 	        userService.updateAllTime(updateMember);
         } 
@@ -160,12 +162,13 @@ public class UserController {
 
         UserDTO loginMember = (UserDTO) session.getAttribute("LoginMember");
         if (loginMember != null) {
-            Timestamp loginTime = loginMember.getLoginTime();
-            Timestamp now = new Timestamp(System.currentTimeMillis());
+        	
+        	Timestamp loginTime = loginMember.getLoginTime();
+        	Timestamp now = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
 
             // 입장 시간부터 현재 시간까지의 시간 차이 계산
-            Duration duration = Duration.between(loginTime.toInstant(), now.toInstant());
-            int seconds = (int) duration.getSeconds();
+        	Duration setDuration = Duration.between(loginTime.toInstant(), now.toInstant());
+        	int seconds = (int) setDuration.getSeconds();
 
             // 현재 잔여 시간에서 사용된 시간을 뺀 값 전송
             int remainingTime = loginMember.getRemainingTime() - seconds;

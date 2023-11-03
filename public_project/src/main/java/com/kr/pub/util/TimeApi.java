@@ -1,5 +1,8 @@
 package com.kr.pub.util;
 
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.web.client.RestTemplate;
@@ -18,5 +21,10 @@ public class TimeApi {
         
         String time = (String) jsonObject.get("time") +":" + seconds;
         return time;
+    }
+    // ZonedDateTime을 Timestamp로 변환하는 함수
+    public static Timestamp encodingTime(ZonedDateTime zoneTime) {
+       Timestamp timeStamp = Timestamp.from(zoneTime.toInstant());
+       return timeStamp;
     }
 }

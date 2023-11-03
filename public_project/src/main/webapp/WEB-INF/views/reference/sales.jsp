@@ -89,13 +89,13 @@
             <table style="width: 100%;border-color: #a49f9f; border-collapse:collapse; display:block;">
                 <thead>
                     <th style="width: 45px;">순번</th>
-                    <th style="width: 130px;">매출전표코드</th>
-                    <th style="width: 130px;">매출일자</th>
-                    <th style="width: 110px;">회원이름</th>
-                    <th style="width: 110px;">사용시간</th>
-                    <th style="width: 110px;">이용금액</th>
-                    <th style="width: 110px;" class="amount-cell">부가상품매출</th>
-                    <th style="width: 156px;" class="amount-cell">총 매출</th>
+                    <th style="width: 130px;" class="sortable salesSortable" data-sort="매출전표">매출 전표</th>
+                    <th style="width: 130px;" class="sortable salesSortable" data-sort="매출일자">매출일자</th>
+                    <th style="width: 110px;" class="sortable salesSortable" data-sort="회원이름">회원이름</th>
+                    <th style="width: 110px;" class="sortable salesSortable" data-sort="사용시간">사용시간</th>
+                    <th style="width: 110px;" class="sortable salesSortable" data-sort="이용금액">이용금액</th>
+                    <th style="width: 130px;" class="sortable salesSortable amount-cell" data-sort="부가상품매출">부가상품매출</th>
+                    <th style="width: 138px;" class="sortable salesSortable amount-cell" data-sort="총 매출">총 매출</th>
                 </thead>
 
                 <tbody class="paymTbody paymScroll">

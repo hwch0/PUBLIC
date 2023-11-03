@@ -92,7 +92,7 @@ $(document).ready(function () {
 			rows = originalRows;
 		}
 		
-		table.find('.itemSortable').not(this).removeClass('asc desc reset');
+		table.find('.statusSortable').not(this).removeClass('asc desc reset');
 
         table.find('tbody').empty().append(rows);
     });
@@ -106,7 +106,7 @@ $(document).ready(function () {
                 return valA.localeCompare(valB);
             } else if (index === 4 || index === 3) { // 일자 또는 상세
                 return valA.localeCompare(valB);
-            } else if (index === 5 || index === 6 || index === 8) { // 입·출고수량, 입·출고단가, 총금액
+            } else if (index === 5 || index === 6 || index === 7) { // 입·출고수량, 입·출고단가, 총금액
                 return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);

@@ -40,6 +40,7 @@ function changeInventoryStatusPage() {
 function changeSalesPage() {
 		$('#sales').css("display", "block");
 		$('#order').css("display", "none");
+		$('.detail').css("display", "none");
 		resetInputs();
 }      
 

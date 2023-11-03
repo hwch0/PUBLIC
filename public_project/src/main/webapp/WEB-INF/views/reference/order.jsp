@@ -60,10 +60,8 @@
                         <td class="tr_th">구분</td>
                         <td style="padding: 0 30px;">
                             <select class="itemSelect">
-                                <option value="1">완료</option>
-                                <option value="2">취소</option>
-                                <option value="3">기타</option>
-
+                                <option value="1">PC이용</option>
+                                <option value="2">상품</option>
 
                             </select>
                         </td>
@@ -89,13 +87,13 @@
             <table style="width: 100%;border-color: #a49f9f; border-collapse:collapse; display:block;">
                 <thead>
                     <th style="width: 45px;">순번</th>
-                    <th style="width: 130px;">주문전표코드</th>
-                    <th style="width: 130px;">주문일자</th>
-                    <th style="width: 178px;">상품명</th>
-                    <th style="width: 90px;">수량</th>
-                    <th style="width: 124px;" class="amount-cell">단가</th>
-                    <th style="width: 98px;">결제 방법</th>
-                    <th style="width: 108px;">주문 상태</th>
+                    <th style="width: 140px;" class="sortable orderSortable" data-sort="주문전표">주문 전표</th>
+                    <th style="width: 140px;" class="sortable orderSortable" data-sort="일자">주문일자</th>
+                    <th style="width: 110px;">구분</th>
+                    <th style="width: 100px;"class="sortable orderSortable" data-sort="건수">건수</th>
+                    <th style="width: 140px;" class="sortable orderSortable amount-cell" data-sort="총 금액">총 금액</th>
+                    <th style="width: 110px;">결제 방법</th>
+                    <th style="width: 118px;" >결재 상태</th>
                 </thead>
 
                 <tbody class="orderTbody orderScroll">
@@ -103,19 +101,19 @@
                         <td>1</td>
                         <td>ORDER000001</td>
                         <td>2023-11-01</td>
-                        <td>새우깡</td>
-                        <td>1EA</td>
+                        <td>PC이용</td>
+                        <td>1건</td>
                         <td class="amount-cell">￦2,000</td>
                         <td>카드</td>
                         <td>완료</td>
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td>ORDER000002</td>
+                        <td id="orderCode">ORDER000002</td>
                         <td>2023-11-01</td>
-                        <td>신라면 블랙 (컵)</td>
-                        <td>1EA</td>
-                        <td class="amount-cell">￦2,500</td>
+                        <td>상품</td>
+                        <td>3건</td>
+                        <td class="amount-cell">￦5,000</td>
                         <td>카드</td>
                         <td>완료</td>
                     </tr>
@@ -123,29 +121,29 @@
                         <td>3</td>
                         <td>ORDER000003</td>
                         <td>2023-11-01</td>
-                        <td>코카콜라 제로</td>
-                        <td>1EA</td>
-                        <td class="amount-cell">￦2,000</td>
-                        <td>카드</td>
+                        <td>PC이용</td>
+                        <td>1건</td>
+                        <td class="amount-cell">￦3,000</td>
+                        <td>현금</td>
                         <td>완료</td>
                     </tr>
                     <tr>
                         <td>4</td>
                         <td>ORDER000004</td>
                         <td>2023-11-01</td>
-                        <td>코카콜라</td>
-                        <td>1EA</td>
-                        <td class="amount-cell">￦1,900</td>
+                        <td>상품</td>
+                        <td>1건</td>
+                        <td class="amount-cell">￦2,000</td>
                         <td>카드</td>
                         <td>취소</td>
                     </tr>
                     <tr>
                         <td>5</td>
-                        <td>ORDER000005</td>
+                        <td id="orderCode1">ORDER000005</td>
                         <td>2023-11-01</td>
-                        <td>코카콜라</td>
-                        <td>1EA</td>
-                        <td class="amount-cell">￦1,900</td>
+                        <td>상품</td>
+                        <td>4건</td>
+                        <td class="amount-cell">￦8,000</td>
                         <td>카드</td>
                         <td>완료</td>
                     </tr>
@@ -153,9 +151,9 @@
                         <td>6</td>
                         <td>ORDER000006</td>
                         <td>2023-11-01</td>
-                        <td>짜장라면</td>
-                        <td>1EA</td>
-                        <td class="amount-cell">￦2,500</td>
+                        <td>PC이용</td>
+                        <td>1건</td>
+                        <td class="amount-cell">￦2,000</td>
                         <td>현금</td>
                         <td>완료</td>
                     </tr>
@@ -163,9 +161,9 @@
                         <td>7</td>
                         <td>ORDER000007</td>
                         <td>2023-11-01</td>
-                        <td>육계장 (컵)</td>
-                        <td>2EA</td>
-                        <td class="amount-cell">￦1,200</td>
+                        <td>상품</td>
+                        <td>2건</td>
+                        <td class="amount-cell">￦6,000</td>
                         <td>카드</td>
                         <td>완료</td>
                     </tr>
@@ -173,9 +171,9 @@
                         <td>8</td>
                         <td>ORDER000008</td>
                         <td>2023-11-01</td>
-                        <td>촉촉한 초코칩</td>
-                        <td>2EA</td>
-                        <td class="amount-cell">￦1,500</td>
+                        <td>PC이용</td>
+                        <td>2건</td>
+                        <td class="amount-cell">￦3,000</td>
                         <td>현금</td>
                         <td>완료</td>
                     </tr>
@@ -183,38 +181,38 @@
                         <td>9</td>
                         <td>ORDER000009</td>
                         <td>2023-11-01</td>
-                        <td>핫식스</td>
-                        <td>1EA</td>
-                        <td class="amount-cell">￦1,800</td>
+                        <td>PC이용</td>
+                        <td>1건</td>
+                        <td class="amount-cell">￦2,000</td>
                         <td>현금</td>
-                        <td>취소</td>
+                        <td>완료</td>
                     </tr>
                     <tr>
                         <td>10</td>
                         <td>ORDER000010</td>
                         <td>2023-11-01</td>
-                        <td>핫식스</td>
-                        <td>3EA</td>
+                        <td>상품</td>
+                        <td>1건</td>
                         <td class="amount-cell">￦1,800</td>
                         <td>현금</td>
-                        <td>완료</td>
+                        <td>취소</td>
                     </tr>
                     <tr>
                         <td>11</td>
                         <td>ORDER000011</td>
                         <td>2023-11-01</td>
-                        <td>핫바</td>
-                        <td>2EA</td>
-                        <td class="amount-cell">￦1,900</td>
-                        <td>카드</td>
+                        <td>상품</td>
+                        <td>5건</td>
+                        <td class="amount-cell">￦25,000</td>
+                        <td>현금</td>
                         <td>완료</td>
                     </tr>
                     <tr>
                         <td>12</td>
                         <td>ORDER000012</td>
                         <td>2023-11-01</td>
-                        <td>오다리</td>
-                        <td>2EA</td>
+                        <td>상품</td>
+                        <td>1건</td>
                         <td class="amount-cell">￦2,000</td>
                         <td>카드</td>
                         <td>완료</td>
@@ -222,6 +220,53 @@
                  </tbody>
             </table>
         </div>
+
+		  <div class="detail" style="display:none;">
+	        <span class="orderDetail"></span>
+	        
+		        <div class="cont_area orderDetail">
+		            <h2>
+		                <em><img src="/images/icon1.png" alt="아이콘"></em>
+		                상세
+		            </h2>            
+		            <table style="width: 100%;border-color: #a49f9f; border-collapse:collapse; display:block;">
+		                <thead>
+		                    <th style="width: 45px;">순번</th> 
+		                    <th style="width: 130px;">주문 전표</th>
+		                    <th style="width: 125px;">주문일자</th>
+		                    <th style="width: 100px;">주문자</th>
+		                    <th style="width: 170px;">품목명</th>
+		                    <th style="width: 78px;">수량</th>
+		                    <th style="width: 110px;">단가</th>
+		                    <th style="width: 128px;">총 금액</th>
+		                </thead>
+		
+		                <tbody class="orderDetailTbody orderDetailScroll">
+                  	<tr>
+                        <td>1</td>
+                        <td>ORDER000002</td>
+                        <td>2023-11-01</td>
+                        <td>홍길동</td>
+                        <td>짜장라면</td>
+                        <td>1</td>
+                        <td class="amount-cell">￦2,000</td>
+                        <td>￦2,000</td>
+                    </tr>
+                  	<tr>
+                        <td>2</td>
+                        <td>ORDER000002</td>
+                        <td>2023-11-01</td>
+                        <td>홍길동</td>
+                        <td>코카콜라</td>
+                        <td>2</td>
+                        <td class="amount-cell">￦1,500</td>
+                        <td>￦3,000</td>
+                    </tr>
+		                 </tbody>
+		            </table>
+		        </div>
+	        </div>
+
     </div>
     
 </body>

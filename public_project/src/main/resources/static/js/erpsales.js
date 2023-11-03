@@ -5,6 +5,9 @@ $(document).ready(function(){
 		//const detailInfo = getOrderDetailInfo(orderCode);
 		
 		$('.detail').show();
+		
+		//패딩값 변경
+		$('.changePadding').css('padding', '0 15px');
 	})
 })
 
@@ -43,10 +46,19 @@ $(document).ready(function () {
             var valA = getCellValue(a, index);
             var valB = getCellValue(b, index);
 
-            if (index === 1 || index === 2) { // 주문전표, 매출일자
+            if (index === 1 || index === 2) { // 주문전표, 건수
                 return valA.localeCompare(valB);
-            } else if (index === 4) { // 건수
-                return valA.localeCompare(valB);
+            } else if (index === 4) { // 매출일자
+                const dateA = new Date(valA);
+                const dateB = new Date(valB);
+                
+                if(dateA.getFullYear() !== dateB.getFullYear()){
+					return dateA.getFullYear() - dateB.getFullYear();
+				}else if(dateA.getMonth() !== dateB.getMonth()){
+					return dateA.getMonth() - dateB.getMonth();
+				}else{
+					return dateA.getDate() - dateB.getDate();
+				}
             } else if (index === 5) { // 총 금액
                 return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {
@@ -95,10 +107,19 @@ $(document).ready(function () {
             var valA = getCellValue(a, index);
             var valB = getCellValue(b, index);
 
-            if (index === 1 || index === 2) { // 매출전표코드, 매출일자
+            if (index === 1 || index === 2 || index === 4 ) { // 매출전표코드, 주문전표, 매출일자
                 return valA.localeCompare(valB);
-            } else if (index === 4 || index === 3) { // 회원이름, 사용시간
-                return valA.localeCompare(valB);
+            } else if (index === 3) { // 매출일자
+                const dateA = new Date(valA);
+                const dateB = new Date(valB);
+                
+                if(dateA.getFullYear() !== dateB.getFullYear()){
+					return dateA.getFullYear() - dateB.getFullYear();
+				}else if(dateA.getMonth() !== dateB.getMonth()){
+					return dateA.getMonth() - dateB.getMonth();
+				}else{
+					return dateA.getDate() - dateB.getDate();
+				}
             } else if (index === 5 || index === 6 || index === 7) { // 이용금액, 부가상품매출, 총매출
                 return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {

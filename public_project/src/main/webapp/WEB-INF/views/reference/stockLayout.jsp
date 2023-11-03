@@ -24,10 +24,10 @@
             <div class="btn_toggle">
                 <ul>
                     <li class="btn btn_pos">
-                        <a href="/pos">POS</a>
+                        <a href="/admin">POS</a>
                     </li>
                     <li class="btn btn_ERP on">
-                        <a href="/erp">ERP</a>
+                        <a href="/stock">ERP</a>
                     </li>
                 </ul>
             </div>

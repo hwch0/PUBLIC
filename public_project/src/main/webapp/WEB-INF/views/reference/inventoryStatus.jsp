@@ -27,7 +27,7 @@
             <div class="inquiry">
                 <table>
                     <tr>
-                       <td class="tr_th">일자</td>
+                       <td class="tr_th">입고 일자</td>
 			            <td style="padding:0 10px;">
 						    <div class="input-group date" style="display: inline-block; ">
 						        <input type="text" class="form-control" id="startDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
@@ -47,7 +47,7 @@
 						 </td>
 
 
-                        <td class="tr_th">품목코드</td>
+                        <td class="tr_th">품목 코드</td>
                         <td style="padding: 0 30px;">
                             <input type="text" class="itemName">
                             <button id="check">조회</button>
@@ -57,7 +57,7 @@
 
 
                     <tr>
-                        <td class="tr_th">입·출고상세</td>
+                        <td class="tr_th">구분 상세</td>
                         <td style="padding: 0 30px;">
                             <select class="itemSelect">
                                 <option value="1">입고</option>
@@ -69,7 +69,7 @@
                         </td>
 
 
-                        <td class="tr_th">재고량</td>
+                        <td class="tr_th">재고 수량</td>
                         <td style="padding: 0 30px;">
 						    <label style="font-size: 13px"><input type="radio" name="inventorystockOption" checked> 모두 보기</label>
                             <label style="font-size: 13px"><input type="radio" name="inventorystockOption"> 입고</label>
@@ -92,8 +92,8 @@
 			        <th style="width: 45px;">순번</th>
 			        <th style="width: 132px;" class="sortable statusSortable" data-sort="품목코드">품목코드</th>
 			        <th style="width: 236px;" class="sortable statusSortable" data-sort="품목명">품목명</th>
-			        <th style="width: 109px;" class="sortable statusSortable" data-sort="일자">일자</th>
-			        <th style="width: 71px;" class="sortable statusSortable" data-sort="입·출고상세">상세</th>
+			        <th style="width: 109px;" class="sortable statusSortable" data-sort="일자">입고 일자</th>
+			        <th style="width: 71px;">상세</th>
 			        <th style="width: 90px;" class="sortable statusSortable" data-sort="입·출고수량">수량</th>
 			        <th style="width: 99px;" class="sortable statusSortable amount-cell" data-sort="입·출고단가">단가</th>
 			        <th style="width: 120px;"class="sortable statusSortable amount-cell" data-sort="총금액">총금액</th>

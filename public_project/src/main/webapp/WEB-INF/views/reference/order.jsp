@@ -27,7 +27,7 @@
             <div class="inquiry">
                 <table>
                     <tr>
-                       <td class="tr_th">주문일자</td>
+                       <td class="tr_th">주문 일자</td>
 			            <td style="padding:0 10px;">
 						    <div class="input-group date" style="display: inline-block; ">
 						        <input type="text" class="form-control" id="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
@@ -47,8 +47,8 @@
 						 </td>
 
 
-                        <td class="tr_th">주문전표코드</td>
-                        <td style="padding: 0 30px;">
+                        <td class="tr_th">주문 전표</td>
+                        <td class="changePadding" style="padding: 0 30px;">
                             <input type="text" class="orderName" readonly style="background-color: #d3d3d3; outline: none;">
                             <button id="orderCodeFide">검색</button>
                         </td>
@@ -57,7 +57,7 @@
 
 
                     <tr>
-                        <td class="tr_th">구분</td>
+                        <td class="tr_th">구분 상세</td>
                         <td style="padding: 0 30px;">
                             <select class="itemSelect">
                                 <option value="1">PC이용</option>
@@ -67,8 +67,8 @@
                         </td>
 
 
-                        <td class="tr_th">결재방법</td>
-                        <td style="padding: 0 30px;">
+                        <td class="tr_th">결재 방법</td>
+                        <td  class="changePadding"style="padding: 0 30px;">
 						    <label style="font-size: 13px"><input type="radio" name="itemStockOption" checked> 모두 보기</label>
                             <label style="font-size: 13px"><input type="radio" name="itemStockOption"> 카드</label>
 						    <label style="font-size: 13px"><input type="radio" name="itemStockOption"> 현금</label>

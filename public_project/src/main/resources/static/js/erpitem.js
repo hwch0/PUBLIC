@@ -51,9 +51,18 @@ $(document).ready(function () {
 
             if (index === 1 || index === 2) { // 품목코드 또는 품목명
                 return valA.localeCompare(valB);
-            } else if (index === 4) { // 등록일
-                return new Date(valA) - new Date(valB);
-            } else if (index === 7 || index === 5 || index === 6) { // 평균단가, 현재재고, 전월재고
+            } else if (index === 4 || index === 5) { // 등록일, 일자
+                const dateA = new Date(valA);
+                const dateB = new Date(valB);
+                
+                if(dateA.getFullYear() !== dateB.getFullYear()){
+					return dateA.getFullYear() - dateB.getFullYear();
+				}else if(dateA.getMonth() !== dateB.getMonth()){
+					return dateA.getMonth() - dateB.getMonth();
+				}else{
+					return dateA.getDate() - dateB.getDate();
+				}
+            } else if (index === 7 || index === 6) { // 입고단가, 현재재고
                 return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
@@ -104,8 +113,17 @@ $(document).ready(function () {
 
             if (index === 1 || index === 2) { // 품목코드 또는 품목명
                 return valA.localeCompare(valB);
-            } else if (index === 4 || index === 3) { // 일자 또는 상세
-                return valA.localeCompare(valB);
+            } else if (index === 4 ) { // 일자 또는 상세
+                const dateA = new Date(valA);
+                const dateB = new Date(valB);
+                
+                if(dateA.getFullYear() !== dateB.getFullYear()){
+					return dateA.getFullYear() - dateB.getFullYear();
+				}else if(dateA.getMonth() !== dateB.getMonth()){
+					return dateA.getMonth() - dateB.getMonth();
+				}else{
+					return dateA.getDate() - dateB.getDate();
+				}
             } else if (index === 5 || index === 6 || index === 7) { // 입·출고수량, 입·출고단가, 총금액
                 return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {

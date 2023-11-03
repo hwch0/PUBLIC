@@ -27,7 +27,7 @@
             <div class="inquiry">
                 <table>
                     <tr>
-                       <td class="tr_th">매출일자</td>
+                       <td class="tr_th">매출 일자</td>
 			            <td style="padding:0 10px;">
 						    <div class="input-group date" style="display: inline-block; ">
 						        <input type="text" class="form-control" id="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
@@ -47,7 +47,7 @@
 						 </td>
 
 
-                        <td class="tr_th">매출전표코드</td>
+                        <td class="tr_th">매출 전표</td>
                         <td style="padding: 0 30px;">
                             <input type="text" class="paymName" readonly style="background-color: #d3d3d3; outline: none;">
                             <button id="paymCodeFide">검색</button>
@@ -57,21 +57,13 @@
 
 
                     <tr>
-                        <td class="tr_th">사용시간</td>
+                        <td class="tr_th">주문 전표</td>
                         <td style="padding: 0 30px;">
-                            <select class="itemSelect">
-                                <option value="1">1시간 ~ 2시간</option>
-                                <option value="2">3시간 ~ 4시간</option>
-                                <option value="3">5시간 ~ 6시간</option>
-                                <option value="4">7시간 ~ 8시간</option>
-                                <option value="5">그 외</option>
-
-
-                            </select>
+                        	<input type="text" class="userName">                       	
                         </td>
 
 
-                        <td class="tr_th">회원이름</td>
+                        <td class="tr_th">회원 이름</td>
                         <td style="padding: 0 30px;">
                         	<input type="text" class="userName">                       	
                         </td>
@@ -90,9 +82,9 @@
                 <thead>
                     <th style="width: 45px;">순번</th>
                     <th style="width: 130px;" class="sortable salesSortable" data-sort="매출전표">매출 전표</th>
-                    <th style="width: 130px;" class="sortable salesSortable" data-sort="매출일자">매출일자</th>
+                    <th style="width: 130px;" class="sortable salesSortable" data-sort="주문전표">주문전표</th>
+                    <th style="width: 110px;" class="sortable salesSortable" data-sort="매출일자">매출일자</th>
                     <th style="width: 110px;" class="sortable salesSortable" data-sort="회원이름">회원이름</th>
-                    <th style="width: 110px;" class="sortable salesSortable" data-sort="사용시간">사용시간</th>
                     <th style="width: 110px;" class="sortable salesSortable" data-sort="이용금액">이용금액</th>
                     <th style="width: 130px;" class="sortable salesSortable amount-cell" data-sort="부가상품매출">부가상품매출</th>
                     <th style="width: 138px;" class="sortable salesSortable amount-cell" data-sort="총 매출">총 매출</th>
@@ -102,9 +94,9 @@
                     <tr>
                         <td>1</td>
                         <td>PAYM000001</td>
-                        <td>2023-11-01</td>
+                        <td>ORDER000001</td>
+                        <td>2023-11-04</td>
                         <td>홍길동</td>
-                        <td>1시간</td>
                         <td class="amount-cell">￦1,000</td>
                         <td class="amount-cell">￦5,000</td>
                         <td class="amount-cell">￦6,000</td>
@@ -122,7 +114,7 @@
                     <tr>
                         <td>2</td>
                         <td>PAYM000002</td>
-                        <td>2023-11-01</td>
+                        <td>2023-11-02</td>
                         <td>김갑용</td>
                         <td>3시간</td>
                         <td class="amount-cell">￦3,000</td>
@@ -132,7 +124,7 @@
                     <tr>
                         <td>3</td>
                         <td>PAYM000003</td>
-                        <td>2023-11-01</td>
+                        <td>2023-11-03</td>
                         <td>김갑자</td>
                         <td>2시간</td>
                         <td class="amount-cell">￦2,000</td>

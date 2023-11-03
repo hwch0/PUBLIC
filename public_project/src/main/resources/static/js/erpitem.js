@@ -1,96 +1,98 @@
-//비동기 전환 화면
-function loadPage(pageUrl) {
-	 
-	 $('#dynamicContent').html('');
-	 
-    $.ajax({
-        url: pageUrl,
-        type: 'GET',
-        success: function (data) {
-            // jQuery를 사용하여 특정 클래스를 가진 부분만 선택
-            const dynamicContent = $(data).filter('.content').find('.cont_top, .cont_area');
+function itemCheck(){
+	 // 선택한 조회 조건 값 가져오기
+    const startDate = $("#startDate").val();
+    const endDate = $("#endDate").val();
+    const itemName = $(".itemName").val();
+    const itemSelect = $(".itemSelect").val();
+    const itemStockOption = $("input[name='itemStockOption']:checked").val();
 
-            console.log('Dynamic Content:', dynamicContent.html());
-
-            // #dynamicContent에 선택된 부분을 삽입           
-            $('#dynamicContent').html(dynamicContent);
-            
-        },
-        error: function (error) {
-            console.error('Error loading page:', error);
-        }
-    });
-}
-
-/*function loadPage(pageUrl) {
-    $.ajax({
-        url: pageUrl,
-        type: 'GET',
-        success: function (data) {
-          //특정 부분의 시작과 끝 태그 기준으로 추출
-          const startTag = '<div class="content" id="dynamicContent">';
-          const endTag = '</div>';
-          
-          const startIndex = data.indexOf(startTag);
-          const endIndex = data.indexOf(endTag, startIndex + startTag.length);
-          
-          if(startIndex !== -1 && endIndex !== -1){
-			  const dynamicContent = data.substring(startIndex, endIndex + endTag.length);
-
-			   console.log('Dynamic Content:', dynamicContent); 			  
-
-			  $('#dynamicContent').html(dynamicContent);			  
-		  }else{
-			  console.error('로드된 페이지에서 #dynamicContent인 요소를 찾을 수 없습니다.');
-		  }
-        },
-        error: function (error) {
-            console.error('Error loading page:', error);
-        }
-    });
-}*/
-/*$(document).ready(function(){
-	//초기 재고품목 페이지 료시
-	loadPage('erp.jsp');
-	
-	//네비게이션 메뉴 클릭 이벤트 처리
-	$('.main.nav a').click(function (event){
-		event.preventDefault(); //기본 이벤트 방지
-		
-		const pageUrl = $(this).attr('href');
-		loadPage(pageUrl);
-	});
-});
-
-//페이지 로드 함수
-function loadPage(pageUrl){
 	$.ajax({
-		url: pageUrl,
-		type:'GET',
-		success: function (data){
-			$('.content').html(data); //가져온 HTML .content에 삽입
-		},
-		error: function(error){
-			console.error('Error loading page: ' , error);
-		}
-	});
+		type: "POST",
+		
+	})
 }
-*/
-//목록 정렬 
+
+
+//품목 목록 정렬 
 $(document).ready(function () {
-    $('.sortable').click(function () {
-        var table = $(this).closest('table');
-        var index = $(this).index();
-        var rows = table.find('tbody > tr').toArray().sort(comparator(index));
+   const originalRows = $('.itemSortable').closest('table').find('tbody > tr').toArray();
+
+    $('.itemSortable').click(function () {
+        const table = $(this).closest('table');
+        const index = $(this).index();
+        let rows;
 
         if ($(this).hasClass('asc')) {
-            rows = rows.reverse();
-            $(this).removeClass('asc');
-            $(this).addClass('desc');
-        } else {
+            rows = table.find('tbody > tr').toArray().sort(comparator(index)).reverse();
+            $(this).removeClass('asc').addClass('desc');
+        } else if ($(this).hasClass('desc')) {
             $(this).removeClass('desc');
+            $(this).addClass('reset');
+            rows = originalRows;
+        } else {
             $(this).addClass('asc');
+             rows = table.find('tbody > tr').toArray().sort(comparator(index));
         }
+        
+        if ($(this).hasClass('reset')) {
+		    $(this).removeClass('reset');
+		    rows = originalRows;
+		}
+        
+        table.find('.itemSortable').not(this).removeClass('asc desc reset');
+        
+        table.find('tbody').empty().append(rows);
+    });
+
+    function comparator(index) {
+        return function (a, b) {
+            const valA = getCellValue(a, index);
+            const valB = getCellValue(b, index);
+
+            if (index === 1 || index === 2) { // 품목코드 또는 품목명
+                return valA.localeCompare(valB);
+            } else if (index === 4) { // 등록일
+                return new Date(valA) - new Date(valB);
+            } else if (index === 7 || index === 5 || index === 6) { // 평균단가, 현재재고, 전월재고
+                return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
+            } else {
+                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+            }
+        };
+    }
+
+    function getCellValue(row, index) {
+        return $(row).children('td').eq(index).text();
+    }
+});
+
+
+//입출고 정렬
+$(document).ready(function () {
+	const originalRows = $('.statusSortable').closest('table').find('tbody > tr').toArray();
+    $('.statusSortable').click(function () {
+        const table = $(this).closest('table');
+        const index = $(this).index();
+        let rows;
+
+        if ($(this).hasClass('asc')) {
+            rows = table.find('tbody > tr').toArray().sort(comparator(index)).reverse();
+            $(this).removeClass('asc').addClass('desc');
+        } else if ($(this).hasClass('desc')) {
+            $(this).removeClass('desc');
+            $(this).addClass('reset');
+            rows = originalRows;
+        }else{
+			$(this).addClass('asc');
+			rows = table.find('tbody > tr').toArray().sort(comparator(index));
+		}
+		
+		if($(this).hasClass('reset')){
+			$(this).removeClass('reset');
+			rows = originalRows;
+		}
+		
+		table.find('.itemSortable').not(this).removeClass('asc desc reset');
 
         table.find('tbody').empty().append(rows);
     });
@@ -102,9 +104,9 @@ $(document).ready(function () {
 
             if (index === 1 || index === 2) { // 품목코드 또는 품목명
                 return valA.localeCompare(valB);
-            } else if (index === 4) { // 등록일
-                return new Date(valA) - new Date(valB);
-            } else if (index === 7 || index === 5 || index === 6) { // 평균단가, 현재재고, 전월재고
+            } else if (index === 4 || index === 3) { // 일자 또는 상세
+                return valA.localeCompare(valB);
+            } else if (index === 5 || index === 6 || index === 8) { // 입·출고수량, 입·출고단가, 총금액
                 return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);

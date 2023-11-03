@@ -354,9 +354,9 @@
         border-left: 1px dashed #9d9a9a;
     }
 
-    .cont_area table td +  .cont_area table td {
-        border-left: 1px dashed #9d9a9a;
-    }
+	.cont_area table td + td {
+	    border-left: 1px dashed #9d9a9a;
+	}
 
     .cont_area table tr:nth-child(even) {
        background-color: #e1dcdc;
@@ -581,6 +581,7 @@
 
     .modal.on {
         width: calc(100vw - 400px);
+        display: block;
     }
     .modal-content {
         position: absolute;
@@ -616,9 +617,11 @@
 }
 .input-group .form-control {
     position: relative;
+    outline: none;
+    font-size: 13px;
     z-index: 2;
     float: left;
-    width: 75px;
+    width: 76px;
     margin-bottom: 0
 }
 .datepicker-dropdown{
@@ -676,19 +679,120 @@
 	width: 200px;
 }
 
+/*item Tbody Css*/
 .itemTbody{
 	text-align: center;
+	max-height: 232px; 
+	overflow-y: auto;
+	display: block;
 }
+
+.itemScroll > tr > td:nth-child(1) { width: 45px; }
+.itemScroll > tr > td:nth-child(2) { width: 135px; }
+.itemScroll > tr > td:nth-child(3) { width: 236px; }
+.itemScroll > tr > td:nth-child(4) { width: 71px; }
+.itemScroll > tr > td:nth-child(5) { width: 109px; }
+.itemScroll > tr > td:nth-child(6) { width: 90px; }
+.itemScroll > tr > td:nth-child(7) { width: 90px; }
+.itemScroll > tr > td:nth-child(8) { width: 86px; }
 
 .itemTbody .amount-cell {
     text-align: end;
     padding: 0 12px;
 }
 
+/*status Tbody Css*/
+.statusTbody{
+	text-align: center;
+	max-height: 232px;  
+	overflow-y: auto;
+	display: block;
+}
+
+.statusScroll > tr > td:nth-child(1) { width: 45px; }
+.statusScroll > tr > td:nth-child(2) { width: 132px; }
+.statusScroll > tr > td:nth-child(3) { width: 237px; }
+.statusScroll > tr > td:nth-child(4) { width: 109px; }
+.statusScroll > tr > td:nth-child(5) { width: 71px; }
+.statusScroll > tr > td:nth-child(6) { width: 90px; }
+.statusScroll > tr > td:nth-child(7) { width: 74px; }
+.statusScroll > tr > td:nth-child(8) { width: 80px; }
+
+
+.statusTbody .amount-cell {
+    text-align: end;
+    padding: 0 12px;
+}
+
+/*paym Tbody Css*/
 .paymTbody{
 	text-align: center;
+	max-height: 232px;  
+	overflow-y: auto;
+	display: block;
 }
+
+.paymScroll > tr > td:nth-child(1) { width: 45px; }
+.paymScroll > tr > td:nth-child(2) { width: 130px; }
+.paymScroll > tr > td:nth-child(3) { width: 130px; }
+.paymScroll > tr > td:nth-child(4) { width: 110px; }
+.paymScroll > tr > td:nth-child(5) { width: 110px; }
+.paymScroll > tr > td:nth-child(6) { width: 86px; }
+.paymScroll > tr > td:nth-child(7) { width: 86px; }
+.paymScroll > tr > td:nth-child(8) { width: 117px; }
+
 .paymTbody .amount-cell {
     text-align: end;
     padding: 0 12px;
+}
+
+/*품목 정렬 css*/
+.sortable {
+    cursor: pointer;
+}
+
+.sortable:hover {
+    background-color: #f2f2f2; 
+}
+
+.statusSortable.asc::after {
+    content: ' ▲';
+    color: #450877; 
+}
+
+.statusSortable.desc::after {
+    content: ' ▼';
+    color: #450877; 
+}
+
+.statusSortable.reset::after {
+    content: '';
+    color: initial; 
+}
+
+.itemSortable.asc::after {
+    content: ' ▲';
+    color: #450877 !important; 
+}
+
+.itemSortable.desc::after {
+    content: ' ▼';
+    color: #450877; 
+}
+
+.itemSortable.reset::after {
+    content: ''; 
+    color: initial; 
+}
+
+/*로딩중*/
+.loading-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    display: block;
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
 }

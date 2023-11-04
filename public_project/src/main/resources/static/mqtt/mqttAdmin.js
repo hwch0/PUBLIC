@@ -121,14 +121,23 @@ function ajaxResponse(method, url, params) {
 	}//주문리스트 받기
 	
 	const recvLogin = recv => {
-		const data = { userId: recv.userId };
-		ajaxResponse('POST', '/user/getUser', data)
+		//const data = { userId: recv.userId };
+		const data = {};
+		ajaxResponse('POST', '/loggedInUserList', data)
 			.then(function(response) {
-				var userInfo = $.parseJSON(response);
+				console.log(response.result);
+				$.each(response.result, function(index, user){
+					console.dir(user.seatNo);
+					var seat = $(`li[data-seatNo=${user.seatNo}]`);
+					seat.addClass('on');
+					seat.find('p').first().text(user.userId);
+					seat.find('p').last().text(formatTime(user.remainingTime));
+				});
+				/*var userInfo = $.parseJSON(response);
 				var seat = $(`li[data-seatNo=${recv.seatNo}]`);
 				seat.addClass('on');
 				seat.find('p').first().text(userInfo.userId);
-				seat.find('p').last().text(formatTime(userInfo.remainingTime));
+				seat.find('p').last().text(formatTime(userInfo.remainingTime));*/
 			})
 			.catch(function(error) {
 				console.error("로그인 정보 가져오는중 에러 발생: " + error);

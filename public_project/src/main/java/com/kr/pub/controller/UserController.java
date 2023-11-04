@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,9 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kr.pub.dto.OrderDTO;
-import com.kr.pub.dto.OrderHistoryDTO;
-import com.kr.pub.dto.PaymentDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
@@ -47,7 +43,7 @@ public class UserController {
 	@Autowired
 	private ServletContext app;
 	
-	@GetMapping("/")
+	@GetMapping("")
     public String login() {
 		return "/user/login";
     }
@@ -103,14 +99,18 @@ public class UserController {
     @PostMapping("/login")
     @ResponseBody
     public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
+        //HttpSession session = request.getSession();
         Map<String, Object> map = new HashMap<>();
         Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
         UserDTO rs = userService.login(user);
+        
+        	
+        
+        	//System.out.println(rs);
         // 잔여시간
         //int remainingTime = userService.getRemainingTime(user);
         
-        if (rs.getRemainingTime() > 0) {
+        if (rs.getRemainingTime() > 0) {//rs널체크 필요해보임
         		
 //            session.setAttribute("remainingTime", remainingTime);
 //            session.setAttribute("LoginTime", loginTime);
@@ -123,11 +123,13 @@ public class UserController {
 
             userService.updateLoginTime(rs);
 			List<UserDTO> loggedInUserList = (List<UserDTO>) app.getAttribute("loggedInUserList");
-            System.out.println("application=>" + loggedInUserList);
+            System.out.println("application=> " + loggedInUserList);
             
             	if(loggedInUserList != null) {
-            		loggedInUserList.add(rs);
-            		app.setAttribute("loggedInUserList", loggedInUserList);
+            		if(!AppContextController.searchUser(loggedInUserList, rs)){
+            				loggedInUserList.add(rs);
+                        app.setAttribute("loggedInUserList", loggedInUserList);
+            			}
             	}else {
             		List<UserDTO> newloggedInUserList = new ArrayList<>();
             		newloggedInUserList.add(rs);
@@ -140,8 +142,8 @@ public class UserController {
             	JSONObject jsonObject = new JSONObject();
             	jsonObject.put("type", "LOGIN");
             	jsonObject.put("receiver", "admin");
-            	jsonObject.put("seatNo", "1");
-            	jsonObject.put("userId", rs.getUserId());
+            	//jsonObject.put("seatNo", "1");
+            	//jsonObject.put("userId", rs.getUserId());
 
             mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
             	

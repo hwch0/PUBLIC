@@ -16,13 +16,14 @@ import jakarta.servlet.ServletContext;
 
 @Component
 public class AppContextListener implements ServletContextListener {
-	@Autowired
-	private ServletContext app;
-	
-	@Override
-    public void contextInitialized(ServletContextEvent sce) {
-        List<UserDTO> loggedInUserList = new ArrayList<>();
-        //원하는 데이터 초기화
-        app.setAttribute("loggedInUserList", loggedInUserList);
-    }
+//	@Autowired
+//	private ServletContext app;
+//	
+//	@Override
+//    public void contextInitialized(ServletContextEvent sce) {
+//		System.out.println("어플리케이션 영역 초기화");
+//        List<UserDTO> loggedInUserList = new ArrayList<>();
+//        //원하는 데이터 초기화
+//        app.setAttribute("loggedInUserList", loggedInUserList);
+//    }
 }

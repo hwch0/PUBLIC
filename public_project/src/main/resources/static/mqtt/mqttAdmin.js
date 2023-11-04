@@ -125,7 +125,14 @@ function ajaxResponse(method, url, params) {
 		const data = {};
 		ajaxResponse('POST', '/loggedInUserList', data)
 			.then(function(response) {
-				console.log(response);
+				console.log(response.result);
+				$.each(response.result, function(index, user){
+					console.dir(user.seatNo);
+					var seat = $(`li[data-seatNo=${user.seatNo}]`);
+					seat.addClass('on');
+					seat.find('p').first().text(user.userId);
+					seat.find('p').last().text(formatTime(user.remainingTime));
+				});
 				/*var userInfo = $.parseJSON(response);
 				var seat = $(`li[data-seatNo=${recv.seatNo}]`);
 				seat.addClass('on');

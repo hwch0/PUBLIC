@@ -20,11 +20,14 @@ import jakarta.servlet.ServletContext;
 public class AppContextController {
 	@Autowired
 	private ServletContext app;
-	public static Optional<UserDTO> searchUser(List<UserDTO> userList, UserDTO input) {
+	public static boolean searchUser(List<UserDTO> userList, UserDTO input) {
+		boolean result=false;
 		Optional<UserDTO> optionalUser = userList.stream()
 			    .filter(user -> user.getUserId().equals(input.getUserId()))
 			    .findFirst();
-		return optionalUser;
+		if (optionalUser.isPresent()) {
+			result = true;}
+		return result;
 	}
 	
 	@PostMapping("/loggedInUserList")
@@ -37,33 +40,17 @@ public class AppContextController {
 	
 	@PostMapping("/getUserById")
 	@ResponseBody
-	public Map<String, Optional<UserDTO>> getUserById(@RequestBody UserDTO user){
-		Map<String, Optional<UserDTO>> result = new HashMap<>();
-		result.put("result", searchUser((List<UserDTO>) app.getAttribute("loggedInUserList"), user));
+	public Map<String, UserDTO> getUserById(@RequestBody UserDTO input){
+		Map<String, UserDTO> result = new HashMap<>();
+		List<UserDTO> userList = (List<UserDTO>) app.getAttribute("loggedInUserList");
+		if(userList != null) {
+			Optional<UserDTO> optionalUser = userList.stream()
+				    .filter(user -> user.getUserId().equals(input.getUserId()))
+				    .findFirst();
+			if (optionalUser.isPresent()) {result.put("result", optionalUser.get());}
+		}
 		return result;
 	}
  }
 
-//	@GetMapping("/getAppUser")
-//	@ResponseBody
-//	public Map<String, Object> getAppUser() {
-//	    Map<String, Object> map = new HashMap<>();
-//	    List<String> attributeNames = new ArrayList<>();
-//	    
-//	    // Enumeration을 List로 복사
-//	    Enumeration<String> attributeNamesEnum = app.getAttributeNames();
-//	    while (attributeNamesEnum.hasMoreElements()) {
-//	        attributeNames.add(attributeNamesEnum.nextElement());
-//	    }
-//	    
-//	    map.put("result", attributeNames);
-//	    return map;
-//	}
-//	@GetMapping("/getAppUser")
-//	@ResponseBody
-//	public Map<String, List<UserDTO>> getAppUser(){
-//		Map<String, List<UserDTO>> map = new HashMap<>();
-//		map.put("result", (List<UserDTO>) app.getAttribute("loggedInUserList"));
-//		return map;
-//	}
 

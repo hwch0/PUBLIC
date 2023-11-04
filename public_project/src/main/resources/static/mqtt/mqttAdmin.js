@@ -1,4 +1,30 @@
-const mqtt_host = "www.chocomungco.store";
+function formatTime(seconds) {
+    var hours = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds % 3600) / 60);
+    var remainingSeconds = seconds % 60;
+	//+ remainingSeconds + " 초"
+    return hours + " 시간 " + minutes + " 분 ";
+}
+function ajaxResponse(method, url, params) {
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            url: url,
+            method: method,
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            success: function(response) {
+                resolve(response);
+            },
+            error: function(error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+
+
+	const mqtt_host = "www.chocomungco.store";
 	const mqtt_port = 9001; //websocket port : mosquitt.conf 파일에 설정됨  
 	const mqtt_topic = "/public/";
 
@@ -93,20 +119,21 @@ const mqtt_host = "www.chocomungco.store";
 				</div>`
 		)
 	}//주문리스트 받기
+	
 	const recvLogin = recv => {
-		const data = {userId : recv.userId};
-		//console.log("recvLogin=>" + data);
-		$.ajax({
-			url: 'http://localhost:8282/user/getUser',
-			method: 'POST', 
-			data: JSON.stringify(data),
-			contentType: 'application/json', 
-			success: function(response) {
-				console.log("response=>" + response);
-				$(`li[data-seatNo=${recv.seatNo}]`).addClass('on');
-			},
-		});
-	}//로그인시 관리자에게 알림주기(좌석 동적으로 변경하기 위해)
+		const data = { userId: recv.userId };
+		ajaxResponse('POST', '/user/getUser', data)
+			.then(function(response) {
+				var userInfo = $.parseJSON(response);
+				var seat = $(`li[data-seatNo=${recv.seatNo}]`);
+				seat.addClass('on');
+				seat.find('p').first().text(userInfo.userId);
+				seat.find('p').last().text(formatTime(userInfo.remainingTime));
+			})
+			.catch(function(error) {
+				console.error("로그인 정보 가져오는중 에러 발생: " + error);
+			});
+	}//사용자 로그인시 관리자 좌석 동적으로 변경
 	
 	
     //설정 및 메서드 끝

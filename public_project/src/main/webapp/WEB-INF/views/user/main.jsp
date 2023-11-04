@@ -11,7 +11,7 @@
     <div class="body-wrap">
         <div class="nav-wrap">
             <div>
-                <a id="logout" href="/user/logout">로그아웃</a>
+                <a href="/user/logout">로그아웃</a>
             </div>
         </div>
         <div class="chat-wrap">
@@ -20,7 +20,26 @@
     </div>
 </body>
 <script>
+
 // 시간 js
+function ajaxResponse(method, url, params) {
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            url: url,
+            method: method,
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            success: function(response) {
+                resolve(response);
+            },
+            error: function(error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+
 var remainingTimeElement = document.getElementById("remainingTime");
 
 function formatTime(seconds) {
@@ -39,29 +58,35 @@ function updateCountdown(remainingTime) {
             updateCountdown(remainingTime);
         }, 1000);
     } else {
-    	alert("잔여시간이 없습니다.")
-        location.href = "/user/";
+        location.href = "/user/login";
     }
 }
 
 function updateRemainingTime() {
-    var remainingTime = ${sessionScope.remainingTime}; 
+	const data = {userId : "user4"}; //JWT 토큰 구현 이후 userID가져와야함
+	ajaxResponse('POST', '/getUserById', data)
+		.then(function(response) {			
+			var userInfo = response.result;
+			var remainingTime = userInfo.remainingTime;
+			if (remainingTime >= 0) {
+		        var now = new Date().getTime();
+		        var loginTime = new Date(userInfo.loginTime).getTime();
+		        var durationTime = now - loginTime;
+		        remainingTime = remainingTime - Math.floor(durationTime / 1000);
+		        updateCountdown(remainingTime);
+		    } else {
+		       alert("잔여시간이 없습니다.")
+        		   location.href = "/user/";
+		    } 
+		})
+		.catch(function(error) {
+			console.error("로그인 정보 가져오는중 에러 발생: " + error);
+		});
 
-    if (remainingTime >= 0) {
-        var now = new Date().getTime();
-        var loginTime = new Date("${sessionScope.LoginMember.loginTime}").getTime();
-        var durationTime = now - loginTime;
-        remainingTime = remainingTime - Math.floor(durationTime / 1000);
-        updateCountdown(remainingTime);
-    } else {
-    	alert("잔여시간이 없습니다.")
-        location.href = "/user/";
-    }
 }
 
 window.onload = function () {
     updateRemainingTime();
 }
 </script>
-
 </html>

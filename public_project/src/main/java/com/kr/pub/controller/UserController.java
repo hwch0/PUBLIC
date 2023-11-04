@@ -4,11 +4,13 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
@@ -66,10 +70,18 @@ public class UserController {
 		model.addAttribute("result", result);
 		return "/user/userList";
 	}
+	@PostMapping("/getUser")
+	@ResponseBody
+	public String getUser(@RequestBody UserDTO userDTO) throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(userService.getUser(userDTO));
+		return json;
+	}
+
 
 	@GetMapping("/userTest")
-	public String userTest(Model model) throws Exception {
-		model.addAttribute("time" ,TimeApi.getTime());
+	public String userTest(Model model, HttpServletRequest request) throws Exception {
+		//model.addAttribute("time" ,TimeApi.getTime());
 		//mqttService.publishMessage(TimeApi.getTime(),"/public/order");
 		/*
 		 * 순서:
@@ -105,6 +117,18 @@ public class UserController {
 	            session.setAttribute("LoginMember", rs);
 	            map.put("rs", rs);
 	            map.put("message", "로그인 성공했습니다.");
+	            
+	            System.out.println(rs);
+	            
+	            userService.updateLoginTime(rs);
+            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
+            	userService.updateSeat(rs);//1번 사용중으로 변경
+            	JSONObject jsonObject = new JSONObject();
+            	jsonObject.put("type", "LOGIN");
+            	jsonObject.put("receiver", "admin");
+            	jsonObject.put("seatNo", "1");
+            	jsonObject.put("userId", rs.getUserId());
+	            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
 	        } else {
 	            map.put("message", "잔여시간이 없습니다.");
 	            map.put("rs", 0);

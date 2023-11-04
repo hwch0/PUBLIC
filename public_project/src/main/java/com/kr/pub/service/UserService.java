@@ -42,6 +42,7 @@ public class UserService {
                 // 잔여시간이 있을 경우
                 Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
                 rs.setLoginTime(loginTime);
+                rs.setSeatNo("1");
                 updateLoginTime(rs);
             }
         }
@@ -61,6 +62,10 @@ public class UserService {
 		userDAO.updateAllTime(user);
 		
 	}
+	public void updateSeat(UserDTO user) {
+		userDAO.updateSeat(user);
+	}
+
 
 	public UserDTO loginHistory(UserDTO user) {
 		return userDAO.loginHistory(user);

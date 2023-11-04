@@ -10,7 +10,7 @@
 <script src="js/reference.js"></script>
 
 <!-- ********** 관리자 대시보드 ********** -->
-<script src="/js/admin.js"></script>
+<script src="js/admin.js"></script>
 <!-- jQuery -->
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -24,9 +24,11 @@
 <!-- ********** 관리자 메뉴판 관리 ********** -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
+
 <!-- ********** 채팅 ********** -->
 
 <!-- ********** ERP ********** -->
+<script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
 <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
 <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">

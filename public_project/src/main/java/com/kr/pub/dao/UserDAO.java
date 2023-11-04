@@ -23,5 +23,8 @@ public interface UserDAO {
 	public void updateAllTime(UserDTO user);
 
 	public UserDTO loginHistory(UserDTO user);
+	
+	public void updateSeat(UserDTO user);
+
 
 }

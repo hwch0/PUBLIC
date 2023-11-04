@@ -11,7 +11,7 @@
     <div class="body-wrap">
         <div class="nav-wrap">
             <div>
-                <a href="/user/logout">로그아웃</a>
+                <a id="logout" href="/user/logout">로그아웃</a>
             </div>
         </div>
         <div class="chat-wrap">
@@ -20,7 +20,6 @@
     </div>
 </body>
 <script>
-
 // 시간 js
 var remainingTimeElement = document.getElementById("remainingTime");
 
@@ -40,7 +39,8 @@ function updateCountdown(remainingTime) {
             updateCountdown(remainingTime);
         }, 1000);
     } else {
-        location.href = "/user/login";
+    	alert("잔여시간이 없습니다.")
+        location.href = "/user/";
     }
 }
 
@@ -54,7 +54,8 @@ function updateRemainingTime() {
         remainingTime = remainingTime - Math.floor(durationTime / 1000);
         updateCountdown(remainingTime);
     } else {
-        location.href = "/user/login";
+    	alert("잔여시간이 없습니다.")
+        location.href = "/user/";
     }
 }
 

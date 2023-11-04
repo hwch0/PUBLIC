@@ -1,4 +1,4 @@
-function myFetch(url, param, handler) {
+/*function myFetch(url, param, handler) {
 
 	fetch(url, {
 		method:'POST',
@@ -7,6 +7,19 @@ function myFetch(url, param, handler) {
 			},        
 		body: JSON.stringify(param),
 	})
+	.then((response) => response.json())
+	.then((data) => {
+		if(data.status) {
+			if (handler != null) {
+				handler(data); // 응답데이터로 처리할 로직을 handler 함수에 정의
+			}
+		}
+	})
+}*/
+
+function myFetch(url, option,  handler) {
+
+	fetch(url, option)
 	.then((response) => response.json())
 	.then((data) => {
 		if(data.status) {
@@ -41,10 +54,30 @@ $("#addMenuBnt").on("click", () => {
 	alert("메뉴 등록");
 	
 	const formData = new FormData($("#menuForm")[0]);
-	const url = "/image/insertImage";
-	myFetch(url, formData, response => {
-		conseole.log("결과" + response.status);
-	});
+	const url = "/admin/addMenu";
+	
+	fetch(url, {
+		method:'POST',
+		body: formData
+	})
+	.then((response) => response.json())
+	.then((data) => {
+		if(data.status) {
+			alert(data.message); // 
+		}
+	})
+	
+})
+
+// 메뉴 리스트 가져오기
+$(document).ready(() => {
+	
+	const url = "/admin/menulist";
+	const option = { method: 'GET' };
+	
+	myFetch(url, option, response => {
+		console.log(response.list);
+	})
 	
 })
 

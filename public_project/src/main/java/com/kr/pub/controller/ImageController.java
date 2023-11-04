@@ -25,11 +25,7 @@ public class ImageController {
 	public Map<String, Object> imageInsert(MultipartHttpServletRequest multipartRequest, HttpServletResponse res) {
 		//List<ImageDTO> imageList = fileProcess(multipartRequest);
 		
-		
 		return null;
-		
 	}
 	
-	
-
 }

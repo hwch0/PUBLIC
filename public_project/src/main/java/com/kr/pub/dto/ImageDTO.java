@@ -19,5 +19,7 @@ public class ImageDTO {
 	private char deleted;
 	private String contentType;
 	private String imgNameOrg;
+	
+	private String itemId;
 		
 }

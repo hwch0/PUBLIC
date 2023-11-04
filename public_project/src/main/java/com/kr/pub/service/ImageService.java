@@ -9,25 +9,45 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.kr.pub.dao.ImageDAO;
+import com.kr.pub.dao.ItemDAO;
+import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dto.ImageDTO;
+import com.kr.pub.dto.MenuDTO;
 
 @Service
 public class ImageService {
 	private static String CURR_IMAGE_REPO_PATH = "C:\\file_repo";
 	
-	public List<ImageDTO> imageProcess(MultipartHttpServletRequest multipartRequests) throws IOException {
-		List<ImageDTO> fileList = new ArrayList<>();
-        Iterator<String> fileNames = multipartRequests.getFileNames();
+	@Autowired
+	private ImageDAO imageDAO;
+	@Autowired
+	private MenuDAO menuDAO;
+	
+	public boolean insertImage(ImageDTO image) {
+		imageDAO.insertImage(image);
+		
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>" + image.getImgId());
+		
+		MenuDTO menu = MenuDTO.builder()
+						.itemId(image.getItemId())
+						.imgId(image.getImgId())
+						.build();
+		menuDAO.updateMenu(menu);
+		return true;
+	}
+	
+	public ImageDTO imageProcess(MultipartHttpServletRequest multipartRequests) throws IOException {
+		ImageDTO newFile = new ImageDTO();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy\\MM\\dd");
         String today = dateFormat.format(new Date());
         
-        while (fileNames.hasNext()) {
-            String fileName = fileNames.next();
-            MultipartFile mFile = multipartRequests.getFile(fileName);
+            MultipartFile mFile = multipartRequests.getFile("menuImage");
             String originalFileName = mFile.getOriginalFilename(); // 파일명.jpg
             
             String fileExtension = "";
@@ -45,14 +65,13 @@ public class ImageService {
                 
                 File file = new File(savePath, saveFileName);
                 
-                ImageDTO newFile = ImageDTO.builder()
+                newFile = ImageDTO.builder()
                 		.imgNameOrg(originalFileName)
                 		.imgNameReal("\\" + today+ "\\" +saveFileName)
                 		.length(mFile.getSize())
                 		.contentType(contentType)
                 		.build();
                 		
-                fileList.add(newFile);
 
                 if (!file.exists()) {
                     if (file.getParentFile().mkdirs()) {
@@ -68,8 +87,10 @@ public class ImageService {
                 System.out.println();
                 mFile.transferTo(file);
             }
-        }
-        	return fileList;
+            
+        	return newFile;
 	}
+
+
 
 }

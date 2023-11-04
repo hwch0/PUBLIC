@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kr.pub.dao.MenuDAO">
+
+<update id="updateMenu">
+	update menu
+	set img_id = #{imgId}, menu_checked = 'Y'
+	where item_id = #{itemId}
+</update>
+
+<select id="getMenuList" resultType="com.kr.pub.dto.MenuDTO">
+	select * from menu where menuChecked = 'Y'
+</select>
+	
+</mapper>

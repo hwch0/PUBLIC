@@ -38,7 +38,13 @@ public class UserController {
 	
 	@GetMapping("/")
     public String login() {
-        return "/user/login";
+		
+		return "/user/login";
+        
+    }
+	@GetMapping("/test")
+    public String testIp() {
+        return "/user/ipTest";
     }
 	
     @GetMapping("/main")
@@ -84,37 +90,30 @@ public class UserController {
 	
 	
 	// 로그인
-    @PostMapping("/login")
-    @ResponseBody
-    public Map<String, Object> login(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
-        Map<String, Object> map = new HashMap<>();
+	@PostMapping("/login")
+	@ResponseBody
+	public Map<String, Object> login(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
+	    HttpSession session = request.getSession();
+	    Map<String, Object> map = new HashMap<>();
 
-        Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
-        
-        
-        UserDTO rs = userService.login(user);
+	    UserDTO rs = userService.login(user);
 
-        // 잔여시간
-        int remainingTime = userService.getRemainingTime(user);
-        
-        System.out.println(rs);
-        
-        if (rs != null) {
-            session.setAttribute("remainingTime", remainingTime);
-            session.setAttribute("LoginTime", loginTime);
-            session.setAttribute("LoginMember", rs);
-            map.put("rs", rs);
-            map.put("message", "로그인 성공했습니다.");
-            
-            // 로그인 성공 시 loginTime 삽입
-            rs.setLoginTime(loginTime);
-            userService.updateLoginTime(rs);
-        } else {
-            map.put("message", "로그인 실패했습니다.");
-        }
-        return map;
-    }
+	    if (rs != null) {
+	        if (rs.getRemainingTime() > 0) {
+	            session.setAttribute("remainingTime", userService.getRemainingTime(user));
+	            session.setAttribute("LoginTime", rs.getLoginTime());
+	            session.setAttribute("LoginMember", rs);
+	            map.put("rs", rs);
+	            map.put("message", "로그인 성공했습니다.");
+	        } else {
+	            map.put("message", "잔여시간이 없습니다.");
+	            map.put("rs", 0);
+	        }
+	    } else {
+	        map.put("message", "로그인 실패했습니다.");
+	    }
+	    return map;
+	}
     
 	// 로그아웃
     @GetMapping("/logout")
@@ -142,7 +141,7 @@ public class UserController {
 	        UserDTO updateMember = new UserDTO();
 	        
 	        updateMember.setUserId(loginMember.getUserId());
-	        updateMember.setLogoutTime(loginTime);
+	        updateMember.setLogoutTime(logoutTime);
 	        updateMember.setRemainingTime(remainingTime);
 	        
 	        userService.updateAllTime(updateMember);
@@ -151,7 +150,7 @@ public class UserController {
         session.removeAttribute("LoginTime");
         session.removeAttribute("remainingTime");
 
-        return "/user/login";
+        return "<script>window.location.href = '/user/';</script>";
     }
     
     // 시간계산 

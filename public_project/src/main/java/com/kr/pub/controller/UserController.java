@@ -104,6 +104,7 @@ public class UserController {
         Map<String, Object> map = new HashMap<>();
         Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
         UserDTO rs = userService.login(user);
+        	System.out.println(rs);
         // 잔여시간
         //int remainingTime = userService.getRemainingTime(user);
         
@@ -124,8 +125,10 @@ public class UserController {
             System.out.println("application=>" + loggedInUserList);
             
             	if(loggedInUserList != null) {
-            		loggedInUserList.add(rs);
-            		app.setAttribute("loggedInUserList", loggedInUserList);
+            		if(!rs.getUserId().equals(AppContextController.searchUser(loggedInUserList, rs).get().getUserId())) {
+            			loggedInUserList.add(rs);
+                	app.setAttribute("loggedInUserList", loggedInUserList);
+            		}
             	}else {
             		List<UserDTO> newloggedInUserList = new ArrayList<>();
             		newloggedInUserList.add(rs);

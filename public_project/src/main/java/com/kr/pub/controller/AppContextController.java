@@ -20,7 +20,7 @@ import jakarta.servlet.ServletContext;
 public class AppContextController {
 	@Autowired
 	private ServletContext app;
-	public Optional<UserDTO> searchUser(List<UserDTO> userList, UserDTO input) {
+	public static Optional<UserDTO> searchUser(List<UserDTO> userList, UserDTO input) {
 		Optional<UserDTO> optionalUser = userList.stream()
 			    .filter(user -> user.getUserId().equals(input.getUserId()))
 			    .findFirst();

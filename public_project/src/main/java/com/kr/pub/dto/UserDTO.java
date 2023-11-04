@@ -27,6 +27,7 @@ public class UserDTO {
 	private Date regDate;
 	private int remainingTime;
 	private String roleId;
+	
 	private String seatNo;
 	
 }

@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kr.pub.dto.OrderDTO;
+import com.kr.pub.dto.OrderHistoryDTO;
+import com.kr.pub.dto.PaymentDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
@@ -110,29 +113,27 @@ public class UserController {
 
 	    UserDTO rs = userService.login(user);
 
-	    if (rs != null) {
-	        if (rs.getRemainingTime() > 0) {
-	            session.setAttribute("remainingTime", userService.getRemainingTime(user));
-	            session.setAttribute("LoginTime", rs.getLoginTime());
-	            session.setAttribute("LoginMember", rs);
-	            map.put("rs", rs);
-	            map.put("message", "로그인 성공했습니다.");
-	            
-	            System.out.println(rs);
-	            
-	            userService.updateLoginTime(rs);
-            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
-            	userService.updateSeat(rs);//1번 사용중으로 변경
-            	JSONObject jsonObject = new JSONObject();
-            	jsonObject.put("type", "LOGIN");
-            	jsonObject.put("receiver", "admin");
-            	jsonObject.put("seatNo", "1");
-            	jsonObject.put("userId", rs.getUserId());
-	            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
-	        } else {
-	            map.put("message", "잔여시간이 없습니다.");
-	            map.put("rs", 0);
-	        }
+	    if (rs.getRemainingTime() > 0) {
+	    	session.setAttribute("remainingTime", userService.getRemainingTime(user));
+            session.setAttribute("LoginTime", rs.getLoginTime());
+            session.setAttribute("LoginMember", rs);
+            map.put("rs", rs);
+            map.put("message", "로그인 성공했습니다.");
+            
+            System.out.println(rs);
+            
+            userService.updateLoginTime(rs);
+        	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
+        	userService.updateSeat(rs);//1번 사용중으로 변경
+        	JSONObject jsonObject = new JSONObject();
+        	jsonObject.put("type", "LOGIN");
+        	jsonObject.put("receiver", "admin");
+        	jsonObject.put("seatNo", "1");
+        	jsonObject.put("userId", rs.getUserId());
+            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
+	    } else if(rs.getRemainingTime() == 0) {
+	    	map.put("message", "잔여시간이 없습니다.");
+            map.put("rs", 0);
 	    } else {
 	        map.put("message", "로그인 실패했습니다.");
 	    }
@@ -205,5 +206,6 @@ public class UserController {
         return response;
     }
 
+    
 
 }

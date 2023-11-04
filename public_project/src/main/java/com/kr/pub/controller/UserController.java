@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +46,11 @@ public class UserController {
 	
 	@GetMapping("/")
     public String login() {
-        return "/user/login";
+		return "/user/login";
+    }
+	@GetMapping("/test")
+    public String testIp() {
+        return "/user/ipTest";
     }
 	
     @GetMapping("/main")
@@ -90,9 +96,10 @@ public class UserController {
 		
 	
 	// 로그인
+
     @PostMapping("/login")
     @ResponseBody
-    public Map<String, Object> login(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
+    public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         Map<String, Object> map = new HashMap<>();
         Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
@@ -125,7 +132,7 @@ public class UserController {
             		app.setAttribute("loggedInUserList", newloggedInUserList);
             		System.out.println("getapplication=>" + app.getAttribute("loggedInUserList"));
             	}
-            
+        
             	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
             	userService.updateSeat(rs);//1번 사용중으로 변경
             	JSONObject jsonObject = new JSONObject();
@@ -133,6 +140,7 @@ public class UserController {
             	jsonObject.put("receiver", "admin");
             	jsonObject.put("seatNo", "1");
             	jsonObject.put("userId", rs.getUserId());
+//<<<<<<< HEAD
             mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
             	
         } else {
@@ -140,6 +148,18 @@ public class UserController {
         }
         return map;
     }
+//=======
+//	            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
+//	        } else {
+//	            map.put("message", "잔여시간이 없습니다.");
+//	            map.put("rs", 0);
+//	        }
+//	    } else {
+//	        map.put("message", "로그인 실패했습니다.");
+//	    }
+//	    return map;
+//	}
+//>>>>>>> branch 'main' of https://github.com/hwch0/PUBLIC.git
     
 	// 로그아웃
     @GetMapping("/logout")
@@ -167,7 +187,7 @@ public class UserController {
 	        UserDTO updateMember = new UserDTO();
 	        
 	        updateMember.setUserId(loginMember.getUserId());
-	        updateMember.setLogoutTime(loginTime);
+	        updateMember.setLogoutTime(logoutTime);
 	        updateMember.setRemainingTime(remainingTime);
 	        
 	        userService.updateAllTime(updateMember);
@@ -176,7 +196,7 @@ public class UserController {
         session.removeAttribute("LoginTime");
         session.removeAttribute("remainingTime");
 
-        return "/user/login";
+        return "<script>window.location.href = '/user/';</script>";
     }
     
     // 시간계산 

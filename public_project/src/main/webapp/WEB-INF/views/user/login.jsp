@@ -8,6 +8,9 @@
 </head>
 <link rel="stylesheet" href="/css/user.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+	
+</style>
 <body>
     <div class="logo"><img src="/images/logo_w.png" alt="로고"></div>
     <div class="login_content">
@@ -41,9 +44,51 @@
             </div>
         </div>
     </div>
+	<div class="pay_content" style="display:none;">
+        <h2>시간 충전</h2>
+        <div class="pay_form">
+            <ul>
+                <li>
+                    <p><span id="userId" class="getUserId"></span>님</p>
+                </li>
+                <li>
+                    <p>충전 시간</p>
+                    
+                    <div class="charge_time">
+                    	<span class="btn_charge minus"><a href="javascript:void(0);">-</a></span>
+                    	<p>
+	                        <em>1</em>시간
+	                    </p>
+                        <span class="btn_charge plus"><a href="javascript:void(0);">+</a></span>
+                    </div>
+                    
+                </li>
+            </ul>
+        </div>
+        <div class="li_pay">
+            <ul>
+                <li>
+                    <a href="javascript:void(0);">
+                        카드결제
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">
+                        계좌이체
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">
+                        간편결제
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <button class="canclePayment">취소</button>
+    </div>
 </body>
 
-<script>
+<script> 
 //로그인
 document.querySelector("#login").addEventListener("click", e => {
 	 const userId = $("#userId").val();
@@ -64,10 +109,43 @@ document.querySelector("#login").addEventListener("click", e => {
 	.then((json) =>{
 		alert(json.message);
 		if (json.rs != null) {
-			location.href = "/user/main";
+			if (json.rs != 0) {
+				location.href = "/user/main";	
+			} else {
+				$('.login_content').css('display','none');
+				$('.pay_content').css('display','block');
+			}	
 		}
 	});
 });
+
+// 충전시간 조절
+let chargeTime = 1;
+
+$('.minus').on('click', function(e) {
+    if (chargeTime > 1) {
+        chargeTime--; 
+        updateChargeTime();
+    }
+});
+
+$('.plus').on('click', function(e) {
+    chargeTime++; 
+    updateChargeTime();
+});
+
+
+function updateChargeTime() {
+    $('.charge_time em').text(chargeTime);
+}
+
+
+$('.canclePayment').on('click', function(e){
+	$('#password').val('');
+	$('.login_content').css('display', 'block');
+	$('.pay_content').css('display', 'none');
+});
+
 
 
 // 로그인 폼 스타일

@@ -75,12 +75,14 @@ function updateRemainingTime() {
 		        remainingTime = remainingTime - Math.floor(durationTime / 1000);
 		        updateCountdown(remainingTime);
 		    } else {
-		        location.href = "/user/login";
+		       alert("잔여시간이 없습니다.")
+        		   location.href = "/user/";
 		    } 
 		})
 		.catch(function(error) {
 			console.error("로그인 정보 가져오는중 에러 발생: " + error);
 		});
+
 }
 
 window.onload = function () {

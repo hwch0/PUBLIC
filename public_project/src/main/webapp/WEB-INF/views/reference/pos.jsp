@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/chat.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
+
 <body>
 	<div class="wrap">
 		<!-- ########## 상단 헤더 영역 끝 ########## -->
@@ -63,8 +64,30 @@
 			<div class="seat_grp">
 				<div class="seat">
 					<ul>
+<<<<<<< HEAD
+						<li class="on"><a href="javascript:void(0);"></a>
+							<p class="uid">user 1</p>
+							<p class="time">01:17:34</p>
+						</li>
 						<li><a href="javascript:void(0);"></a>
 							<p class="uid"></p>
+							<p class="time"></p>
+						</li>
+=======
+>>>>>>> branch 'main' of https://github.com/hwch0/PUBLIC.git
+						<li><a href="javascript:void(0);"></a>
+							<p class="uid"></p>
+							<p class="time"></p></li>
+						<li><a href="javascript:void(0);"></a>
+							<p class="uid"></p>
+<<<<<<< HEAD
+							<p class="time"></p>
+						</li>
+						<li class="on"><a href="javascript:void(0);"></a>
+							<p class="uid">user 121</p>
+							<p class="time">01:17:34</p>
+						</li>
+=======
 							<p class="time"></p></li>
 						<li><a href="javascript:void(0);"></a>
 							<p class="uid"></p>
@@ -75,17 +98,43 @@
 						<li><a href="javascript:void(0);"></a>
 							<p class="uid"></p>
 							<p class="time"></p></li>
+>>>>>>> branch 'main' of https://github.com/hwch0/PUBLIC.git
 						<li><a href="javascript:void(0);"></a>
 							<p class="uid"></p>
-							<p class="time"></p></li>
-						<li><a href="javascript:void(0);"></a>
-							<p class="uid"></p>
-							<p class="time"></p></li>
+							<p class="time"></p>
+						</li>
 					</ul>
 				</div>
 
 				<div class="seat seat_end">
 					<ul>
+<<<<<<< HEAD
+						<li class="on"><a href="javascript:void(0);"></a>
+							<p class="uid">user 99</p>
+							<p class="time">01:17:34</p>
+						</li>
+						<li class="on"><a href="javascript:void(0);"></a>
+							<p class="uid">user 369</p>
+							<p class="time">01:17:34</p>
+						</li>
+=======
+>>>>>>> branch 'main' of https://github.com/hwch0/PUBLIC.git
+						<li><a href="javascript:void(0);"></a>
+							<p class="uid"></p>
+							<p class="time"></p>
+						</li>
+						<li><a href="javascript:void(0);"></a>
+							<p class="uid"></p>
+							<p class="time"></p></li>
+						<li><a href="javascript:void(0);"></a>
+							<p class="uid"></p>
+							<p class="time"></p></li>
+<<<<<<< HEAD
+						<li class="on"><a href="javascript:void(0);"></a>
+							<p class="uid">user 24</p>
+							<p class="time">01:17:34</p>
+						</li>
+=======
 						<li><a href="javascript:void(0);"></a>
 							<p class="uid"></p>
 							<p class="time"></p></li>
@@ -95,15 +144,7 @@
 						<li><a href="javascript:void(0);"></a>
 							<p class="uid"></p>
 							<p class="time"></p></li>
-						<li><a href="javascript:void(0);"></a>
-							<p class="uid"></p>
-							<p class="time"></p></li>
-						<li><a href="javascript:void(0);"></a>
-							<p class="uid"></p>
-							<p class="time"></p></li>
-						<li><a href="javascript:void(0);"></a>
-							<p class="uid"></p>
-							<p class="time"></p></li>
+>>>>>>> branch 'main' of https://github.com/hwch0/PUBLIC.git
 					</ul>
 				</div>
 

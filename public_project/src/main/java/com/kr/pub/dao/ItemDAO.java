@@ -9,5 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ItemDAO {
 
 	//재고 목록 출력
-	public List<Map<String, Object>> itemList() throws Exception;
+	public List<Map<String, Object>> itemList(Map<String, Object> searchParams) throws Exception;
 }

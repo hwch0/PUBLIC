@@ -1,17 +1,57 @@
-function itemCheck(){
-	 // 선택한 조회 조건 값 가져오기
-    const startDate = $("#startDate").val();
-    const endDate = $("#endDate").val();
-    const itemName = $(".itemName").val();
-    const itemSelect = $(".itemSelect").val();
-    const itemStockOption = $("input[name='itemStockOption']:checked").val();
+//품목관리 조회조건
+function searchData() {
+    LoadingWithMask('/images/loading.gif');
+    
+    const searchParams = {
+        startDate: $('#startDate').val().replace(/\//g, '-'),
+        endDate: $('#endDate').val().replace(/\//g, '-'),
+        itemName: $('.itemName').val(),
+        itemSelect: $('.itemSelect').val(),
+        registrationDay: $('.registrationDay').val()
+    };
+        
+    $.ajax({
+        url: '/search',
+        type: 'POST',
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(searchParams),
+        success: function (data) {
+            console.log(searchParams);
+            console.log(data.itemsearch);
+            console.log(data);
+            $('#itemTbody').empty();
+            
+            $.each(data.itemsearch, function(index, item){
+				 let row = '<tr>' +
+        '<td>' + (item['index'] || '') + '</td>' +
+        '<td>' + item['ITEMID'] + '</td>' +
+        '<td>' + item['ITEMNAME'] + '</td>' +
+        '<td>' + item['TYPE'] + '</td>' +
+        '<td>' + (item['REGDATE'] == null ? '-' : item['REGDATE']) + '</td>' +
+        '<td>' + (item['STOREDATE'] == null ? '-' : item['STOREDATE']) + '</td>' +
+        '<td>' + (item['STOCK'] == null ? '-' : item['STOCK']) + ' EA</td>' +
+        '<td>';
 
-	$.ajax({
-		type: "POST",
-		
-	})
+    if (item['PRICE'] != null) {
+        row += new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(item['PRICE'])
+    } else {
+        row += '-';
+    }
+
+    row += '</td></tr>';
+
+    $('#itemTbody').append(row);
+			});
+            
+        },
+        error: function (error) {
+            console.error('Ajax 요청 중 오류 발생: ', error);
+        },
+        complete: function () {
+            closeLoadingWithMask();
+        }
+    });
 }
-
 
 //품목 목록 정렬 
 $(document).ready(function () {

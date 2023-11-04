@@ -21,6 +21,14 @@ $(document).ready(() => {
 
 	makeCalendar();
 
+	const today = new Date();
+	const todayFormatted = today.getFullYear() +
+    '-' +
+    (today.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    today.getDate().toString().padStart(2, '0');
+	$('#startDate').val(todayFormatted);
+	$('#endDate').val(todayFormatted);
 });
 
 //재고관리 품목 & 입·출고 
@@ -70,11 +78,12 @@ function resetInputs(){
 }
 
 //로딩화면
+/*
 function loading(){
 	LoadingWithMask('/images/loading.gif');
 	setTimeout(closeLoadingWithMask, 2000);
 }
-
+*/
 function LoadingWithMask(gif){
 	const maskHeight = $(document).height();
 	const maskWidth = window.document.body.clientWidth;

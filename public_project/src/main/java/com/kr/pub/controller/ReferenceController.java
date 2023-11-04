@@ -12,18 +12,4 @@ public class ReferenceController {
 		return "/reference/pos";
 	}
 
-	@GetMapping("/stock")
-	public String erp(Model model) {
-		return "/reference/stockLayout";
-	}
-
-	@GetMapping("/sales")
-	public String sales(Model model) {
-		return "/reference/salesLayout";
-	}
-
-	//	@GetMapping("/erp2")
-//	public String erp2(Model model) {
-//		return "/reference/erp2";
-//	}
 }

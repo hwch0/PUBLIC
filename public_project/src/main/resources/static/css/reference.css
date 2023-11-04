@@ -673,6 +673,7 @@
 
 /*input박스*/
 .itemName,
+.registrationDay,
 .paymName,
 .userName,
 .orderName {
@@ -700,7 +701,7 @@
 .itemScroll > tr > td:nth-child(5) { width: 109px; }
 .itemScroll > tr > td:nth-child(6) { width: 90px; }
 .itemScroll > tr > td:nth-child(7) { width: 90px; }
-.itemScroll > tr > td:nth-child(8) { width: 86px; }
+.itemScroll > tr > td:nth-child(8) { width: 112px; }
 
 .itemTbody .amount-cell {
     text-align: end;

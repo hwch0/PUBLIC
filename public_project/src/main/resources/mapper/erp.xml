@@ -5,30 +5,52 @@
 
 <mapper namespace="com.kr.pub.dao.ItemDAO">
 
+	<select id="itemList" resultType="java.util.Map">
+	  SELECT
+	    i.ITEM_ID AS itemId,
+	    i.ITEM_NAME AS itemName,
+	    c.TYPE AS type,
+	    TO_CHAR(i.REG_DATE, 'YYYY-MM-DD') AS regDate,
+	    TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') AS storeDate,
+	    i.STOCK AS stock,
+	    sh.PRICE AS price
+	  FROM
+	    item i
+	  LEFT JOIN
+	    store_history sh ON i.ITEM_ID = sh.ITEM_ID
+	  LEFT JOIN
+	    store s ON sh.STORE_ID = s.STORE_ID
+	  LEFT JOIN
+	    common_code c ON i.ITEM_TYPE_CODE = c.CODE
+	  WHERE
+	    1=1
+	    <!-- startDate, endDate -->
+	    <if test="startDate != null">
+	      AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}	      
+	    </if>
+	    <!-- registrationDay -->
+		<if test="registrationDay != null and registrationDay != ''">
+		    <choose>
+		        <when test="registrationDay.length() == 4">
+		            AND TO_CHAR(i.REG_DATE, 'YYYY') = #{registrationDay}
+		        </when>
+		        <otherwise>
+		            AND TO_CHAR(i.REG_DATE, 'YYYY-MM') = #{registrationDay}
+		        </otherwise>
+		    </choose>
+		</if>
+	    <!-- itemSelect -->
+	    <if test="itemSelect != null">
+	      AND c.TYPE = #{itemSelect}
+	    </if>
+	    <!-- itemName -->
+	    <if test="itemName != null">
+	      AND i.ITEM_NAME LIKE '%' || #{itemName} || '%'
+	    </if>
+	  GROUP BY
+	     i.ITEM_ID, i.ITEM_NAME, i.ITEM_TYPE_CODE, c.TYPE, i.STOCK, sh.PRICE, i.REG_DATE, s.STORE_DATE
+	</select>
 
-
-  <select id="itemList" resultType="java.util.Map">
-    <![CDATA[
-      SELECT
-        i.ITEM_ID AS itemId,
-        i.ITEM_NAME AS itemName,
-        c.TYPE AS type,
-        MIN(s.STORE_DATE) AS storeDate,
-        MAX(s.STORE_DATE) AS storeDate,
-        i.STOCK AS stock,
-        sh.PRICE AS price
-      FROM
-        item i
-      LEFT JOIN
-        store_history sh ON i.ITEM_ID = sh.ITEM_ID
-      LEFT JOIN
-        store s ON sh.STORE_ID = s.STORE_ID
-      LEFT JOIN
-        common_code c ON i.ITEM_TYPE_CODE = c.CODE
-      GROUP BY
-        i.ITEM_ID, i.ITEM_NAME, i.ITEM_TYPE_CODE, c.TYPE, i.STOCK, sh.PRICE;
-    ]]>
-  </select>
 
 	
 </mapper>

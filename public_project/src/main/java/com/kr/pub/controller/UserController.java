@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,19 +97,17 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseBody
+    @SuppressWarnings("unchecked")
     public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
         //HttpSession session = request.getSession();
         Map<String, Object> map = new HashMap<>();
-        Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+       // Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
         UserDTO rs = userService.login(user);
-        
-        	
-        
         	//System.out.println(rs);
         // 잔여시간
         //int remainingTime = userService.getRemainingTime(user);
         
-        if (rs.getRemainingTime() > 0) {//rs널체크 필요해보임
+        if (rs.getRemainingTime() > 0) {
         		
 //            session.setAttribute("remainingTime", remainingTime);
 //            session.setAttribute("LoginTime", loginTime);
@@ -120,31 +117,29 @@ public class UserController {
             map.put("message", "로그인 성공했습니다.");
             	
             // 로그인 성공 시 loginTime 삽입
-
-            userService.updateLoginTime(rs);
-			List<UserDTO> loggedInUserList = (List<UserDTO>) app.getAttribute("loggedInUserList");
+            //userService.updateLoginTime(rs);
+           
+			List<UserDTO> loggedInUserList = (List<UserDTO>) app.getAttribute("loggedInUserList");//app영역에서 로그인되어있는 회원의 배열 가져오기
             System.out.println("application=> " + loggedInUserList);
             
-            	if(loggedInUserList != null) {
-            		if(!AppContextController.searchUser(loggedInUserList, rs)){
-            				loggedInUserList.add(rs);
-                        app.setAttribute("loggedInUserList", loggedInUserList);
+            	if(loggedInUserList != null) {//로그인된 회원이 있을떄
+            		if(!AppContextController.searchUser(loggedInUserList, rs)){//리스트에서 현재 로그인한 회원을 스트림으로 찾고 없다면
+            				loggedInUserList.add(rs);//로그인유저 리스트에 추가
+                        app.setAttribute("loggedInUserList", loggedInUserList);//app영역에 update하기
             			}
             	}else {
-            		List<UserDTO> newloggedInUserList = new ArrayList<>();
-            		newloggedInUserList.add(rs);
-            		app.setAttribute("loggedInUserList", newloggedInUserList);
+            		loggedInUserList = new ArrayList<>();//현재 로그인한 회원이 아무도 없다면(배열이 null) 새로운 배열 객체 만들기
+            		loggedInUserList.add(rs);//로그인 유저 리스트에 추가
+            		app.setAttribute("loggedInUserList", loggedInUserList);//app영역에 update
             		System.out.println("getapplication=>" + app.getAttribute("loggedInUserList"));
             	}
         
             	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
             	userService.updateSeat(rs);//1번 사용중으로 변경
-            	JSONObject jsonObject = new JSONObject();
-            	jsonObject.put("type", "LOGIN");
-            	jsonObject.put("receiver", "admin");
-            	//jsonObject.put("seatNo", "1");
-            	//jsonObject.put("userId", rs.getUserId());
-
+            	JSONObject jsonObject = new JSONObject(Map.of(
+            		    "type", "LOGIN",
+            		    "receiver", "admin"
+            		));
             mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
             	
         }  else if(rs.getRemainingTime() == 0) {
@@ -156,44 +151,51 @@ public class UserController {
         return map;
     }
 
+    @GetMapping("/logout/{userId}")
+    @ResponseBody
+    public String logout(@PathVariable("userId") String userId, HttpSession session) {
+        System.out.println("1");
+        return "/user/login"; // 로그인 페이지로 리다이렉트
+    }
     
 	// 로그아웃
-    @GetMapping("/logout")
-    @ResponseBody
-    public String logout(HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
-        
-        // 세션에서 LoginMember 속성 가져오기
-        UserDTO loginMember = (UserDTO) session.getAttribute("LoginMember");
-        if(loginMember != null) {
-	        int remainingTime = (int) session.getAttribute("remainingTime");
-	        
-	        // 입장시간
-	        Timestamp loginTime = loginMember.getLoginTime();
-	        // 퇴장시간
-	        Timestamp logoutTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
-	        
-	        // 입장시간 - 퇴장시간
-	        Duration setDuration = Duration.between(loginTime.toInstant(), logoutTime.toInstant());
-
-	        // 잔여시간 - 사용시간
-	        int seconds = (int) setDuration.getSeconds();
-	        remainingTime = (remainingTime - seconds);
-	        
-	        UserDTO updateMember = new UserDTO();
-	        
-	        updateMember.setUserId(loginMember.getUserId());
-	        updateMember.setLogoutTime(logoutTime);
-	        updateMember.setRemainingTime(remainingTime);
-	        
-	        userService.updateAllTime(updateMember);
-        } 
-        session.removeAttribute("LoginMember");
-        session.removeAttribute("LoginTime");
-        session.removeAttribute("remainingTime");
-
-        return "<script>window.location.href = '/user/';</script>";
-    }
+//    @GetMapping("/logout/{userId}")
+//    public String logout(@PathVariable("userId") String userId) throws Exception {
+//    	System.out.println(userId);
+//       // HttpSession session = request.getSession();
+//        /*
+//        // 세션에서 LoginMember 속성 가져오기
+//        UserDTO loginMember = (UserDTO) session.getAttribute("LoginMember");
+//        if(loginMember != null) {
+//	        int remainingTime = (int) session.getAttribute("remainingTime");
+//	        
+//	        // 입장시간
+//	        Timestamp loginTime = loginMember.getLoginTime();
+//	        // 퇴장시간
+//	        Timestamp logoutTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+//	        
+//	        // 입장시간 - 퇴장시간
+//	        Duration setDuration = Duration.between(loginTime.toInstant(), logoutTime.toInstant());
+//
+//	        // 잔여시간 - 사용시간
+//	        int seconds = (int) setDuration.getSeconds();
+//	        remainingTime = (remainingTime - seconds);
+//	        
+//	        UserDTO updateMember = new UserDTO();
+//	        
+//	        updateMember.setUserId(loginMember.getUserId());
+//	        updateMember.setLogoutTime(logoutTime);
+//	        updateMember.setRemainingTime(remainingTime);
+//	        
+//	        userService.updateAllTime(updateMember);
+//        } 
+//        session.removeAttribute("LoginMember");
+//        session.removeAttribute("LoginTime");
+//        session.removeAttribute("remainingTime");
+//*/
+//    	return "/user/login";
+//        //return "<script>window.location.href = '/user';</script>";
+//    }
     
     // 시간계산 
     @GetMapping("/getRemainingTime")

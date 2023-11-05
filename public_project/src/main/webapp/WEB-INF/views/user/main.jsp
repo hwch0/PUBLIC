@@ -11,7 +11,8 @@
     <div class="body-wrap">
         <div class="nav-wrap">
             <div>
-                <a href="/user/logout">로그아웃</a>
+                <!-- <a href="/user/logout">로그아웃</a> -->
+                <button id="logoutBtn">로그아웃</button>
             </div>
         </div>
         <div class="chat-wrap">
@@ -20,7 +21,9 @@
     </div>
 </body>
 <script>
-
+$('#logoutBtn').on('click', function(){
+	location.href = "/logout/"+localStorage.getItem("userId");
+});
 // 시간 js
 function ajaxResponse(method, url, params) {
     return new Promise(function(resolve, reject) {

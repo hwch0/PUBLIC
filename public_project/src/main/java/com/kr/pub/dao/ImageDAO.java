@@ -9,4 +9,6 @@ public interface ImageDAO {
 	
 	public void insertImage(ImageDTO image);
 
+	public ImageDTO getImage(String imgId);
+
 }

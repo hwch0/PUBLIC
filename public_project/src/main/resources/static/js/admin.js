@@ -33,52 +33,126 @@ function myFetch(url, option,  handler) {
 // 메뉴 관리 모달창
 const menuModal = $("#menuModal");
 
+// 메뉴 관리 모달창을 오픈하는 버튼
 const openMenuController = $(".openMenuController");
 
 openMenuController.on("click" , () => {
-//	menuModal.css('display', 'block');
-	menuModal.addClass('on');
+	const menuSelectListBody = $("#tbody");
+	const menuItem = $("#menu-item");
+	const url = "/admin/menulist/N/N"; // 등록여부: N, 카테고리: N 인 모든 목록 조회
+	
+	myFetch(url,{method: "GET"}, data => {
+		console.log(data);
+		// 상품 리스트 테이블에 가져온 상품 목록을 하나씩 추가
+		const menuListData = data.menuList; 
+		menuListData.forEach((menu) =>{
+			menuItemClone = menuItem.clone();
+			menuItemClone.find(".category").text(menu.MENU_CATEGORY);
+			menuItemClone.find(".menuName").text(menu.ITEM_NAME);
+			menuItemClone.find(".menuPrice").text(menu.SELLING_PRICE);
+			menuItemClone.find(".menuId").text(menu.ITEM_ID);
+			menuItemClone.show();
+			menuSelectListBody.append(menuItemClone);
+		})
+		
+		menuModal.addClass('on');
+	} )
+	
 })
 
-$(window).on('click', (e) => {
-    if (e.target === menuModal) {
-        menuModal.removeClass('on'); 
-    }
-});
+
+ $('.form-select').on('change', ()=>{
+    var selectedValue =  $('.form-select').find(":selected").val();
+    console.log('선택한 값: ' + selectedValue);
+    
+	const menuSelectListBody = $("#tbody");
+	const menuItem = $("#menu-item");
+	const url = "/admin/menulist/N/" + selectedValue;
+	menuSelectListBody.empty();
+	
+	myFetch(url,{method: "GET"}, data => {
+		console.log(data);
+		const menuListData = data.menuList;
+		menuListData.forEach((menu) =>{
+			menuItemClone = menuItem.clone();
+			menuItemClone.find(".category").text(menu.MENU_CATEGORY);
+			menuItemClone.find(".menuName").text(menu.ITEM_NAME);
+			menuItemClone.find(".menuPrice").text(menu.SELLING_PRICE);
+			menuItemClone.find(".menuId").text(menu.ITEM_ID);
+			menuItemClone.show();
+			menuSelectListBody.append(menuItemClone);
+		})
+		
+		menuModal.addClass('on');
+	} )
+    
+    
+    
+  });
 
 $('.close').on('click', () => {
+    // 모달 창이 닫힐 때 id="selectedItem"의 값을 초기화
+    $('.form-select').val('N');
+    
+    // 이미지의 src를 초기화
+    $('#inputGroupFile02').val('');
+    $('#preview').attr('src', '');
+    $('#preview').css('display', 'none');
+	 
 	 menuModal.removeClass('on');  
 });
 
 $("#addMenuBnt").on("click", () => {
 	alert("메뉴 등록");
+	// 체크된 tr의 menuId 클래스명을 가진 요소의 텍스트 값을 저장할 배열을 만듭니다.
+	var checkedMenuIds = [];
 	
-	const formData = new FormData($("#menuForm")[0]);
-	const url = "/admin/addMenu";
+	// 'menuChecked' 클래스명을 가진 체크박스 중에서 체크된 항목을 찾습니다.
+	$('.menuChecked #checkedBox:checked').each(function() {
+	    // 각 체크된 항목의 부모 <tr>에서 menuId 클래스명을 가진 요소의 텍스트 값을 가져와서 배열에 추가합니다.
+	    var menuIdText = $(this).closest('tr').find('.menuId').text();
+	    checkedMenuIds.push(menuIdText);
+	});
 	
-	fetch(url, {
-		method:'POST',
-		body: formData
-	})
-	.then((response) => response.json())
-	.then((data) => {
-		if(data.status) {
-			alert(data.message); // 
-		}
-	})
 	
-})
+	if(checkedMenuIds.length == 0) {
+		alert("등록하실 메뉴를 선택해주세요.")
+	} else if(checkedMenuIds.length > 1) {
+		alert("메뉴는 한 개만 선택해주세요.")
+	} else {
+		
+	// 체크된 항목의 menuId 값을 확인합니다.
+	$('#selectedItem').val(checkedMenuIds[0]);
+	console.log($('#selectedItem').val());
+		
+		const formData = new FormData($("#menuForm")[0]);
+		const url = "/admin/addMenu";
+		
+		fetch(url, {
+			method:'POST',
+			body: formData
+		})
+		.then((response) => response.json())
+		.then((data) => {
+			if(data.status) {
+				
+				alert(data.message); 
+				console.log(data.menu);
+				
+				// 메뉴 등록 후 반환받은 정보를 menuList 그리드에 추가
+				const cardDate = data.menu;
+				const menuList = $('.menuList');
+				const cardItem = $('#cardItem').clone();
+				cardItem.find('img').attr('src', '/image/download/' + cardDate.IMG_ID);
+				cardItem.find('.fw-bolder.menuName').text(cardDate.ITEM_NAME);
+				cardItem.find('.fw-bolder.menuPrice').text(cardDate.ITEM_SELLING_PRICE);
+				cardItem.show();
+				menuList.append(cardItem);
+				menuModal.removeClass('on'); 
 
-// 메뉴 리스트 가져오기
-$(document).ready(() => {
-	
-	const url = "/admin/menulist";
-	const option = { method: 'GET' };
-	
-	myFetch(url, option, response => {
-		console.log(response.list);
-	})
-	
+			}
+		})
+	}
 })
 
 

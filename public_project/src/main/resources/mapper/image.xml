@@ -19,5 +19,9 @@
 	)
 </insert>
 
+<select id="getImage" resultType="com.kr.pub.dto.ImageDTO">
+	select * from image where img_id = #{imgId}
+</select>
+
 	
 </mapper>

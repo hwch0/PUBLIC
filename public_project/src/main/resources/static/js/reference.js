@@ -70,7 +70,7 @@ function addFoodPage() {
 
 function showAlert(){
 	if($(".wrap_chat").hasClass('on')){
-		$(".wrap_chat").removeClass("on");
+		$(".wrap_chat").removeClass('on');
 		$(".wrap_alert").toggleClass('on');
 	}else{
 		$('.wrap_cont').toggleClass('lft');

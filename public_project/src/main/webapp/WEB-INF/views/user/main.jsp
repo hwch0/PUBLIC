@@ -22,7 +22,7 @@
 </body>
 <script>
 $('#logoutBtn').on('click', function(){
-	location.href = "/logout/"+localStorage.getItem("userId");
+	location.href = "/user/logout/"+localStorage.getItem("userId");
 });
 // 시간 js
 function ajaxResponse(method, url, params) {
@@ -66,7 +66,7 @@ function updateCountdown(remainingTime) {
 }
 
 function updateRemainingTime() {
-	const data = {userId : "user4"}; //JWT 토큰 구현 이후 userID가져와야함
+	const data = {userId : localStorage.getItem("userId")}; //JWT 토큰 구현 이후 userID가져와야함
 	ajaxResponse('POST', '/getUserById', data)
 		.then(function(response) {			
 			var userInfo = response.result;

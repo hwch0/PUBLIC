@@ -24,7 +24,8 @@ public interface UserDAO {
 
 	public UserDTO loginHistory(UserDTO user);
 	
-	public void updateSeat(UserDTO user);
+	public void loginSeat(UserDTO user);
+	public void logoutSeat(UserDTO user);
 
 
 }

@@ -66,8 +66,11 @@ public class UserService {
 		userDAO.updateAllTime(user);
 		
 	}
-	public void updateSeat(UserDTO user) {
-		userDAO.updateSeat(user);
+	public void loginSeat(UserDTO user) {
+		userDAO.loginSeat(user);
+	}
+	public void logoutSeat(UserDTO user) {
+		userDAO.logoutSeat(user);
 	}
 
 

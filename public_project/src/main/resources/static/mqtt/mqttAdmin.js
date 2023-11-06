@@ -133,16 +133,45 @@ function ajaxResponse(method, url, params) {
 					seat.find('p').first().text(user.userId);
 					seat.find('p').last().text(formatTime(user.remainingTime));
 				});
-				/*var userInfo = $.parseJSON(response);
-				var seat = $(`li[data-seatNo=${recv.seatNo}]`);
-				seat.addClass('on');
-				seat.find('p').first().text(userInfo.userId);
-				seat.find('p').last().text(formatTime(userInfo.remainingTime));*/
 			})
 			.catch(function(error) {
 				console.error("로그인 정보 가져오는중 에러 발생: " + error);
 			});
 	}//사용자 로그인시 관리자 좌석 동적으로 변경
+	
+	const recvLogout = recv => {
+		let arr = [];
+		const data = {};
+		ajaxResponse('POST', '/loggedInUserList', data)
+			.then(function(response) {
+				console.log(response.result);
+				$.each(response.result, function(index, user){
+					arr.push(user.seatNo);
+				});
+				const result = Array.from({ length: 50 }, (_, index) => index + 1)
+  				.filter(number => !arr.includes(number));
+  				
+  				console.log(result);
+  				$.each(result, function(index, seatNo){
+					  var seat = $(`li[data-seatNo=${seatNo}]`);
+					  if(seat.has('on')){
+						  seat.removeClass('on');
+						  seat.find('p').first().text("");
+						  seat.find('p').last().text("");
+					  }
+				  });
+					  
+				  
+				/*var seat = $(`li[data-seatNo=${user.seatNo}]`);
+					seat.addClass('on');
+					seat.find('p').first().text(user.userId);
+					seat.find('p').last().text(formatTime(user.remainingTime));*/
+			})
+			.catch(function(error) {
+				console.error("로그인 정보 가져오는중 에러 발생: " + error);
+			});
+	}//사용자 로그인시 관리자 좌석 동적으로 변경
+	
 	
 	
     //설정 및 메서드 끝
@@ -165,7 +194,9 @@ function ajaxResponse(method, url, params) {
         		recvMessage(data);
         	}else if(data.receiver === "admin" && data.type ==="LOGIN"){
 			recvLogin(data);
-			}
+		}else if(data.receiver === "admin" && data.type ==="LOGOUT"){
+			recvLogout(data);
+		}
         	else{
 			recvOrder(data);
 		}

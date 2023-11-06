@@ -32,9 +32,14 @@
 		SET logout_time = #{logoutTime}, remaining_time = #{remainingTime}
 		WHERE user_id = #{userId}
 	</update>
-	<update id="updateSeat">
+	<update id="loginSeat">
 		UPDATE seat
 		SET used = 'Y', user_id = #{userId}
+		WHERE seat_no = #{seatNo}
+	</update>
+	<update id="logoutSeat">
+		UPDATE seat
+		SET used = 'N', user_id = null
 		WHERE seat_no = #{seatNo}
 	</update>
 	

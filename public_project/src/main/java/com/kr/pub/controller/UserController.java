@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +136,7 @@ public class UserController {
             	}
         
             	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
-            	userService.updateSeat(rs);//1번 사용중으로 변경
+            	userService.loginSeat(rs);//1번 사용중으로 변경
             	JSONObject jsonObject = new JSONObject(Map.of(
             		    "type", "LOGIN",
             		    "receiver", "admin"
@@ -152,9 +153,42 @@ public class UserController {
     }
 
     @GetMapping("/logout/{userId}")
-    @ResponseBody
-    public String logout(@PathVariable("userId") String userId, HttpSession session) {
-        System.out.println("1");
+    public String logout(@PathVariable("userId") String userId) throws Exception {
+    	System.out.println(userId);
+    	UserDTO logoutUser;
+    	List<UserDTO> loggedInUserList = (List<UserDTO>) app.getAttribute("loggedInUserList");
+    	if(loggedInUserList != null) {
+    		logoutUser = loggedInUserList.stream().filter(user -> user.getUserId().equals(userId)).findFirst().get();
+    		System.out.println(logoutUser);
+    		int remainingTime = logoutUser.getRemainingTime();
+    		 // 입장시간
+	        Timestamp loginTime = logoutUser.getLoginTime();
+	        // 퇴장시간
+	        Timestamp logoutTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+	        // 입장시간 - 퇴장시간
+	        Duration setDuration = Duration.between(loginTime.toInstant(), logoutTime.toInstant());
+	        // 잔여시간 - 사용시간
+	        int seconds = (int) setDuration.getSeconds();
+	        remainingTime = (remainingTime - seconds);
+	        logoutUser.setLogoutTime(logoutTime);
+    		logoutUser.setRemainingTime(remainingTime);
+    		userService.updateAllTime(logoutUser);//DB에 업데이트
+    		
+    		System.out.println(logoutUser);
+    	 	userService.logoutSeat(logoutUser);
+    	 	
+    	 	JSONObject jsonObject = new JSONObject(Map.of(
+        		    "type", "LOGOUT",
+        		    "receiver", "admin"
+        		));
+    	 	mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그아웃한 알림 관리자에게
+    		loggedInUserList = loggedInUserList.stream()
+                    .filter(user -> !user.getUserId().equals(userId)) // 특정 아이디와 일치하지 않는 요소를 필터링
+                    .collect(Collectors.toCollection(ArrayList::new)); // 필터링된 요소로 새 ArrayList 생성
+    		app.setAttribute("loggedInUserList", loggedInUserList);//app영역에 업데이트
+                // 삭제된 후의 ArrayList 출력
+    		System.out.println(loggedInUserList);
+    	}
         return "/user/login"; // 로그인 페이지로 리다이렉트
     }
     

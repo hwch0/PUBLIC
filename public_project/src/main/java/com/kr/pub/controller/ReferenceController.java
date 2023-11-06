@@ -19,8 +19,11 @@ public class ReferenceController {
 	@GetMapping("/pos")
 	@SuppressWarnings("unchecked")
 	public String pos(Model model) {
+		//Map<String, Object> result = new HashMap<>();
+		//result.put("result", (List<UserDTO>) app.getAttribute("loggedInUserList"));
 		List<UserDTO> loggedInUserList = (List<UserDTO>) app.getAttribute("loggedInUserList");
 		model.addAttribute("loggedInUserList", loggedInUserList);
+		System.out.println(loggedInUserList);
 		return "/reference/pos";
 	}
 

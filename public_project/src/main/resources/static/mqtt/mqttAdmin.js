@@ -2,9 +2,52 @@ function formatTime(seconds) {
     var hours = Math.floor(seconds / 3600);
     var minutes = Math.floor((seconds % 3600) / 60);
     var remainingSeconds = seconds % 60;
-	//+ remainingSeconds + " 초"
-    return hours + " 시간 " + minutes + " 분 ";
+    return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
 }
+
+//var remainingTimeElement = document.getElementById("remainingTime");
+function updateCountdown(time, remainingTime) {
+    time.text(formatTime(remainingTime));
+    if (remainingTime > 0) {
+        remainingTime--;
+        setTimeout(function () {
+            updateCountdown(time, remainingTime);
+        }, 1000);
+    } else {//시간  0 되면 좌석 비우기(로그아웃때문에 안만들어도 되나?)
+		
+    }
+}
+
+/*function updateRemainingTime() {
+	const data = {userId : localStorage.getItem("userId")}; //userList app영역에서 가져오기
+	ajaxResponse('POST', '/getUserById', data)
+		.then(function(response) {			
+			var userInfo = response.result;
+			var remainingTime = userInfo.remainingTime;
+			if (remainingTime >= 0) {
+		        var now = new Date().getTime();
+		        var loginTime = new Date(userInfo.loginTime).getTime();
+		        var durationTime = now - loginTime;
+		        remainingTime = remainingTime - Math.floor(durationTime / 1000);
+		        updateCountdown(remainingTime);
+		    } else {
+		       alert("잔여시간이 없습니다.")
+        		   location.href = "/user/";
+		    } 
+		})
+		.catch(function(error) {
+			console.error("로그인 정보 가져오는중 에러 발생: " + error);
+		});
+
+}
+window.onload = function () {
+    updateRemainingTime();
+}
+*/
+
+
+
+
 function ajaxResponse(method, url, params) {
     return new Promise(function(resolve, reject) {
         $.ajax({
@@ -21,8 +64,20 @@ function ajaxResponse(method, url, params) {
         });
     });
 }
-
-
+function sortOptions() {//채팅창 좌석선택 옵션 정렬
+	const optionsArray = $('#seatSelector option').toArray();
+	// <option> 요소를 seatNo 속성으로 정렬
+	optionsArray.sort(function(a, b) {
+		const seatNoA = parseInt($(a).val(), 10);
+		const seatNoB = parseInt($(b).val(), 10);
+		return seatNoA - seatNoB;
+	});
+	// <select> 요소를 비우고 정렬된 <option> 요소를 다시 추가
+	$('#seatSelector').empty();
+	optionsArray.forEach(function(option) {
+		$('#seatSelector').append(option);
+	});
+}
 
 	const mqtt_host = "www.chocomungco.store";
 	const mqtt_port = 9001; //websocket port : mosquitt.conf 파일에 설정됨  
@@ -121,8 +176,8 @@ function ajaxResponse(method, url, params) {
 	}//주문리스트 받기
 	
 	const recvLogin = recv => {
-		//const data = { userId: recv.userId };
 		const data = {};
+		var arr = [];
 		ajaxResponse('POST', '/loggedInUserList', data)
 			.then(function(response) {
 				console.log(response.result);
@@ -131,8 +186,21 @@ function ajaxResponse(method, url, params) {
 					var seat = $(`li[data-seatNo=${user.seatNo}]`);
 					seat.addClass('on');
 					seat.find('p').first().text(user.userId);
-					seat.find('p').last().text(formatTime(user.remainingTime));
+					//seat.find('p').last().text(formatTime(user.remainingTime));
+					updateCountdown(seat.find('p').last(), user.remainingTime);
 				});
+				
+			    const existingOptions = $('#seatSelector option').map(function() {
+					    return $(this).val();
+				}).get();//현재 로그인한 좌석 번호
+				console.log(existingOptions);
+				$.each($("[data-seatNo].on em"), function(i, k){
+					 const seatNumber = $(k).text();
+				     if (!existingOptions.includes(seatNumber)) {
+				     	$('#seatSelector').append("<option value=" + seatNumber + ">" + seatNumber + "</option>");
+				     }
+				});
+				sortOptions();
 			})
 			.catch(function(error) {
 				console.error("로그인 정보 가져오는중 에러 발생: " + error);
@@ -158,19 +226,14 @@ function ajaxResponse(method, url, params) {
 						  seat.removeClass('on');
 						  seat.find('p').first().text("");
 						  seat.find('p').last().text("");
+						  $(`option[value=${seatNo}]`).remove();
 					  }
 				  });
-					  
-				  
-				/*var seat = $(`li[data-seatNo=${user.seatNo}]`);
-					seat.addClass('on');
-					seat.find('p').first().text(user.userId);
-					seat.find('p').last().text(formatTime(user.remainingTime));*/
 			})
 			.catch(function(error) {
-				console.error("로그인 정보 가져오는중 에러 발생: " + error);
+				console.error("로그아웃 정보 가져오는중 에러 발생: " + error);
 			});
-	}//사용자 로그인시 관리자 좌석 동적으로 변경
+	}//사용자 로그아웃시 관리자 좌석 동적으로 변경
 	
 	
 	
@@ -185,19 +248,16 @@ function ajaxResponse(method, url, params) {
     
  // 구독 메시지 수신 
     mqttClient.on('message', function (topic, message) {
-        // message is Buffer
         ////console.log("mqtt message receive :", message.toString())
         	const data = JSON.parse(message.toString())
         	console.log(data);
-        	//if(data.receiver)
         	if(data.receiver === "admin" && data.type ==="CHAT"){
         		recvMessage(data);
         	}else if(data.receiver === "admin" && data.type ==="LOGIN"){
 			recvLogin(data);
 		}else if(data.receiver === "admin" && data.type ==="LOGOUT"){
 			recvLogout(data);
-		}
-        	else{
+		}else{
 			recvOrder(data);
 		}
     })

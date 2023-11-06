@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,10 @@ public class UserService {
                 // 잔여시간이 있을 경우
                 Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
                 rs.setLoginTime(loginTime);
-                rs.setSeatNo("1");
+                Random random = new Random();
+                // 1부터 50 사이의 랜덤 숫자 생성
+                int randomNumber = random.nextInt(50) + 1;
+                rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
                 updateLoginTime(rs);
             }
         }
@@ -62,8 +66,11 @@ public class UserService {
 		userDAO.updateAllTime(user);
 		
 	}
-	public void updateSeat(UserDTO user) {
-		userDAO.updateSeat(user);
+	public void loginSeat(UserDTO user) {
+		userDAO.loginSeat(user);
+	}
+	public void logoutSeat(UserDTO user) {
+		userDAO.logoutSeat(user);
 	}
 
 

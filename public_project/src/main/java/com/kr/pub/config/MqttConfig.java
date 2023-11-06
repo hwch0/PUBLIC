@@ -1,7 +1,4 @@
 package com.kr.pub.config;
-
-import java.util.UUID;
-
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;

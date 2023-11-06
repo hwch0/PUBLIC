@@ -11,7 +11,8 @@
     <div class="body-wrap">
         <div class="nav-wrap">
             <div>
-                <a href="/user/logout">로그아웃</a>
+                <!-- <a href="/user/logout">로그아웃</a> -->
+                <button id="logoutBtn">로그아웃</button>
             </div>
         </div>
         <div class="chat-wrap">
@@ -20,7 +21,9 @@
     </div>
 </body>
 <script>
-
+$('#logoutBtn').on('click', function(){
+	location.href = "/user/logout/"+localStorage.getItem("userId");
+});
 // 시간 js
 function ajaxResponse(method, url, params) {
     return new Promise(function(resolve, reject) {
@@ -63,7 +66,7 @@ function updateCountdown(remainingTime) {
 }
 
 function updateRemainingTime() {
-	const data = {userId : "user4"}; //JWT 토큰 구현 이후 userID가져와야함
+	const data = {userId : localStorage.getItem("userId")}; //JWT 토큰 구현 이후 userID가져와야함
 	ajaxResponse('POST', '/getUserById', data)
 		.then(function(response) {			
 			var userInfo = response.result;

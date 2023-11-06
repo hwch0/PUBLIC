@@ -44,25 +44,6 @@ function changeAdminPage() {
 }*/
 
 
-function myFetch(url, param, handler) {
-
-	fetch(url, {
-		method:'POST',
-		headers: {
-			"Content-Type" : "application/json; charset=UTF-8",
-			},        
-		body: JSON.stringify(param),
-	})
-	.then((response) => response.json())
-	.then((data) => {
-		if(data.status) {
-			if (handler != null) {
-				handler(data); // 응답데이터로 처리할 로직을 handler 함수에 정의
-			}
-		}
-	})
-}
-
 /* 관리자 좌석현황 <-> 대시보드 전환 */
 function changeAdminPage() {
 	if($(".admin_main").hasClass('on')) {
@@ -89,7 +70,7 @@ function addFoodPage() {
 
 function showAlert(){
 	if($(".wrap_chat").hasClass('on')){
-		$(".wrap_chat").removeClass("on");
+		$(".wrap_chat").removeClass('on');
 		$(".wrap_alert").toggleClass('on');
 	}else{
 		$('.wrap_cont').toggleClass('lft');

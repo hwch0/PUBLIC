@@ -28,6 +28,6 @@ public class UserDTO {
 	private int remainingTime;
 	private String roleId;
 	
-	private String seatNo;
+	private int seatNo;
 	
 }

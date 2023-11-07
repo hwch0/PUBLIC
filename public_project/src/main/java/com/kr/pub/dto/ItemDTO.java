@@ -16,7 +16,7 @@ public class ItemDTO {
 	private String itemName;
 	private int sellingPrice;
 	private int stock;
-	private Date regDate;
 	private String itemTypeCode;
-
+	private Date regDate;
+	
 }

@@ -10,7 +10,7 @@
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 </head>
 <body>
-	<!-- <div class="wrap_chat">
+	 <div class="wrap_chat">
 		<div class="wrap_chat_main">
 			<ul id="chatList">	</ul>
 			<footer>
@@ -20,13 +20,13 @@
 		</div>
 	</div>
 	
-	<button id="orderBtn">주문 버튼</button> -->
+	<!--<button id="orderBtn">주문 버튼</button> -->
 	
 	
 	
-	<input type="text" id="inputTime" placeholder="HH:MM:SS">
+	<%-- <input type="text" id="inputTime" placeholder="HH:MM:SS">
     <button id="startTimer">Start Timer</button>
-    <h1 id="countdown">${time}</h1>
+    <h1 id="countdown">${time}</h1> --%>
 
     <script>
     </script>

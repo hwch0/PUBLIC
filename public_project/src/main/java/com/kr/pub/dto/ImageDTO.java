@@ -1,6 +1,7 @@
 package com.kr.pub.dto;
 
-import java.util.Date;
+
+import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +15,12 @@ import lombok.NoArgsConstructor;
 public class ImageDTO {
 	private String imgId;
 	private Date regDate;
-	private int length;
+	private long length;
 	private String imgNameReal;
 	private char deleted;
 	private String contentType;
 	private String imgNameOrg;
+	
+	private String itemId;
 		
 }

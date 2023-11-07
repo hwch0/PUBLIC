@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+ 
 <!DOCTYPE html>
 <html>
 <head>
@@ -356,9 +358,6 @@
 </body>
 <script src="js/reference.js"></script>
 <script type="text/javascript" src="/mqtt/mqttAdmin.js"></script>
-<script>
-	for(let i=1; i<51; i++){
-		$('#seatSelector').append("<option value="+ i +">"+ i +"</option>")
-	}//채팅 좌석번호선택 생성
-</script>
+<script type="text/javascript" src="/js/pos.js"></script>
+
 </html>

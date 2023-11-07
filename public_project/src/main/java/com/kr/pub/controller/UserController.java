@@ -157,7 +157,13 @@ public class UserController {
 	        int seconds = (int) setDuration.getSeconds();
 	        remainingTime = (remainingTime - seconds);
 	        logoutUser.setLogoutTime(logoutTime);
-    		logoutUser.setRemainingTime(remainingTime);
+    		
+	        if(remainingTime <= 0) {
+    			logoutUser.setRemainingTime(0);
+    		} else {
+    			logoutUser.setRemainingTime(remainingTime);
+    		}
+	        
     		userService.updateAllTime(logoutUser);//DB에 업데이트
     		
     		System.out.println(logoutUser);
@@ -174,38 +180,10 @@ public class UserController {
     		app.setAttribute("loggedInUserList", loggedInUserList);//app영역에 업데이트
                 // 삭제된 후의 ArrayList 출력
     		System.out.println(loggedInUserList);
+    		
     	}
         return "/user/login"; // 로그인 페이지로 리다이렉트
     }
-    
-    // 시간계산 
-    @GetMapping("/getRemainingTime")
-    @ResponseBody
-    public Map<String, Integer> getRemainingTime(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Map<String, Integer> response = new HashMap<>();
 
-        UserDTO loginMember = (UserDTO) session.getAttribute("LoginMember");
-        if (loginMember != null) {
-        	
-        	Timestamp loginTime = loginMember.getLoginTime();
-        	Timestamp now = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
-
-            // 입장 시간부터 현재 시간까지의 시간 차이 계산
-        	Duration setDuration = Duration.between(loginTime.toInstant(), now.toInstant());
-        	int seconds = (int) setDuration.getSeconds();
-
-            // 현재 잔여 시간에서 사용된 시간을 뺀 값 전송
-            int remainingTime = loginMember.getRemainingTime() - seconds;
-            response.put("remainingTime", remainingTime);
-        } else {
-            // 사용자가 로그인하지 않은 경우 처리
-            response.put("remainingTime", 0);
-        }
-
-        return response;
-    }
-
-    
 
 }

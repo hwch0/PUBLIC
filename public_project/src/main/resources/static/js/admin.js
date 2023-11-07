@@ -90,7 +90,8 @@ $(".openMenuController").on("click" , () => {
   });
 
 /* 메뉴 관리 모달창 닫기 */
-$('.close').on('click', () => {
+$('#closeModalBtn').on('click', () => {
+	console.log("닫힘");
     // 모달 창이 닫힐 때 id="selectedItem"의 값을 초기화
     $('.form-select').val('N');
     

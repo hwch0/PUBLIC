@@ -1,9 +1,6 @@
 package com.kr.pub.util;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
@@ -24,6 +21,7 @@ import com.kr.pub.dto.ExcelDTO;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+
 
 public class ResultRowDataHandler implements ResultHandler<ExcelDTO>{
 	private Logger logger = LoggerFactory.getLogger(getClass());

@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!--     <link rel="stylesheet" href="/css/food.css"/> -->
-<link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<link href="/docs/5.0/assets/css/docs.css" rel="stylesheet">
 
 <style>
 
@@ -197,8 +194,6 @@
           </div>
           	
           </c:forEach>
-          
-          
           
         </div>
       </div>

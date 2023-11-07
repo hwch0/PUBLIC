@@ -72,7 +72,7 @@
     
 
     <!-- 모달 창 영역 -->
-    <div id="modal" class="modal">
+    <div id="infoModal" class="modal">
          <jsp:include page="adminModal.jsp"></jsp:include>
     </div>
 </body>

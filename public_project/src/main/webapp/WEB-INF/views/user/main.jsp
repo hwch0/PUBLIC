@@ -12,24 +12,48 @@
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 <body>
 	<div class="body-wrap">
-		<div class="nav-wrap">
-			<div>
-				<!-- <a href="/user/logout">로그아웃</a> -->
-				<button id="logoutBtn">로그아웃</button>
-				<h1>
-					카운트다운: <span id="remainingTime">0</span>
-				</h1>
+		<div class="cont-top-wrap">
+			<div class="cont-header">
+				<span></span>
+				<p>PUBLIC</p>
+			</div>
+			<div class="seat-wrap">	
+				<h4>
+					NO.
+					<span id="seatNum">06</span>
+				</h4>
+				<div class="seat-btn">
+					<ul>
+						<li><a href="javascript:void(0);">자리이동</a></li>
+						<li id="logoutBtn"><a href="javascript:void(0);">사용 종료</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="info-wrap">
+				<em id="userId">user1</em> 님
+			</div>
+			<div class="time-wrap">
+				<p id="remainingTime">0</p>
+			</div>
+			<div class="nav-btn-wrap">
+				<ul>
+					<li><a href="javascript:void(0);">주문</a></li>
+					<li><a href="javascript:void(0);">충전</a></li>
+					<li><a href="javascript:void(0);">채팅</a></li>
+				</ul>
 			</div>
 		</div>
-		<div class="chat-wrap">
-			<div class="wrap_chat">
-				<div class="wrap_chat_main">
-					<ul id="chatList">
-					</ul>
-					<footer>
-						<textarea placeholder="Type your message" id="chatInputBox"></textarea>
-						<a href="javascript:void(0);" id="send_chat_button">Send</a>
-					</footer>
+		<div class="cont-bot-wrap">
+			<div class="chat-wrap">
+				<div class="wrap_chat">
+					<div class="wrap_chat_main">
+						<ul id="chatList">
+						</ul>
+						<footer>
+							<textarea placeholder="Type your message" id="chatInputBox"></textarea>
+							<a href="javascript:void(0);" id="send_chat_button">Send</a>
+						</footer>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -39,6 +63,10 @@
 <script>
 $('#logoutBtn').on('click', function(){
 	location.href = "/user/logout/"+localStorage.getItem("userId");
+});
+
+$(".nav-btn-wrap li").on('click', function(){
+	$(".cont-bot-wrap").css('display','block');
 });
 // 시간 js
 function ajaxResponse(method, url, params) {
@@ -66,8 +94,9 @@ function formatTime(seconds) {
     var minutes = Math.floor((seconds % 3600) / 60);
     var remainingSeconds = seconds % 60;
 
-    return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
+    return hours + " : " + minutes + " : " + remainingSeconds ;
 }
+
 
 function updateCountdown(remainingTime) {
     remainingTimeElement.textContent = formatTime(remainingTime);
@@ -76,8 +105,10 @@ function updateCountdown(remainingTime) {
         setTimeout(function () {
             updateCountdown(remainingTime);
         }, 1000);
-    } else {
-        location.href = "/user/login";
+    } else if (remainingTime <= 300 && remainingTime > 0) {
+        remainingTimeElement.style.color = "red";
+	}else {
+        location.href = "/user/logout/"+localStorage.getItem("userId");
     }
 }
 
@@ -96,7 +127,7 @@ function updateRemainingTime() {
 		        updateCountdown(remainingTime);
 		    } else {
 		       alert("잔여시간이 없습니다.")
-        		   location.href = "/user/";
+        		   location.href = "/user";
 		    } 
 		})
 		.catch(function(error) {
@@ -107,6 +138,10 @@ function updateRemainingTime() {
 
 window.onload = function () {
     updateRemainingTime();
+    
+    var userIdElement = document.getElementById("userId");
+    var loggedInUserId = localStorage.getItem("userId"); 
+    userIdElement.textContent = loggedInUserId;
 }
 </script>
 </html>

@@ -176,25 +176,179 @@ label {
 .body-wrap {
     width: 100vw;
     height: 100vh;
-    background-image: url("images/bg_common.jpg");
+    background-image: url("/images/bg_common.jpg");
     background-size: auto 100%;
     background-position: center bottom;
 }
-.nav-wrap {
+
+.cont-top-wrap {
     position: fixed;
-    top: 25px;
+    top: 3.333%;
     right: 25px;
     width: 400px;
-    height: 300px;
-    border-radius: 10px;
-    background-color: #fff;
+    height: 30%;
+    background-color: rgba(51,51,51,0.9);
 }
-.chat-wrap {
+.cont-top-wrap > div {
+	padding: 0 10px;
+	box-sizing: border-box;
+}
+
+.cont-header {
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	background-color: rgba(0,0,0,0.5);
+}
+
+.cont-header span {
+	display: block;
+	float: left;
+	width: 30px;
+	height: 30px;
+	background-image: url("/images/logo_s.png");
+	background-size:auto 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.info-wrap {
+}
+
+.cont-header p {
+	color: rgba(255,255,255,0.7);
+}
+.seat-wrap {
+	position: relative;
+	height: 50px;
+}
+
+.seat-wrap h4 {
+	height: 100%;
+	line-height: 50px;
+	font-size: 16px;
+	color: #fff;
+}
+
+#seatNum {
+	color: #ffca28;
+	font-size: 24px;
+}
+.seat-wrap .seat-btn {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	margin-top: -13px;
+	width: 70%;
+	height: 26px;
+}
+
+.seat-wrap .seat-btn ul {
+	width: 100%;
+	height: 100%;
+}
+.seat-wrap .seat-btn li {
+	float: left;
+	margin: 0 5%;
+	width: 40%;
+	height: 100%;
+	background-color: #000;
+}
+
+.seat-wrap .seat-btn li a {
+	display: block;
+	height: 100%;
+	line-height: 26px;
+	text-align: center;
+	font-size: 12px;
+	color: #fff;
+}
+
+.info-wrap {
+	position: relative;
+	margin: 0 10px;
+	padding: 0 25px !important;
+	height: 30px;
+	line-height: 30px;
+	text-align: right;
+	color: #fff;
+	background-color: rgba(102,102,102,0.9);
+}
+.info-wrap:after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 100px;
+	margin-top: -13px;
+	width: 26px;
+	height: 26px;
+	background-image:url("/images/user.png");
+	background-size: 100%;
+}
+
+#userId {
+	color: #ffca28;
+}
+.time-wrap {
+	height: 70px;
+}
+
+.time-wrap p {
+	height: 100%;
+	line-height: 70px;
+	font-size: 40px;
+	color: #fff;
+	text-align: center;
+}
+.nav-btn-wrap ul {
+	margin: 20px 0;
+	width: 100%;
+	height: 50px;
+}
+.nav-btn-wrap li {
+	position: relative;
+	float:left;
+	width: 30%;
+	height: 50px;
+	background-color: rgba(102,102,102,0.9);
+}
+
+.nav-btn-wrap li:after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 20px;
+	margin-top: -13px;
+	width: 26px;
+	height: 26px;
+	background-image:url("/images/order-user.png");
+	background-size: 100%;
+}
+.nav-btn-wrap li:nth-child(2):after {
+	background-image:url("/images/recharge-user.png");
+}
+
+.nav-btn-wrap li:nth-child(3):after {
+	background-image:url("/images/chat-user.png");
+}
+
+.nav-btn-wrap li + li {
+	margin-left: 5%;
+}
+.nav-btn-wrap li a {
+	display: block;
+	line-height: 50px;
+	text-indent: 50px;
+	font-size: 14px;
+	color: #fff;
+}
+
+.cont-bot-wrap {
     position: fixed;
-    bottom: 40px;
+    display: none;
+    bottom: 3.333%;
     right: 25px;
     width: 400px;
-    height: 500px;
-    border-radius: 10px;
+    height: 60%;
     background-color: #fff;
 }

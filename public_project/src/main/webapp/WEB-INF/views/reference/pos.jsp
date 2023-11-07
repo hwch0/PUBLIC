@@ -358,11 +358,6 @@
 </body>
 <script src="js/reference.js"></script>
 <script type="text/javascript" src="/mqtt/mqttAdmin.js"></script>
-<script>
-/* var arr = loggedInUserList;
+<script type="text/javascript" src="/js/pos.js"></script>
 
-
-console.log(arr); */
-
-</script>
 </html>

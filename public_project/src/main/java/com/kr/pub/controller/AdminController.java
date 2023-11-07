@@ -61,7 +61,7 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@PostMapping("/admin/addMenu")
+	@PostMapping("/addMenu")
 	public Map<String, Object> addMenu(MultipartHttpServletRequest multipartRequest, HttpServletResponse res) throws IOException {
 		System.out.println("AdminController addMenu");
 		Map<String,Object> result = new HashMap<>();

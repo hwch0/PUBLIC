@@ -21,4 +21,6 @@ public interface MenuDAO {
 
 	public Map<String, Object> getMenu(String itemId);
 
+	public int deleteMenu(MenuDTO menu);
+
 }

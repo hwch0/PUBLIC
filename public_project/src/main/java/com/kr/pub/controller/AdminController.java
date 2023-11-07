@@ -79,7 +79,7 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/admin/menulist/{menuChecked}/{category}")
+	@GetMapping("/menulist/{menuChecked}/{category}")
 	public Map<String, Object> getMenuList(@PathVariable String menuChecked, @PathVariable String category) {
 		System.out.println("AdminController getMenuList");
 		Map<String,Object> result = new HashMap<>();
@@ -95,7 +95,7 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/admin/deleteMenu/{itemId}")
+	@GetMapping("/deleteMenu/{itemId}")
 	public Map<String, Object> deleteMenu(@PathVariable String itemId) {
 		System.out.println("AdminController deleteMenu");
 		Map<String, Object> result = new HashMap<>();

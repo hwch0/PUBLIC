@@ -1,6 +1,6 @@
 const listSeat = $('.seat_grp ul li');
-const onSeat = document.querySelectorAll('.seat_grp ul li.on');
-const modal = document.getElementById('modal');
+const onSeat = $("[data-seatNo].on");
+const modal = $('#modal');
 const listChat = document.querySelectorAll('.btn_grp ul li');
 
 listSeat.each(function(index, li) {
@@ -9,11 +9,16 @@ listSeat.each(function(index, li) {
     $(li).attr("data-seatNo", index+1);
 });
 
-onSeat.forEach((li) => {
-    li.addEventListener('click', function() {
+$.each(onSeat, li => {
+	li.on('click', function() {
         modal.style.display = 'block';
     });
-});
+})
+/*onSeat.forEach((li) => {
+    li.on('click', function() {
+        modal.style.display = 'block';
+    });
+});*/
 
 //회원정보 모달창 닫기
 window.addEventListener('click', (event) => {

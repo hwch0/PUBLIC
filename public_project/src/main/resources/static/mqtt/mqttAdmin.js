@@ -9,46 +9,52 @@ function formatTime(seconds) {
   }
 }
 
-//var remainingTimeElement = document.getElementById("remainingTime");
-function updateCountdown(time, remainingTime, seatNo) {
-  console.log("seatNo->" + seatNo)
+/*function updateCountdown(time, remainingTime, seatNo) {
   time.text(formatTime(remainingTime));
   if (remainingTime > 0) {
     remainingTime--;
     seatNo = setTimeout(function () {
+	  console.log(seatNo)
       updateCountdown(time, remainingTime, seatNo);
     }, 1000);
   } else {
-    //시간  0 되면 좌석 비우기(로그아웃때문에 안만들어도 되나?)
+   		time.closest('li').removeClass("on");
+        time.closest('li').find("p").first().text("");
+        clearTimeout(seatNo);
+        time.closest('li').find("p").last().text("");
+        $(`option[value=${seatNo}]`).remove();
+  }
+}*/
+
+let timers = {}; // 타이머 ID를 저장할 객체
+
+function updateCountdown(time, remainingTime, seatNo) {
+  time.text(formatTime(remainingTime));
+  if (remainingTime > 0) {
+    remainingTime--;
+
+    // 재귀 호출 대신 타이머를 저장하고 업데이트
+    const timerID = setInterval(function () {
+      time.text(formatTime(remainingTime));
+      remainingTime--;
+
+      if (remainingTime <= 0) {
+        clearInterval(timerID); // 타이머 중지
+        time.closest('li').removeClass("on");
+        time.closest('li').find("p").first().text("");
+        time.closest('li').find("p").last().text("");
+        $(`option[value=${seatNo}]`).remove();
+        delete timers[seatNo]; // 타이머 ID를 객체에서 제거
+      }
+    }, 1000);
+
+    // 타이머 ID를 저장
+    timers[seatNo] = timerID;
+    console.log(timers)
   }
 }
 
-function updateRemainingTime() {
-	ajaxResponse("POST", "/loggedInUserList", null)
-		.then(function(response) {			
-			var userInfo = response.result;
-			var remainingTime = userInfo.remainingTime;
-			if (remainingTime >= 0) {
-		        var now = new Date().getTime();
-		        var loginTime = new Date(userInfo.loginTime).getTime();
-		        var durationTime = now - loginTime;
-		        remainingTime = remainingTime - Math.floor(durationTime / 1000);
-		        updateCountdown(remainingTime);
-		    } else {
-		       alert("잔여시간이 없습니다.")
-        		   location.href = "/user/";
-		    } 
-		})
-		.catch(function(error) {
-			console.error("로그인 정보 가져오는중 에러 발생: " + error);
-		});
 
-}
-/*
-window.onload = function () {
-    updateRemainingTime();
-}
-*/
 
 function ajaxResponse(method, url, params) {
   return new Promise(function (resolve, reject) {
@@ -192,7 +198,6 @@ const recvLogin = () => {
         	if(!seat.hasClass('on')){
 				seat.addClass("on");
 		        seat.find("p").first().text(user.userId);
-		        //seat.find('p').last().text(formatTime(user.remainingTime));
 		        updateCountdown(seat.find("p").last(), user.remainingTime, user.seatNo);
 			}
       });
@@ -212,6 +217,7 @@ const recvLogin = () => {
         }
       });
       sortOptions();
+      countSeat();
     })
     .catch(function (error) {
       console.error("로그인 정보 가져오는중 에러 발생: " + error);
@@ -231,17 +237,19 @@ const recvLogout = () => {
         (number) => !arr.includes(number)
       );
 
-      console.log(result);
+      console.log("logout=>" + result);
       $.each(result, function (index, seatNo) {
         var seat = $(`li[data-seatNo=${seatNo}]`);
         if (seat.has("on")) {
           seat.removeClass("on");
           seat.find("p").first().text("");
-          clearTimeout(seatNo);
+          clearInterval(timers[seatNo]);
+          delete timers[seatNo]
           seat.find("p").last().text("");
           $(`option[value=${seatNo}]`).remove();
         }
       });
+      countSeat();
     })
     .catch(function (error) {
       console.error("로그아웃 정보 가져오는중 에러 발생: " + error);

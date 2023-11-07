@@ -9,7 +9,6 @@ makeCalendar = () => {
     })
 }
 
-
 $(document).ready(() => {
 
 	$.fn.datepicker.dates['kr'] = {
@@ -21,7 +20,15 @@ $(document).ready(() => {
 	};
 
 	makeCalendar();
-
+/*
+	const today = new Date();
+	const todayFormatted = today.getFullYear() +
+    '-' +
+    (today.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    today.getDate().toString().padStart(2, '0');
+	$('#startDate').val(todayFormatted);
+	$('#endDate').val(todayFormatted);*/
 });
 
 //재고관리 품목 & 입·출고 
@@ -36,6 +43,20 @@ function changeInventoryStatusPage() {
 		$('#inventoryStatus').css("display", "block");
 		resetInputs();
 }             
+
+//매출내역 주문내역
+function changeSalesPage() {
+		$('#sales').css("display", "block");
+		$('#order').css("display", "none");
+		$('.detail').css("display", "none");
+		resetInputs();
+}      
+
+function changeOrderPage() {
+		$('#sales').css("display", "none");
+		$('#order').css("display", "block");
+		resetInputs();
+}     
 
 //버튼 클릭 시 초기화
 function resetInputs(){
@@ -52,16 +73,17 @@ function resetInputs(){
 	$('itemSelect').val('1');
 	
 	//라디오 초기화
-	$('input[name="itemStockOption"][value="1"]').prop('checked', true);
+	$('input[name="stockStatus"][value="1"]').prop('checked', true);
 	$('input[name="inventorystockOption"][value="1"]').prop('checked', true);
 }
 
 //로딩화면
+/*
 function loading(){
 	LoadingWithMask('/images/loading.gif');
 	setTimeout(closeLoadingWithMask, 2000);
 }
-
+*/
 function LoadingWithMask(gif){
 	const maskHeight = $(document).height();
 	const maskWidth = window.document.body.clientWidth;

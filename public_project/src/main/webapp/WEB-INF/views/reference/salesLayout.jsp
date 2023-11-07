@@ -4,13 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>erp</title>
+<title>매출 관리</title>
 
 </head>
 <%-- <jsp:include page="/WEB-INF/views/common/commonCSS.jsp"></jsp:include> --%>
 
 <!-- erp 영역 CSS -->
-<link rel="stylesheet" href="css/reference.css"> 
+<link rel="stylesheet" href="/css/reference.css"> 
 
 <body>
  <div class="header">
@@ -24,10 +24,10 @@
             <div class="btn_toggle">
                 <ul>
                     <li class="btn btn_pos">
-                        <a href="/pos">POS</a>
+                        <a href="/admin">POS</a>
                     </li>
                     <li class="btn btn_ERP on">
-                        <a href="/erp">ERP</a>
+                        <a href="/erp/stock">ERP</a>
                     </li>
                 </ul>
             </div>
@@ -54,13 +54,13 @@
             <ul class="main_nav">
                 <li>
                     <em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="/stock" onclick="navOn(this);">재고관리</a>                  
+                    <a href="/erp/stock" onclick="navOn(this);">재고관리</a>                  
                 </li>
                 <li class="on">
                 	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="/sales" onclick="navOn(this);">매출관리</a>
+                    <a href="/erp/sales" onclick="navOn(this);">매출관리</a>
                    	<ul class="sub_nav">
-		                <li><a href="javascript:void(0);" onclick="changesalesPage();">매출 내역</a></li>
+		                <li><a href="javascript:void(0);" onclick="changeSalesPage();">매출 내역</a></li>
 		                <li><a href="javascript:void(0);" onclick="changeOrderPage();">주문 내역</a></li>
 		            </ul>
                 </li>

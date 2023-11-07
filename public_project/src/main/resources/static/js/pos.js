@@ -25,7 +25,8 @@ $(document).ready(function() {
 	ajaxResponse("POST", "/loggedInUserList", null)
 		.then(function(response) {
 			loggedInUserList = response.result;
-			$.each(loggedInUserList, function(index, user) {
+			if(loggedInUserList != null){
+				$.each(loggedInUserList, function(index, user) {
 				var remainingTime = user.remainingTime;
 				var seat = $(`li[data-seatNo=${user.seatNo}]`);
 				if (remainingTime >= 0) {
@@ -40,6 +41,9 @@ $(document).ready(function() {
 					}
 				}
 			});
-			countSeat();
+			}
+		addOption();
+  		countSeat()		
 		});
 });
+

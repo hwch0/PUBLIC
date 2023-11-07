@@ -88,6 +88,40 @@ function sortOptions() {
   });
 }
 
+const addOption = () => {
+	const existingOptions = $("#seatSelector option").map(function() { 
+		return $(this).val(); 
+		}).get(); //현재 로그인한 좌석 번호
+	console.log(existingOptions);
+	$.each($("[data-seatNo].on em"), function(index,seat) {
+		const seatNumber = $(seat).text();
+		console.log(seatNumber);
+		if (!existingOptions.includes(seatNumber)) {
+			$("#seatSelector").append(
+				"<option value=" + seatNumber + ">" + seatNumber + "</option>"
+			);
+		}
+	});
+	sortOptions();
+}
+/*function addOption() {
+	const existingOptions = $("#seatSelector option").map(function() {
+		return $(this).val();
+	}).get(); //현재 로그인한 좌석 번호
+	console.log(existingOptions);
+	$.each($("[data-seatNo].on em"), function(seat) {
+		const seatNumber = $(seat).text();
+		console.log(seatNumber);
+		if (!existingOptions.includes(seatNumber)) {
+			$("#seatSelector").append(
+				"<option value=" + seatNumber + ">" + seatNumber + "</option>"
+			);
+		}
+	});
+	sortOptions();
+}*/
+
+
 const mqtt_host = "www.chocomungco.store";
 const mqtt_port = 9001; //websocket port : mosquitt.conf 파일에 설정됨
 const mqtt_topic = "/public/";
@@ -201,23 +235,8 @@ const recvLogin = () => {
 		        updateCountdown(seat.find("p").last(), user.remainingTime, user.seatNo);
 			}
       });
-
-      const existingOptions = $("#seatSelector option")
-        .map(function () {
-          return $(this).val();
-        })
-        .get(); //현재 로그인한 좌석 번호
-
-      $.each($("[data-seatNo].on em"), function (i, seat) {
-        const seatNumber = $(seat).text();
-        if (!existingOptions.includes(seatNumber)) {
-          $("#seatSelector").append(
-            "<option value=" + seatNumber + ">" + seatNumber + "</option>"
-          );
-        }
-      });
-      sortOptions();
       countSeat();
+      addOption();
     })
     .catch(function (error) {
       console.error("로그인 정보 가져오는중 에러 발생: " + error);

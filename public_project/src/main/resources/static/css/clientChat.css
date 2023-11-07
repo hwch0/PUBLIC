@@ -1,6 +1,6 @@
 .wrap_chat_main{
 	width:400px;
-	height:87s0px;
+	height:500px;
 	display:inline-block;
 	font-size:15px;
 	vertical-align:top;
@@ -11,7 +11,7 @@
 	margin:0;
 	list-style-type:none;
 	overflow-y:scroll;
-	height:700px;
+	height:355px;
 	border-top:2px solid #fff;
 }
 #chatList li{
@@ -68,7 +68,7 @@
 	resize:none;
 	border:none;
 	width:70%;
-	height:135px;
+	height:100%;
 	border-radius:3px;
 	padding:20px;
 	font-size:13px;

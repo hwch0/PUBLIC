@@ -2,25 +2,29 @@ function formatTime(seconds) {
   var hours = Math.floor(seconds / 3600);
   var minutes = Math.floor((seconds % 3600) / 60);
   var remainingSeconds = seconds % 60;
-  return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
+  if(hours === 0){
+	  return minutes + " 분 " + remainingSeconds + " 초";
+  }else{
+	  return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
+  }
 }
 
 //var remainingTimeElement = document.getElementById("remainingTime");
-function updateCountdown(time, remainingTime) {
+function updateCountdown(time, remainingTime, seatNo) {
+  console.log("seatNo->" + seatNo)
   time.text(formatTime(remainingTime));
   if (remainingTime > 0) {
     remainingTime--;
-    setTimeout(function () {
-      updateCountdown(time, remainingTime);
+    seatNo = setTimeout(function () {
+      updateCountdown(time, remainingTime, seatNo);
     }, 1000);
   } else {
     //시간  0 되면 좌석 비우기(로그아웃때문에 안만들어도 되나?)
   }
 }
 
-/*function updateRemainingTime() {
-	const data = {userId : localStorage.getItem("userId")}; //userList app영역에서 가져오기
-	ajaxResponse('POST', '/getUserById', data)
+function updateRemainingTime() {
+	ajaxResponse("POST", "/loggedInUserList", null)
 		.then(function(response) {			
 			var userInfo = response.result;
 			var remainingTime = userInfo.remainingTime;
@@ -40,6 +44,7 @@ function updateCountdown(time, remainingTime) {
 		});
 
 }
+/*
 window.onload = function () {
     updateRemainingTime();
 }
@@ -184,10 +189,12 @@ const recvLogin = () => {
       console.log(response.result);
       $.each(response.result, function (index, user) {
         var seat = $(`li[data-seatNo=${user.seatNo}]`);
-        seat.addClass("on");
-        seat.find("p").first().text(user.userId);
-        //seat.find('p').last().text(formatTime(user.remainingTime));
-        updateCountdown(seat.find("p").last(), user.remainingTime);
+        	if(!seat.hasClass('on')){
+				seat.addClass("on");
+		        seat.find("p").first().text(user.userId);
+		        //seat.find('p').last().text(formatTime(user.remainingTime));
+		        updateCountdown(seat.find("p").last(), user.remainingTime, user.seatNo);
+			}
       });
 
       const existingOptions = $("#seatSelector option")
@@ -211,7 +218,7 @@ const recvLogin = () => {
     });
 }; //사용자 로그인시 관리자 좌석 동적으로 변경
 
-const recvLogout = (recv) => {
+const recvLogout = () => {
   let arr = [];
   const data = {};
   ajaxResponse("POST", "/loggedInUserList", data)
@@ -230,6 +237,7 @@ const recvLogout = (recv) => {
         if (seat.has("on")) {
           seat.removeClass("on");
           seat.find("p").first().text("");
+          clearTimeout(seatNo);
           seat.find("p").last().text("");
           $(`option[value=${seatNo}]`).remove();
         }

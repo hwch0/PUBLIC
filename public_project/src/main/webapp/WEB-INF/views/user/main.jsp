@@ -1,25 +1,41 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>사용자 화면</title>
+<meta charset="UTF-8">
+<title>사용자 화면</title>
 </head>
 <link rel="stylesheet" href="/css/user.css">
+<link rel="stylesheet" href="/css/clientChat.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 <body>
-    <div class="body-wrap">
-        <div class="nav-wrap">
-            <div>
-                <!-- <a href="/user/logout">로그아웃</a> -->
-                <button id="logoutBtn">로그아웃</button>
-            </div>
-        </div>
-        <div class="chat-wrap">
-            <h1>카운트다운: <span id="remainingTime">0</span> </h1>
-        </div>
-    </div>
+	<div class="body-wrap">
+		<div class="nav-wrap">
+			<div>
+				<!-- <a href="/user/logout">로그아웃</a> -->
+				<button id="logoutBtn">로그아웃</button>
+				<h1>
+					카운트다운: <span id="remainingTime">0</span>
+				</h1>
+			</div>
+		</div>
+		<div class="chat-wrap">
+			<div class="wrap_chat">
+				<div class="wrap_chat_main">
+					<ul id="chatList">
+					</ul>
+					<footer>
+						<textarea placeholder="Type your message" id="chatInputBox"></textarea>
+						<a href="javascript:void(0);" id="send_chat_button">Send</a>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+<script type="text/javascript" src="/mqtt/mqttClient.js"></script>
 <script>
 $('#logoutBtn').on('click', function(){
 	location.href = "/user/logout/"+localStorage.getItem("userId");
@@ -70,6 +86,7 @@ function updateRemainingTime() {
 	ajaxResponse('POST', '/getUserById', data)
 		.then(function(response) {			
 			var userInfo = response.result;
+			localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
 			var remainingTime = userInfo.remainingTime;
 			if (remainingTime >= 0) {
 		        var now = new Date().getTime();

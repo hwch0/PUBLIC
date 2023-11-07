@@ -19,14 +19,13 @@ const countSeat = () => {
 	$('.cont_top').find('em').last().text(50 - $("[data-seatNo].on").length);
 }
 
-
 $(document).ready(function() {
 	var loggedInUserList = [];
 	ajaxResponse("GET", "/loggedInUserList")
 		.then(function(response) {
 			loggedInUserList = response.result;
-			if(loggedInUserList !=null) {
-			$.each(loggedInUserList, function(index, user) {
+			if(loggedInUserList != null){
+				$.each(loggedInUserList, function(index, user) {
 				var remainingTime = user.remainingTime;
 				var seat = $(`li[data-seatNo=${user.seatNo}]`);
 				if (remainingTime >= 0) {
@@ -42,6 +41,8 @@ $(document).ready(function() {
 				}
 			});
 			}
-			countSeat();
+		addOption();
+  		countSeat()		
 		});
 });
+

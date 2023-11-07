@@ -16,7 +16,6 @@
     <!-- item 필드에 대한 매핑 -->
     <association property="item" javaType="com.kr.pub.dto.ItemDTO" >
     </association>
-
 </resultMap>
 
 
@@ -95,6 +94,12 @@
 	INNER JOIN common_code c ON m.menu_category_code = c.code
 	WHERE m.item_id = #{itemId}
 </select>
+
+<update id="deleteMenu" >
+	update menu 
+	set menu_checked = 'N', img_id = '' 
+	where item_id = #{itemId}
+</update>
 
 	
 </mapper>

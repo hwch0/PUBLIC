@@ -3,11 +3,9 @@ package com.kr.pub.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,7 +69,7 @@ public class AdminController {
 		boolean status = imageService.insertImage(image);
 		
 		result.put("status", status);
-		result.put("message", status ? "메뉴가 등록되었습니다." : "메뉴 등록 중 오류 발생");
+		result.put("message", status ? "메뉴가 등록 되었습니다." : "메뉴 등록 중 오류 발생");
 		result.put("menu",  status ? adminService.getMenu(itemId) : "");
 		return result;
 	}
@@ -89,6 +87,19 @@ public class AdminController {
 		if(status) {
 			result.put("menuList", menuList);
 		}
+		return result;
+	}
+	
+	@ResponseBody
+	@GetMapping("/admin/deleteMenu/{itemId}")
+	public Map<String, Object> deleteMenu(@PathVariable String itemId) {
+		System.out.println("AdminController deleteMenu");
+		Map<String, Object> result = new HashMap<>();
+		
+		boolean status = adminService.deleteMenu(itemId);
+		result.put("status", status);
+		result.put("message", status ? "메뉴가 삭제 되었습니다." : "메뉴 삭제 중 오류 발생");
+		
 		return result;
 	}
 	

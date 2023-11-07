@@ -673,7 +673,6 @@
 
 /*input박스*/
 .itemName,
-.registrationDay,
 .paymName,
 .userName,
 .orderName {
@@ -682,7 +681,8 @@
 }
 
 /*select*/
-.itemSelect{
+.itemSelect,
+.stockStatus{
 	width: 200px;
 }
 
@@ -700,8 +700,8 @@
 .itemScroll > tr > td:nth-child(4) { width: 71px; }
 .itemScroll > tr > td:nth-child(5) { width: 109px; }
 .itemScroll > tr > td:nth-child(6) { width: 90px; }
-.itemScroll > tr > td:nth-child(7) { width: 90px; }
-.itemScroll > tr > td:nth-child(8) { width: 112px; }
+.itemScroll > tr > td:nth-child(7) { width: 126px; }
+.itemScroll > tr > td:nth-child(8) { width: 74px; }
 
 .itemTbody .amount-cell {
     text-align: end;
@@ -894,4 +894,15 @@ span.orderDetail {
     height: 6px;
     background: #a49f9f;
     border-radius: 2.5px; 
+}
+/*재고 상태 색상 추가*/
+.sold-out {
+    color: red;
+}	
+.warning {
+    color: #e59c00;
+    font-weight: bold;
+}	
+.good {
+    color: green;
 }

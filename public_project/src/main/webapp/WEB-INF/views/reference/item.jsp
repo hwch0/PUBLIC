@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>재고관리</title>
-<link rel="stylesheet" href="css/reference.css">
 </head>
 
 <body>
@@ -50,9 +49,9 @@
 						 </td>
 
 
-                        <td class="tr_th">등록 일자</td>
+                        <td class="tr_th">품목 이름</td>
                         <td style="padding: 0 30px;">
-                            <input type="text" class="registrationDay">
+                            <input type="text" class="itemName">
                         </td>
 
                     </tr>
@@ -68,11 +67,12 @@
                             </select>
                         </td>
 
-
-                        <td class="tr_th">품목 이름</td>
-                        <td style="padding: 0 30px;">
-                            <input type="text" class="itemName">
-                        </td>
+                        <td class="tr_th">재고 상태</td>
+						<td style="padding: 0 30px;">
+						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="1" checked> 양호</label>
+						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="2"> 위험</label>
+						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="3"> 품절</label>
+						</td>
                     </tr>
                 </table>
             </div>
@@ -89,10 +89,10 @@
 			        <th style="width: 135px;" class="sortable itemSortable" data-sort="품목코드">품목코드</th>
 			        <th style="width: 236px;" class="sortable itemSortable" data-sort="품목명">품목명</th>
 			        <th style="width: 71px;">품목유형</th>
-			        <th style="width: 109px;" class="sortable itemSortable" data-sort="등록일">등록일</th>
-			        <th style="width: 90px;" class="sortable itemSortable" data-sort="입고일자">입고일</th>
+			        <th style="width: 109px;" class="sortable itemSortable" data-sort="입고일">입고일</th>
 			        <th style="width: 90px;" class="sortable itemSortable" data-sort="현재재고">현재재고</th>
-			        <th style="width: 128px;" class="sortable itemSortable amount-cell" data-sort="평균단가">입고단가</th>
+			        <th style="width: 128px;" class="amount-cell">입고단가</th>
+			        <th style="width: 90px;">재고상태</th>
 			    </thead>
 
                 <tbody class="itemTbody itemScroll" id="itemTbody" varStatus="loop">
@@ -103,7 +103,6 @@
 						        <td>${item['ITEMID']}</td>
 						        <td>${item['ITEMNAME']}</td>
 						        <td>${item['TYPE']}</td>
-						        <td>${item['REGDATE'] == null ? '-' : item['REGDATE']}</td>
 						        <td>${item['STOREDATE'] == null ? '-' : item['STOREDATE']}</td>
 						        <td>${item['STOCK'] == null ? '-' : item['STOCK']} EA</td>
 						        <td>
@@ -116,6 +115,7 @@
 						                </c:otherwise>
 						            </c:choose>
 						        </td>
+						        <td class="stockStatus" data-stock="${item['STOCK']}"></td>
 						   </tr>     
                 	</c:forEach>
                 </tbody>

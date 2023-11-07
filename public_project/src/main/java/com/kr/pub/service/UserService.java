@@ -1,5 +1,8 @@
 package com.kr.pub.service;
 
+import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.UserDTO;
+import com.kr.pub.util.TimeApi;
 
 @Service
 public class UserService {
@@ -26,9 +30,24 @@ public class UserService {
 		return userDAO.getUser(userId);
 	}
 	
-	// 로그인 + 시간
 	public UserDTO login(UserDTO user) {
-        return userDAO.login(user);
+        // 로그인 로직 구현
+        UserDTO rs = userDAO.login(user);
+
+        // 잔여시간
+        int remainingTime = getRemainingTime(user);
+        
+        if (rs != null) {
+            if (remainingTime != 0) {
+                // 잔여시간이 있을 경우
+                Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+                rs.setLoginTime(loginTime);
+                rs.setSeatNo("1");
+                updateLoginTime(rs);
+            }
+        }
+        
+        return rs;
     }
     
     public void updateLoginTime(UserDTO user) {
@@ -42,6 +61,14 @@ public class UserService {
 	public void updateAllTime(UserDTO user) {
 		userDAO.updateAllTime(user);
 		
+	}
+	public void updateSeat(UserDTO user) {
+		userDAO.updateSeat(user);
+	}
+
+
+	public UserDTO loginHistory(UserDTO user) {
+		return userDAO.loginHistory(user);
 	}
 
 }

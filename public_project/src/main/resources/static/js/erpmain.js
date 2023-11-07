@@ -20,7 +20,7 @@ $(document).ready(() => {
 	};
 
 	makeCalendar();
-
+/*
 	const today = new Date();
 	const todayFormatted = today.getFullYear() +
     '-' +
@@ -28,7 +28,7 @@ $(document).ready(() => {
     '-' +
     today.getDate().toString().padStart(2, '0');
 	$('#startDate').val(todayFormatted);
-	$('#endDate').val(todayFormatted);
+	$('#endDate').val(todayFormatted);*/
 });
 
 //재고관리 품목 & 입·출고 
@@ -73,7 +73,7 @@ function resetInputs(){
 	$('itemSelect').val('1');
 	
 	//라디오 초기화
-	$('input[name="itemStockOption"][value="1"]').prop('checked', true);
+	$('input[name="stockStatus"][value="1"]').prop('checked', true);
 	$('input[name="inventorystockOption"][value="1"]').prop('checked', true);
 }
 

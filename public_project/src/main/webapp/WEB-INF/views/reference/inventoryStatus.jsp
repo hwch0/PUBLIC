@@ -5,7 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>입·출고현황</title>
-<link rel="stylesheet" href="css/reference.css">
 </head>
 
 <body>

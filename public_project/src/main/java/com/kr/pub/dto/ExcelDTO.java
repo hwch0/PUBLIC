@@ -1,6 +1,5 @@
 package com.kr.pub.dto;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -12,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchDTO {
-
-	private String itemid;
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private String itemName;
-	private String itemSelect;
-	private int stockStatus;	
+public class ExcelDTO {
 	
+	private String itemId;
+	private String itemName;
+	private String type;
+	private Date storeDate;
+	private int stock;
+	private int price;
+		
 }

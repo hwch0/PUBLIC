@@ -6,7 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <title>주문관리</title>
-<link rel="stylesheet" href="css/reference.css">
 </head>
 <body>
 

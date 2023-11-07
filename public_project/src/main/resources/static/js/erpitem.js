@@ -1,17 +1,48 @@
+//재고 상태 계산 및 표시
+ function stockStatus(stock) {
+        if (stock == null) {
+            return '-';
+         } else if (stock === 0) {
+            return '<span class="sold-out">품절</span>';
+         } else if (stock > 0 && stock <= 50) {
+            return '<span class="warning">부족</span>';
+         } else {
+            return '<span class="good">양호</span>';
+         }
+    }
+// 페이지가 로딩된 후 실행되는 부분
+    document.addEventListener('DOMContentLoaded', function () {
+        var stockCells = document.querySelectorAll('.stockStatus');
+        stockCells.forEach(function (cell) {
+            var stockValue = parseInt(cell.dataset.stock, 10); 
+            cell.innerHTML = stockStatus(stockValue);
+        });
+    });
+
+// 엑셀 다운로드
+$(document).ready(function() {
+    $('#Excel').on("click", function() {
+        window.location.href = "/erp/download";
+    })
+})
+
+
 //품목관리 조회조건
 function searchData() {
     LoadingWithMask('/images/loading.gif');
     
-    const searchParams = {
-        startDate: $('#startDate').val().replace(/\//g, '-'),
-        endDate: $('#endDate').val().replace(/\//g, '-'),
-        itemName: $('.itemName').val(),
-        itemSelect: $('.itemSelect').val(),
-        registrationDay: $('.registrationDay').val()
-    };
+    const selectedStockStatus = $('input[name="stockStatus"]:checked').val();
+    
+	const searchParams = {
+	    startDate: $('#startDate').val().replace(/\//g, '-'),
+	    endDate: $('#endDate').val().replace(/\//g, '-'),
+	    itemName: $('.itemName').val(),
+	    itemSelect: $('.itemSelect').val(),
+	    stockStatus: selectedStockStatus
+	};
         
     $.ajax({
-        url: '/search',
+        url: '/erp/search',
         type: 'POST',
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(searchParams),
@@ -27,9 +58,8 @@ function searchData() {
         '<td>' + item['ITEMID'] + '</td>' +
         '<td>' + item['ITEMNAME'] + '</td>' +
         '<td>' + item['TYPE'] + '</td>' +
-        '<td>' + (item['REGDATE'] == null ? '-' : item['REGDATE']) + '</td>' +
         '<td>' + (item['STOREDATE'] == null ? '-' : item['STOREDATE']) + '</td>' +
-        '<td>' + (item['STOCK'] == null ? '-' : item['STOCK']) + ' EA</td>' +
+        '<td>' + (item['STOCK'] == null ? '-' : item['STOCK']) + ' EA</td>' +        
         '<td>';
 
     if (item['PRICE'] != null) {
@@ -38,7 +68,8 @@ function searchData() {
         row += '-';
     }
 
-    row += '</td></tr>';
+    row += '</td>' +
+    '<td>' + stockStatus(item['STOCK']) + '</td></tr>';
 
     $('#itemTbody').append(row);
 			});
@@ -89,9 +120,9 @@ $(document).ready(function () {
             const valA = getCellValue(a, index);
             const valB = getCellValue(b, index);
 
-            if (index === 1 || index === 2) { // 품목코드 또는 품목명
+            if (index === 1 || index === 2 || index === 4) { // 품목코드, 품목명, 현재재고
                 return valA.localeCompare(valB);
-            } else if (index === 4 || index === 5) { // 등록일, 일자
+            } else if (index === 3) { // 입고일
                 const dateA = new Date(valA);
                 const dateB = new Date(valB);
                 
@@ -102,8 +133,6 @@ $(document).ready(function () {
 				}else{
 					return dateA.getDate() - dateB.getDate();
 				}
-            } else if (index === 7 || index === 6) { // 입고단가, 현재재고
-                return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
             }

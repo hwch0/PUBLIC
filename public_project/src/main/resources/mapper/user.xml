@@ -18,6 +18,7 @@
 	<select id="login" resultType="com.kr.pub.dto.UserDTO">
 	    SELECT * FROM users WHERE user_id = #{userId} AND password = #{password}
 	</select>
+
 	<select id="getRemainingTime" resultType="int">
 		SELECT remaining_time FROM users WHERE user_id = #{userId}
 	</select>
@@ -30,6 +31,11 @@
 		UPDATE users
 		SET logout_time = #{logoutTime}, remaining_time = #{remainingTime}
 		WHERE user_id = #{userId}
+	</update>
+	<update id="updateSeat">
+		UPDATE seat
+		SET used = 'Y', user_id = #{userId}
+		WHERE seat_no = #{seatNo}
 	</update>
 	
 </mapper>

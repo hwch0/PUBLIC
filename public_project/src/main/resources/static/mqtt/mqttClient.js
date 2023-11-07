@@ -1,3 +1,10 @@
+function getNow() {
+	var today = new Date();
+	var hours = ('0' + today.getHours()).slice(-2);
+	var minutes = ('0' + today.getMinutes()).slice(-2);
+	var seconds = ('0' + today.getSeconds()).slice(-2);
+	return hours + ':' + minutes + ':' + seconds;
+}
     const mqtt_host = "www.chocomungco.store";
 	const mqtt_port = 9001; //websocket port : mosquitt.conf 파일에 설정됨  
 	const mqtt_topic = "/public/";
@@ -46,7 +53,7 @@
     		const message = $("#chatInputBox").val();
             mqttClient.publish(mqtt_topic+"chat", JSON.stringify({
             	type:'CHAT',
-            	sender : "client",
+            	sender : localStorage.getItem("seatNo")+"번 좌석",
             	receiver :"admin",
             	message:message
             	}));
@@ -54,9 +61,8 @@
             	$("#chatList").append(//h2변경 필요
 					`<li class="me">
 					<div class="entete">
-						<h3>10:12AM, Today</h3>
+						<p>${getNow()}</p>
 						<h2>client</h2>
-						<span class="status blue"></span>
 					</div>
 					<div class="triangle"></div>
 					<div class="message">${message}</div>
@@ -70,9 +76,8 @@
      $("#chatList").append(
 		`<li class="you">
 						<div class="entete">
-							<span class="status green"></span>
+							<p>${getNow()}</p>
 							<h2>${recv.sender}</h2>
-							<h3>10:12AM, Today</h3>
 						</div>
 						<div class="triangle"></div>
 						<div class="message">${recv.message}</div>
@@ -94,7 +99,7 @@
         // message is Buffer
         //console.log("mqtt message receive :", message.toString())
         	const data = JSON.parse(message.toString())
-        	if(data.receiver === "2"){//좌석에따라 수동적으로 바뀌는거 필요함
+        	if(data.receiver === localStorage.getItem("seatNo")){//좌석에따라 수동적으로 바뀌는거 필요함
         		recvMessage(data);
         	}
     })

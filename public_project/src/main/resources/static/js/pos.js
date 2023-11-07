@@ -19,10 +19,9 @@ const countSeat = () => {
 	$('.cont_top').find('em').last().text(50 - $("[data-seatNo].on").length);
 }
 
-
 $(document).ready(function() {
 	var loggedInUserList = [];
-	ajaxResponse("POST", "/loggedInUserList", null)
+	ajaxResponse("GET", "/loggedInUserList")
 		.then(function(response) {
 			loggedInUserList = response.result;
 			if(loggedInUserList != null){

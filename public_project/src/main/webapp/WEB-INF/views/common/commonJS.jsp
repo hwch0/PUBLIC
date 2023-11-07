@@ -26,6 +26,10 @@
 
 
 <!-- ********** 채팅 ********** -->
+<script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
+<script type="text/javascript" src="/mqtt/mqttAdmin.js"></script>
+<script type="text/javascript" src="/js/pos.js"></script>
+
 
 <!-- ********** ERP ********** -->
 <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>

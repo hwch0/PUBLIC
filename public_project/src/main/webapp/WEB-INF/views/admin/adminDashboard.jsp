@@ -388,7 +388,6 @@
 <!--     Page specific script -->
 
     <script>
-      $(function () {
         // -------------
         // - PIE CHART -
         // -------------
@@ -702,6 +701,5 @@
 
         // Call the function to add data to the table
         addDataToTable();
-      });
     </script>
     

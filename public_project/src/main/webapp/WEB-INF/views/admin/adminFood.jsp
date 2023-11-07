@@ -195,8 +195,6 @@
           	
           </c:forEach>
           
-          
-          
         </div>
       </div>
     </section>

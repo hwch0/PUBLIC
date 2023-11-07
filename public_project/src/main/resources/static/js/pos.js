@@ -22,9 +22,10 @@ const countSeat = () => {
 
 $(document).ready(function() {
 	var loggedInUserList = [];
-	ajaxResponse("POST", "/loggedInUserList", null)
+	ajaxResponse("GET", "/loggedInUserList")
 		.then(function(response) {
 			loggedInUserList = response.result;
+			if(loggedInUserList !=null) {
 			$.each(loggedInUserList, function(index, user) {
 				var remainingTime = user.remainingTime;
 				var seat = $(`li[data-seatNo=${user.seatNo}]`);
@@ -40,6 +41,7 @@ $(document).ready(function() {
 					}
 				}
 			});
+			}
 			countSeat();
 		});
 });

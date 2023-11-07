@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +31,7 @@ public class AppContextController {
 		return result;
 	}
 	
-	@PostMapping("/loggedInUserList")
+	@GetMapping("/loggedInUserList")
 	@ResponseBody
 	public Map<String, List<UserDTO>> getLoggedInUser(){
 		Map<String, List<UserDTO>> result = new HashMap<>();

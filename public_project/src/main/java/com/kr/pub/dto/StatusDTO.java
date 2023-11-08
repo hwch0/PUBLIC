@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExcelDTO {
+public class StatusDTO {
 	
 	private String itemId;
 	private String itemName;
-	private String type;
-	private Date storeDate;
+	private String incDec;
+	private Date statusDate;
 	private int stock;
 	private int price;
-		
+	private int index;
 }

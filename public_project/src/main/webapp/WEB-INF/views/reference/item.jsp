@@ -70,7 +70,7 @@
                         <td class="tr_th">재고 상태</td>
 						<td style="padding: 0 30px;">
 						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="1" checked> 양호</label>
-						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="2"> 위험</label>
+						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="2"> 부족</label>
 						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="3"> 품절</label>
 						</td>
                     </tr>

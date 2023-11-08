@@ -9,11 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kr.pub.dao.ItemDAO;
-import com.kr.pub.dto.ExcelDTO;
+import com.kr.pub.dto.StatusDTO;
 import com.kr.pub.dto.SearchDTO;
-import com.kr.pub.util.ResultRowDataHandler;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class ErpService {
@@ -22,8 +19,24 @@ public class ErpService {
 	private ItemDAO itemDAO;
 	
 	
-	//재고 목록,excel 다운
-	public List<Map<String, Object>> itemList(SearchDTO search) throws Exception {
+	//입출고 목록 
+	public List<Map<String, Object>> statusList() throws Exception{
+		
+		Map<String, Object> Params = new HashMap<>();
+		
+		List<Map<String, Object>> statusList = itemDAO.statusList(Params);
+		
+		for(int i = 0; i < statusList.size(); i++) {
+			statusList.get(i).put("index", i + 1);
+		}
+		
+		return statusList;
+	}
+	
+	
+	
+	//재고 조회
+	public List<Map<String, Object>> itemSearch(SearchDTO search) throws Exception {
 		Map<String, Object> searchParams = new HashMap<>();
 		
 		searchParams.put("startDate", search.getStartDate());
@@ -33,6 +46,16 @@ public class ErpService {
         searchParams.put("stockStatus", search.getStockStatus());
 		
 		List<Map<String, Object>> itemList = itemDAO.itemList(searchParams);
+        
+            return itemList;      
+    }
+	
+	//재고 목록
+	public List<Map<String, Object>> itemList() throws Exception {
+		
+		Map<String, Object> params = new HashMap<>();
+		
+		List<Map<String, Object>> itemList = itemDAO.itemList(params);
 
         // 검색 결과에 순번 추가
         for (int i = 0; i < itemList.size(); i++) {
@@ -42,30 +65,10 @@ public class ErpService {
             return itemList;      
     }
 	
-	//재고 조회
-//	public List<Map<String, Object>> itemSearch(SearchDTO search) throws Exception {
-//		Map<String, Object> searchParams = new HashMap<>();
-//		
-//		searchParams.put("startDate", search.getStartDate());
-//        searchParams.put("endDate", search.getEndDate());
-//        searchParams.put("itemName", search.getItemName());
-//        searchParams.put("registrationDay", search.getRegistrationDay());
-//        searchParams.put("itemSelect", search.getItemSelect());
+//	@Transactional
+//	public void download(ExcelDTO excelDTO, ResultRowDataHandler resultRowDataHandler) throws Exception{	      
+//		  List<ExcelDTO> excelData = itemDAO.excelDownload(excelDTO, resultRowDataHandler);
 //
-//        List<Map<String, Object>> itemList = itemDAO.itemList(searchParams);
-//        
-//            return itemList;      
-//    }
-	
-	@Transactional
-	public void download(ExcelDTO excelDTO, HttpServletResponse response) throws Exception{
-		 ResultRowDataHandler resultRowDataHandler = new ResultRowDataHandler(response);
-		 System.out.println("open확인하기: "+  resultRowDataHandler);
-	        try {
-	            itemDAO.excelDownload(excelDTO, resultRowDataHandler);
-	        } finally {
-	            resultRowDataHandler.close();
-	        }
-	}
+//	}
 	
 }

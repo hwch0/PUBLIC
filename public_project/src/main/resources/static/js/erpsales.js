@@ -132,7 +132,7 @@ $(document).ready(function () {
         return $(row).children('td').eq(index).text();
     }
 });
-
+/*
 //모달창
 const Modal = document.getElementById('erpModal');
 
@@ -153,3 +153,4 @@ $(window).on('click', function(event) {
 $('.close').on('click', function(e){
 	 Modal.classList.remove('on'); 
 });
+*/

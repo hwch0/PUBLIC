@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.kr.pub.dto.ImageDTO;
 import com.kr.pub.dto.MenuDTO;
+import com.kr.pub.dto.OrderListDTO;
 
 @Mapper
 public interface MenuDAO {

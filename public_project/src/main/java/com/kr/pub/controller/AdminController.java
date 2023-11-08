@@ -2,6 +2,7 @@ package com.kr.pub.controller;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dto.ImageDTO;
+import com.kr.pub.dto.OrderListDTO;
+import com.kr.pub.service.AdminService;
 import com.kr.pub.service.ImageService;
-import com.kr.pub.util.SetImagePath;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletResponse;
-import com.kr.pub.service.AdminService;
 
 @Controller
 @RequestMapping("/admin")
@@ -107,5 +108,31 @@ public class AdminController {
 		return result;
 	}
 	
-	
+//	@GetMapping("/getOrderList")
+//	@ResponseBody
+//	public Map<String, Object> getOrderList() {
+//		Map<String, Object> result = new HashMap<>();
+//		//result.put("result", adminService.getOrderList());
+//		System.out.println(adminService.getOrderList());
+//		return	result;
+//	}
+	@GetMapping("/getOrderList")
+	@ResponseBody
+	public Map<String, Object> getOrderList() {
+		Map<String, Object> result = new HashMap<>();
+		List<OrderListDTO> originalResult = adminService.getOrderList();
+		Map<String, List<OrderListDTO>> groupedResult = new HashMap<>();
+
+		for (OrderListDTO item : originalResult) {
+			String paymentId = item.getPaymentId();
+			if (!groupedResult.containsKey(paymentId)) {
+				groupedResult.put(paymentId, new ArrayList<>());
+			}
+			groupedResult.get(paymentId).add(item);
+		}
+
+		result.put("result", groupedResult);
+		System.out.println(result);
+		return result;
+	}
 }

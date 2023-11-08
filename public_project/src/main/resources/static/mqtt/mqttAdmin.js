@@ -181,15 +181,27 @@ const recvMessage = (recv) => {
   );
   $("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
 };
-const recvOrder = (recv) => {
+const recvOrder = () => {
+	ajaxResponse("GET", "/admin/getOrderList", null)
+    .then(function (response) {
+		console.log(response.result)
+      $.each(response.result, function(index, order){
+		  $("#orderList").append(`<button class="accordion" data-paymentId="${}">${order.orderId}번 좌석 주문내역 : </button>`);
+		 $.each(order, function(index, detailOrder){
+		 });
+	  })
+    })
+    /*.catch(function (error) {
+      console.error("주문 정보 가져오는중 에러 발생: " + error);
+    });*/
   //console.log(recv);
-  $("#orderList").append(
+  /*$("#orderList").append(
 	  `<button class="accordion">${recv.sender}번 좌석 주문내역 : ${recv.orderList}</button>
 				<div class="panel">
 					<p>${recv.orderList}</p>
 					<button>주문 확인</button>
 				</div>`
-  );
+  );*/
 }; //주문리스트 받기
 
 const recvLogin = () => {
@@ -263,7 +275,7 @@ mqttClient.on("message", function (topic, message) {
     recvLogin(data);
   } else if (data.receiver === "admin" && data.type === "LOGOUT") {
     recvLogout(data);
-  } else {
+  } else if(data.receiver === "admin" && data.type === "ORDER"){
     recvOrder(data);
   }
 });

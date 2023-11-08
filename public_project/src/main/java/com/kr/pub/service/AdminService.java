@@ -10,14 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kr.pub.dao.AdminDAO;
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.MenuDAO;
+import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dto.ItemDTO;
 import com.kr.pub.dto.MenuDTO;
+import com.kr.pub.dto.OrderListDTO;
 
 @Service
 public class AdminService {
 	
 	@Autowired
 	private AdminDAO adminDAO;
+	
+	@Autowired
+	private OrderDAO orderDAO;
 	
 	@Autowired
 	private MenuDAO menuDAO;
@@ -54,6 +59,10 @@ public class AdminService {
 						.itemId(itemId)
 						.build();
 		return menuDAO.deleteMenu(menu) != 0;
+	}
+
+	public List<OrderListDTO> getOrderList() {
+		return orderDAO.getOrderList();
 	}
 	
 }

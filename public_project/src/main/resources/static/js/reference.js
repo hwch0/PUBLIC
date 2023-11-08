@@ -1,45 +1,20 @@
 const listSeat = $('.seat_grp ul li');
-//const onSeat = $("[data-seatNo].on");
 const infoModal = $('#infoModal');
 const listChat = document.querySelectorAll('.btn_grp ul li');
-const liList = [];
 
 listSeat.each(function(index, li) {
     const em = $('<em>').text(index + 1);
     $(li).find('a').before(em);
     $(li).attr("data-seatNo", index+1);
-    liList.push($(li));
-});
-
-/*$.each(onSeat, li => {
-	li.on('click', function() {
-        infoModal.style.display = 'block';
-    });
-})*/
-
-liList.forEach((li) => {
-	console.log(li);
-    li.on('click', function() {
-		console.log("클릭");
-		infoModal.addClass('on');
-        //infoModal.style.display = 'block';
-    });
 });
 
 //회원정보 모달창 닫기
-window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-        modal.style.display = 'none';
+$('window').on('click', (e) => {
+    if (e.currentTarget != infoModal) {
+        infoModal.css("display",'none');
     }
 });
 
-/*$('.close').on('click', function(e){
-	 infoModal.style.display = 'none';
-});*/
-
-infoModal.find('.close').on('click', (e) =>{
-	infoModal.removeClass('on');
-})
 
 /*let admimPageChange = true;
 

@@ -8,7 +8,13 @@ function formatTime(seconds) {
 	  return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
   }
 }
-
+function getNow() {
+	var today = new Date();
+	var hours = ('0' + today.getHours()).slice(-2);
+	var minutes = ('0' + today.getMinutes()).slice(-2);
+	var seconds = ('0' + today.getSeconds()).slice(-2);
+	return hours + ':' + minutes + ':' + seconds;
+}
 let timers = {}; // 타이머 ID를 저장할 객체
 
 function updateCountdown(time, remainingTime, seatNo) {
@@ -148,9 +154,8 @@ const sendMessage = () => {
     $("#chatList").append(
       `<li class="me">
 					<div class="entete">
-						<h3>10:12AM, Today</h3>
+						<p>${getNow()}</p>
 						<h2>좌석 ${seatNo}님에게 보냄</h2>
-						<span class="status blue"></span>
 					</div>
 					<div class="triangle"></div>
 					<div class="message">${message}</div>
@@ -167,9 +172,8 @@ const recvMessage = (recv) => {
   $("#chatList").append(
 	`<li class="you">
 		<div class="entete">
-			<span class="status green"></span>
+			<p>${getNow()}</p>
 			<h2>${recv.sender}</h2>
-			<h3>10:12AM, Today</h3>
 			</div>
 			<div class="triangle"></div>
 			<div class="message">${recv.message}</div>
@@ -177,19 +181,31 @@ const recvMessage = (recv) => {
   );
   $("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
 };
-const recvOrder = (recv) => {
+const recvOrder = () => {
+	ajaxResponse("GET", "/admin/getOrderList", null)
+    .then(function (response) {
+		console.log(response.result)
+      $.each(response.result, function(index, order){
+		  $("#orderList").append(`<button class="accordion" data-paymentId="${}">${order.orderId}번 좌석 주문내역 : </button>`);
+		 $.each(order, function(index, detailOrder){
+		 });
+	  })
+    })
+    /*.catch(function (error) {
+      console.error("주문 정보 가져오는중 에러 발생: " + error);
+    });*/
   //console.log(recv);
-  $("#orderList").append(
+  /*$("#orderList").append(
 	  `<button class="accordion">${recv.sender}번 좌석 주문내역 : ${recv.orderList}</button>
 				<div class="panel">
 					<p>${recv.orderList}</p>
 					<button>주문 확인</button>
 				</div>`
-  );
+  );*/
 }; //주문리스트 받기
 
 const recvLogin = () => {
-  ajaxResponse("POST", "/loggedInUserList", null)
+  ajaxResponse("GET", "/loggedInUserList", null)
     .then(function (response) {
       console.log(response.result);
       $.each(response.result, function (index, user) {
@@ -210,8 +226,7 @@ const recvLogin = () => {
 
 const recvLogout = () => {
   let arr = [];
-  const data = {};
-  ajaxResponse("POST", "/loggedInUserList", data)
+  ajaxResponse("GET", "/loggedInUserList")
     .then(function (response) {
       console.log(response.result);
       $.each(response.result, function (index, user) {
@@ -260,7 +275,7 @@ mqttClient.on("message", function (topic, message) {
     recvLogin(data);
   } else if (data.receiver === "admin" && data.type === "LOGOUT") {
     recvLogout(data);
-  } else {
+  } else if(data.receiver === "admin" && data.type === "ORDER"){
     recvOrder(data);
   }
 });

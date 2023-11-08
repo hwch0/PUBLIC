@@ -5,10 +5,8 @@
 <!-- #################### JS #################### -->
 <!-- ********** 공통 ********** -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
 <script src="/js/reference.js"></script>
-
 <!-- ********** 관리자 대시보드 ********** -->
 <script src="/js/admin.js"></script>
 <!-- jQuery -->

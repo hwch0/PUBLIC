@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css"/>
+<script src="/plugins/chart.js/Chart.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
  <div class="admin_dash">
 <div class="dashboard" style="padding: 50px 100px 0px 100px">
@@ -388,7 +391,6 @@
 <!--     Page specific script -->
 
     <script>
-      $(function () {
         // -------------
         // - PIE CHART -
         // -------------
@@ -702,6 +704,5 @@
 
         // Call the function to add data to the table
         addDataToTable();
-      });
     </script>
     

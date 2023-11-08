@@ -335,7 +335,11 @@
     .cont_area {
         margin-top: 50px;
     }
-
+    
+    .orderDetail{
+        margin-top: 30px;
+    }
+    
     .cont_area table {
         margin-top: 20px;
         border-top: 3px solid #9d9a9a;
@@ -670,13 +674,15 @@
 /*input박스*/
 .itemName,
 .paymName,
-.userName {
+.userName,
+.orderName {
 	height: 20px;
     width: 200px;
 }
 
 /*select*/
-.itemSelect{
+.itemSelect,
+.stockStatus{
 	width: 200px;
 }
 
@@ -694,15 +700,15 @@
 .itemScroll > tr > td:nth-child(4) { width: 71px; }
 .itemScroll > tr > td:nth-child(5) { width: 109px; }
 .itemScroll > tr > td:nth-child(6) { width: 90px; }
-.itemScroll > tr > td:nth-child(7) { width: 90px; }
-.itemScroll > tr > td:nth-child(8) { width: 86px; }
+.itemScroll > tr > td:nth-child(7) { width: 126px; }
+.itemScroll > tr > td:nth-child(8) { width: 74px; }
 
 .itemTbody .amount-cell {
     text-align: end;
     padding: 0 12px;
 }
 
-/*status Tbody Css*/
+/*status Tbody css*/
 .statusTbody{
 	text-align: center;
 	max-height: 232px;  
@@ -725,7 +731,7 @@
     padding: 0 12px;
 }
 
-/*paym Tbody Css*/
+/*paym Tbody css*/
 .paymTbody{
 	text-align: center;
 	max-height: 232px;  
@@ -739,10 +745,62 @@
 .paymScroll > tr > td:nth-child(4) { width: 110px; }
 .paymScroll > tr > td:nth-child(5) { width: 110px; }
 .paymScroll > tr > td:nth-child(6) { width: 86px; }
-.paymScroll > tr > td:nth-child(7) { width: 86px; }
-.paymScroll > tr > td:nth-child(8) { width: 117px; }
+.paymScroll > tr > td:nth-child(7) { width: 106px; }
+.paymScroll > tr > td:nth-child(8) { width: 97px; }
 
 .paymTbody .amount-cell {
+    text-align: end;
+    padding: 0 12px;
+}
+
+/*order Tbody css*/
+.orderTbody {
+	text-align: center;
+	max-height: 232px;  
+	overflow-y: auto;
+	display: block;
+}
+
+.orderScroll > tr > td:nth-child(1) { width: 45px; }
+.orderScroll > tr > td:nth-child(2) { width: 139px; }
+.orderScroll > tr > td:nth-child(3) { width: 141px; }
+.orderScroll > tr > td:nth-child(4) { width: 110px; }
+.orderScroll > tr > td:nth-child(5) { width: 100px; }
+.orderScroll > tr > td:nth-child(6) { width: 116px; }
+.orderScroll > tr > td:nth-child(7) { width: 110px; }
+.orderScroll > tr > td:nth-child(8) { width: 101px; }
+
+.orderDetailScroll > tr > td:nth-child(1) { width: 45px; }
+.orderDetailScroll > tr > td:nth-child(2) { width: 139px; }
+.orderDetailScroll > tr > td:nth-child(3) { width: 141px; }
+.orderDetailScroll > tr > td:nth-child(4) { width: 110px; }
+.orderDetailScroll > tr > td:nth-child(5) { width: 100px; }
+.orderDetailScroll > tr > td:nth-child(6) { width: 116px; }
+.orderDetailScroll > tr > td:nth-child(7) { width: 110px; }
+.orderDetailScroll > tr > td:nth-child(8) { width: 101px; }
+
+.orderTbody .amount-cell {
+    text-align: end;
+    padding: 0 12px;
+}
+/*orderDetail css*/
+.orderDetailTbody {
+	text-align: center;
+	max-height: 232px;  
+	overflow-y: auto;
+	display: block;
+}
+
+.orderDetailScroll > tr > td:nth-child(1) { width: 45px; }
+.orderDetailScroll > tr > td:nth-child(2) { width: 130px; }
+.orderDetailScroll > tr > td:nth-child(3) { width: 125px; }
+.orderDetailScroll > tr > td:nth-child(4) { width: 100px; }
+.orderDetailScroll > tr > td:nth-child(5) { width: 170px; }
+.orderDetailScroll > tr > td:nth-child(6) { width: 78px; }
+.orderDetailScroll > tr > td:nth-child(7) { width: 86px; }
+.orderDetailScroll > tr > td:nth-child(8) { width: 128px; }
+
+.orderDetailTbody .amount-cell {
     text-align: end;
     padding: 0 12px;
 }
@@ -786,6 +844,36 @@
     color: initial; 
 }
 
+.salesSortable.asc::after {
+    content: ' ▲';
+    color: #450877 !important; 
+}
+
+.salesSortable.desc::after {
+    content: ' ▼';
+    color: #450877; 
+}
+
+.salesSortable.reset::after {
+    content: ''; 
+    color: initial; 
+}
+
+.orderSortable.asc::after {
+    content: ' ▲';
+    color: #450877 !important; 
+}
+
+.orderSortable.desc::after {
+    content: ' ▼';
+    color: #450877; 
+}
+
+.orderSortable.reset::after {
+    content: ''; 
+    color: initial; 
+}
+
 /*로딩중*/
 .loading-image {
     position: absolute;
@@ -796,4 +884,25 @@
     margin: 0 auto;
     width: 50px;
     height: 50px;
+}
+
+/*detal span*/
+span.orderDetail {
+    display: block;
+    margin-top: 50px;
+    width: 100%;
+    height: 6px;
+    background: #a49f9f;
+    border-radius: 2.5px; 
+}
+/*재고 상태 색상 추가*/
+.sold-out {
+    color: red;
+}	
+.warning {
+    color: #e59c00;
+    font-weight: bold;
+}	
+.good {
+    color: green;
 }

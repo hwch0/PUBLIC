@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kr.pub.dao.PaymentDAO">
+
+	<!-- 매출 내역 -->
+	<select id="salesList" resultType="java.util.Map">
+	SELECT
+	    p.PAYMENT_ID AS "paymentId",
+	    o.ORDER_ID AS "orderID",
+	    p.PAYMENT_DATE AS "paymentDate",
+	    u.UNAME AS "uname",
+	    cc.TYPE AS "type",
+	    oh.PRICE AS "price",
+	    oh.PRICE - (oh.PRICE * 0.10) AS "netProfit"
+	FROM
+	    payment p
+	JOIN
+	    orders o ON p.ORDER_ID = o.ORDER_ID
+	JOIN
+	    users u ON o.USER_ID = u.USER_ID
+	JOIN
+	    order_history oh ON o.ORDER_ID = oh.ORDER_ID
+	JOIN
+	    common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
+	ORDER BY
+	    p.PAYMENT_ID
+	</select>
+
+</mapper>

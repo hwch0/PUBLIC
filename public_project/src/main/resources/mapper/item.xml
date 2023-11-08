@@ -9,5 +9,157 @@
 	update item 
 	set image
 </update>
+
+	<!-- 입출고 내역 -->
+	<select id="statusList" resultType="java.util.Map">		
+	        SELECT
+	            ITEM_ID,
+			    ITEM_NAME,
+			    statusDate,
+			    incDec,
+			    stock,
+			    price
+	        FROM (
+	            SELECT
+	                i.ITEM_ID,
+	                i.ITEM_NAME,	                
+	                TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') AS statusDate,	                
+	                ct.INC_DEC AS incDec,
+	                sh.QUANTITY AS stock,
+	                sh.PRICE AS price
+	            FROM
+	                ITEM i
+	            JOIN
+	                STORE_HISTORY sh ON i.ITEM_ID = sh.ITEM_ID
+	            JOIN
+	                STORE s ON sh.STORE_ID = s.STORE_ID
+	            JOIN
+	                CHANGE_TYPE ct ON s.CODE = ct.CODE
+                WHERE
+                <![CDATA[
+       				i.ITEM_ID <> 'ITEM000001'
+       				]]>
+ 				<if test="startDate != null">
+	                AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') BETWEEN TO_CHAR(#{startDate}, 'YYYY-MM-DD') AND TO_CHAR(#{endDate}, 'YYYY-MM-DD')
+	            </if>
+	            
+	            <if test="statusCode != null">
+	                AND i.ITEM_ID = #{statusCode}
+	            </if>
+
+				<if test="stockStatus == '입고'">
+				    AND ct.INC_DEC = '입고'
+				</if>
+				<if test="stockStatus == '출고'">
+				    AND ct.INC_DEC = '출고'
+				</if>
+				
+			    <if test="statusName != null">
+			      	AND i.ITEM_NAME LIKE '%' || #{statusName} || '%'
+			    </if>				 
+	            ORDER BY
+	                s.STORE_DATE DESC
+	        ) q1
+	
+	        UNION ALL
+	
+	        SELECT
+	           	ITEM_ID,
+			    ITEM_NAME,
+			    statusDate,
+			    incDec,
+			    stock,
+			    price
+	        FROM (
+	            SELECT
+	                i.ITEM_ID,
+	                i.ITEM_NAME,
+	                TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') AS statusDate,
+	                ct.INC_DEC AS incDec,
+	                oh.QUANTITY AS stock,
+	                oh.PRICE AS price
+	            FROM
+	                ITEM i
+	            JOIN
+	                order_history oh ON i.ITEM_ID = oh.ITEM_ID
+	            JOIN
+	                orders o ON oh.ORDER_ID = o.ORDER_ID
+	            JOIN
+	                change_type ct ON o.CODE = ct.CODE
+               WHERE
+               <![CDATA[
+       				i.ITEM_ID <> 'ITEM000001'
+       				]]>
+	            <if test="startDate != null and startDate != ''">
+	                AND TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') BETWEEN TO_CHAR(#{startDate}, 'YYYY-MM-DD') AND TO_CHAR(#{endDate}, 'YYYY-MM-DD')
+	            </if>
+	            
+	            <if test="statusCode != null and statusCode != ''">
+	                AND i.ITEM_ID = #{statusCode}
+	            </if>	
+	                        
+				<if test="stockStatus == '입고'">
+				    AND ct.INC_DEC = '입고'
+				</if>
+				<if test="stockStatus == '출고'">
+				 	 AND ct.INC_DEC = '출고' 
+				</if>
+			    
+			    <if test="statusName != null and statusName != ''">
+			      AND i.ITEM_NAME LIKE '%' || #{statusName} || '%'
+			    </if>
+	            ORDER BY
+	                o.ORDER_DATE DESC
+	        ) q2
+	        
+	        ORDER BY
+	            statusDate DESC	    
+	</select>
+
+	<!-- 재고 관리 -->
+	<select id="itemList" resultType="java.util.Map">
+	  SELECT
+	    i.ITEM_ID AS itemId,
+	    i.ITEM_NAME AS itemName,
+	    c.TYPE AS type,
+	    TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') AS storeDate,
+	    i.STOCK AS stock,
+	    sh.PRICE AS price
+	  FROM
+	    item i
+	  LEFT JOIN
+	    store_history sh ON i.ITEM_ID = sh.ITEM_ID
+	  LEFT JOIN
+	    store s ON sh.STORE_ID = s.STORE_ID
+	  LEFT JOIN
+	    common_code c ON i.ITEM_TYPE_CODE = c.CODE
+	  WHERE
+	    1=1
+	    <!-- startDate, endDate -->
+	    <if test="startDate != null and startDate != ''">
+	       AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') BETWEEN TO_CHAR(#{startDate}, 'YYYY-MM-DD') AND TO_CHAR(#{endDate}, 'YYYY-MM-DD')
+	    </if>
+	    <!-- itemSelect -->
+	    <if test="itemSelect != null and itemSelect != ''">
+	      AND c.TYPE = #{itemSelect}
+	    </if>
+	    <!-- itemName -->
+	    <if test="itemName != null and itemName != ''">
+	      AND i.ITEM_NAME LIKE '%' || #{itemName} || '%'
+	    </if>
+	    <!-- stockStatus -->
+		<if test="stockItem == 1">
+		    AND i.STOCK > 50
+		</if>
+		<if test="stockItem == 2">
+		    AND i.STOCK BETWEEN 1 AND 50
+		</if>
+		<if test="stockItem == 3">
+		    AND i.STOCK = 0
+		</if>
+	  GROUP BY
+	     i.ITEM_ID, i.ITEM_NAME, i.ITEM_TYPE_CODE, c.TYPE, i.STOCK, sh.PRICE, s.STORE_DATE
+		ORDER BY s.STORE_DATE DESC
+	</select>
 	
 </mapper>

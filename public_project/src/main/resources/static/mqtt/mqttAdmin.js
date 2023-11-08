@@ -9,23 +9,6 @@ function formatTime(seconds) {
   }
 }
 
-/*function updateCountdown(time, remainingTime, seatNo) {
-  time.text(formatTime(remainingTime));
-  if (remainingTime > 0) {
-    remainingTime--;
-    seatNo = setTimeout(function () {
-	  console.log(seatNo)
-      updateCountdown(time, remainingTime, seatNo);
-    }, 1000);
-  } else {
-   		time.closest('li').removeClass("on");
-        time.closest('li').find("p").first().text("");
-        clearTimeout(seatNo);
-        time.closest('li').find("p").last().text("");
-        $(`option[value=${seatNo}]`).remove();
-  }
-}*/
-
 let timers = {}; // 타이머 ID를 저장할 객체
 
 function updateCountdown(time, remainingTime, seatNo) {
@@ -33,7 +16,6 @@ function updateCountdown(time, remainingTime, seatNo) {
   if (remainingTime > 0) {
     remainingTime--;
 
-    // 재귀 호출 대신 타이머를 저장하고 업데이트
     const timerID = setInterval(function () {
       time.text(formatTime(remainingTime));
       remainingTime--;
@@ -104,23 +86,6 @@ const addOption = () => {
 	});
 	sortOptions();
 }
-/*function addOption() {
-	const existingOptions = $("#seatSelector option").map(function() {
-		return $(this).val();
-	}).get(); //현재 로그인한 좌석 번호
-	console.log(existingOptions);
-	$.each($("[data-seatNo].on em"), function(seat) {
-		const seatNumber = $(seat).text();
-		console.log(seatNumber);
-		if (!existingOptions.includes(seatNumber)) {
-			$("#seatSelector").append(
-				"<option value=" + seatNumber + ">" + seatNumber + "</option>"
-			);
-		}
-	});
-	sortOptions();
-}*/
-
 
 const mqtt_host = "www.chocomungco.store";
 const mqtt_port = 9001; //websocket port : mosquitt.conf 파일에 설정됨

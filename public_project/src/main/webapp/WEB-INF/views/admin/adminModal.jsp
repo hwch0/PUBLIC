@@ -12,28 +12,31 @@
 	<div class="tab__content-wrapper">
 		<div id="tab1" class="tab__content active">
 			<table class="table-fill">
-				<thead>
-					<tr>
-						<th class="text-left">좌석번호</th>
-						<th class="text-left">데이터</th>
-					</tr>
-				</thead>
 				<tbody class="table-hover">
 					<tr>
+						<td class="text-left">좌석번호</td>
+						<td class="text-left" id="userSeatNo">
+						</td>
+					</tr>
+					<tr>
 						<td class="text-left">회원아이디</td>
-						<td class="text-left">데이터</td>
+						<td class="text-left" id="userId">
+						</td>
 					</tr>
 					<tr>
 						<td class="text-left">시작시간</td>
-						<td class="text-left">데이터</td>
+						<td class="text-left" id="loginTime">
+						</td>
 					</tr>
 					<tr>
 						<td class="text-left">잔여시간</td>
-						<td class="text-left">데이터</td>
+						<td class="text-left" id="remainingTime">
+						</td>
 					</tr>
 					<tr>
-						<td class="text-left">사용시간</td>
-						<td class="text-left">데이터</td>
+						<td class="text-left">회원가입일</td>
+						<td class="text-left" id="regDate">
+						</td>
 					</tr>
 				</tbody>
 			</table>

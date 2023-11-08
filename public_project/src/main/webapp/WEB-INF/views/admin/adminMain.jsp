@@ -5,11 +5,11 @@
 			<div class="cont_top">
 				<ul>
 					<li>
-						<p>이용중인 좌석</p> <em>22</em>
+						<p>이용중인 좌석</p> <em></em>
 					</li>
 
 					<li>
-						<p>잔여 좌석</p> <em>28</em>
+						<p>잔여 좌석</p> <em></em>
 					</li>
 				</ul>
 			</div>

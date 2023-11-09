@@ -44,7 +44,7 @@ $(".openMenuController").on("click" , () => {
 		console.log(data);
 		// 상품 리스트 테이블에 가져온 상품 목록을 하나씩 추가
 		const menuListData = data.menuList; 
-		menuListData.forEach((menu) =>{
+		menuListData.forEach((menu) => {
 			menuItemClone = menuItem.clone();
 			menuItemClone.find(".category").text(menu.MENU_CATEGORY);
 			menuItemClone.find(".menuName").text(menu.ITEM_NAME);
@@ -60,7 +60,7 @@ $(".openMenuController").on("click" , () => {
 })
 
 /* 메뉴 관리 모달창 > select option 목록 이벤트 핸들러 */
- $('.form-select').on('change', ()=>{
+ $('.form-select').on('change', () => {
     let selectedValue =  $('.form-select').find(":selected").val();
     console.log('선택한 값: ' + selectedValue);
     
@@ -84,8 +84,6 @@ $(".openMenuController").on("click" , () => {
 		
 		menuModal.addClass('on');
 	} )
-    
-    
     
   });
 
@@ -174,7 +172,6 @@ function deleteMenu(element) {
 		    element.closest('.col.mb-5').remove();
 		}
 	})
-
 }
 
 /* 첨부파일 이벤트 핸들러 */
@@ -195,14 +192,6 @@ $(document).on("change", ".form-control", function(){
         preView.src = ""; // 미리보기 이미지 제거
     }
 });
-
-
-
-
-
-
-
-
 
 
 
@@ -312,8 +301,76 @@ $(document).on("change", ".form-control", function(){
     /*
      * END INTERACTIVE CHART
      */
+	
+	
+	
+/****** 파이차트 (많이 팔린 메뉴 - 연, 월, 일) ******/
+const pieChartUrl = "/admin/chartPieData";
+
+myFetch(pieChartUrl, {method: "GET"}, response => {
+	const pieChartData = response.data;
+	
+	createPieChart($("#pieChart1"),pieChartData.year.top6Menu, pieChartData.year.top6Sales); // 연
+	createPieChart($("#pieChart2"),pieChartData.month.top6Menu, pieChartData.month.top6Sales); // 월
+	createPieChart($("#pieChart3"),pieChartData.day.top6Menu, pieChartData.day.top6Sales); // 일
+		
+})
 
 
+function createPieChart(chart, labels, data) {
+	
+	if(labels == null) {
+		chart.closest('.tab-pane').removeClass('on');
+		$('.tab-pane.nonData').addClass('on');
+	} else {
+		// -------------
+    // - PIE CHART -
+    // -------------
+    // Get context with jQuery - using jQuery's .get() method.
+
+    var donutData = {
+      /*labels: ["신라면", "참깨라면", "콜라", "사이다", "소떡소떡", "짜파게티"],*/
+      labels: labels,
+      datasets: [
+        {
+          /*data: [700, 500, 400, 600, 300, 100],*/
+          data: data,
+          backgroundColor: [
+            "#f56954",
+            "#00a65a",
+            "#f39c12",
+            "#00c0ef",
+            "#3c8dbc",
+            "#d2d6de",
+          ],
+        },
+      ],
+    };
+    var donutOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+    };
+
+    var pieChartCanvas = chart.get(0).getContext("2d");
+    var pieData = donutData;
+    var pieOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+    };
+
+    // Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+
+    new Chart(pieChartCanvas, {
+      type: "pie",
+      data: pieData,
+      options: pieOptions,
+    });
+	}
+}
+
+
+/****** 스택 바 차트 (월별 매출) ******/
 	const url = "/admin/chartData";
 	const labels = [];
 	
@@ -328,138 +385,12 @@ $(document).on("change", ".form-control", function(){
 		const pcData = response.data.pc;
 		const total = response.data.total;
 		
-		console.log("지난달 매출" +  menuData);
+		/*console.log("지난달 매출" +  menuData);
 		console.log("이번달 매출" +  pcData);
 		console.log("지난달 매출" +  total[thisMonth -1]);
-		console.log("이번달 매출" +  total[thisMonth]);
-		
-		lastMonthSalse.text(total[thisMonth -1]);
-		thisMonthSalse.text(total[thisMonth]);
-        // -------------
-        // - PIE CHART -
-        // -------------
-        // Get context with jQuery - using jQuery's .get() method.
-
-        var donutData = {
-          labels: ["신라면", "참깨라면", "콜라", "사이다", "소떡소떡", "짜파게티"],
-          datasets: [
-            {
-              data: [700, 500, 400, 600, 300, 100],
-              backgroundColor: [
-                "#f56954",
-                "#00a65a",
-                "#f39c12",
-                "#00c0ef",
-                "#3c8dbc",
-                "#d2d6de",
-              ],
-            },
-          ],
-        };
-        var donutOptions = {
-          maintainAspectRatio: false,
-          responsive: true,
-        };
-
-        var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
-        var pieData = donutData;
-        var pieOptions = {
-          maintainAspectRatio: false,
-          responsive: true,
-        };
-
-        // Create pie or douhnut chart
-        // You can switch between pie and douhnut using the method below.
-
-        new Chart(pieChartCanvas, {
-          type: "pie",
-          data: pieData,
-          options: pieOptions,
-        });
-
-        /* ChartJS
-         * -------
-         * Here we will create a few charts using ChartJS
-         */
-
-        //-----------------------
-        // - MONTHLY SALES CHART -
-        //-----------------------
-
-        // Get context with jQuery - using jQuery's .get() method.
-/*        var salesChartCanvas = $("#salesChart").get(0).getContext("2d");
-
-        var salesChartData = {
-          labels: [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-          ],
-          datasets: [
-            {
-              label: "Digital Goods",
-              backgroundColor: "rgba(60,141,188,0.9)",
-              borderColor: "rgba(60,141,188,0.8)",
-              pointRadius: false,
-              pointColor: "#3b8bba",
-              pointStrokeColor: "rgba(60,141,188,1)",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(60,141,188,1)",
-              data: [28, 48, 40, 19, 86, 27, 90],
-            },
-            {
-              label: "Electronics",
-              backgroundColor: "rgba(210, 214, 222, 1)",
-              borderColor: "rgba(210, 214, 222, 1)",
-              pointRadius: false,
-              pointColor: "rgba(210, 214, 222, 1)",
-              pointStrokeColor: "#c1c7d1",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(220,220,220,1)",
-              data: [65, 59, 80, 81, 56, 55, 40],
-            },
-          ],
-        };
-
-        var salesChartOptions = {
-          maintainAspectRatio: false,
-          responsive: true,
-          legend: {
-            display: false,
-          },
-          scales: {
-            xAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-              },
-            ],
-          },
-        };
-
-        // This will get the first returned node in the jQuery collection.
-        // eslint-disable-next-line no-unused-vars
-        var salesChart = new Chart(salesChartCanvas, {
-          type: "line",
-          data: salesChartData,
-          options: salesChartOptions,
-        });
-
-        //---------------------------
-        // - END MONTHLY SALES CHART -
-        //------*/
+		console.log("이번달 매출" +  total[thisMonth]);*/
+		lastMonthSalse.text(Number(total[thisMonth -1]).toLocaleString('ko-KR') + "원");
+		thisMonthSalse.text(Number(total[thisMonth]).toLocaleString('ko-KR') + "원");
 
         //---------------------
         //- STACKED BAR CHART -
@@ -467,18 +398,8 @@ $(document).on("change", ".form-control", function(){
 
         var stackedChartData = {
           labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
+            "Jan", "Feb", "Mar","Apr", "May", "Jun"
+            , "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
           ],
 
           datasets: [

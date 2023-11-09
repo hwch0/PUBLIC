@@ -39,30 +39,50 @@ GROUP BY
 
 
 <select id="getPieChartData" resultType="map">
-<![CDATA[
-select i.item_id as item_id
-		, i.item_name as item_name
-		, merge.total_count as total_count
-		, merge.total_sales as total_sales
-		, merge.ranking 
+
+select *
+from 
+(select i.item_id, i.item_name, merge.total_count, merge.total_sales, merge.ranking
 from(
         select sub.*
             , rank() over (order by total_count desc) as ranking
         from (
-	        select item_id
-	        , sum(quantity) as total_count
-	        , sum(price) as total_sales
-	        from order_history h
-	        join orders o on h.order_id = o.order_id
-	        where to_char(order_date, 'yyyy') = '2023' and item_id != 'ITEM000001'
-	        group by item_id
-	        ) sub
-	  ) merge
+        select item_id
+        , sum(quantity) as total_count
+        , sum(price) as total_sales
+        from order_history h
+        join orders o on h.order_id = o.order_id
+        where item_id != 'ITEM000001'
+			
+		    <choose>
+		        <when test="dateType == 'month'">
+		            <![CDATA[
+		            and to_char(order_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
+		            ]]>
+		        </when>
+		        <when test="dateType == 'day'">
+		            <![CDATA[
+		            and to_char(order_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+		            ]]>
+		        </when>
+		        <otherwise>
+		            <![CDATA[
+		            and to_char(order_date, 'yyyy') = to_char(sysdate, 'yyyy')
+		            ]]>
+		        </otherwise>
+		    </choose>
+			
+        
+<![CDATA[        
+        group by item_id) sub) merge
 join item i
-on i.item_id = merge.item_id; 
+on i.item_id = merge.item_id
+order by merge.ranking)
+where rownum <7
 ]]>
         
 </select>
+
 
 
 	

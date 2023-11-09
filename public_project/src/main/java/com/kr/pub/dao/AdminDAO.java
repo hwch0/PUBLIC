@@ -10,4 +10,6 @@ public interface AdminDAO {
 	
 	public List<Map<String, Object>> getChartData();
 	
+	public List<Map<String, Object>> getPieChartData(String dateType);
+	
 }

@@ -3,8 +3,7 @@
 <!-- <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css"/> -->
 <link rel="stylesheet" href="/plugins/chart.js/Chart.css"/>
 <script src="/plugins/chart.js/Chart.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
+  <script src="/plugins/jquery/jquery.min.js"></script>
   
 <style>
 .chartjs-render-monitor {
@@ -195,12 +194,30 @@
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="far fa-chart-bar"></i>
-                  Interactive Area Chart
+                  Top6 Menu
                 </h3>
+                 <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#tap-pieChart1" data-toggle="tab">연</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#tap-pieChart2" data-toggle="tab">월</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#tap-nonData" data-toggle="tab">일</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
+              
               <div class="card-body">
- 					<canvas
-                      id="pieChart"
+                <div class="tab-content p-0">
+                  <!-- Morris chart - Sales -->
+                  <div class="chart tab-pane active" id="tap-pieChart1"
+                       style="position: relative; height: 100%;">
+             		<canvas
+                      id="pieChart1"
                       style="
                         min-height: 200px;
                         height: 200px;
@@ -208,12 +225,55 @@
                         max-width: 100%;
                       "
                     ></canvas>
-            </div>
-            <!-- /.card -->
+                   </div>
+                   
+                    <div class="chart tab-pane" id="tap-pieChart2"
+                       style="position: relative; height: 100%;">
+             		<canvas
+                      id="pieChart2"
+                      style="
+                        min-height: 200px;
+                        height: 200px;
+                        max-height: 200px;
+                        max-width: 100%;
+                      "
+                    ></canvas>
+                   </div>
+                   
+                    <div class="chart tab-pane" id="tap-pieChart3"
+                       style="position: relative; height: 100%;">
+             		<canvas
+                      id="pieChart3"
+                      style="
+                        min-height: 200px;
+                        height: 200px;
+                        max-height: 200px;
+                        max-width: 100%;
+                      "
+                    ></canvas>
+                   </div>
+                   <div class="chart tab-pane nonData" id="tap-nonData"
+                       style="position: relative; height: 100%;">
+                       <div 
+	                        style="
+	                        min-height: 200px;
+	                        height: 200px;
+	                        max-height: 200px;
+	                        max-width: 100%;
+	                      "
+                       >
+                       <div class="icon" style="font-size: 70px; opacity: 0.5;">
+			              <div class="icon ion-sad-outline"></div>
+			           </div>
+			              <p>주문 내역이 없습니다.</p>
+	                       </div>
+                   </div>
+              	</div>
 
-          </div>
-        </div>
-       </div> <!-- /.row -->
+          	</div> <!-- /.card-body -->
+        </div> <!-- /.card -->
+       </div> <!-- /.col -->
+      </div> <!-- /.row -->
       
       <div class="row">
         <div class="col-md-6">
@@ -262,7 +322,7 @@
 
           <div class="card card-info">
             <div class="card-header">
-              <h3 class="card-title">Users Timeline</h3>
+              <h3 class="card-title">Monthly Users</h3>
 
               <div class="card-tools">
                 <button

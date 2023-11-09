@@ -4,7 +4,11 @@
 
 <!-- #################### JS #################### -->
 <!-- ********** 공통 ********** -->
+<<<<<<< HEAD
 <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+=======
+<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+>>>>>>> branch 'main' of https://github.com/hwch0/PUBLIC.git
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
 <script src="/js/reference.js"></script>
 <!-- ********** 관리자 대시보드 ********** -->

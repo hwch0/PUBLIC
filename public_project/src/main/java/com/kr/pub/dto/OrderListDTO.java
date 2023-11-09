@@ -1,5 +1,4 @@
 package com.kr.pub.dto;
-
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -11,13 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExcelDTO {
+public class OrderListDTO {//사용자가 주문한 데이터를 출력하기 위한 용도
 	
-	private String itemId;
+	private String paymentId;
+	private Date paymentDate;
 	private String itemName;
-	private String type;
-	private Date storeDate;
-	private int stock;
-	private int price;
-		
+	private int sellingPrice;
+	private int quantity;
+	private String userId;
+	private char served;
+
 }

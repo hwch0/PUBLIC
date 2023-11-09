@@ -8,24 +8,13 @@ function formatTime(seconds) {
 	  return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
   }
 }
-
-/*function updateCountdown(time, remainingTime, seatNo) {
-  time.text(formatTime(remainingTime));
-  if (remainingTime > 0) {
-    remainingTime--;
-    seatNo = setTimeout(function () {
-	  console.log(seatNo)
-      updateCountdown(time, remainingTime, seatNo);
-    }, 1000);
-  } else {
-   		time.closest('li').removeClass("on");
-        time.closest('li').find("p").first().text("");
-        clearTimeout(seatNo);
-        time.closest('li').find("p").last().text("");
-        $(`option[value=${seatNo}]`).remove();
-  }
-}*/
-
+function getNow() {
+	var today = new Date();
+	var hours = ('0' + today.getHours()).slice(-2);
+	var minutes = ('0' + today.getMinutes()).slice(-2);
+	var seconds = ('0' + today.getSeconds()).slice(-2);
+	return hours + ':' + minutes + ':' + seconds;
+}
 let timers = {}; // 타이머 ID를 저장할 객체
 
 function updateCountdown(time, remainingTime, seatNo) {
@@ -33,7 +22,6 @@ function updateCountdown(time, remainingTime, seatNo) {
   if (remainingTime > 0) {
     remainingTime--;
 
-    // 재귀 호출 대신 타이머를 저장하고 업데이트
     const timerID = setInterval(function () {
       time.text(formatTime(remainingTime));
       remainingTime--;
@@ -104,23 +92,6 @@ const addOption = () => {
 	});
 	sortOptions();
 }
-/*function addOption() {
-	const existingOptions = $("#seatSelector option").map(function() {
-		return $(this).val();
-	}).get(); //현재 로그인한 좌석 번호
-	console.log(existingOptions);
-	$.each($("[data-seatNo].on em"), function(seat) {
-		const seatNumber = $(seat).text();
-		console.log(seatNumber);
-		if (!existingOptions.includes(seatNumber)) {
-			$("#seatSelector").append(
-				"<option value=" + seatNumber + ">" + seatNumber + "</option>"
-			);
-		}
-	});
-	sortOptions();
-}*/
-
 
 const mqtt_host = "www.chocomungco.store";
 const mqtt_port = 9001; //websocket port : mosquitt.conf 파일에 설정됨
@@ -183,9 +154,8 @@ const sendMessage = () => {
     $("#chatList").append(
       `<li class="me">
 					<div class="entete">
-						<h3>10:12AM, Today</h3>
+						<p>${getNow()}</p>
 						<h2>좌석 ${seatNo}님에게 보냄</h2>
-						<span class="status blue"></span>
 					</div>
 					<div class="triangle"></div>
 					<div class="message">${message}</div>
@@ -202,9 +172,8 @@ const recvMessage = (recv) => {
   $("#chatList").append(
 	`<li class="you">
 		<div class="entete">
-			<span class="status green"></span>
+			<p>${getNow()}</p>
 			<h2>${recv.sender}</h2>
-			<h3>10:12AM, Today</h3>
 			</div>
 			<div class="triangle"></div>
 			<div class="message">${recv.message}</div>
@@ -212,19 +181,37 @@ const recvMessage = (recv) => {
   );
   $("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
 };
-const recvOrder = (recv) => {
+const recvOrder = () => {
+	ajaxResponse("GET", "/admin/getOrderList", null)
+    .then(function (response) {
+      $.each(response.result, function(key, order){
+		 $("#orderList").prepend(
+			 `<button class="accordion" data-paymentId='${key}'>${order.orderId}번 좌석 주문내역 : </button>
+		 		<div class="panel">
+				<button>주문 확인</button>
+				</div>`);
+		 $.each(order, function(index, detailOrder){
+			 console.log(detailOrder)
+			 $("#orderList").children().next()[0]
+			.prepend(`<p>${detailOrder.itemName}</p>`);
+		 });
+	  })
+    })
+    /*.catch(function (error) {
+      console.error("주문 정보 가져오는중 에러 발생: " + error);
+    });*/
   //console.log(recv);
-  $("#orderList").append(
+  /*$("#orderList").append(
 	  `<button class="accordion">${recv.sender}번 좌석 주문내역 : ${recv.orderList}</button>
 				<div class="panel">
 					<p>${recv.orderList}</p>
 					<button>주문 확인</button>
 				</div>`
-  );
+  );*/
 }; //주문리스트 받기
 
 const recvLogin = () => {
-  ajaxResponse("POST", "/loggedInUserList", null)
+  ajaxResponse("GET", "/loggedInUserList", null)
     .then(function (response) {
       console.log(response.result);
       $.each(response.result, function (index, user) {
@@ -245,8 +232,7 @@ const recvLogin = () => {
 
 const recvLogout = () => {
   let arr = [];
-  const data = {};
-  ajaxResponse("POST", "/loggedInUserList", data)
+  ajaxResponse("GET", "/loggedInUserList")
     .then(function (response) {
       console.log(response.result);
       $.each(response.result, function (index, user) {
@@ -295,7 +281,7 @@ mqttClient.on("message", function (topic, message) {
     recvLogin(data);
   } else if (data.receiver === "admin" && data.type === "LOGOUT") {
     recvLogout(data);
-  } else {
+  } else if(data.receiver === "admin" && data.type === "ORDER"){
     recvOrder(data);
   }
 });

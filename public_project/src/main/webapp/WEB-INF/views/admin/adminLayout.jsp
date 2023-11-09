@@ -60,7 +60,7 @@
 		</div>
 
 		<!-- 관리자 알림창 영역 -->
-        <div class="wrap_alert">
+        <div class="wrap_alert" id = "orderList">
             <jsp:include page="adminAlert.jsp"></jsp:include>
         </div>
         

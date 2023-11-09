@@ -17,7 +17,7 @@
 #chatList li{
 	padding:10px 30px;
 }
-#chatList h2,#chat h3{
+#chatList h2,#chat p{
 	display:inline-block;
 	font-size:15px;
 	font-weight:normal;

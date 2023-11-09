@@ -674,6 +674,8 @@
 /*input박스*/
 .itemName,
 .paymName,
+.statusCode,
+.statusName,
 .userName,
 .orderName {
 	height: 20px;
@@ -681,8 +683,7 @@
 }
 
 /*select*/
-.itemSelect,
-.stockStatus{
+.itemSelect {
 	width: 200px;
 }
 
@@ -720,10 +721,10 @@
 .statusScroll > tr > td:nth-child(2) { width: 132px; }
 .statusScroll > tr > td:nth-child(3) { width: 237px; }
 .statusScroll > tr > td:nth-child(4) { width: 109px; }
-.statusScroll > tr > td:nth-child(5) { width: 71px; }
-.statusScroll > tr > td:nth-child(6) { width: 90px; }
-.statusScroll > tr > td:nth-child(7) { width: 74px; }
-.statusScroll > tr > td:nth-child(8) { width: 80px; }
+.statusScroll > tr > td:nth-child(5) { width: 79px; }
+.statusScroll > tr > td:nth-child(6) { width: 72px; }
+.statusScroll > tr > td:nth-child(7) { width: 108px; }
+.statusScroll > tr > td:nth-child(8) { width: 104px; }
 
 
 .statusTbody .amount-cell {
@@ -742,11 +743,11 @@
 .paymScroll > tr > td:nth-child(1) { width: 45px; }
 .paymScroll > tr > td:nth-child(2) { width: 130px; }
 .paymScroll > tr > td:nth-child(3) { width: 130px; }
-.paymScroll > tr > td:nth-child(4) { width: 110px; }
+.paymScroll > tr > td:nth-child(4) { width: 125px; }
 .paymScroll > tr > td:nth-child(5) { width: 110px; }
-.paymScroll > tr > td:nth-child(6) { width: 86px; }
-.paymScroll > tr > td:nth-child(7) { width: 106px; }
-.paymScroll > tr > td:nth-child(8) { width: 97px; }
+.paymScroll > tr > td:nth-child(6) { width: 98px; }
+.paymScroll > tr > td:nth-child(7) { width: 121px; }
+.paymScroll > tr > td:nth-child(8) { width: 127px; }
 
 .paymTbody .amount-cell {
     text-align: end;

@@ -37,7 +37,7 @@
 			</div>
 			<div class="nav-btn-wrap">
 				<ul>
-					<li><a href="javascript:void(0);">주문</a></li>
+					<li id ="orderBtn"><a href="javascript:void(0);">주문</a></li>
 					<li><a href="javascript:void(0);">충전</a></li>
 					<li><a href="javascript:void(0);">채팅</a></li>
 				</ul>
@@ -143,5 +143,12 @@ window.onload = function () {
     var loggedInUserId = localStorage.getItem("userId"); 
     userIdElement.textContent = loggedInUserId;
 }
+/* $('#orderBtn').on('click', function(){
+	mqttClient.publish("/public/order", JSON.stringify({
+    	type:'ORDER',
+    	receiver :"admin",
+    	}));
+}) */
+
 </script>
 </html>

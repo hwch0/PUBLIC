@@ -1,45 +1,20 @@
 const listSeat = $('.seat_grp ul li');
-//const onSeat = $("[data-seatNo].on");
 const infoModal = $('#infoModal');
 const listChat = document.querySelectorAll('.btn_grp ul li');
-const liList = [];
 
 listSeat.each(function(index, li) {
     const em = $('<em>').text(index + 1);
     $(li).find('a').before(em);
     $(li).attr("data-seatNo", index+1);
-    liList.push($(li));
-});
-
-/*$.each(onSeat, li => {
-	li.on('click', function() {
-        infoModal.style.display = 'block';
-    });
-})*/
-
-liList.forEach((li) => {
-	console.log(li);
-    li.on('click', function() {
-		console.log("클릭");
-		infoModal.addClass('on');
-        //infoModal.style.display = 'block';
-    });
 });
 
 //회원정보 모달창 닫기
-window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-        modal.style.display = 'none';
+$('window').on('click', (e) => {
+    if (e.currentTarget != infoModal) {
+        infoModal.css("display",'none');
     }
 });
 
-/*$('.close').on('click', function(e){
-	 infoModal.style.display = 'none';
-});*/
-
-infoModal.find('.close').on('click', (e) =>{
-	infoModal.removeClass('on');
-})
 
 /*let admimPageChange = true;
 
@@ -104,19 +79,16 @@ function showChat(){
 	}
 }
 /* 아코디언 */
-let acc = document.querySelectorAll(".accordion");
-	for (let i = 0; i < acc.length; i++) {
-	  acc[i].addEventListener("click", function() {
-	    this.classList.toggle("active");
-	    var panel = this.nextElementSibling;
-	    if (panel.style.maxHeight){
-	      panel.style.maxHeight = null;
-	    } else {
-	      panel.style.maxHeight = panel.scrollHeight + "px";
-	    } 
-	  });
-	}
-	
+$(document).on("click", ".accordion", function() {
+  $(this).toggleClass("active");
+  var panel = $(this).next();
+
+  if (panel.css("max-height") !== "0px") {
+    panel.css("max-height", "0px");
+  } else {
+    panel.css("max-height", panel[0].scrollHeight + "px");
+  }
+});
 /* 탭 메뉴 */
 $(document).ready(function() {
   // 초기에 첫 번째 탭을 활성화

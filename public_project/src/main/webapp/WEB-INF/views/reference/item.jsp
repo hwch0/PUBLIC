@@ -14,7 +14,7 @@
         <div class="cont_top" style="height: 100%;">
         <div class="header-content">
             <h2>
-                <em><img src="/images/icon1.png" alt="아이콘"></em>
+                <img src="/images/icon1.png" alt="아이콘">
                 재고 관리
             </h2>
 			<div class="button-group">
@@ -69,9 +69,9 @@
 
                         <td class="tr_th">재고 상태</td>
 						<td style="padding: 0 30px;">
-						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="1" checked> 양호</label>
-						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="2"> 부족</label>
-						    <label style="font-size: 13px"><input type="radio" name="stockStatus" value="3"> 품절</label>
+						    <label style="font-size: 13px"><input type="radio" name="stockItem" value="1" checked> 양호</label>
+						    <label style="font-size: 13px"><input type="radio" name="stockItem" value="2"> 부족</label>
+						    <label style="font-size: 13px"><input type="radio" name="stockItem" value="3"> 품절</label>
 						</td>
                     </tr>
                 </table>

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kr.pub.dto.StatusDTO;
+import com.kr.pub.dto.SearchDTO;
 import com.kr.pub.dto.SearchDTO;
 import com.kr.pub.service.ErpService;
 
@@ -28,18 +28,35 @@ public class ErpController {
 	@Autowired
 	private ErpService erpService;
 
-
+	//매출 내역, 주문 내역
 	@GetMapping("/sales")
-	public String sales(Model model) {
+	public String sales(Model model) throws Exception {
+		
+		List<Map<String, Object>> paymentList = erpService.salesList();
+		
+		model.addAttribute("sales", paymentList);
+		System.out.println("data확인: " + paymentList);
 		return "/reference/salesLayout";
 	}
 	
 
+	//입출고 조회
+	@PostMapping("/statusStatus")
+	@ResponseBody
+	public Map<String, Object> statusStatus(@RequestBody SearchDTO search)throws Exception{
+		Map<String, Object> statusSearch = new HashMap<>();
+		
+		List<Map<String, Object>> searchResult = erpService.statusSearch(search);
+		
+		statusSearch.put("statusSearch", searchResult);
+		System.out.println("조회 조건 Data확인: " + searchResult);
+		return statusSearch;
+	}
 	
 	//재고 조회 조건
 	@PostMapping("/search")
 	@ResponseBody
-	public Map<String, Object> itemSearch(HttpServletResponse res, @RequestBody SearchDTO search) throws Exception{
+	public Map<String, Object> itemSearch(@RequestBody SearchDTO search) throws Exception{
 		Map<String, Object> itemSearch = new HashMap<>();		
 		
 		List<Map<String, Object>> searchResults = erpService.itemSearch(search);
@@ -52,7 +69,7 @@ public class ErpController {
 	
 	//재고 목록,입출고 목록
 	@GetMapping("/stock")
-	public String itemSearch(Model model) throws Exception {
+	public String itemList(Model model) throws Exception {
 
 		List<Map<String, Object>> statusList = erpService.statusList();
 		List<Map<String, Object>> itemList = erpService.itemList();

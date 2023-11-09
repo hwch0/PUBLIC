@@ -65,6 +65,7 @@ function showAlert(){
 		$(".wrap_alert").toggleClass('on');
 	}else{
 		$('.wrap_cont').toggleClass('lft');
+		$('.py-5').toggleClass('lft');
 		$(".wrap_alert").toggleClass('on');
 	}
 }
@@ -75,6 +76,7 @@ function showChat(){
 		$(".wrap_chat").toggleClass('on');
 	}else{
 		$('.wrap_cont').toggleClass("lft");
+		$('.py-5').toggleClass('lft');
 		$(".wrap_chat").toggleClass("on");
 	}
 }

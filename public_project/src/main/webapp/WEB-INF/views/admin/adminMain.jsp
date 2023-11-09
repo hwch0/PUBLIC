@@ -14,7 +14,7 @@
 				</ul>
 			</div>
 
-            			<div class="seat_grp">
+     			<div class="seat_grp">
 				<div class="seat">
 					<ul>
 						<li><a href="javascript:void(0);"></a>

@@ -120,7 +120,7 @@ public class AdminController {
 		
 		result.put("status", status);
 		result.put("data", data); // data -> month, menu, pc, total
-		System.out.println(">>>>>>>>>>>>>>>>>>>data : " + result);
+		System.out.println(">>>>>>>>>>>>>>>>>>> data : " + result);
 		
 		return result;
 	}
@@ -143,6 +143,23 @@ public class AdminController {
 
 		result.put("result", groupedResult);
 		System.out.println(result);
+		return result;
+	}
+	
+
+	@ResponseBody
+	@GetMapping("/chartPieData")
+	public Map<String, Object> getPieChartData() {
+		System.out.println("AdminController getPieChartData");
+		Map<String, Object> result = new HashMap<>();
+		
+		Map<String, Object> data = adminService.getPieChartData();
+		boolean status = data != null;
+		
+		result.put("status", status);
+		result.put("data", data);
+		System.out.println(">>>>>>>>>>>>>>>>>>> data : " + result);
+		
 		return result;
 	}
 

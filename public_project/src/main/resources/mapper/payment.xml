@@ -10,7 +10,7 @@
 	SELECT
 	    p.PAYMENT_ID AS "paymentId",
 	    o.ORDER_ID AS "orderID",
-	    p.PAYMENT_DATE AS "paymentDate",
+	    TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') AS "paymentDate",
 	    u.UNAME AS "uname",
 	    cc.TYPE AS "type",
 	    oh.PRICE AS "price",

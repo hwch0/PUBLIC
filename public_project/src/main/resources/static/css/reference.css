@@ -743,11 +743,11 @@
 .paymScroll > tr > td:nth-child(1) { width: 45px; }
 .paymScroll > tr > td:nth-child(2) { width: 130px; }
 .paymScroll > tr > td:nth-child(3) { width: 130px; }
-.paymScroll > tr > td:nth-child(4) { width: 110px; }
+.paymScroll > tr > td:nth-child(4) { width: 125px; }
 .paymScroll > tr > td:nth-child(5) { width: 110px; }
-.paymScroll > tr > td:nth-child(6) { width: 86px; }
-.paymScroll > tr > td:nth-child(7) { width: 106px; }
-.paymScroll > tr > td:nth-child(8) { width: 97px; }
+.paymScroll > tr > td:nth-child(6) { width: 98px; }
+.paymScroll > tr > td:nth-child(7) { width: 121px; }
+.paymScroll > tr > td:nth-child(8) { width: 127px; }
 
 .paymTbody .amount-cell {
     text-align: end;

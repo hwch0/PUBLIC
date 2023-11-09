@@ -83,11 +83,11 @@
                     <th style="width: 45px;">순번</th>
                     <th style="width: 130px;" class="sortable salesSortable" data-sort="매출전표">매출 코드</th>
                     <th style="width: 130px;" class="sortable salesSortable" data-sort="주문전표">주문 전표</th>
-                    <th style="width: 110px;" class="sortable salesSortable" data-sort="매출일자">매출 일자</th>
+                    <th style="width: 125px;" class="sortable salesSortable" data-sort="매출일자">매출 일자</th>
                     <th style="width: 110px;" class="sortable salesSortable" data-sort="회원이름">회원 이름</th>
-                    <th style="width: 110px;" class="sortable salesSortable" data-sort="구분 상태">구분 상태</th>
-                    <th style="width: 130px;" class="sortable salesSortable amount-cell" data-sort="매출액">매출액</th>
-                    <th style="width: 138px;" class="sortable salesSortable amount-cell" data-sort="순이익">순이익</th>
+                    <th style="width: 98px;" class="sortable salesSortable" data-sort="구분 상태">구분 상태</th>
+                    <th style="width: 121px;" class="amount-cell">매출액</th>
+                    <th style="width: 143px;" class="amount-cell">순이익</th>
                 </thead>
 
                 <tbody class="paymTbody paymScroll" id="paymTbody" varStatus="loop">
@@ -95,8 +95,13 @@
                    	<c:forEach var="paym" items="${sales}">
                    		<tr>
                    			<td>${paym['index']}</td>
-                   			<td>${paym['PAYMENTID']}</td>
-                   			<td>${paym['index']}</td>
+                   			<td>${paym['paymentId']}</td>
+                   			<td>${paym['orderID']}</td>
+                   			<td>${paym['paymentDate']}</td>
+                   			<td>${paym['uname']}</td>
+                   			<td>${paym['type']}</td>
+                   			<td>₩<fmt:formatNumber value="${paym['price']}" /></td>
+                   			<td>₩<fmt:formatNumber value="${paym['netProfit']}" /></td>
                    		</tr>
                    	</c:forEach>
                  </tbody>

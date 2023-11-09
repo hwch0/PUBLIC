@@ -31,7 +31,7 @@ const countSeat = () => {
 }
 
 const showInfoModal = (loggedInUserList) => {
-    $("li[data-seatNo].on").each(function(index, seat) {
+    $(".wrap_cont li[data-seatNo].on").each(function(index, seat) {
         $(seat).on('click', function(e) {
             infoModal.css('display', 'block');
             const clickedUserId = $(e.currentTarget).find('.uid').text();
@@ -45,6 +45,17 @@ const showInfoModal = (loggedInUserList) => {
         });
     });
 }
+/*$(".wrap_cont li[data-seatNo].on").on('click', function(e){
+	 		infoModal.css('display', 'block');
+            const clickedUserId = $(e.currentTarget).find('.uid').text();
+            const userInfo = loggedInUserList.find(user => user.userId == clickedUserId);
+            console.log(userInfo);
+            $('#userSeatNo').text(userInfo.seatNo);
+            $('#userId').text(userInfo.userId);
+            $('#loginTime').text(formatDatenTime(userInfo.loginTime));
+            $('#remainingTime').text(formatTime(userInfo.remainingTime));
+            $('#regDate').text(formatDatenTime(userInfo.regDate));
+})//새로고침시에만 동적생성된 코드 동작(이벤트위임을 사용해서 구현해야함, ajax 통신)*/
 
 
 const closeInfoModal = () => {
@@ -63,7 +74,7 @@ $(document).ready(function() {
 				$.each(loggedInUserList, function(index, user) {
 				var remainingTime = user.remainingTime;
 				var seat = $(`li[data-seatNo=${user.seatNo}]`);
-				if (remainingTime >= 0) {
+				if (remainingTime > 0) {
 					var now = new Date().getTime();
 					var loginTime = new Date(user.loginTime).getTime();
 					var durationTime = now - loginTime;

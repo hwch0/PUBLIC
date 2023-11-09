@@ -116,12 +116,5 @@ function getNow() {
     $("#orderBtn").on("click", e => {
             mqttClient.publish("/public/order", JSON.stringify({
             	type:'ORDER',
-            	sender : "client",
-            	receiver :"admin",
-            	orderList:[
-					{"ramen" : 1},
-					{"coke":2},
-					{"rice":3},
-					{"bread":2,}]
-            	}));
+            	receiver :"admin"}));
     });

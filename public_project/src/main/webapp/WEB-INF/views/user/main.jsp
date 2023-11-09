@@ -143,12 +143,12 @@ window.onload = function () {
     var loggedInUserId = localStorage.getItem("userId"); 
     userIdElement.textContent = loggedInUserId;
 }
-$('#orderBtn').on('click', function(){
+/* $('#orderBtn').on('click', function(){
 	mqttClient.publish("/public/order", JSON.stringify({
     	type:'ORDER',
     	receiver :"admin",
     	}));
-})
+}) */
 
 </script>
 </html>

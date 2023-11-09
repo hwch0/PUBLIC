@@ -107,5 +107,21 @@ public class AdminController {
 		return result;
 	}
 	
+	@ResponseBody
+	@GetMapping("/chartData")
+	public Map<String, Object> getChartData() {
+		System.out.println("AdminController getChartData");
+		Map<String, Object> result = new HashMap<>();
+		
+		Map<String, Object> data = adminService.getChartData();
+		boolean status = data != null;
+		
+		result.put("status", status);
+		result.put("data", data); // data -> month, menu, pc, total
+		System.out.println(">>>>>>>>>>>>>>>>>>>data : " + result);
+		
+		return result;
+	}
+	
 	
 }

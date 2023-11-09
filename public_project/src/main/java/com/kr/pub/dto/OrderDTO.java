@@ -17,6 +17,5 @@ public class OrderDTO {
 	private String userId;
 	private String code;
 	private String remarks;
-	
-
+	private String served;
 }

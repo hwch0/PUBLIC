@@ -14,12 +14,12 @@
         <div class="cont_top" style="height: 100%;">
         <div class="header-content">
             <h2>
-                <em><img src="/images/icon1.png" alt="아이콘"></em>
+                <img src="/images/icon1.png" alt="아이콘">
                 입·출고 현황
             </h2>
 			<div class="button-group">
 	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
-	            <button class="check" id="testCheck">조회</button>
+	            <button class="check" id="testCheck" onclick="statusSearch()">조회</button>
 	            <button id="uplode">등록</button>
 	            <button id="delete">삭제</button>
 	        </div>
@@ -50,7 +50,7 @@
 
                         <td class="tr_th">품목 코드</td>
                         <td style="padding: 0 30px;">
-                            <input type="text" class="itemName">
+                            <input type="text" class="statusCode">
                             <button id="check">조회</button>
                         </td>
 
@@ -58,24 +58,18 @@
 
 
                     <tr>
-                        <td class="tr_th">구분 상세</td>
+                      <td class="tr_th">구분 상세</td>
                         <td style="padding: 0 30px;">
-                            <select class="itemSelect">
-                                <option value="1">입고</option>
-                                <option value="2">기타입고</option>
-                                <option value="3">판매</option>
-                                <option value="4">분실</option>
-                                <option value="5">기타출고</option>
-                            </select>
+						    <label style="font-size: 13px"><input type="radio" name="status" value="all" checked> 모두 보기</label>
+                            <label style="font-size: 13px"><input type="radio" name="status" value="입고"> 입고</label>
+						    <label style="font-size: 13px"><input type="radio" name="status" value="출고"> 출고</label>
                         </td>
-
-
-                        <td class="tr_th">재고 수량</td>
+                       
+					  <td class="tr_th">품목 이름</td>
                         <td style="padding: 0 30px;">
-						    <label style="font-size: 13px"><input type="radio" name="inventorystockOption" checked> 모두 보기</label>
-                            <label style="font-size: 13px"><input type="radio" name="inventorystockOption"> 입고</label>
-						    <label style="font-size: 13px"><input type="radio" name="inventorystockOption"> 출고</label>
+                            <input type="text" class="statusName">
                         </td>
+                        
                     </tr>
                 </table>
             </div>
@@ -94,36 +88,25 @@
 			        <th style="width: 132px;" class="sortable statusSortable" data-sort="품목코드">품목코드</th>
 			        <th style="width: 236px;" class="sortable statusSortable" data-sort="품목명">품목명</th>
 			        <th style="width: 109px;" class="sortable statusSortable" data-sort="일자">일자</th>
-			        <th style="width: 71px;">상세</th>
-			        <th style="width: 90px;" class="sortable statusSortable" data-sort="입·출고수량">수량</th>
-			        <th style="width: 99px;" class="sortable statusSortable amount-cell" data-sort="입·출고단가">단가</th>
-			        <th style="width: 120px;"class="sortable statusSortable amount-cell" data-sort="총금액">총금액</th>
+			        <th style="width: 80px;">상세</th>
+			        <th style="width: 72px;" class="sortable statusSortable" data-sort="입·출고수량">수량</th>
+			        <th style="width: 108px;" class="amount-cell">단가</th>
+			        <th style="width: 120px;"class="amount-cell">총금액</th>
 			    </thead>
 
-                <tbody class="statusTbody statusScroll" id="statusTobody" varStatus="loop">
+                <tbody class="statusTbody statusScroll" id="statusTbody" varStatus="loop">
                     <c:forEach var="status" items="${status}">
                     	<tr>
                     		<td>${status['index']}</td>
 							<td>${status['ITEM_ID']}</td>
 							<td>${status['ITEM_NAME']}</td>
 							<td>${status['STATUSDATE']}</td>
-							<td>${status['INCDEC']}</td>
+							<td style="color: ${status['INCDEC'] eq '입고' ? 'blue' : status['INCDEC'] eq '출고' ? 'red' : 'black'}">
+							${status['INCDEC']}</td>
 							<td>${status['STOCK']}</td>
-							<td>
-								<c:choose>
-									<c:when test="${status['PRICE']}">
-										₩<fmt:formatNumber value="${status['PRICE']}" />
-									</c:when>
-									<c:otherwise>
-						                    -
-					                </c:otherwise>
-				                </c:choose>
-							</td>
-					        <td>${status['STOCK'] * status['PRICE']}</td>
-                    	</tr>
-                    	
-                    	<td>
-						        </td>
+							<td>₩<fmt:formatNumber value="${status['PRICE']}" /></td>
+							<td>₩<fmt:formatNumber value="${status['STOCK'] * status['PRICE']}" /></td>
+                    	</tr>                    	
                     </c:forEach>
                  </tbody>
             </table>

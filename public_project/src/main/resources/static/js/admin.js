@@ -44,7 +44,7 @@ $(".openMenuController").on("click" , () => {
 		console.log(data);
 		// 상품 리스트 테이블에 가져온 상품 목록을 하나씩 추가
 		const menuListData = data.menuList; 
-		menuListData.forEach((menu) =>{
+		menuListData.forEach((menu) => {
 			menuItemClone = menuItem.clone();
 			menuItemClone.find(".category").text(menu.MENU_CATEGORY);
 			menuItemClone.find(".menuName").text(menu.ITEM_NAME);
@@ -60,7 +60,7 @@ $(".openMenuController").on("click" , () => {
 })
 
 /* 메뉴 관리 모달창 > select option 목록 이벤트 핸들러 */
- $('.form-select').on('change', ()=>{
+ $('.form-select').on('change', () => {
     let selectedValue =  $('.form-select').find(":selected").val();
     console.log('선택한 값: ' + selectedValue);
     
@@ -84,8 +84,6 @@ $(".openMenuController").on("click" , () => {
 		
 		menuModal.addClass('on');
 	} )
-    
-    
     
   });
 
@@ -174,7 +172,6 @@ function deleteMenu(element) {
 		    element.closest('.col.mb-5').remove();
 		}
 	})
-
 }
 
 /* 첨부파일 이벤트 핸들러 */
@@ -195,3 +192,370 @@ $(document).on("change", ".form-control", function(){
         preView.src = ""; // 미리보기 이미지 제거
     }
 });
+
+
+
+
+
+
+/*대시보드 */
+/*$(document).ready( ()=> {*/
+
+
+	/* -----------------------	
+     * Flot Interactive Chart
+     * -----------------------
+     */
+    // We use an inline data source in the example, usually data would
+    // be fetched from a server
+    var data        = [],
+        totalPoints = 100
+
+    function getRandomData() {
+
+      if (data.length > 0) {
+        data = data.slice(1)
+      }
+
+      // Do a random walk
+      while (data.length < totalPoints) {
+
+        var prev = data.length > 0 ? data[data.length - 1] : 50,
+            y    = prev + Math.random() * 10 - 5
+
+        if (y < 0) {
+          y = 0
+        } else if (y > 100) {
+          y = 100
+        }
+
+        data.push(y)
+      }
+
+      // Zip the generated y values with the x values
+      var res = []
+      for (var i = 0; i < data.length; ++i) {
+        res.push([i, data[i]])
+      }
+
+      return res
+    }
+    
+    var interactive_plot = $.plot('#interactive', [
+        {
+          data: getRandomData(),
+        }
+      ],
+      {
+        grid: {
+          borderColor: '#f3f3f3',
+          borderWidth: 1,
+          tickColor: '#f3f3f3'
+        },
+        series: {
+          color: '#3c8dbc',
+          lines: {
+            lineWidth: 2,
+            show: true,
+            fill: true,
+          },
+        },
+        yaxis: {
+          min: 0,
+          max: 100,
+          show: true
+        },
+        xaxis: {
+          show: true
+        }
+      }
+    )
+
+    var updateInterval = 1000 //Fetch data ever x milliseconds
+    var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
+    function update() {
+
+      interactive_plot.setData([getRandomData()])
+
+      // Since the axes don't change, we don't need to call plot.setupGrid()
+      interactive_plot.draw()
+      if (realtime === 'on') {
+        setTimeout(update, updateInterval)
+      }
+    }
+
+    //INITIALIZE REALTIME DATA FETCHING
+    if (realtime === 'on') {
+      update()
+    }
+    //REALTIME TOGGLE
+    $('#realtime .btn').click(function () {
+      if ($(this).data('toggle') === 'on') {
+        realtime = 'on'
+      }
+      else {
+        realtime = 'off'
+      }
+      update()
+    })
+    /*
+     * END INTERACTIVE CHART
+     */
+	
+	
+	
+/****** 파이차트 (많이 팔린 메뉴 - 연, 월, 일) ******/
+const pieChartUrl = "/admin/chartPieData";
+
+myFetch(pieChartUrl, {method: "GET"}, response => {
+	const pieChartData = response.data;
+	
+	createPieChart($("#pieChart1"),pieChartData.year.top6Menu, pieChartData.year.top6Sales); // 연
+	createPieChart($("#pieChart2"),pieChartData.month.top6Menu, pieChartData.month.top6Sales); // 월
+	createPieChart($("#pieChart3"),pieChartData.day.top6Menu, pieChartData.day.top6Sales); // 일
+		
+})
+
+
+function createPieChart(chart, labels, data) {
+	
+	if(labels == null) {
+		chart.closest('.tab-pane').removeClass('on');
+		$('.tab-pane.nonData').addClass('on');
+	} else {
+		// -------------
+    // - PIE CHART -
+    // -------------
+    // Get context with jQuery - using jQuery's .get() method.
+
+    var donutData = {
+      /*labels: ["신라면", "참깨라면", "콜라", "사이다", "소떡소떡", "짜파게티"],*/
+      labels: labels,
+      datasets: [
+        {
+          /*data: [700, 500, 400, 600, 300, 100],*/
+          data: data,
+          backgroundColor: [
+            "#f56954",
+            "#00a65a",
+            "#f39c12",
+            "#00c0ef",
+            "#3c8dbc",
+            "#d2d6de",
+          ],
+        },
+      ],
+    };
+    var donutOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+    };
+
+    var pieChartCanvas = chart.get(0).getContext("2d");
+    var pieData = donutData;
+    var pieOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+    };
+
+    // Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+
+    new Chart(pieChartCanvas, {
+      type: "pie",
+      data: pieData,
+      options: pieOptions,
+    });
+	}
+}
+
+
+/****** 스택 바 차트 (월별 매출) ******/
+	const url = "/admin/chartData";
+	const labels = [];
+	
+	const today = new Date();
+	const thisMonth = today.getMonth(); // 0부터 시작 
+	const lastMonthSalse = $('.lastMonthSalse');
+	const thisMonthSalse = $('.thisMonthSalse');
+	
+	
+	myFetch(url, {method: "GET"}, response =>{
+		const menuData = response.data.menu;
+		const pcData = response.data.pc;
+		const total = response.data.total;
+		
+		/*console.log("지난달 매출" +  menuData);
+		console.log("이번달 매출" +  pcData);
+		console.log("지난달 매출" +  total[thisMonth -1]);
+		console.log("이번달 매출" +  total[thisMonth]);*/
+		lastMonthSalse.text(Number(total[thisMonth -1]).toLocaleString('ko-KR') + "원");
+		thisMonthSalse.text(Number(total[thisMonth]).toLocaleString('ko-KR') + "원");
+
+        //---------------------
+        //- STACKED BAR CHART -
+        //---------------------
+
+        var stackedChartData = {
+          labels: [
+            "Jan", "Feb", "Mar","Apr", "May", "Jun"
+            , "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+          ],
+
+          datasets: [
+            {
+              label: "음식 판매",
+              backgroundColor: "rgba(60,141,188,0.9)",
+              borderColor: "rgba(60,141,188,0.8)",
+              pointRadius: false,
+              pointColor: "#3b8bba",
+              pointStrokeColor: "rgba(60,141,188,1)",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(60,141,188,1)",
+              /* data: [28, 48, 40, 19, 24, 27, 30, 20, 15, 23, 31, 35], */
+              data: menuData,
+            },
+            {
+              label: "PC방 이용",
+              backgroundColor: "rgba(210, 214, 222, 1)",
+              borderColor: "rgba(210, 214, 222, 1)",
+              pointRadius: false,
+              pointColor: "rgba(210, 214, 222, 1)",
+              pointStrokeColor: "#c1c7d1",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(220,220,220,1)",
+              /* data: [65, 59, 80, 81, 56, 55, 40, 90, 60, 57, 76, 83], */
+              data: pcData,
+            },
+          ],
+        };
+
+        var barChartData = $.extend(true, {}, stackedChartData);
+        var temp0 = stackedChartData.datasets[0];
+        var temp1 = stackedChartData.datasets[1];
+        barChartData.datasets[0] = temp1;
+        barChartData.datasets[1] = temp0;
+
+        var stackedBarChartCanvas = $("#stackedBarChart")
+          .get(0)
+          .getContext("2d");
+        var stackedBarChartData = $.extend(true, {}, barChartData);
+
+        var stackedBarChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [
+              {
+                stacked: true,
+              },
+            ],
+            yAxes: [
+              {
+                stacked: true,
+              },
+            ],
+          },
+        };
+
+        new Chart(stackedBarChartCanvas, {
+          type: "bar",
+          data: stackedBarChartData,
+          options: stackedBarChartOptions,
+        });
+
+        var lineChartData = {
+          labels: [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+            20, 21, 22, 23, 24,
+          ],
+
+          datasets: [
+            {
+              label: "이용자수",
+              backgroundColor: "rgba(60,141,188,0.9)",
+              borderColor: "rgba(60,141,188,0.8)",
+              pointRadius: false,
+              pointColor: "#3b8bba",
+              pointStrokeColor: "rgba(60,141,188,1)",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(60,141,188,1)",
+              data: [
+                28, 48, 40, 19, 24, 27, 30, 20, 15, 23, 31, 35, 28, 48, 40, 19,
+                24, 27, 30, 20, 15, 23, 31, 35,
+              ],
+            },
+          ],
+        };
+
+        var lineChartDataOptions = {
+          maintainAspectRatio: false,
+          responsive: true,
+          legend: {
+            display: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                gridLines: {
+                  display: false,
+                },
+              },
+            ],
+            yAxes: [
+              {
+                gridLines: {
+                  display: false,
+                },
+              },
+            ],
+          },
+        };
+
+        //-------------
+        //- LINE CHART -
+        //--------------
+        var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
+        var lineChartOptions = $.extend(true, {}, lineChartDataOptions);
+        var lineChartData = $.extend(true, {}, lineChartData);
+        lineChartData.datasets[0].fill = false;
+        // lineChartData.datasets[1].fill = false;
+        lineChartOptions.datasetFill = false;
+
+        //var lineChart = new Chart(lineChartCanvas, {
+        new Chart(lineChartCanvas, {
+          type: "line",
+          data: lineChartData,
+          options: lineChartOptions,
+        });
+
+        // Sample data for demonstration
+        const data = [
+          {
+            orderID: "OR9842",
+            item: "Call of Duty IV",
+            status: "Shipped",
+            popularity: "90,80,90,-70,61,-83,63",
+          },
+          {
+            orderID: "OR1848",
+            item: "Samsung Smart TV",
+            status: "Pending",
+            popularity: "90,80,-90,70,61,-83,68",
+          },
+          {
+            orderID: "OR7429",
+            item: "iPhone 6 Plus",
+            status: "Delivered",
+            popularity: "90,-80,90,70,-61,83,63",
+          },
+          // Add more data items here
+        ];
+	}) 
+	
+	
+
+
+
+	
+/*})*/

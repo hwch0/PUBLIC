@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.kr.pub.dto.UserDTO;
 
+
 @Mapper
 public interface UserDAO {
 
@@ -25,7 +26,8 @@ public interface UserDAO {
 	public UserDTO loginHistory(UserDTO user);
 	
 	public void loginSeat(UserDTO user);
+	
 	public void logoutSeat(UserDTO user);
 
-
+	public UserDTO findByUserId(String userId);
 }

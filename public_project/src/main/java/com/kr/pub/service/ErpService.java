@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.kr.pub.dao.ItemDAO;
+import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dao.PaymentDAO;
 import com.kr.pub.dto.SearchDTO;
 
@@ -22,6 +22,66 @@ public class ErpService {
 	@Autowired
 	private PaymentDAO paymentDAO;
 	
+	@Autowired
+	private OrderDAO orderDAO;
+	
+	
+	//주문 내역 상세보기
+	public List<Map<String, Object>> orderView(String orderId) throws Exception{
+		Map<String, Object> params = new HashMap<>();
+		params.put("orderId", orderId);
+		
+		List<Map<String, Object>> orderView = orderDAO.erpOrderView(params);
+		
+		indexList(orderView);
+		
+		return orderView;
+	}
+	
+	//주문 내역 조회
+	public List<Map<String, Object>> orderSearch(SearchDTO search) throws Exception{
+		Map<String, Object> params = new HashMap<>();
+		
+		params.put("startDate", search.getStartDate());
+		params.put("endDate", search.getEndDate());
+		params.put("orderId", search.getOrderId());
+		params.put("paymentMethod", search.getSelect());
+		params.put("orderOption", search.getCode());
+		
+		List<Map<String, Object>> orderList = orderDAO.erpOrderList(params);
+		
+		indexList(orderList);
+		System.out.println("서비스 확인: " + params);
+		return orderList;
+	}
+	
+	//주문 내역
+	public List<Map<String, Object>> orderList() throws Exception{
+		Map<String, Object> params = new HashMap<>();
+		
+		List<Map<String, Object>> orderList = orderDAO.erpOrderList(params);
+		
+		indexList(orderList);
+		
+		return orderList;
+	}
+	
+	//매출 내역 조회
+	public List<Map<String, Object>> salesSearch(SearchDTO search) throws Exception{
+		Map<String, Object> params = new HashMap<>();
+		
+		params.put("startDate", search.getStartDate());
+		params.put("endDate", search.getEndDate());
+		params.put("paymentId", search.getPaymentId());
+		params.put("orderId", search.getOrderId());
+		params.put("unme", search.getUnme());
+		
+		List<Map<String, Object>> salesList = paymentDAO.salesList(params);
+		System.out.println("서비스 확인: " + params);
+		indexList(salesList);
+		
+		return salesList;
+	}
 	//매출 내역
 	public List<Map<String, Object>> salesList() throws Exception{
 		Map<String, Object> params = new HashMap<>();
@@ -99,6 +159,7 @@ public class ErpService {
 			list.get(i).put("index", i + 1);
 		}
 	}
+	
 	
 //	@Transactional
 //	public void download(ExcelDTO excelDTO, ResultRowDataHandler resultRowDataHandler) throws Exception{	      

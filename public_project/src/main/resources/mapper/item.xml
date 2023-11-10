@@ -40,7 +40,7 @@
        				i.ITEM_ID <> 'ITEM000001'
        				]]>
  				<if test="startDate != null">
-	                AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') BETWEEN TO_CHAR(#{startDate}, 'YYYY-MM-DD') AND TO_CHAR(#{endDate}, 'YYYY-MM-DD')
+	                AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 	            </if>
 	            
 	            <if test="statusCode != null">
@@ -91,7 +91,7 @@
        				i.ITEM_ID <> 'ITEM000001'
        				]]>
 	            <if test="startDate != null and startDate != ''">
-	                AND TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') BETWEEN TO_CHAR(#{startDate}, 'YYYY-MM-DD') AND TO_CHAR(#{endDate}, 'YYYY-MM-DD')
+	                AND TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 	            </if>
 	            
 	            <if test="statusCode != null and statusCode != ''">
@@ -137,7 +137,7 @@
 	    1=1
 	    <!-- startDate, endDate -->
 	    <if test="startDate != null and startDate != ''">
-	       AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') BETWEEN TO_CHAR(#{startDate}, 'YYYY-MM-DD') AND TO_CHAR(#{endDate}, 'YYYY-MM-DD')
+	       AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 	    </if>
 	    <!-- itemSelect -->
 	    <if test="itemSelect != null and itemSelect != ''">

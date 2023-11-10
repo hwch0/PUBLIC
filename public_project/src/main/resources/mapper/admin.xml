@@ -5,7 +5,7 @@
 
 <mapper namespace="com.kr.pub.dao.AdminDAO">
 
-<select id="getChartData" resultType="map">
+<select id="getChartData" resultType="java.util.LinkedHashMap">
 SELECT
     TO_CHAR(p.payment_date, 'yyyy-mm') AS payment_month,
     SUM(CASE WHEN p.payment_type_code = 'PT001' THEN o.total_price ELSE 0 END) AS PT001,
@@ -34,11 +34,12 @@ JOIN (
 ) o ON o.order_id = p.order_id
 GROUP BY
     TO_CHAR(p.payment_date, 'yyyy-mm')
+ORDER BY payment_month
 
 </select>
 
 
-<select id="getPieChartData" resultType="map">
+<select id="getPieChartData" resultType="java.util.LinkedHashMap">
 
 select *
 from 
@@ -83,6 +84,26 @@ where rownum <7
         
 </select>
 
+
+<select id="getUserCount" resultType="java.util.LinkedHashMap">
+
+select to_char(login_time, 'yyyy-mm-dd') as day
+	, count(user_id) as userCount
+from user_history 
+group by to_char(login_time, 'yyyy-mm-dd')
+having to_char(login_time, 'yyyy-mm-dd') 
+in (to_char(sysdate, 'yyyy-mm-dd'), to_char(sysdate -1, 'yyyy-mm-dd')
+)
+order by day
+</select>
+
+<select id="getMonthlyUsers" resultType="java.util.LinkedHashMap">
+select to_char(login_time, 'yyyy-mm') as month
+, count(user_id) userCount
+from user_history 
+group by to_char(login_time, 'yyyy-mm')
+order by month
+</select>
 
 
 	

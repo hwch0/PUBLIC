@@ -193,7 +193,7 @@ const recvOrder = () => {
 		 $.each(order, function(index, detailOrder){
 			 console.log(detailOrder)
 			 $("#orderList").children().next()[0]
-			.prepend(`<p>${detailOrder.itemName}</p>`);
+			.append(`상품 이름 : ${detailOrder.itemName}`);
 		 });
 	  })
     })

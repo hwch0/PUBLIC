@@ -65,6 +65,7 @@ function showAlert(){
 		$(".wrap_alert").toggleClass('on');
 	}else{
 		$('.wrap_cont').toggleClass('lft');
+		$('.py-5').toggleClass('lft');
 		$(".wrap_alert").toggleClass('on');
 	}
 }
@@ -75,23 +76,21 @@ function showChat(){
 		$(".wrap_chat").toggleClass('on');
 	}else{
 		$('.wrap_cont').toggleClass("lft");
+		$('.py-5').toggleClass('lft');
 		$(".wrap_chat").toggleClass("on");
 	}
 }
 /* 아코디언 */
-let acc = document.querySelectorAll(".accordion");
-	for (let i = 0; i < acc.length; i++) {
-	  acc[i].addEventListener("click", function() {
-	    this.classList.toggle("active");
-	    var panel = this.nextElementSibling;
-	    if (panel.style.maxHeight){
-	      panel.style.maxHeight = null;
-	    } else {
-	      panel.style.maxHeight = panel.scrollHeight + "px";
-	    } 
-	  });
-	}
-	
+$(document).on("click", ".accordion", function() {
+  $(this).toggleClass("active");
+  var panel = $(this).next();
+
+  if (panel.css("max-height") !== "0px") {
+    panel.css("max-height", "0px");
+  } else {
+    panel.css("max-height", panel[0].scrollHeight + "px");
+  }
+});
 /* 탭 메뉴 */
 $(document).ready(function() {
   // 초기에 첫 번째 탭을 활성화

@@ -4,8 +4,6 @@
 
 <!-- #################### JS #################### -->
 <!-- ********** 공통 ********** -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
 <script src="/js/reference.js"></script>
 <!-- ********** 관리자 대시보드 ********** -->
 <script src="/js/admin.js"></script>
@@ -20,7 +18,7 @@
 
 
 <!-- ********** 관리자 메뉴판 관리 ********** -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
 
 
 <!-- ********** 채팅 ********** -->

@@ -184,10 +184,16 @@ const recvMessage = (recv) => {
 const recvOrder = () => {
 	ajaxResponse("GET", "/admin/getOrderList", null)
     .then(function (response) {
-		console.log(response.result)
-      $.each(response.result, function(index, order){
-		  $("#orderList").append(`<button class="accordion" data-paymentId="${}">${order.orderId}번 좌석 주문내역 : </button>`);
+      $.each(response.result, function(key, order){
+		 $("#orderList").prepend(
+			 `<button class="accordion" data-paymentId='${key}'>${order.orderId}번 좌석 주문내역 : </button>
+		 		<div class="panel">
+				<button>주문 확인</button>
+				</div>`);
 		 $.each(order, function(index, detailOrder){
+			 console.log(detailOrder)
+			 $("#orderList").children().next()[0]
+			.append(`상품 이름 : ${detailOrder.itemName}`);
 		 });
 	  })
     })

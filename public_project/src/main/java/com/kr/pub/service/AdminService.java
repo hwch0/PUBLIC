@@ -1,8 +1,11 @@
 package com.kr.pub.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,8 +64,54 @@ public class AdminService {
 		return menuDAO.deleteMenu(menu) != 0;
 	}
 
+
+	public Map<String, Object> getChartData() {
+		Map<String, Object> result = new HashMap<>();
+		List<Map<String, Object>> rawData = adminDAO.getChartData();
+		List<String> month = new ArrayList<>();
+		List<String> menu = new ArrayList<>();
+		List<String> pc = new ArrayList<>();
+		List<String> total = new ArrayList<>();
+		
+		for(Map<String, Object> data : rawData) {
+			month.add(data.get("PAYMENT_MONTH").toString());
+			menu.add(data.get("PT002").toString());
+			pc.add(data.get("PT001").toString());
+			total.add(data.get("TOTAL_SALES").toString());
+		};
+		
+		result.put("month", month);
+		result.put("menu", menu);
+		result.put("pc", pc);
+		result.put("total", total);
+		
+		return result;
+	}
 	public List<OrderListDTO> getOrderList() {
 		return orderDAO.getOrderList();
+	}
+	
+	public Map<String, Object> getPieChartData() {
+		Map<String, Object> result = new HashMap<>(); 
+		String[] typeList = {"year", "month" ,"day"};
+		
+		for(String type : typeList) {
+			Map<String, Object> dataList = new HashMap<>(); // 각 반복마다 초기화
+			List<String> top6Menu = new ArrayList<>();
+			List<String> top6Sales = new ArrayList<>();
+
+			List<Map<String, Object>> rawData = adminDAO.getPieChartData(type);
+			for(Map<String, Object> data : rawData) {
+				top6Menu.add(data.get("ITEM_NAME").toString());
+				top6Sales.add(data.get("TOTAL_COUNT").toString());
+				
+			};
+			dataList.put("top6Menu", top6Menu);
+			dataList.put("top6Sales", top6Sales);
+			result.put(type, dataList);
+		}
+		System.out.println("result >>>> " + result);
+		return result; // year -> ITEM_NAME, TOTAL_COUNT / month -> ITEM_NAME, TOTAL_COUNT / day -> ITEM_NAME, TOTAL_COUNT
 	}
 	
 }

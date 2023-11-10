@@ -53,7 +53,8 @@ function getNow() {
     		const message = $("#chatInputBox").val();
             mqttClient.publish(mqtt_topic+"chat", JSON.stringify({
             	type:'CHAT',
-            	sender : localStorage.getItem("seatNo")+"번 좌석",
+            	sender : localStorage.getItem("seatNo"),
+            	userId : localStorage.getItem("userId"),
             	receiver :"admin",
             	message:message
             	}));
@@ -106,12 +107,20 @@ function getNow() {
       
     $("#chatInputBox").on("keydown", e => {
     	  if (e.keyCode == 13) {
-    		  e.preventDefault();
-    		  sendMessage();
+			  e.preventDefault();
+			  if($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " "){
+				  sendMessage();
+			  }else{
+				  alert("메세지를 입력해 주세요")
+			  }
         }
     });
     $("#send_chat_button").on("click", e => {
-        sendMessage();
+        if($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " "){
+				  sendMessage();
+			  }else{
+				  alert("메세지를 입력해 주세요")
+			  }
     });
     $("#orderBtn").on("click", e => {
             mqttClient.publish("/public/order", JSON.stringify({

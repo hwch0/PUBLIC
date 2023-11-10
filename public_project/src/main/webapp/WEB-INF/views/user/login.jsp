@@ -238,6 +238,7 @@ document.querySelector("#login").addEventListener("click", e => {
 			if (json.rs != 0) {
 				location.href = "/user/main";
 				localStorage.setItem("userId", userId);//테스트용 userId저장
+				localStorage.setItem("seatNo", seatNo);//테스트용 userId저장
 			} else {
 				$('.login_content').css('display','none');
 				$('.payment_content').css('display','block');

@@ -110,7 +110,7 @@ public class UserController {
             map.put("rs", rs);
             map.put("message", "로그인 성공했습니다.");
 			List<UserDTO> loggedInUserList = (List<UserDTO>) app.getAttribute("loggedInUserList");//app영역에서 로그인되어있는 회원의 배열 가져오기
-            System.out.println("application=> " + loggedInUserList);
+            //System.out.println("application=> " + loggedInUserList);
             	if(loggedInUserList != null) {//로그인된 회원이 있을떄
             		if(!AppContextController.searchUser(loggedInUserList, rs)){//리스트에서 현재 로그인한 회원을 스트림으로 찾고 없다면
             				loggedInUserList.add(rs);//로그인유저 리스트에 추가
@@ -120,7 +120,7 @@ public class UserController {
             		loggedInUserList = new ArrayList<>();//현재 로그인한 회원이 아무도 없다면(배열이 null) 새로운 배열 객체 만들기
             		loggedInUserList.add(rs);//로그인 유저 리스트에 추가
             		app.setAttribute("loggedInUserList", loggedInUserList);//app영역에 update
-            		System.out.println("getapplication=>" + app.getAttribute("loggedInUserList"));
+            		//System.out.println("getapplication=>" + app.getAttribute("loggedInUserList"));
             	}
             	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
             	userService.loginSeat(rs);//random번 사용중으로 변경

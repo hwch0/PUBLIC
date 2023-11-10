@@ -17,15 +17,17 @@ import com.kr.pub.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	
-	@Autowired
-	private UserDAO userDAO;
+	//@Autowired
+	final private UserDAO userDAO;
 	
-	@Autowired
-	private UserService userService;
+	//@Autowired
+	final private UserService userService;
 	
 	@Override
     public void onAuthenticationSuccess(

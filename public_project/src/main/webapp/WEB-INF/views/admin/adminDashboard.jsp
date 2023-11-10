@@ -96,7 +96,7 @@
           <!-- small box -->
           <div class="small-box bg-info">
             <div class="inner">
-              <h3 class="data">150<span style="font-size:20px;"> 명</span></h3>
+              <h3 class="data lastdayUsers">150<span style="font-size:20px;"> 명</span></h3>
 
               <p>전일 사용자</p>
             </div>
@@ -111,7 +111,7 @@
 <!--           small box -->
           <div class="small-box bg-success">
             <div class="inner">
-              <h3 class="data">150<span style="font-size:20px;"> 명</span></h3>
+              <h3 class="data todayUsers">150<span style="font-size:20px;"> 명</span></h3>
 
               <p>금일 사용자</p>
             </div>

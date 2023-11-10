@@ -14,7 +14,12 @@
 			where user_id = #{userId}
 		]]>
 	</select>
-	
+	<select id="findByUserId" resultType="com.kr.pub.dto.UserDTO">
+		select 
+			*
+		from users
+		where user_id = #{userId} 
+	</select> 
 	<select id="login" resultType="com.kr.pub.dto.UserDTO">
 	    SELECT * FROM users WHERE user_id = #{userId} AND password = #{password}
 	</select>

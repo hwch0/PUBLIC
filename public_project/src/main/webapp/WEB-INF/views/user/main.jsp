@@ -62,7 +62,7 @@
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>
 <script>
 $('#logoutBtn').on('click', function(){
-	location.href = "/user/logout/"+localStorage.getItem("userId");
+	location.href = "/logout";
 });
 
 $(".nav-btn-wrap li").on('click', function(){

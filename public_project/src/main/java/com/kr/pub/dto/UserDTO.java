@@ -3,7 +3,11 @@ package com.kr.pub.dto;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +18,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
+	private Long id;
+	
 	private String userId;
 	private String password;
 	private String uname;
@@ -30,4 +36,12 @@ public class UserDTO {
 	
 	private int seatNo;
 	
+	// ENUM으로 안하고 ,로 해서 구분해서 ROLE을 입력 -> 그걸 파싱!!
+	// 예제 ROLL 값 : "ROLE_USER","ROLE_MANAGER","ROLE_ADMIN"  
+	public List<String> getRoleList() {
+	    if (this.roleId.length() > 0) {
+	        return Arrays.asList(this.roleId.split(","));
+	    }
+	    return new ArrayList<>();
+	}
 }

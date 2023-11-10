@@ -95,7 +95,11 @@ public class MqttConfig {
               String mqtt_receivedTopic = (String) messageHeaders.get("mqtt_receivedTopic");
 
               if (mqttService != null && StringUtils.startsWith(mqtt_receivedTopic, topic)) {
-              mqttService.execute(mqtt_receivedTopic, (String) message.getPayload());
+              try {
+				mqttService.execute(mqtt_receivedTopic, (String) message.getPayload());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
               }
           }
       };

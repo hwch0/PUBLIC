@@ -19,7 +19,7 @@
             </h2>
 			<div class="button-group">
 	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
-	            <button id="paymCheck">조회</button>
+	            <button id="paymCheck" onclick="salesSearch()">조회</button>
 	            <button id="Excel">엑셀</button>
 	        </div>
 		</div>
@@ -59,7 +59,7 @@
                     <tr>
                         <td class="tr_th">주문 전표</td>
                         <td style="padding: 0 30px;">
-                        	<input type="text" class="userName">                       	
+                        	<input type="text" class="orderCode">                       	
                         </td>
 
 
@@ -85,7 +85,7 @@
                     <th style="width: 130px;" class="sortable salesSortable" data-sort="주문전표">주문 전표</th>
                     <th style="width: 125px;" class="sortable salesSortable" data-sort="매출일자">매출 일자</th>
                     <th style="width: 110px;" class="sortable salesSortable" data-sort="회원이름">회원 이름</th>
-                    <th style="width: 98px;" class="sortable salesSortable" data-sort="구분 상태">구분 상태</th>
+                    <th style="width: 98px;">구분 상태</th>
                     <th style="width: 121px;" class="amount-cell">매출액</th>
                     <th style="width: 143px;" class="amount-cell">순이익</th>
                 </thead>
@@ -96,10 +96,20 @@
                    		<tr>
                    			<td>${paym['index']}</td>
                    			<td>${paym['paymentId']}</td>
-                   			<td>${paym['orderID']}</td>
+                   			<td>${paym['orderId']}</td>
                    			<td>${paym['paymentDate']}</td>
                    			<td>${paym['uname']}</td>
-                   			<td>${paym['type']}</td>
+                   			<c:choose>
+					            <c:when test="${paym['type'] == 'PC이용'}">
+					                <td style="color: #87CEEB">${paym['type']}</td>
+					            </c:when>
+					            <c:when test="${paym['type'] == '메뉴주문'}">
+					                <td style="color: #70594d">${paym['type']}</td>
+					            </c:when>
+					            <c:otherwise>
+					                <td style="color: black">${paym['type']}</td>
+					            </c:otherwise>
+					        </c:choose>
                    			<td>₩<fmt:formatNumber value="${paym['price']}" /></td>
                    			<td>₩<fmt:formatNumber value="${paym['netProfit']}" /></td>
                    		</tr>

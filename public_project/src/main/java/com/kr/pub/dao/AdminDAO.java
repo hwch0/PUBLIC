@@ -12,4 +12,8 @@ public interface AdminDAO {
 	
 	public List<Map<String, Object>> getPieChartData(String dateType);
 	
+	public List<Map<String, Object>> getUserCount();
+
+	public List<Map<String, Object>> getMonthlyUsers();
+	
 }

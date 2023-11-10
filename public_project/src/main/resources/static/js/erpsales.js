@@ -1,15 +1,139 @@
-//주문내역 상세 보기
-$(document).ready(function(){
-	$('#orderCode').click(function(){
-		const orderCode = $(this).text();
-		//const detailInfo = getOrderDetailInfo(orderCode);
-		
-		$('.detail').show();
-		
-		//패딩값 변경
-		$('.changePadding').css('padding', '0 15px');
-	})
-})
+// 주문내역 상세 보기
+function orderDetail(orderId) {
+    const orderData = {
+        orderId: orderId
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/erp/orderView',
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(orderData),
+        success: function(data) {
+			
+			$('#orderDetailTbody').empty();
+				
+				$.each(data.orderView, function(index, detail) {
+                    var row = '<tr>' +
+                        '<td>' + detail['index'] + '</td>' +
+                        '<td>' + detail['orderId'] + '</td>' +
+                        '<td>' + detail['orderDate'] + '</td>' +
+                        '<td>' + detail['uname'] + '</td>' +
+                        '<td>' + detail['itemName'] + '</td>' +
+                        '<td>' + detail['quantity'] + '</td>' +
+                        '<td>₩' + new Intl.NumberFormat().format(detail['paymentPrice']) + '</td>' +
+                        '<td>₩' + new Intl.NumberFormat().format(detail['price']) + '</td>' +
+                        '</tr>';
+                    $('#orderDetailTbody').append(row);
+                });
+                
+                $('.detail').css('display', 'block');
+                $('.changePadding').css('padding', '0 15px');
+        },
+    });
+}
+
+
+//주문내역 조회 조건
+function orderSearch(){
+	LoadingWithMask('/images/loading.gif');
+
+	const selectOrder = $('input[name="orderOption"]:checked').val();
+
+	const orderParam = {
+		startDate: $('#startDate2').val().replace(/\//g, '-'),
+		endDate: $('#endDate2').val().replace(/\//g, '-'),
+		orderId: $('.orderCodes').val(),
+		select: $('.orderSelect').val(),
+		code: selectOrder		
+	};
+	
+	$.ajax({
+		url: '/erp/orderSearch',
+		type: 'POST',
+		contentType: "application/json; charset=UTF-8",
+		data: JSON.stringify(orderParam),
+		success: function (data){
+
+			$('#orderTbody').empty();
+			
+			$.each(data.orderSearch, function(index, order){
+								
+			let row = '<tr>' +
+				'<td>' + (order['index'] || '') + '</td>' +
+		            '<td onclick="orderDetail(\'' + order['orderId'] + '\')" class="clickable-cell">' + order['orderId'] + '</td>' +
+		            '<td>' + order['orderDate'] + '</td>' +
+		            '<td>' + order['type'] + '</td>' +
+		            '<td>' + order['quantity'] + '</td>' +
+		            '<td>₩' + new Intl.NumberFormat().format(order['price']) + '</td>' +
+		            '<td>' + order['paymentMethod'] + '</td>' +
+		            '<td style="color: ' + (order['paymentStatus'] === '판매' ? 'blue' : order['paymentStatus'] === '주문취소' ? 'red' : 'black')
+		             + '">' + order['paymentStatus'] + '</td>' +
+		            '</tr>';
+				$('#orderTbody').append(row);
+			});
+		 },
+        error: function (error) {
+            console.error('Ajax 요청 중 오류 발생: ', error);
+        },
+        complete: function () {
+            closeLoadingWithMask();
+        }
+	});
+}
+
+//매출내역 조회 조건
+function salesSearch(){
+	LoadingWithMask('/images/loading.gif');
+
+	const salesParam = {
+		startDate: $('#startDate').val().replace(/\//g, '-'),
+		endDate: $('#endDate').val().replace(/\//g, '-'),
+		paymentId: $('.paymName').val(),
+		orderId: $('.orderCode').val(),
+		unme: $('.userName').val()		
+	};
+	
+	$.ajax({
+		url: '/erp/salesSearch',
+		type: 'POST',
+		contentType: "application/json; charset=UTF-8",
+		data: JSON.stringify(salesParam),
+		success: function (data){
+
+			$('#paymTbody').empty();
+			
+			$.each(data.salesSearch, function(index, sales){
+				let color;
+				if (sales['type'] === 'PC이용'){
+					color = '#87CEEB';
+				} else if (sales['type'] === '메뉴주문'){
+					color = '#70594d';
+				}else{
+					color = 'black';
+				}
+								
+		let row = '<tr>' +
+			'<td>' + (sales['index'] || '') + '</td>' +
+                    '<td>' + sales['paymentId'] + '</td>' +
+                    '<td>' + sales['orderId'] + '</td>' +
+                    '<td>' + sales['paymentDate'] + '</td>' +
+                    '<td>' + sales['uname'] + '</td>' +
+                    '<td style="color: ' + color + '">' + sales['type'] + '</td>' +
+                    '<td>₩' + new Intl.NumberFormat().format(sales['price']) + '</td>' +
+                    '<td>₩' + new Intl.NumberFormat().format(sales['netProfit']) + '</td>' +
+                    '</tr>';
+			
+				$('#paymTbody').append(row);
+			});
+		 },
+        error: function (error) {
+            console.error('Ajax 요청 중 오류 발생: ', error);
+        },
+        complete: function () {
+            closeLoadingWithMask();
+        }
+	});
+}
 
 //주문 내역 정렬
 $(document).ready(function () {
@@ -59,8 +183,6 @@ $(document).ready(function () {
 				}else{
 					return dateA.getDate() - dateB.getDate();
 				}
-            } else if (index === 5) { // 총 금액
-                return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
             }
@@ -120,8 +242,6 @@ $(document).ready(function () {
 				}else{
 					return dateA.getDate() - dateB.getDate();
 				}
-            } else if (index === 5 || index === 6 || index === 7) { // 이용금액, 부가상품매출, 총매출
-                return parseFloat(valA.replace('￦', '').replace(',', '')) - parseFloat(valB.replace('￦', '').replace(',', ''));
             } else {
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
             }

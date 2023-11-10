@@ -1,4 +1,4 @@
-//재고 상태 계산 및 표시
+//재고 상태 계산 및 표시 1
  function stockStatus(stock) {
         if (stock == null) {
             return '-';
@@ -10,7 +10,7 @@
             return '<span class="good">양호</span>';
          }
     }
-// 페이지가 로딩된 후 실행되는 부분
+// 페이지가 로딩된 후 실행되는 부분 2
     document.addEventListener('DOMContentLoaded', function () {
         var stockCells = document.querySelectorAll('.stockStatus');
         stockCells.forEach(function (cell) {

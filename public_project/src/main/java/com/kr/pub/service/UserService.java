@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,21 +24,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.kr.pub.controller.AppContextController;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.UserDTO;
+import com.kr.pub.exception.ExistMemberException;
 import com.kr.pub.util.TimeApi;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 	
-	@Autowired
-	private UserDAO userDAO;
-	@Autowired
-	private MqttService mqttService;
+//	@Autowired
+	final private UserDAO userDAO;
+//	@Autowired
+	final private MqttService mqttService;
 	@Autowired
 	private ServletContext app;
+//	@Autowired
+	final private PasswordEncoder passwordEncoder;
+	
 	
 	public UserDTO findByUserId(String userId) {
 		return userDAO.findByUserId(userId);
@@ -76,6 +84,31 @@ public class UserService {
         
         return rs;
     }
+	
+	public void insertMember(UserDTO user) throws Exception {
+		try {
+			if (user == null ||
+				Objects.isNull(user.getEmail())) {
+				throw new Exception("아이디는 필수 정보입니다");
+			} else if (Objects.isNull(user.getOauth()) && Objects.isNull(user.getPassword())) {
+				throw new Exception("비밀번호는 필수 정보입니다");
+			}
+			UserDTO existMember = userDAO.findByEmail(user.getEmail());
+			if (existMember != null && !Objects.isNull(user.getEmail())) {
+				throw new ExistMemberException(user.getEmail());
+			}
+			//비밀번호 암호화 한다
+			//비밀번호가 있을때만 암호화를 진행한다.
+			if(Objects.isNull(user.getOauth())) {
+				user.setPassword(passwordEncoder.encode(user.getPassword()));
+			}
+			userDAO.insertMember(user);
+			System.out.println(user);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
 	
 	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
 		Map<String, Object> map = new HashMap<>();

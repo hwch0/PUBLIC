@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kr.pub.dto.ChatDTO;
 import com.kr.pub.dto.UserDTO;
 
 import jakarta.servlet.ServletContext;
@@ -50,6 +51,14 @@ public class AppContextController {
 				    .findFirst();
 			if (optionalUser.isPresent()) {result.put("result", optionalUser.get());}
 		}
+		return result;
+	}
+	
+	@GetMapping("/getChatList")
+	@ResponseBody
+	public Map<String, List<ChatDTO>> getChatList(){
+		Map<String, List<ChatDTO>> result = new HashMap<>();
+		result.put("result", (List<ChatDTO>) app.getAttribute("chatList"));
 		return result;
 	}
  }

@@ -62,7 +62,7 @@
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>
 <script>
 $('#logoutBtn').on('click', function(){
-	location.href = "/user/logout/"+localStorage.getItem("userId");
+	location.href = "/logout";
 });
 
 $(".nav-btn-wrap li").on('click', function(){
@@ -143,12 +143,7 @@ window.onload = function () {
     var loggedInUserId = localStorage.getItem("userId"); 
     userIdElement.textContent = loggedInUserId;
 }
-/* $('#orderBtn').on('click', function(){
-	mqttClient.publish("/public/order", JSON.stringify({
-    	type:'ORDER',
-    	receiver :"admin",
-    	}));
-}) */
+
 
 </script>
 </html>

@@ -142,18 +142,18 @@
     <div class="login_content">
         <div class="id_pw_form">
             <h2>로그인</h2>
-            <form id="loginForm">
+            <form id="loginForm" method="post" action="/login" >
                 <div class="ipt ipt_id">
                     <label class="placeLabel">아이디</label>
                     <span></span>
-                    <input type="text" name="userId" id="userId" placeholder="아이디">
+                    <input type="text" name="username" id="userId" placeholder="아이디">
                 </div>
                 <div class="ipt ipt_pwd">
                     <label class="placeLabel">비밀번호</label>
                     <span></span>
                     <input type="password" name="password" id="password" placeholder="비밀번호">
                 </div>
-                <button class="btn login_btn" type="button" id="login">로그인</button>
+                <button class="btn login_btn" type="submit" id="login">로그인</button>
             </form>
             
             <div class="btn kakao_btn">
@@ -213,42 +213,10 @@
        <div class="canclePayment"><a>취소</a></div> 
     </div>
 </body>
-
 <script> 
 //로그인
-document.querySelector("#login").addEventListener("click", e => {
-	 const userId = $("#userId").val();
- 	 const password = $("#password").val();
-	 const param = {
-		userId: userId,
-		password: password
-	};
 
-	fetch('/user/login',{
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json; charset=UTF-8",
-		},
-		body: JSON.stringify(param),
-	})
-	.then((rs) => rs.json())
-	.then((json) =>{
-		alert(json.message);
-		if (json.rs != null) {
-			if (json.rs != 0) {
-				location.href = "/user/main";
-				localStorage.setItem("userId", userId);//테스트용 userId저장
-				localStorage.setItem("seatNo", seatNo);//테스트용 userId저장
-			} else {
-				$('.login_content').css('display','none');
-				$('.payment_content').css('display','block');
-				$('.getUserId').text(userId);
-			}	
-		}
-	});
-});
-
-//시간 충전
+// 시간 충전
 $('.li_paymethod li').on('click', function(e) {
     const userId = $('.getUserId').text();
     const chargeTime = $('#chargeTime').text();
@@ -256,28 +224,30 @@ $('.li_paymethod li').on('click', function(e) {
 
     const param = {
         userId: userId,
-        remainingTime: chargeTime,
+        remainingTime: chargeTime * 3600,
         paymentMethodCode: paymentMethodCode
     };
 
-    $.ajax({
-        type: 'POST',
-        url: '/user/chargeRemainingTime',
-        data: JSON.stringify(param),
-        contentType: 'application/json; charset=UTF-8',
-        success: function (json) {
-            if (json.success) {
-                alert('충전이 완료되었습니다!');
-            } else {
-                alert('결제가 정상적으로 이루어지지 않았습니다. 다시 시도해주세요.');
-            }
-            location.href = '/user/login';
+    fetch('/user/rechargeTime', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8",
         },
-        error: function () {
-            alert('서버 요청 중 오류가 발생했습니다.');
+        body: JSON.stringify(param),
+    })
+    .then((rs) => rs.json())
+    .then((json) =>{
+        if (json.rs == "success") {
+            alert('충전이 완료되었습니다!');
+            location.reload();
+        } else {
+            alert('결제가 정상적으로 이루어지지 않았습니다. 다시 시도해주세요.');
+            location.reload();
         }
     });
 });
+
+
 
 
 // 충전시간 조절

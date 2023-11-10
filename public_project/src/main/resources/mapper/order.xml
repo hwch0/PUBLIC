@@ -12,4 +12,79 @@
 		inner join item i on oh.item_id = i.item_id
 		where served = 'N' and p.Payment_id = 'P000006' and p.Payment_Type_code ='PT002'
 	</select>
+	
+	
+	<!-- 주문 내역 상세보기 -->
+	<select id="erpOrderView" resultType="java.util.Map">
+		SELECT
+		    o.ORDER_ID AS "orderId",
+		    TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') AS "orderDate",
+		    u.UNAME AS "uname",
+		    i.ITEM_NAME AS "itemName",
+		    oh.QUANTITY AS "quantity",
+		    i.SELLING_PRICE AS "paymentPrice",
+		    oh.PRICE AS "price"
+		FROM
+		    orders o
+		JOIN
+		    order_history oh ON o.ORDER_ID = oh.ORDER_ID
+		JOIN
+		    users u ON o.USER_ID = u.USER_ID
+		JOIN
+		    item i ON oh.ITEM_ID = i.ITEM_ID
+		where
+			o.ORDER_ID = #{orderId}
+		ORDER BY
+		    oh.PRICE DESC		
+	</select>
+	
+	
+	<!-- 주문 내역 리스트 -->
+	<select id="erpOrderList" resultType="java.util.Map">
+		SELECT 
+		    o.ORDER_ID AS "orderId",           
+		    TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') AS "orderDate",         
+		    cc_type.TYPE AS "type",            
+		    oh.QUANTITY AS "quantity",             
+		    oh.PRICE AS "price",                
+		    cc_method.TYPE AS "paymentMethod",      
+		    ct.TYPE AS "paymentStatus"              
+		FROM
+		    orders o
+		JOIN
+		   order_history oh ON o.ORDER_ID = oh.ORDER_ID
+		JOIN
+		    payment pm ON o.ORDER_ID = pm.ORDER_ID  
+		JOIN
+		    common_code cc_type ON pm.PAYMENT_TYPE_CODE = cc_type.CODE   
+		JOIN
+		    common_code cc_method ON pm.PAYMENT_METHOD_CODE = cc_method.CODE  
+		JOIN
+		    change_type ct ON o.CODE = ct.CODE
+		 WHERE
+	    1=1
+	    <!-- startDate, endDate -->
+	    <if test="startDate != null and startDate != ''">
+		     AND TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+		  </if>
+	    	<!-- orderCodes -->
+	   	<if test="orderId != null and orderId != '' ">
+	   		AND o.ORDER_ID = #{orderId}
+	   	</if>
+	   	<!-- orderSelect -->
+	   	<if test="paymentMethod != null and paymentMethod != '' ">
+	   		AND cc_method.TYPE = #{paymentMethod}
+	   	</if>
+
+	   	<!-- orderOption -->
+	   	 <if test="orderOption == 'PC이용'">
+	   	 	AND  cc_type.TYPE = 'PC이용'
+	   	 </if>
+	   	 <if test="orderOption == '메뉴주문'">
+	   	 	AND  cc_type.TYPE = '메뉴주문'
+	   	 </if>
+		ORDER BY
+		    o.ORDER_DATE DESC, o.ORDER_ID DESC
+	</select>
+	
 </mapper>

@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kr.pub.dto.SearchDTO;
-import com.kr.pub.dto.SearchDTO;
 import com.kr.pub.service.ErpService;
 
-import jakarta.servlet.http.HttpServletResponse;
+
 
 
 @Controller
@@ -28,18 +27,63 @@ public class ErpController {
 	@Autowired
 	private ErpService erpService;
 
+	//주문 상세보기
+	@PostMapping("/orderView")
+	@ResponseBody
+	public Map<String, Object> orderView(@RequestBody Map<String, Object> requestData) throws Exception{
+		Map<String, Object> orderView = new HashMap<>();
+		
+		String orderId = (String) requestData.get("orderId");
+		System.err.println("orderId확인: " + orderId);
+		
+		List<Map<String, Object>> orderResult = erpService.orderView(orderId);
+		
+		orderView.put("orderView", orderResult);
+		System.out.println("data확인: " + orderResult);
+		return orderView;
+	}
+	
+	//주문 내역 조회조건
+	@PostMapping("/orderSearch")
+	@ResponseBody
+	public Map<String, Object> orderSearch(@RequestBody SearchDTO search) throws Exception {
+		Map<String, Object> orderSearch = new HashMap<>();
+		
+		List<Map<String, Object>> orderResult = erpService.orderSearch(search);
+		
+		orderSearch.put("orderSearch", orderResult);
+		System.out.println("조건 Data확인: " + orderResult);
+		return orderSearch; 
+	}
+	
+	//매출 내역 조회조건
+	@PostMapping("/salesSearch")
+	@ResponseBody
+	public Map<String, Object> salesSearch(@RequestBody SearchDTO search) throws Exception{
+		Map<String, Object> salesSearch = new HashMap<>();
+		
+		List<Map<String, Object>> salesResult = erpService.salesSearch(search);
+		
+		salesSearch.put("salesSearch", salesResult);
+		System.out.println("조회 조건 Data확인: " + salesResult);
+		return salesSearch;
+	}
+	
 	//매출 내역, 주문 내역
 	@GetMapping("/sales")
 	public String sales(Model model) throws Exception {
 		
 		List<Map<String, Object>> paymentList = erpService.salesList();
+		List<Map<String, Object>> orderList = erpService.orderList();
 		
 		model.addAttribute("sales", paymentList);
-		System.out.println("data확인: " + paymentList);
+		model.addAttribute("order", orderList);
+		
+//		System.out.println("data확인: " + paymentList);
+//		System.out.println("data확인: " + orderList);
 		return "/reference/salesLayout";
 	}
 	
-
 	//입출고 조회
 	@PostMapping("/statusStatus")
 	@ResponseBody
@@ -49,7 +93,7 @@ public class ErpController {
 		List<Map<String, Object>> searchResult = erpService.statusSearch(search);
 		
 		statusSearch.put("statusSearch", searchResult);
-		System.out.println("조회 조건 Data확인: " + searchResult);
+//		System.out.println("조회 조건 Data확인: " + searchResult);
 		return statusSearch;
 	}
 	
@@ -62,7 +106,7 @@ public class ErpController {
 		List<Map<String, Object>> searchResults = erpService.itemSearch(search);
 		
 		itemSearch.put("itemsearch", searchResults);		
-		System.out.println("조회 조건 DATA확인: " + searchResults);
+//		System.out.println("조회 조건 DATA확인: " + searchResults);
 		
 		return itemSearch;
 	}

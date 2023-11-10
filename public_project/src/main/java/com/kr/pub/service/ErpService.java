@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dao.PaymentDAO;
-import com.kr.pub.dto.SearchDTO;
+import com.kr.pub.dto.ErpDTO;
 
 
 @Service
@@ -39,7 +39,7 @@ public class ErpService {
 	}
 	
 	//주문 내역 조회
-	public List<Map<String, Object>> orderSearch(SearchDTO search) throws Exception{
+	public List<Map<String, Object>> orderSearch(ErpDTO search) throws Exception{
 		Map<String, Object> params = new HashMap<>();
 		
 		params.put("startDate", search.getStartDate());
@@ -67,7 +67,7 @@ public class ErpService {
 	}
 	
 	//매출 내역 조회
-	public List<Map<String, Object>> salesSearch(SearchDTO search) throws Exception{
+	public List<Map<String, Object>> salesSearch(ErpDTO search) throws Exception{
 		Map<String, Object> params = new HashMap<>();
 		
 		params.put("startDate", search.getStartDate());
@@ -94,7 +94,7 @@ public class ErpService {
 	}
 	
 	//입출고 조회
-	public List<Map<String, Object>> statusSearch(SearchDTO search) throws Exception {
+	public List<Map<String, Object>> statusSearch(ErpDTO search) throws Exception {
 		Map<String, Object> params = new HashMap<>();
 		
 		params.put("startDate", search.getStartDate());
@@ -125,14 +125,17 @@ public class ErpService {
 	}
 		
 	//재고 조회
-	public List<Map<String, Object>> itemSearch(SearchDTO search) throws Exception {
+	public List<Map<String, Object>> itemSearch(ErpDTO erpDTO) throws Exception {
 		Map<String, Object> searchParams = new HashMap<>();
 		
-		searchParams.put("startDate", search.getStartDate());
-        searchParams.put("endDate", search.getEndDate());
-        searchParams.put("itemName", search.getName());
-        searchParams.put("itemSelect", search.getSelect());
-        searchParams.put("stockItem", search.getStock());
+//		searchParams.put("startNo", erpDTO.getStartNo());
+//		searchParams.put("endNo", erpDTO.getPageSize());	
+		
+		searchParams.put("startDate", erpDTO.getStartDate());
+        searchParams.put("endDate", erpDTO.getEndDate());
+        searchParams.put("itemName", erpDTO.getName());
+        searchParams.put("itemSelect", erpDTO.getSelect());
+        searchParams.put("stockItem", erpDTO.getStock());
 		
 		List<Map<String, Object>> itemList = itemDAO.itemList(searchParams);
         
@@ -143,13 +146,13 @@ public class ErpService {
 	
 	//재고 목록
 	public List<Map<String, Object>> itemList() throws Exception {
-		
+	
 		Map<String, Object> params = new HashMap<>();
-		
+
 		List<Map<String, Object>> itemList = itemDAO.itemList(params);
 
         indexList(itemList);
-        
+
             return itemList;      
     }
 	

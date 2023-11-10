@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kr.pub.dto.SearchDTO;
+import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.service.ErpService;
 
 
@@ -46,7 +46,7 @@ public class ErpController {
 	//주문 내역 조회조건
 	@PostMapping("/orderSearch")
 	@ResponseBody
-	public Map<String, Object> orderSearch(@RequestBody SearchDTO search) throws Exception {
+	public Map<String, Object> orderSearch(@RequestBody ErpDTO search) throws Exception {
 		Map<String, Object> orderSearch = new HashMap<>();
 		
 		List<Map<String, Object>> orderResult = erpService.orderSearch(search);
@@ -59,7 +59,7 @@ public class ErpController {
 	//매출 내역 조회조건
 	@PostMapping("/salesSearch")
 	@ResponseBody
-	public Map<String, Object> salesSearch(@RequestBody SearchDTO search) throws Exception{
+	public Map<String, Object> salesSearch(@RequestBody ErpDTO search) throws Exception{
 		Map<String, Object> salesSearch = new HashMap<>();
 		
 		List<Map<String, Object>> salesResult = erpService.salesSearch(search);
@@ -87,7 +87,7 @@ public class ErpController {
 	//입출고 조회
 	@PostMapping("/statusStatus")
 	@ResponseBody
-	public Map<String, Object> statusStatus(@RequestBody SearchDTO search)throws Exception{
+	public Map<String, Object> statusStatus(@RequestBody ErpDTO search)throws Exception{
 		Map<String, Object> statusSearch = new HashMap<>();
 		
 		List<Map<String, Object>> searchResult = erpService.statusSearch(search);
@@ -98,14 +98,14 @@ public class ErpController {
 	}
 	
 	//재고 조회 조건
-	@PostMapping("/search")
+	@RequestMapping("/search")
 	@ResponseBody
-	public Map<String, Object> itemSearch(@RequestBody SearchDTO search) throws Exception{
+	public Map<String, Object> itemSearch(@RequestBody ErpDTO search) throws Exception{
 		Map<String, Object> itemSearch = new HashMap<>();		
 		
 		List<Map<String, Object>> searchResults = erpService.itemSearch(search);
 		
-		itemSearch.put("itemsearch", searchResults);		
+		itemSearch.put("itemsearch", searchResults);
 //		System.out.println("조회 조건 DATA확인: " + searchResults);
 		
 		return itemSearch;
@@ -120,9 +120,22 @@ public class ErpController {
 		
 		model.addAttribute("stock", itemList);
 		model.addAttribute("status", statusList);
-//	    System.out.println("dateCheck: " + itemList);
+		
+	    System.out.println("dateCheck: " + itemList);
 		return "/reference/stockLayout";
 	}
+	
+//	@GetMapping("/stock")
+//	public String stockList(Model model, ErpDTO erpDTO)throws Exception{
+//		Map<String, Object> result = new HashMap<>();
+//		
+//		List<Map<String, Object>> stockResult = erpService.itemList(erpDTO);
+//
+//		result.put("stock", stockResult);
+//
+//		model.addAttribute("stock", erpService.itemList(erpDTO));
+//		return "/reference/stockLayout";
+//	}
 	
 	// 재고 목록 엑셀 DB 다운로드
 //	@GetMapping("/download")

@@ -1,3 +1,6 @@
+//품목 등록 모달창
+const stockModel = $("#stockModel");
+
 //재고 상태 계산 및 표시 1
  function stockStatus(stock) {
         if (stock == null) {

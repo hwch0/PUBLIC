@@ -20,6 +20,7 @@
 			<div class="button-group">
 	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
 	            <button class="check" id="itemCheck" onclick="searchData()">조회</button>
+	            <button class="insert" id="stockBtn">등록</button>
 	            <button id="Excel">
 					 <img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 엑셀
 				</button>
@@ -122,5 +123,16 @@
             </table>
         </div>
     </div>
+    
+    <div id="stockModel" class="model">
+    	<div class="model-content">
+    		<span class="close" id="closeModelBtn">&times;</span>
+    		
+    		<form name="stockForm" id="stockForm" method="multipart/form-data" style="width:100%; height:100%;">
+    			<div></div>
+    		</form>
+    	</div>
+    </div>
+    
 </body>
 </html>

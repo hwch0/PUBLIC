@@ -677,13 +677,15 @@
 .statusCode,
 .statusName,
 .userName,
-.orderName {
+.orderCode,
+.orderCodes {
 	height: 20px;
     width: 200px;
 }
 
 /*select*/
-.itemSelect {
+.itemSelect,
+.orderSelect {
 	width: 200px;
 }
 
@@ -765,11 +767,11 @@
 .orderScroll > tr > td:nth-child(1) { width: 45px; }
 .orderScroll > tr > td:nth-child(2) { width: 139px; }
 .orderScroll > tr > td:nth-child(3) { width: 141px; }
-.orderScroll > tr > td:nth-child(4) { width: 110px; }
-.orderScroll > tr > td:nth-child(5) { width: 100px; }
-.orderScroll > tr > td:nth-child(6) { width: 116px; }
+.orderScroll > tr > td:nth-child(4) { width: 125px; }
+.orderScroll > tr > td:nth-child(5) { width: 84px; }
+.orderScroll > tr > td:nth-child(6) { width: 140px; }
 .orderScroll > tr > td:nth-child(7) { width: 110px; }
-.orderScroll > tr > td:nth-child(8) { width: 101px; }
+.orderScroll > tr > td:nth-child(8) { width: 102px; }
 
 .orderDetailScroll > tr > td:nth-child(1) { width: 45px; }
 .orderDetailScroll > tr > td:nth-child(2) { width: 139px; }
@@ -798,7 +800,7 @@
 .orderDetailScroll > tr > td:nth-child(4) { width: 100px; }
 .orderDetailScroll > tr > td:nth-child(5) { width: 170px; }
 .orderDetailScroll > tr > td:nth-child(6) { width: 78px; }
-.orderDetailScroll > tr > td:nth-child(7) { width: 86px; }
+.orderDetailScroll > tr > td:nth-child(7) { width: 110px; }
 .orderDetailScroll > tr > td:nth-child(8) { width: 128px; }
 
 .orderDetailTbody .amount-cell {
@@ -906,4 +908,16 @@ span.orderDetail {
 }	
 .good {
     color: green;
+}
+
+/*주문내역 마우스 효과*/
+.clickable-cell {
+    cursor: pointer;
+    color: #000; 
+    text-decoration: none; 
+}
+
+.clickable-cell:hover {
+    color: #007bff; 
+    text-decoration: underline; 
 }

@@ -125,6 +125,16 @@ public class AdminController {
 		return result;
 	}
 	
+	@ResponseBody
+	@GetMapping("/chartMontlyUsers")
+	public void chartMontlyUsers() {
+		System.out.println("AdminController chartMontlyUsers");
+		System.out.println(">>>>>>>>>>>> " + adminService.getMonthlyUsers());;
+	}
+	
+	
+	
+	
 
 	@GetMapping("/getOrderList")
 	@ResponseBody
@@ -162,5 +172,23 @@ public class AdminController {
 		
 		return result;
 	}
+	
+	@ResponseBody
+	@GetMapping("/getUserCount")
+	public Map<String, Object> getUserCount() {
+		System.out.println("AdminController getUserCount");
+		Map<String, Object> result = new HashMap<>();
+		
+		Map<String, Object> data= adminService.getUserCount();
+		boolean status = data != null;
+		
+		result.put("status", status);
+		result.put("data", data);
+		System.out.println(">>>>>>>>>>>>>>>>>>> data : " + data);
+		
+		return result;
+	}
+	
+	
 
 }

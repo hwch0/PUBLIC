@@ -301,7 +301,24 @@ $(document).on("change", ".form-control", function(){
     /*
      * END INTERACTIVE CHART
      */
-	
+
+
+/****** 전일, 금일 이용자 수 (월별 매출) ******/
+const getUserCountUrl = "/admin/getUserCount";
+
+const lastdayUsers = $('.lastdayUsers');
+const todayUsers = $('.todayUsers');
+
+
+myFetch(getUserCountUrl, {method: "GET"}, response =>{
+		const lastDayUserCnt = response.data.lastday.USERCOUNT;
+		const todayUserCnt = response.data.today.USERCOUNT;
+		
+		console.log(lastDayUserCnt + " " +todayUserCnt);
+		
+		lastdayUsers.text(lastDayUserCnt + "명");
+		todayUsers.text(todayUserCnt + "명");
+})
 	
 	
 /****** 파이차트 (많이 팔린 메뉴 - 연, 월, 일) ******/
@@ -370,192 +387,167 @@ function createPieChart(chart, labels, data) {
 }
 
 
-/****** 스택 바 차트 (월별 매출) ******/
-	const url = "/admin/chartData";
-	const labels = [];
+/****** 스택 바 차트 (월별 매출), 라인 차트 (월별 이용자수) ******/
+const url = "/admin/chartData";
+const labels = [];
+
+const today = new Date();
+const thisMonth = today.getMonth(); // 0부터 시작 
+const lastMonthSalse = $('.lastMonthSalse');
+const thisMonthSalse = $('.thisMonthSalse');
+
+
+myFetch(url, {method: "GET"}, response =>{
+	const menuData = response.data.menu;
+	const pcData = response.data.pc;
+	const total = response.data.total;
+	const users = response.data.users;
 	
-	const today = new Date();
-	const thisMonth = today.getMonth(); // 0부터 시작 
-	const lastMonthSalse = $('.lastMonthSalse');
-	const thisMonthSalse = $('.thisMonthSalse');
-	
-	
-	myFetch(url, {method: "GET"}, response =>{
-		const menuData = response.data.menu;
-		const pcData = response.data.pc;
-		const total = response.data.total;
-		
-		/*console.log("지난달 매출" +  menuData);
-		console.log("이번달 매출" +  pcData);
-		console.log("지난달 매출" +  total[thisMonth -1]);
-		console.log("이번달 매출" +  total[thisMonth]);*/
-		lastMonthSalse.text(Number(total[thisMonth -1]).toLocaleString('ko-KR') + "원");
-		thisMonthSalse.text(Number(total[thisMonth]).toLocaleString('ko-KR') + "원");
+	/*console.log("지난달 매출" +  menuData);
+	console.log("이번달 매출" +  pcData);
+	console.log("지난달 매출" +  total[thisMonth -1]);
+	console.log("이번달 매출" +  total[thisMonth]);*/
+	lastMonthSalse.text(Number(total[thisMonth -1]).toLocaleString('ko-KR') + "원");
+	thisMonthSalse.text(Number(total[thisMonth]).toLocaleString('ko-KR') + "원");
 
-        //---------------------
-        //- STACKED BAR CHART -
-        //---------------------
+    //---------------------
+    //- STACKED BAR CHART -
+    //---------------------
 
-        var stackedChartData = {
-          labels: [
-            "Jan", "Feb", "Mar","Apr", "May", "Jun"
-            , "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-          ],
+    var stackedChartData = {
+      labels: [
+        "Jan", "Feb", "Mar","Apr", "May", "Jun"
+        , "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+      ],
 
-          datasets: [
-            {
-              label: "음식 판매",
-              backgroundColor: "rgba(60,141,188,0.9)",
-              borderColor: "rgba(60,141,188,0.8)",
-              pointRadius: false,
-              pointColor: "#3b8bba",
-              pointStrokeColor: "rgba(60,141,188,1)",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(60,141,188,1)",
-              /* data: [28, 48, 40, 19, 24, 27, 30, 20, 15, 23, 31, 35], */
-              data: menuData,
-            },
-            {
-              label: "PC방 이용",
-              backgroundColor: "rgba(210, 214, 222, 1)",
-              borderColor: "rgba(210, 214, 222, 1)",
-              pointRadius: false,
-              pointColor: "rgba(210, 214, 222, 1)",
-              pointStrokeColor: "#c1c7d1",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(220,220,220,1)",
-              /* data: [65, 59, 80, 81, 56, 55, 40, 90, 60, 57, 76, 83], */
-              data: pcData,
-            },
-          ],
-        };
+      datasets: [
+        {
+          label: "음식 판매",
+          backgroundColor: "rgba(60,141,188,0.9)",
+          borderColor: "rgba(60,141,188,0.8)",
+          pointRadius: false,
+          pointColor: "#3b8bba",
+          pointStrokeColor: "rgba(60,141,188,1)",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(60,141,188,1)",
+          /* data: [28, 48, 40, 19, 24, 27, 30, 20, 15, 23, 31, 35], */
+          data: menuData,
+        },
+        {
+          label: "PC방 이용",
+          backgroundColor: "rgba(210, 214, 222, 1)",
+          borderColor: "rgba(210, 214, 222, 1)",
+          pointRadius: false,
+          pointColor: "rgba(210, 214, 222, 1)",
+          pointStrokeColor: "#c1c7d1",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(220,220,220,1)",
+          /* data: [65, 59, 80, 81, 56, 55, 40, 90, 60, 57, 76, 83], */
+          data: pcData,
+        },
+      ],
+    };
 
-        var barChartData = $.extend(true, {}, stackedChartData);
-        var temp0 = stackedChartData.datasets[0];
-        var temp1 = stackedChartData.datasets[1];
-        barChartData.datasets[0] = temp1;
-        barChartData.datasets[1] = temp0;
+    var barChartData = $.extend(true, {}, stackedChartData);
+    var temp0 = stackedChartData.datasets[0];
+    var temp1 = stackedChartData.datasets[1];
+    barChartData.datasets[0] = temp1;
+    barChartData.datasets[1] = temp0;
 
-        var stackedBarChartCanvas = $("#stackedBarChart")
-          .get(0)
-          .getContext("2d");
-        var stackedBarChartData = $.extend(true, {}, barChartData);
+    var stackedBarChartCanvas = $("#stackedBarChart")
+      .get(0)
+      .getContext("2d");
+    var stackedBarChartData = $.extend(true, {}, barChartData);
 
-        var stackedBarChartOptions = {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            xAxes: [
-              {
-                stacked: true,
-              },
-            ],
-            yAxes: [
-              {
-                stacked: true,
-              },
-            ],
-          },
-        };
-
-        new Chart(stackedBarChartCanvas, {
-          type: "bar",
-          data: stackedBarChartData,
-          options: stackedBarChartOptions,
-        });
-
-        var lineChartData = {
-          labels: [
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-            20, 21, 22, 23, 24,
-          ],
-
-          datasets: [
-            {
-              label: "이용자수",
-              backgroundColor: "rgba(60,141,188,0.9)",
-              borderColor: "rgba(60,141,188,0.8)",
-              pointRadius: false,
-              pointColor: "#3b8bba",
-              pointStrokeColor: "rgba(60,141,188,1)",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(60,141,188,1)",
-              data: [
-                28, 48, 40, 19, 24, 27, 30, 20, 15, 23, 31, 35, 28, 48, 40, 19,
-                24, 27, 30, 20, 15, 23, 31, 35,
-              ],
-            },
-          ],
-        };
-
-        var lineChartDataOptions = {
-          maintainAspectRatio: false,
-          responsive: true,
-          legend: {
-            display: false,
-          },
-          scales: {
-            xAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-              },
-            ],
-          },
-        };
-
-        //-------------
-        //- LINE CHART -
-        //--------------
-        var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
-        var lineChartOptions = $.extend(true, {}, lineChartDataOptions);
-        var lineChartData = $.extend(true, {}, lineChartData);
-        lineChartData.datasets[0].fill = false;
-        // lineChartData.datasets[1].fill = false;
-        lineChartOptions.datasetFill = false;
-
-        //var lineChart = new Chart(lineChartCanvas, {
-        new Chart(lineChartCanvas, {
-          type: "line",
-          data: lineChartData,
-          options: lineChartOptions,
-        });
-
-        // Sample data for demonstration
-        const data = [
+    var stackedBarChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [
           {
-            orderID: "OR9842",
-            item: "Call of Duty IV",
-            status: "Shipped",
-            popularity: "90,80,90,-70,61,-83,63",
+            stacked: true,
           },
+        ],
+        yAxes: [
           {
-            orderID: "OR1848",
-            item: "Samsung Smart TV",
-            status: "Pending",
-            popularity: "90,80,-90,70,61,-83,68",
+            stacked: true,
           },
+        ],
+      },
+    };
+
+    new Chart(stackedBarChartCanvas, {
+      type: "bar",
+      data: stackedBarChartData,
+      options: stackedBarChartOptions,
+    });
+    
+    
+
+    //-------------
+    //- LINE CHART -
+    //--------------
+
+    var lineChartData = {
+      labels: [
+        "Jan", "Feb", "Mar","Apr", "May", "Jun"
+        , "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+      ],
+
+      datasets: [
+        {
+          label: "이용자수",
+          backgroundColor: "rgba(60,141,188,0.9)",
+          borderColor: "rgba(60,141,188,0.8)",
+          pointRadius: false,
+          pointColor: "#3b8bba",
+          pointStrokeColor: "rgba(60,141,188,1)",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(60,141,188,1)",
+          /*data: [
+            28, 48, 40, 19, 24, 27, 30, 20, 15, 23, 31, 35, 28, 48, 40, 19,
+            24, 27, 30, 20, 15, 23, 31, 35,
+          ],*/
+          data: users,
+        },
+      ],
+    };
+
+    var lineChartDataOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+      legend: {
+        display: false,
+      },
+      scales: {
+        xAxes: [
           {
-            orderID: "OR7429",
-            item: "iPhone 6 Plus",
-            status: "Delivered",
-            popularity: "90,-80,90,70,-61,83,63",
+            gridLines: {
+              display: false,
+            },
           },
-          // Add more data items here
-        ];
-	}) 
-	
-	
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+      },
+    };
 
+    var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
+    var lineChartOptions = $.extend(true, {}, lineChartDataOptions);
+    var lineChartData = $.extend(true, {}, lineChartData);
+    lineChartData.datasets[0].fill = false;
+    lineChartOptions.datasetFill = false;
 
+    new Chart(lineChartCanvas, {
+      type: "line",
+      data: lineChartData,
+      options: lineChartOptions,
+    });
+}) 
 
 	
-/*})*/

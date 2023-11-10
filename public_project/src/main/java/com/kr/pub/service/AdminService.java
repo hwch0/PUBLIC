@@ -72,6 +72,9 @@ public class AdminService {
 		List<String> menu = new ArrayList<>();
 		List<String> pc = new ArrayList<>();
 		List<String> total = new ArrayList<>();
+		List<String> users = new ArrayList<>();
+		
+		List<Map<String, Object>> rawData2 = adminDAO.getMonthlyUsers();
 		
 		for(Map<String, Object> data : rawData) {
 			month.add(data.get("PAYMENT_MONTH").toString());
@@ -80,13 +83,26 @@ public class AdminService {
 			total.add(data.get("TOTAL_SALES").toString());
 		};
 		
+		for(Map<String, Object> data : rawData2) {
+			users.add(data.get("USERCOUNT").toString());
+		};
+		
 		result.put("month", month);
 		result.put("menu", menu);
 		result.put("pc", pc);
 		result.put("total", total);
+		result.put("users", users);
+		
+		System.out.println("result >>> " +  result);
 		
 		return result;
 	}
+	
+	
+	public List<Map<String, Object>> getMonthlyUsers() {
+		return adminDAO.getMonthlyUsers();
+	}
+	
 	public List<OrderListDTO> getOrderList() {
 		return orderDAO.getOrderList();
 	}
@@ -112,6 +128,18 @@ public class AdminService {
 		}
 		System.out.println("result >>>> " + result);
 		return result; // year -> ITEM_NAME, TOTAL_COUNT / month -> ITEM_NAME, TOTAL_COUNT / day -> ITEM_NAME, TOTAL_COUNT
+	}
+	
+	
+	public Map<String, Object> getUserCount() {
+		Map<String, Object> result = new HashMap<>(); 
+		//[{DAY=2023-11-09, USERCOUNT=1}, {DAY=2023-11-10, USERCOUNT=1}]
+		List<Map<String, Object>> dataMap = adminDAO.getUserCount();
+		
+		result.put("lastday", dataMap.get(0));
+		result.put("today", dataMap.get(1));
+		
+		return result;
 	}
 	
 }

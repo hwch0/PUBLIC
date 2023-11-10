@@ -97,5 +97,5 @@ public class UserController {
 		 * 최근인 데이터들만 가져와서 뷰단에 동적으로 출력 
 		 * */
 		
-    
+
 }

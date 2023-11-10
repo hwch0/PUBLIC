@@ -173,7 +173,7 @@ const recvMessage = (recv) => {
 	`<li class="you">
 		<div class="entete">
 			<p>${getNow()}</p>
-			<h2>${recv.sender}</h2>
+			<h2>${recv.sender}번 좌석(${recv.userId})</h2>
 			</div>
 			<div class="triangle"></div>
 			<div class="message">${recv.message}</div>
@@ -182,36 +182,47 @@ const recvMessage = (recv) => {
   $("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
 };
 const recvOrder = () => {
-	ajaxResponse("GET", "/admin/getOrderList", null)
+	ajaxResponse("GET", "/admin/getOrderList")
     .then(function (response) {
+	  var priceList = [];
+	  var sum = 0;
       $.each(response.result, function(key, order){
+		 var seatNo = $("li.on .uid:contains('" + order[0].userId + "')").parent().find('em').text();
 		 $("#orderList").prepend(
-			 `<button class="accordion" data-paymentId='${key}'>${order.orderId}번 좌석 주문내역 : </button>
-		 		<div class="panel">
-				<button>주문 확인</button>
-				</div>`);
+			 `<button class="accordion" data-paymentId='${key}'>${seatNo}번 좌석 주문</button>
+		 		<div class="panel"></div>`);
 		 $.each(order, function(index, detailOrder){
-			 console.log(detailOrder)
-			 $("#orderList").children().next()[0]
-			.append(`상품 이름 : ${detailOrder.itemName}`);
+			 $("#orderList").children().next().first()
+			.append(
+				`<p>상품 이름 : ${detailOrder.itemName}</p>
+				<p>상품 가격 : ${detailOrder.sellingPrice}</p>
+				<p>수량 : ${detailOrder.quantity}</p>`
+				);
+				priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
 		 });
-	  })
-    })
-    /*.catch(function (error) {
-      console.error("주문 정보 가져오는중 에러 발생: " + error);
-    });*/
-  //console.log(recv);
-  /*$("#orderList").append(
-	  `<button class="accordion">${recv.sender}번 좌석 주문내역 : ${recv.orderList}</button>
-				<div class="panel">
-					<p>${recv.orderList}</p>
-					<button>주문 확인</button>
-				</div>`
-  );*/
+		 $.each(priceList, function(index, price){
+			 sum = sum+price
+		 })
+		  $("#orderList").children().next().first()
+			.append(`
+			<p>주문 일시 : ${getNow()}</p>
+			<p>총 금액 : ${sum}</p>
+			<button class="served">주문 확인</button>
+			`);
+	  });
+    });
 }; //주문리스트 받기
 
+$('#orderList').on('click', '.served', function(e) {
+	console.log($(e.currentTarget).parent().prev());
+	$(e.currentTarget).parent().prev().remove();
+	$(e.currentTarget).parent().remove();
+	//DB에 Orders 테이블 served를 Y로 바꾸는 로직 들어가야함
+});
+
+
 const recvLogin = () => {
-  ajaxResponse("GET", "/loggedInUserList", null)
+  ajaxResponse("GET", "/loggedInUserList")
     .then(function (response) {
       console.log(response.result);
       $.each(response.result, function (index, user) {
@@ -283,15 +294,23 @@ mqttClient.on("message", function (topic, message) {
     recvLogout(data);
   } else if(data.receiver === "admin" && data.type === "ORDER"){
     recvOrder(data);
-  }
+  }//충전시 잔여시간 변경 기능 추가
 });
 
-$("#chatInputBox").on("keydown", (e) => {
-  if (e.keyCode == 13) {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-$("#send_chat_button").on("click", (e) => {
-  sendMessage();
-});
+ $("#chatInputBox").on("keydown", e => {
+    	  if (e.keyCode == 13) {
+			  e.preventDefault();
+			  if($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " "){
+				  sendMessage();
+			  }else{
+				  alert("메세지를 입력해 주세요")
+			  }
+        }
+    });
+    $("#send_chat_button").on("click", e => {
+        if($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " "){
+				  sendMessage();
+			  }else{
+				  alert("메세지를 입력해 주세요")
+			  }
+    });

@@ -54,11 +54,11 @@
 }
 #chatList .you .triangle{
 		border-color: transparent transparent #450877 transparent;
-		margin-left:15px;
+		margin-left:4px;
 }
 #chatList .me .triangle{
 		border-color: transparent transparent #ddd transparent;
-		margin-left:300px;
+		margin-left:318px;
 }
 
 .wrap_chat_main footer{

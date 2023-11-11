@@ -117,6 +117,7 @@ function updateRemainingTime() {
 	ajaxResponse('POST', '/getUserById', data)
 		.then(function(response) {			
 			var userInfo = response.result;
+			console.log(userInfo)
 			localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
 			var remainingTime = userInfo.remainingTime;
 			if (remainingTime >= 0) {
@@ -130,9 +131,9 @@ function updateRemainingTime() {
         		   location.href = "/user";
 		    } 
 		})
-		.catch(function(error) {
+	/* 	.catch(function(error) {
 			console.error("로그인 정보 가져오는중 에러 발생: " + error);
-		});
+		}); */
 
 }
 

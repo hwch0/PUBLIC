@@ -30,4 +30,8 @@ public interface UserDAO {
 	public void logoutSeat(UserDTO user);
 
 	public UserDTO findByUserId(String userId);
+
+	public UserDTO findByEmail(String email);
+
+	public void insertMember(UserDTO user);
 }

@@ -50,13 +50,18 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		     if (role.getAuthority().contains("RT004")) {
 		    	 url = "/admin";
 		     } else if (role.getAuthority().contains("RT001")) {
-		    	 try {
-					userService.login2(userInfo, request, response);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    	url = "/user/main";
+			    if(userInfo.getRemainingTime() > 0) {	
+		    	 	try {
+						userService.login2(userInfo, request, response);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			    	url = "/user/main";
+			    } else {
+			    	System.out.println("잔여시간 없음");
+			    	url ="/recharge";
+			    }
 		     } else {
 		    	 url = "/";
 		     }

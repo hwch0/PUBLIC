@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.kr.pub.controller.AppContextController;
+import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dao.UserDAO;
+import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.exception.ExistMemberException;
 import com.kr.pub.util.TimeApi;
@@ -39,14 +41,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 	
-//	@Autowired
-	final private UserDAO userDAO;
-//	@Autowired
-	final private MqttService mqttService;
+	@Autowired
+	private UserDAO userDAO;
+	@Autowired
+	private MenuDAO menuDAO;
+	@Autowired
+	private MqttService mqttService;
 	@Autowired
 	private ServletContext app;
-//	@Autowired
-	final private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	
 	public UserDTO findByUserId(String userId) {
@@ -230,5 +234,24 @@ public class UserService {
 	    }
 
 	    return; // 로그인 페이지로 리다이렉트
+	}
+	
+	public int rechargeTime(UserDTO user) {
+	    int remainingTime = userDAO.getRemainingTime(user); 
+	    int rechargeTime = user.getRemainingTime(); 
+	    
+	    remainingTime += rechargeTime; 
+        user.setRemainingTime(remainingTime);
+        userDAO.updateRemainingTime(user); 
+        
+	    if (rechargeTime > 0) { 
+	        return 1; 
+	    } else {
+	        return 0; 
+	    }
+	}
+
+	public List<MenuDTO> getMenuList() {
+		return menuDAO.getMenuList();
 	}
 }

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+   pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,53 +11,54 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 <body>
-	<div class="body-wrap">
-		<div class="cont-top-wrap">
-			<div class="cont-header">
-				<span></span>
-				<p>PUBLIC</p>
-			</div>
-			<div class="seat-wrap">	
-				<h4>
-					NO.
-					<span id="seatNum">06</span>
-				</h4>
-				<div class="seat-btn">
-					<ul>
-						<li><a href="javascript:void(0);">자리이동</a></li>
-						<li id="logoutBtn"><a href="javascript:void(0);">사용 종료</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="info-wrap">
-				<em id="userId">user1</em> 님
-			</div>
-			<div class="time-wrap">
-				<p id="remainingTime">0</p>
-			</div>
-			<div class="nav-btn-wrap">
-				<ul>
-					<li id ="orderBtn"><a href="javascript:void(0);">주문</a></li>
-					<li><a href="javascript:void(0);">충전</a></li>
-					<li><a href="javascript:void(0);">채팅</a></li>
-				</ul>
-			</div>
-		</div>
-		<div class="cont-bot-wrap">
-			<div class="chat-wrap">
-				<div class="wrap_chat">
-					<div class="wrap_chat_main">
-						<ul id="chatList">
-						</ul>
-						<footer>
-							<textarea placeholder="Type your message" id="chatInputBox"></textarea>
-							<a href="javascript:void(0);" id="send_chat_button">Send</a>
-						</footer>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+<input type="hidden" id="userInfo" value="${map.rs}">
+   <div class="body-wrap">
+      <div class="cont-top-wrap">
+         <div class="cont-header">
+            <span></span>
+            <p>PUBLIC</p>
+         </div>
+         <div class="seat-wrap">   
+            <h4>
+               NO.
+               <span id="seatNum">06</span>
+            </h4>
+            <div class="seat-btn">
+               <ul>
+                  <li><a href="javascript:void(0);">자리이동</a></li>
+                  <li id="logoutBtn"><a href="javascript:void(0);">사용 종료</a></li>
+               </ul>
+            </div>
+         </div>
+         <div class="info-wrap">
+            <em id="userId">user1</em> 님
+         </div>
+         <div class="time-wrap">
+            <p id="remainingTime">0</p>
+         </div>
+         <div class="nav-btn-wrap">
+            <ul>
+               <li id ="orderBtn"><a href="javascript:void(0);">주문</a></li>
+               <li><a href="javascript:void(0);">충전</a></li>
+               <li><a href="javascript:void(0);">채팅</a></li>
+            </ul>
+         </div>
+      </div>
+      <div class="cont-bot-wrap">
+         <div class="chat-wrap">
+            <div class="wrap_chat">
+               <div class="wrap_chat_main">
+                  <ul id="chatList">
+                  </ul>
+                  <footer>
+                     <textarea placeholder="Type your message" id="chatInputBox"></textarea>
+                     <a href="javascript:void(0);" id="send_chat_button">Send</a>
+                  </footer>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 </body>
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>
 <script>
@@ -107,40 +108,60 @@ function updateCountdown(remainingTime) {
         }, 1000);
     } else if (remainingTime <= 300 && remainingTime > 0) {
         remainingTimeElement.style.color = "red";
-	}else {
+   }else {
         location.href = "/user/logout/"+localStorage.getItem("userId");
     }
 }
 
-function updateRemainingTime() {
-	const data = {userId : localStorage.getItem("userId")}; //JWT 토큰 구현 이후 userID가져와야함
-	ajaxResponse('POST', '/getUserById', data)
-		.then(function(response) {			
-			var userInfo = response.result;
-			localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
-			var remainingTime = userInfo.remainingTime;
-			if (remainingTime >= 0) {
-		        var now = new Date().getTime();
-		        var loginTime = new Date(userInfo.loginTime).getTime();
-		        var durationTime = now - loginTime;
-		        remainingTime = remainingTime - Math.floor(durationTime / 1000);
-		        updateCountdown(remainingTime);
-		    } else {
-		       alert("잔여시간이 없습니다.")
-        		   location.href = "/user";
-		    } 
-		})
-		.catch(function(error) {
-			console.error("로그인 정보 가져오는중 에러 발생: " + error);
-		});
-
+function updateRemainingTime(userIdValue) {
+   const data = {userId : userIdValue}; //JWT 토큰 구현 이후 userID가져와야함
+   ajaxResponse('POST', '/getUserById', data)
+      .then(function(response) {         
+         var userInfo = response.result;
+         localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
+         var remainingTime = userInfo.remainingTime;
+         if (remainingTime >= 0) {
+              var now = new Date().getTime();
+              var loginTime = new Date(userInfo.loginTime).getTime();
+              var durationTime = now - loginTime;
+              remainingTime = remainingTime - Math.floor(durationTime / 1000);
+              updateCountdown(remainingTime);
+          } else {
+             alert("잔여시간이 없습니다.")
+                 location.href = "/user";
+          } 
+      })
+      .catch(function(error) {
+         console.error("로그인 정보 가져오는중 에러 발생: " + error);
+      });
 }
 
 window.onload = function () {
-    updateRemainingTime();
+	const userInfoData = $('#userInfo').val();
+	
+	// 쿠키에서 모든 쿠키를 가져옵니다.
+	var allCookies = document.cookie;
+
+	// 각 쿠키를 분리합니다.
+	var cookiesArray = allCookies.split(';');
+
+	// userId 쿠키를 찾습니다.
+	var userIdCookie = cookiesArray.find(function(cookie) {
+	    return cookie.trim().startsWith('userId=');
+	});
+
+	// userId 쿠키에서 값만 추출합니다.
+	var userIdValue = userIdCookie ? userIdCookie.split('=')[1] : null;
+
+	// userId 값을 출력합니다.
+	console.log('userId 값:', userIdValue);
+
+	
+    updateRemainingTime(userIdValue);
     
     var userIdElement = document.getElementById("userId");
-    var loggedInUserId = localStorage.getItem("userId"); 
+    //var loggedInUserId = localStorage.getItem("userId"); 
+    var loggedInUserId = userIdValue; 
     userIdElement.textContent = loggedInUserId;
 }
 

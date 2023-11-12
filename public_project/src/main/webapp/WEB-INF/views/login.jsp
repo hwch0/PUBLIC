@@ -143,6 +143,8 @@
         <div class="id_pw_form">
             <h2>로그인</h2>
             <form id="loginForm" method="post" action="/login" >
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            
                 <div class="ipt ipt_id">
                     <label class="placeLabel">아이디</label>
                     <span></span>

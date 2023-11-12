@@ -48,4 +48,18 @@
 		WHERE seat_no = #{seatNo}
 	</update>
 	
+	<insert id="insertUserHistory">
+	insert into user_history(seat_no, user_id, login_time, logout_time) 
+	values(#{seatNo}, #{userId}, #{loginTime}, #{logoutTime} )
+	</insert>
+	<update id="updateUserHistory">
+	update user_history
+	set logout_time = #{logoutTime} 
+	where history_id = (
+		select history_id
+		from user_history 
+		where login_time = (select max(login_time) recent_time from user_history where user_id = #{userId})
+	)
+	</update>
+	
 </mapper>

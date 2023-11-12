@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -132,9 +134,6 @@ public class AdminController {
 		System.out.println(">>>>>>>>>>>> " + adminService.getMonthlyUsers());;
 	}
 	
-	
-	
-	
 
 	@GetMapping("/getOrderList")
 	@ResponseBody
@@ -178,15 +177,27 @@ public class AdminController {
 	public Map<String, Object> getUserCount() {
 		System.out.println("AdminController getUserCount");
 		Map<String, Object> result = new HashMap<>();
-		
 		Map<String, Object> data= adminService.getUserCount();
+		boolean status = data != null;
+		result.put("status", status);
+		result.put("data", data);
+		return result;
+	}
+
+	@Scheduled(cron = "0 0 * * * *")
+	@ResponseBody
+	@GetMapping("/getHourlyUsers")
+	public Map<String, Object> getHourlyUsers() {
+		System.out.println("AdminController getHourlyUsers");
+		Map<String, Object> result = new HashMap<>();
+		
+		Map<String, Object> data = adminService.getHourlyUsers();
 		boolean status = data != null;
 		
 		result.put("status", status);
 		result.put("data", data);
-		System.out.println(">>>>>>>>>>>>>>>>>>> data : " + data);
-		
 		return result;
+		
 	}
 	
 	

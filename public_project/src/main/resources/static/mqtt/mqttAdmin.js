@@ -290,6 +290,7 @@ mqttClient.on("message", function (topic, message) {
     recvMessage(data);
   } else if (data.receiver === "admin" && data.type === "LOGIN") {
     recvLogin(data);
+    incUsersNumber(data);
   } else if (data.receiver === "admin" && data.type === "LOGOUT") {
     recvLogout(data);
   } else if(data.receiver === "admin" && data.type === "ORDER"){
@@ -314,3 +315,10 @@ mqttClient.on("message", function (topic, message) {
 				  alert("메세지를 입력해 주세요")
 			  }
     });
+
+// 로그인 시 금일 이용자수 1씩 증가
+function incUsersNumber() {
+	const todayUsers = $('.todayUsers');
+	todayUsers.text(Number(todayUsers.text()) + 1);
+	console.log("증가 후 : "+ todayUsers.text());
+}

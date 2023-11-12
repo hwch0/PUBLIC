@@ -34,4 +34,8 @@ public interface UserDAO {
 	public UserDTO findByEmail(String email);
 
 	public void insertMember(UserDTO user);
+	
+	public void insertUserHistory(UserDTO user);
+	
+	public void updateUserHistory(UserDTO user);
 }

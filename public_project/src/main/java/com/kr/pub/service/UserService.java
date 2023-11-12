@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,9 @@ import com.kr.pub.exception.ExistMemberException;
 import com.kr.pub.util.TimeApi;
 
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 
@@ -79,6 +82,7 @@ public class UserService {
                 int randomNumber = random.nextInt(50) + 1;
                 rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
                 updateLoginTime(rs);
+                userDAO.insertUserHistory(rs);
             }
         }
         
@@ -110,7 +114,7 @@ public class UserService {
 		}
 	}
 	
-	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
+	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Map<String, Object> map = new HashMap<>();
         UserDTO rs = login(user);
         if (rs.getRemainingTime() > 0) {
@@ -142,6 +146,8 @@ public class UserService {
 	    } else {
             map.put("message", "로그인 실패했습니다.");
         }
+        Cookie cookie = new Cookie("userId", rs.getUserId());
+        response.addCookie(cookie);
         return map;
 	}
     
@@ -194,7 +200,7 @@ public class UserService {
 	            int seconds = (int) setDuration.getSeconds();
 	            remainingTime = (remainingTime - seconds);
 	            logoutUser.setLogoutTime(logoutTime);
-
+	            userDAO.updateUserHistory(logoutUser);
 	            if (remainingTime <= 0) {
 	                logoutUser.setRemainingTime(0);
 	            } else {

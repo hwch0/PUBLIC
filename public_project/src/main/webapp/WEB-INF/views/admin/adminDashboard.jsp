@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!-- <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css"/> -->
 <link rel="stylesheet" href="/plugins/chart.js/Chart.css"/>
 <script src="/plugins/chart.js/Chart.min.js"></script>
-  <script src="/plugins/jquery/jquery.min.js"></script>
+ <script src="/plugins/jquery/jquery.min.js"></script>
   
 <style>
 .chartjs-render-monitor {
@@ -16,87 +15,14 @@
 <div class="dashboard" style="padding: 20px 100px 20px 100px">
 
 
-<!--  <!-- Info boxes -->
-<!--             <div class="row"> -->
-<!--               <div class="col-12 col-sm-6 col-md-3"> -->
-<!--                 <div class="info-box"> -->
-<!--                   <span class="info-box-icon bg-info elevation-1" -->
-<!--                     ><i class="fas fa-cog"></i -->
-<!--                   ></span> -->
 
-<!--                   <div class="info-box-content"> -->
-<!--                     <span class="info-box-text">CPU Traffic</span> -->
-<!--                     <span class="info-box-number"> -->
-<!--                       10 -->
-<!--                       <small>%</small> -->
-<!--                     </span> -->
-<!--                   </div> -->
-<!--                   /.info-box-content -->
-<!--                 </div> -->
-<!--                 /.info-box -->
-<!--               </div> -->
-<!--               /.col -->
-<!--               <div class="col-12 col-sm-6 col-md-3"> -->
-<!--                 <div class="info-box mb-3"> -->
-<!--                   <span class="info-box-icon bg-danger elevation-1" -->
-<!--                     ><i class="fas fa-thumbs-up"></i -->
-<!--                   ></span> -->
-
-<!--                   <div class="info-box-content"> -->
-<!--                     <span class="info-box-text">Likes</span> -->
-<!--                     <span class="info-box-number">41,410</span> -->
-<!--                   </div> -->
-<!--                   /.info-box-content -->
-<!--                 </div> -->
-<!--                 /.info-box -->
-<!--               </div> -->
-<!--               /.col -->
-
-<!--               fix for small devices only -->
-<!--               <div class="clearfix hidden-md-up"></div> -->
-
-<!--               <div class="col-12 col-sm-6 col-md-3"> -->
-<!--                 <div class="info-box mb-3"> -->
-<!--                   <span class="info-box-icon bg-success elevation-1" -->
-<!--                     ><i class="fas fa-shopping-cart"></i -->
-<!--                   ></span> -->
-
-<!--                   <div class="info-box-content"> -->
-<!--                     <span class="info-box-text">Sales</span> -->
-<!--                     <span class="info-box-number">760</span> -->
-<!--                   </div> -->
-<!--                   /.info-box-content -->
-<!--                 </div> -->
-<!--                 /.info-box -->
-<!--               </div> -->
-<!--               /.col -->
-<!--               <div class="col-12 col-sm-6 col-md-3"> -->
-<!--                 <div class="info-box mb-3"> -->
-<!--                   <span class="info-box-icon bg-warning elevation-1" -->
-<!--                     ><i class="fas fa-users"></i -->
-<!--                   ></span> -->
-
-<!--                   <div class="info-box-content"> -->
-<!--                     <span class="info-box-text">New Members</span> -->
-<!--                     <span class="info-box-number">2,000</span> -->
-<!--                   </div> -->
-<!--                   /.info-box-content -->
-<!--                 </div> -->
-<!--                 /.info-box -->
-<!--               </div> -->
-<!--               /.col -->
-<!--             </div> -->
-<!--             /.row -->
-
-<!-- 
-<!-- <!--  -->
 <!--       Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-6">
           <!-- small box -->
           <div class="small-box bg-info">
             <div class="inner">
-              <h3 class="data lastdayUsers">150<span style="font-size:20px;"> 명</span></h3>
+              <h3 class="data lastdayUsers" style="display: inline-block; margin-right: 5px;">150</h3><span style="font-size:20px;"> 명</span>
 
               <p>전일 사용자</p>
             </div>
@@ -111,7 +37,7 @@
 <!--           small box -->
           <div class="small-box bg-success">
             <div class="inner">
-              <h3 class="data todayUsers">150<span style="font-size:20px;"> 명</span></h3>
+              <h3 class="data todayUsers" style="display: inline-block; margin-right: 5px;">150</h3><span style="font-size:20px;"> 명</span>
 
               <p>금일 사용자</p>
             </div>
@@ -160,28 +86,45 @@
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="far fa-chart-bar"></i>
-                  Interactive Area Chart
+                  Hourly Users
                 </h3>
 
-                <div class="card-tools">
-                  Real time
-                  <div class="btn-group" id="realtime" data-toggle="btn-toggle">
-                    <button type="button" class="btn btn-default btn-sm active" data-toggle="on">On</button>
-                    <button type="button" class="btn btn-default btn-sm" data-toggle="off">Off</button>
-                  </div>
-                </div>
+<!--                 <div class="card-tools"> -->
+<!--                   Real time -->
+<!--                   <div class="btn-group" id="realtime" data-toggle="btn-toggle"> -->
+<!--                     <button type="button" class="btn btn-default btn-sm active" data-toggle="on">On</button> -->
+<!--                     <button type="button" class="btn btn-default btn-sm " data-toggle="off">Off</button> -->
+<!--                   </div> -->
+<!--                 </div> -->
               </div>
+              
+           <!--     
               <div class="card-body">
                 <div id="interactive" style="height: 200px;">
                 <canvas class="flot-base" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 100%; height: 200px;"></canvas>
                 <canvas class="flot-overlay" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 100%; height: 200	px;"></canvas>
                 <div  class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;">
-                	<svg style="width: 100%; height: 100%;"></svg>
                 </div>
                 
               </div>
-              <!-- /.card-body-->
+          
             </div>
+            -->
+            
+                  <div class="card-body">
+                    <div class="chart">
+                      <canvas
+                        id="areaChart"
+                        style="
+                          min-height: 200px;
+                          height: 200px;
+                          max-height: 250px;
+                          max-width: 100%;
+                        "
+                      ></canvas>
+                    </div>
+                  </div>
+            
             <!-- /.card -->
 
           </div>
@@ -375,7 +318,6 @@
 <script src="/plugins/raphael/raphael.min.js"></script>
 
 <!-- <!-- FLOT CHARTS -->
-<script src="/plugins/flot/jquery.flot.js"></script>
-<script src="/plugins/flot/plugins/jquery.flot.resize.js"></script>
-<script src="/plugins/flot/plugins/jquery.flot.pie.js"></script> 
-    
+<!-- <script src="/plugins/flot/jquery.flot.js"></script> -->
+<!-- <script src="/plugins/flot/plugins/jquery.flot.resize.js"></script> -->
+<!-- <script src="/plugins/flot/plugins/jquery.flot.pie.js"></script>  -->

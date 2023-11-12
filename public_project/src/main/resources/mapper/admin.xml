@@ -84,17 +84,11 @@ where rownum <7
         
 </select>
 
-
-<select id="getUserCount" resultType="java.util.LinkedHashMap">
-
-select to_char(login_time, 'yyyy-mm-dd') as day
-	, count(user_id) as userCount
-from user_history 
-group by to_char(login_time, 'yyyy-mm-dd')
-having to_char(login_time, 'yyyy-mm-dd') 
-in (to_char(sysdate, 'yyyy-mm-dd'), to_char(sysdate -1, 'yyyy-mm-dd')
-)
-order by day
+<select id="getUserCount" resultType="map">
+SELECT
+  SUM(CASE WHEN TO_CHAR(login_time, 'yyyy-mm-dd') = TO_CHAR(sysdate - 1, 'yyyy-mm-dd') THEN 1 ELSE 0 END) AS lastday,
+  SUM(CASE WHEN TO_CHAR(login_time, 'yyyy-mm-dd') = TO_CHAR(sysdate, 'yyyy-mm-dd') THEN 1 ELSE 0 END) AS today
+FROM user_history
 </select>
 
 <select id="getMonthlyUsers" resultType="java.util.LinkedHashMap">
@@ -105,6 +99,26 @@ group by to_char(login_time, 'yyyy-mm')
 order by month
 </select>
 
+<select id="getHourlyUsers" resultType="java.util.LinkedHashMap">
 
-	
+
+select to_char(sub.hours, 'HH24') as hour
+, count(case when h.login_time is not null then 1 end) as user_count
+from (
+<![CDATA[
+SELECT 
+    to_date(TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ' ' || (LEVEL - 1), 'YYYY-MM-DD HH24') AS hours
+  FROM 
+    dual
+  CONNECT BY LEVEL <= 24
+) sub 
+]]>
+left outer join user_history h
+ON to_char(sub.hours, 'yyyy-mm-dd HH24')= to_char(h.login_time, 'yyyy-mm-dd HH24')
+group by sub.hours
+order by hour
+
+
+</select>
+
 </mapper>

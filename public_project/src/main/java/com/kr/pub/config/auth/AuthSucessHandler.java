@@ -62,8 +62,10 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		     }
 		  }
       
+		
         setDefaultTargetUrl(url);
         
         super.onAuthenticationSuccess(request, response, authentication);
     }
+    
 }

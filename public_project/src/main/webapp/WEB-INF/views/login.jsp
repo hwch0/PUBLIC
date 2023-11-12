@@ -157,7 +157,7 @@
             </form>
             
             <div class="btn kakao_btn">
-                <a href="https://kauth.kakao.com/oauth/authorize?client_id=c3fed459f31a0ba7732ba1f69446b5d1&redirect_uri=http://localhost:9000/auth/kakao/callback&response_type=code">
+                <a href="https://kauth.kakao.com/oauth/authorize?client_id=c3fed459f31a0ba7732ba1f69446b5d1&redirect_uri=http://localhost:8282/auth/kakao/callback&response_type=code">
                     <img src="/images/kakao_login.png" alt="kakao">
                 </a>
             </div>

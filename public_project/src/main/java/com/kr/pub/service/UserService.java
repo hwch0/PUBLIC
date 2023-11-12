@@ -121,7 +121,7 @@ public class UserService {
             	if(loggedInUserList != null) {//로그인된 회원이 있을떄
             		if(!AppContextController.searchUser(loggedInUserList, rs)){//리스트에서 현재 로그인한 회원을 스트림으로 찾고 없다면
             				loggedInUserList.add(rs);//로그인유저 리스트에 추가
-                        app.setAttribute("loggedInUsserList", loggedInUserList);//app영역에 update하기
+                        app.setAttribute("loggedInUserList", loggedInUserList);//app영역에 update하기
             			}
             	}else {
             		loggedInUserList = new ArrayList<>();//현재 로그인한 회원이 아무도 없다면(배열이 null) 새로운 배열 객체 만들기

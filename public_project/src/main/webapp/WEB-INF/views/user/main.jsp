@@ -144,6 +144,5 @@ window.onload = function () {
     userIdElement.textContent = loggedInUserId;
 }
 
-
 </script>
 </html>

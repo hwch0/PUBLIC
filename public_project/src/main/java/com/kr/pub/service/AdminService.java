@@ -93,8 +93,6 @@ public class AdminService {
 		result.put("total", total);
 		result.put("users", users);
 		
-		System.out.println("result >>> " +  result);
-		
 		return result;
 	}
 	
@@ -134,11 +132,26 @@ public class AdminService {
 	public Map<String, Object> getUserCount() {
 		Map<String, Object> result = new HashMap<>(); 
 		//[{DAY=2023-11-09, USERCOUNT=1}, {DAY=2023-11-10, USERCOUNT=1}]
-		List<Map<String, Object>> dataMap = adminDAO.getUserCount();
+		Map<String, Object> dataMap = adminDAO.getUserCount();
+		result.put("lastday", dataMap.get("LASTDAY"));
+		result.put("today", dataMap.get("TODAY"));
 		
-		result.put("lastday", dataMap.get(0));
-		result.put("today", dataMap.get(1));
+		return result;
+	}
+	
+	public Map<String, Object> getHourlyUsers() {
+		Map<String, Object> result = new HashMap<>(); 
+		List<Map<String, Object>> dataMap = adminDAO.getHourlyUsers();
+		List<String> hours = new ArrayList<>();
+		List<String> users = new ArrayList<>();
+		for(Map<String, Object> data : dataMap) {
+			hours.add(data.get("HOUR").toString());
+			users.add(data.get("USER_COUNT").toString());
+		}
+		result.put("users", users);
+		result.put("hours", hours);
 		
+		System.out.println(result);
 		return result;
 	}
 	

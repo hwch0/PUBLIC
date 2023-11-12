@@ -51,7 +51,7 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		    	 url = "/admin";
 		     } else if (role.getAuthority().contains("RT001")) {
 		    	 try {
-					userService.login2(userInfo, request);
+					userService.login2(userInfo, request, response);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

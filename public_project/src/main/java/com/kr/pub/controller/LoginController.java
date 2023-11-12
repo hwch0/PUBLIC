@@ -1,5 +1,8 @@
 package com.kr.pub.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,6 +59,18 @@ public class LoginController {
 		model.addAttribute("exception", exception);
 		return "login";
 	}
+	
+	// 잔여시간 없음
+	@GetMapping("/recharge")
+    public String showPayment(Model model) {
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		 String userId = ((PrincipalDetails) authentication.getPrincipal()).getUser().getUserId();
+		    
+        model.addAttribute("showPaymentContent", true);
+        model.addAttribute("userId", userId);
+        
+        return "login"; 
+    }
 	
 	@GetMapping("/auth/kakao/callback")
 	public String kakaoCallback(String code) { // Data를 리턴해주는 컨트롤러 함수
@@ -170,4 +188,22 @@ public class LoginController {
 		
 		return "redirect:/";
 	}
+	
+	// 시간 충전
+    @PostMapping("/rechargeTime")
+    @ResponseBody
+    public Map<String, String> rechargeTime(@RequestBody UserDTO user) {
+        Map<String, String> map = new HashMap<>();
+        
+        int rechargeResult = userService.rechargeTime(user);
+        if (rechargeResult == 1) { 
+            map.put("rs", "success");
+            map.put("message", "시간 충전이 완료되었습니다.");
+        } else { 
+            map.put("rs", "fail");
+            map.put("message", "시간 충전에 실패했습니다. 다시 시도해주세요.");
+        }
+        
+        return map;
+    }
 }

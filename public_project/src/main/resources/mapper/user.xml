@@ -61,5 +61,10 @@
 		where login_time = (select max(login_time) recent_time from user_history where user_id = #{userId})
 	)
 	</update>
+	<update id="updateRemainingTime">
+	    UPDATE users
+	    SET remaining_time = #{remainingTime}
+	    WHERE user_id = #{userId}
+	</update>
 	
 </mapper>

@@ -921,3 +921,265 @@ span.orderDetail {
     color: #007bff; 
     text-decoration: underline; 
 }
+
+/*버튼 영역*/
+.refresh-button{
+	background: url("/images/refresh.png") no-repeat;
+	width: 30px;
+	height: 30px;
+	margin: 6px;
+	background-size: 100% 100%;
+	transition: background-color 0.3s ease;
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+
+.refresh-button:hover {
+    background-color: #e0e0e0; 
+    cursor: pointer;
+}
+
+/* 조회 버튼 */
+.check {
+  background-color: #4AB34A;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px; 
+  position: relative;
+}
+
+/* 등록 버튼 */
+.insert {
+  background-color: #343a40; 
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* 엑셀 다운로드 버튼 */
+.Excel {
+  background-color: #9A7745; 
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px; 
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.Excel:hover {
+    background-color: #C29F6D; 
+    color: #fff; 
+}
+
+/* 엑셀 아이콘 이미지 스타일 */
+#Excel img {
+  vertical-align: middle;
+  width: 20px;
+  margin-right: 5px;
+}
+
+#insertBnt {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+
+    background-color: #343a40;
+    color: #fff; 
+    border: 1px solid #343a40;
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#insertBnt:hover {
+    background-color: #212529; 
+    color: #fff; 
+}
+
+#statusInsertBnt {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+
+    background-color: #343a40;
+    color: #fff; 
+    border: 1px solid #343a40;
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#statusInsertBnt:hover {
+    background-color: #212529; 
+    color: #fff; 
+}
+
+#excelUploadBnt {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+
+    background-color: #9A7745;
+    color: #fff; 
+    border: 1px solid #343a40;
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#excelUploadBnt:hover {
+    background-color: #C29F6D; 
+    color: #fff; 
+}
+
+
+
+/*모달창 시작*/
+.form-group{
+	padding: 20px;
+}
+.form-group .form-control {
+    height: 38px;
+}
+
+/* 품목명 입력란*/
+.form-control#itemNames {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* 품목가격 입력란*/
+.form-control#itemPrices {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* 품목유형 드롭다운*/
+.form-control#itemType {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/*입출고 목록*/
+.modal-content-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -250px 0 0 -200px;
+    padding: 20px;
+    width: 430px;
+    height: 590px;
+    text-align: center;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+}
+.status-form-group{
+	padding: 8px;
+}
+.status-form-group .form-control {
+    height: 38px;
+}
+
+/* 품목코드 입력란*/
+.form-control#statusCode {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/*수량*/
+.form-control#statusQuantity {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* 입고가격 입력란*/
+.form-control#statusPrices {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* 비고란 입력란*/
+.form-control#remarks {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* 품목유형 드롭다운에*/
+.form-control#statusType {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* 파일 업로드 모달 내 컨텐츠 스타일 */
+    #excelFile {
+        width: 210px;
+        height: 31px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+/* 업로드 버튼 스타일 */
+#uploadBtn button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#uploadBtn button:hover {
+    background-color: #45a049;
+}
+
+.excel-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -250px 0 0 -200px;
+    padding: 20px;
+    width: 400px;
+    height: 200px;
+    text-align: center;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+}

@@ -18,7 +18,7 @@
         <div class="hd hd_lft">
             <!-- 로고 영역 -->
             <div class="logo">
-                <img src="/images/logo_w.png" alt="로고">
+                <a href="/admin"><img src="/images/logo_w.png" alt="로고"></a>
             </div>
             <!-- 화면 전화 버튼 영역 -->
             <div class="btn_toggle">

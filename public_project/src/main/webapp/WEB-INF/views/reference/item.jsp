@@ -18,10 +18,11 @@
                 재고 관리
             </h2>
 			<div class="button-group">
-	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
+				<input type="button" class="refresh-button" onclick="refreshStockPage()">
 	            <button class="check" id="itemCheck" onclick="searchData()">조회</button>
-	            <button id="Excel">
-					 <img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 엑셀
+	            <button class="insert" id="stockBtn">등록</button>
+	            <button class="Excel" id="Excel">
+					 <img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 다운로드
 				</button>
 	        </div>
 		</div>
@@ -32,7 +33,7 @@
                        <td class="tr_th">입고 일자</td>
 			            <td style="padding:0 10px;">
 						    <div class="input-group date" style="display: inline-block;">
-						        <input type="text" class="form-control" id="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
+						        <input type="text" class="form-control" id="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold; z-index: auto;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -41,7 +42,7 @@
 						    <div style="display: inline-block; margin: 0 10px;">~</div>
 						    
 						    <div class="input-group date" style="display: inline-block;">
-						        <input type="text" class="form-control" id="endDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
+						        <input type="text" class="form-control" id="endDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold; z-index: auto;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -122,5 +123,39 @@
             </table>
         </div>
     </div>
+    
+    <div id="stockModel" class="modal">
+    	<div class="modal-content">
+    		<span class="close" id="closeModelBtn">&times;</span>
+    		
+    		<form name="stockForm" id="stockForm" method="multipart/form-data" style="width:100%; height:100%;">
+    			<div>등록하기</div>
+    			
+	    			 <!-- 품목명 입력 -->
+	            <div class="form-group">
+	                <label for="itemName">품목명</label>
+	                <input type="text" class="form-control" id="itemNames" required>
+	            </div>
+	
+	            <!-- 품목가격 입력 -->
+	            <div class="form-group">
+	                <label for="itemPrice">품목가격</label>
+	                <input type="text" class="form-control" id="itemPrices" required>
+	            </div>
+	
+	            <!-- 품목유형 선택 -->
+	            <div class="form-group" style="padding-left: 1px;">
+	                <label for="itemType">품목유형</label>
+	                <select class="form-control" id="itemType" name="itemType" required>
+	                    <option value="type1">상품</option>
+	                    <option value="type2">비품</option>
+	                    <option value="type2">소모품</option>
+	                </select>
+	            </div>
+    			<button class="btn btn-outline-dark mt-auto" id="insertBnt" type="button">등록</button>
+    		</form>
+    	</div>
+    </div>
+    
 </body>
 </html>

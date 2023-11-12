@@ -18,10 +18,13 @@
                 입·출고 현황
             </h2>
 			<div class="button-group">
-	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
+	            <input type="button" class="refresh-button" onclick="refreshStatusPage()">
 	            <button class="check" id="testCheck" onclick="statusSearch()">조회</button>
-	            <button id="uplode">등록</button>
-	            <button id="delete">삭제</button>
+	            <button class="insert" id="stickBtn">등록</button>
+			    <button class="Excel" id="excelDownloadBnt" type="button">
+    				<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px">
+    				다운로드
+    			</button>
 	        </div>
 		</div>
 		
@@ -31,7 +34,7 @@
                        <td class="tr_th">일자</td>
 			            <td style="padding:0 10px;">
 						    <div class="input-group date" style="display: inline-block; ">
-						        <input type="text" class="form-control" id="startDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
+						        <input type="text" class="form-control" id="startDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold; z-index: auto;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -40,7 +43,7 @@
 						    <div style="display: inline-block; margin: 0 10px;">~</div>
 						    
 						    <div class="input-group date" style="display: inline-block;">
-						        <input type="text" class="form-control" id="endDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
+						        <input type="text" class="form-control" id="endDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold; z-index: auto;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -51,7 +54,7 @@
                         <td class="tr_th">품목 코드</td>
                         <td style="padding: 0 30px;">
                             <input type="text" class="statusCode">
-                            <button id="check">조회</button>
+                            <button id="check">검색</button>
                         </td>
 
                     </tr>
@@ -112,5 +115,86 @@
             </table>
            </div>           
         </div>
+        
+        <div id="statusModel" class="modal">
+    	<div class="modal-content-status">
+    		<span class="close" id="closeStatusModelBtn">&times;</span>
+    		
+    		<form name="statusForm" id="statusForm" method="multipart/form-data" style="width:100%; height:100%;">
+    			<div>입고·출고 등록하기</div>
+    			
+	    			 <!-- 품목명 입력 -->
+	            <div class="status-form-group">
+	                <label for="itemCode">품목 코드</label>
+	                <input type="text" class="form-control" id="statusCode" required>
+	            </div>
+	            
+	            <!-- 입고 수량 -->
+   	            <div class="status-form-group">
+	                <label for="itemQuantity">입고 수량</label>
+	                <input type="text" class="form-control" id="statusQuantity" required>
+	            </div>
+	
+	            <!-- 품목가격 입력 -->
+	            <div class="status-form-group">
+	                <label for="itemPrice">입고 가격</label>
+	                <input type="text" class="form-control" id="statusPrices" required>
+	            </div>
+		
+				<div class="status-form-group">
+	                <label for="remarks">비고란</label>
+	                <input type="text" class="form-control" id="remarks" required>
+	            </div>
+	            	
+	            <!-- 품목유형 선택 -->
+	            <div class="status-form-group" style="padding-left: 1px;">
+	                <label for="itemType">품목유형</label>
+	                <select class="form-control" id="statusType" name="statusType" required>
+	                    <option value="type1">상품</option>
+	                    <option value="type2">비품</option>
+	                    <option value="type2">소모품</option>
+	                </select>
+	            </div>
+    			<button class="btn btn-outline-dark mt-auto" id="statusInsertBnt" type="button">등록</button>
+    			<button class="btn btn-outline-dark mt-auto" id="excelUploadBnt" type="button">
+    				<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px">
+    				업로드
+    			</button>
+    		</form>
+    	</div>
+    </div>
+        
+         <div id="ExcelUploadModel" class="modal">
+   			 <div class="excel-modal-content">
+		        <span class="close" id="closeExcelUploadModelBtn">&times;</span>
+		        <h2>파일 업로드</h2>
+		        <form id="excelUploadForm" action="/upload" method="post" enctype="multipart/form-data">
+					<div id="uploadFile">
+		           		<input type="file" id="excelFile"/>
+		            </div>
+		            
+		            <div id="uploadBtn">
+						<button type="button" onclick="upload()"><span>저장</span></button>
+					</div>
+		        </form>
+   			 </div>
+    	</div>
+        
+        <div id="ExcelDownloadModel" class="modal">
+   			 <div class="excel-modal-content">
+		        <span class="close" id="closeExcelDownloadlBtn">&times;</span>
+		        <h2 style="padding: 25px">Excel 다운로드</h2>
+		        <form id="excelDownloadForm" enctype="multipart/form-data">
+					<button class="Excel" id="ExcelDownload">
+					 	<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 다운로드
+					</button>
+		            
+		            <button class="Excel" id="ExcelFormDownload">
+					 	<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 양식받기
+					</button>
+		        </form>
+   			 </div>
+    	</div>
+        
 </body>
 </html>

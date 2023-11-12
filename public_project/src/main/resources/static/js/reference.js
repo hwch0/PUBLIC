@@ -41,13 +41,19 @@ function changeAdminPage() {
 		$(".admin_main").removeClass('on');
 		$(".admin_dash").toggleClass('on');
 		$(".admin_food").removeClass('on');
+		$('.btn_grp li:nth-child(3) a').css("display", "block");
+		$('.btn_grp li:nth-child(4) a').css("display", "none");
 	}else if($(".admin_food").hasClass('on')) {
 		$(".admin_food").removeClass('on');
 		$(".admin_main").addClass('on');
+		$('.btn_grp li:nth-child(3) a').css("display", "none");
+		$('.btn_grp li:nth-child(4) a').css("display", "block");
 	}
 	else{
 		$(".admin_main").toggleClass('on');
 		$(".admin_dash").toggleClass('on');
+		$('.btn_grp li:nth-child(3) a').css("display", "none");
+		$('.btn_grp li:nth-child(4) a').css("display", "block");
 	}
 }
 
@@ -56,6 +62,8 @@ function addFoodPage() {
 	$(".admin_food").addClass('on')
 	$(".admin_main").removeClass('on');
 	$(".admin_dash").removeClass('on');
+	$('.btn_grp li:nth-child(3) a').css("display", "block");
+	$('.btn_grp li:nth-child(4) a').css("display", "none");
 	}
 	
 

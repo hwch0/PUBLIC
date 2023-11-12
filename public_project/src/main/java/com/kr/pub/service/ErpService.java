@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kr.pub.dao.AdminDAO;
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dao.PaymentDAO;
@@ -159,8 +160,13 @@ public class ErpService {
 			list.get(i).put("index", i + 1);
 		}
 	}
+
+	public List<Map<String, Object>> getSalesList(SearchDTO search) {
+		List<Map<String, Object>> salesList = paymentDAO.getSalesList(search);
+		
+		return salesList;
 	
-	
+	}
 //	@Transactional
 //	public void download(ExcelDTO excelDTO, ResultRowDataHandler resultRowDataHandler) throws Exception{	      
 //		  List<ExcelDTO> excelData = itemDAO.excelDownload(excelDTO, resultRowDataHandler);

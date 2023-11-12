@@ -20,16 +20,16 @@
             <div class="hd hd_lft">
                 <!-- 로고 영역 -->
                 <div class="logo">
-                    <img src="/images/logo_p.png" alt="로고">
+                    <a href="/admin"><img src="/images/logo_p.png" alt="로고"></a>
                 </div>
                 <!-- 화면 전화 버튼 영역 -->
                 <div class="btn_toggle">
                     <ul>
                         <li class="btn btn_pos on">
-                            <a href="/pos">POS</a>
+                            <a href="/admin">POS</a>
                         </li>
                         <li class="btn btn_ERP">
-                            <a href="#">ERP</a>
+                            <a href="/erp/stock">ERP</a>
                         </li>
                     </ul>
                 </div>

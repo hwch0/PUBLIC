@@ -63,11 +63,11 @@
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>
 <script>
 $('#logoutBtn').on('click', function(){
-   location.href = "/logout";
+	location.href = "/logout";
 });
 
 $(".nav-btn-wrap li").on('click', function(){
-   $(".cont-bot-wrap").css('display','block');
+	$(".cont-bot-wrap").css('display','block');
 });
 // 시간 js
 function ajaxResponse(method, url, params) {

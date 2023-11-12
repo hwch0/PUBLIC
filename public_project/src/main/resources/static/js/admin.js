@@ -208,8 +208,9 @@ $(document).on("change", ".form-control", function(){
      */
     // We use an inline data source in the example, usually data would
     // be fetched from a server
-    var data        = [],
-        totalPoints = 100
+   /* var data        = [],
+        //totalPoints = 100
+        totalPoints = 10
 
     function getRandomData() {
 
@@ -235,16 +236,41 @@ $(document).on("change", ".form-control", function(){
       // Zip the generated y values with the x values
       var res = []
       for (var i = 0; i < data.length; ++i) {
+		  console.log([i, data[i]]);
         res.push([i, data[i]])
       }
-
+	
+		console.log(">> " + res);
       return res
     }
     
+	let staticData = [10,20,30,40,50,60,70,80,90,10,20,30,40,50,60,70,80,90,10,20,30,40]
+    function getData() {
+		
+      if (staticData.length > 0) {
+        staticData = staticData.slice(1)
+      }
+		
+		let lastData = staticData[staticData.length -1]
+		while(staticData.length < totalPoints) {
+			staticData.push(lastData)
+		}
+      var res = []
+      for (var i = 0; i < staticData.length; ++i) {
+		  console.log([i, staticData[i]]);
+        res.push([i, staticData[i]])
+      }
+	
+		console.log(">> " + res);
+      return res
+	}
+    
     var interactive_plot = $.plot('#interactive', [
         {
-          data: getRandomData(),
-        }
+          //data: getRandomData(),
+          data:getData()        
+          }
+          
       ],
       {
         grid: {
@@ -275,13 +301,14 @@ $(document).on("change", ".form-control", function(){
     var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
     function update() {
 
-      interactive_plot.setData([getRandomData()])
+      interactive_plot.setData([getData()]);
 
       // Since the axes don't change, we don't need to call plot.setupGrid()
       interactive_plot.draw()
       if (realtime === 'on') {
         setTimeout(update, updateInterval)
       }
+      console.log("update");
     }
 
     //INITIALIZE REALTIME DATA FETCHING
@@ -298,9 +325,88 @@ $(document).on("change", ".form-control", function(){
       }
       update()
     })
-    /*
+    
      * END INTERACTIVE CHART
-     */
+     
+*/
+/****** 시간대별 이용자 수 (로그인 시간 기준) ******/
+const getHourlyUsersUrl = "/admin/getHourlyUsers";
+myFetch(getHourlyUsersUrl, {method: "GET"}, response => {
+	const hourlyUsers = response.data.users;
+	
+	//--------------
+//- AREA CHART -
+//--------------
+
+// Get context with jQuery - using jQuery's .get() method.
+var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+
+const areaChartLabels = [];
+let hour = 0;
+for(i=0; i<24; i++) {
+	areaChartLabels.push(hour + "시");
+	hour++;
+}
+
+var areaChartData = {
+  labels: areaChartLabels,
+  datasets: [
+    {
+      label: "Hourly Users",
+      backgroundColor: "rgba(60,141,188,0.9)",
+      borderColor: "rgba(60,141,188,0.8)",
+      pointRadius: false,
+      pointColor: "#3b8bba",
+      pointStrokeColor: "rgba(60,141,188,1)",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(60,141,188,1)",
+      data: hourlyUsers,
+    },
+/*     {
+      label: "Electronics",
+      backgroundColor: "rgba(210, 214, 222, 1)",
+      borderColor: "rgba(210, 214, 222, 1)",
+      pointRadius: false,
+      pointColor: "rgba(210, 214, 222, 1)",
+      pointStrokeColor: "#c1c7d1",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(220,220,220,1)",
+      data: [65, 59, 80, 81, 56, 55, 40,65, 59, 80, 81, 56, 55, 40,65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40 ],
+    }, */
+  ],
+};
+
+var areaChartOptions = {
+  maintainAspectRatio: false,
+  responsive: true,
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          display: false,
+        },
+      },
+    ],
+    yAxes: [
+      {
+        gridLines: {
+          display: false,
+        },
+      },
+    ],
+  },
+};
+
+// This will get the first returned node in the jQuery collection.
+new Chart(areaChartCanvas, {
+  type: "line",
+  data: areaChartData,
+  options: areaChartOptions,
+});
+})
 
 
 /****** 전일, 금일 이용자 수 (월별 매출) ******/
@@ -311,13 +417,15 @@ const todayUsers = $('.todayUsers');
 
 
 myFetch(getUserCountUrl, {method: "GET"}, response =>{
-		const lastDayUserCnt = response.data.lastday.USERCOUNT;
-		const todayUserCnt = response.data.today.USERCOUNT;
+		const lastDayUserCnt = response.data.lastday;
+		const todayUserCnt = response.data.today;
 		
 		console.log(lastDayUserCnt + " " +todayUserCnt);
 		
-		lastdayUsers.text(lastDayUserCnt + "명");
-		todayUsers.text(todayUserCnt + "명");
+		
+		
+		lastdayUsers.text(lastDayUserCnt);
+		todayUsers.text(todayUserCnt);
 })
 	
 	
@@ -326,7 +434,7 @@ const pieChartUrl = "/admin/chartPieData";
 
 myFetch(pieChartUrl, {method: "GET"}, response => {
 	const pieChartData = response.data;
-	
+	console.log("pieCartData" + pieChartData);
 	createPieChart($("#pieChart1"),pieChartData.year.top6Menu, pieChartData.year.top6Sales); // 연
 	createPieChart($("#pieChart2"),pieChartData.month.top6Menu, pieChartData.month.top6Sales); // 월
 	createPieChart($("#pieChart3"),pieChartData.day.top6Menu, pieChartData.day.top6Sales); // 일

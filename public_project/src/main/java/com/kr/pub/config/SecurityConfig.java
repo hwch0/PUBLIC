@@ -56,7 +56,8 @@ public class SecurityConfig {
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login")
                 .successHandler(authSucessHandler)
-                .failureHandler(authFailureHandler))
+                .failureHandler(authFailureHandler)
+                .permitAll())
             .logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessHandler(authLogoutSuccessHandler)

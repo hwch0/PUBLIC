@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.service.ErpService;
@@ -168,6 +169,32 @@ public class ErpController {
 		System.out.println("데이터 확인: " + dataList);
 		
 		excelService.excelDownload(res, sheetName, headerNames, headerLabels, dataList, fileName);
+	}
+	
+	@ResponseBody
+	@PostMapping("/getSalesList")
+	public Map<String, Object> getSalesList(MultipartHttpServletRequest multipartRequest) {
+		
+		ErpDTO search = ErpDTO.builder()
+							.startDate(multipartRequest.getParameter("startDate").replace("/", "-"))
+							.endDate(multipartRequest.getParameter("endDate").replace("/", "-"))
+							.select(multipartRequest.getParameter("select"))
+							.code(multipartRequest.getParameter("code")) // 매출전표코드
+							.orderId(multipartRequest.getParameter("orderId"))
+							.unme(multipartRequest.getParameter("unme"))
+							.build();
+		
+		System.out.println(">>>> " + search);
+		Map<String, Object> result = new HashMap<>();		
+		List<Map<String, Object>> data = erpService.getSalesList(search);
+		boolean status = data.size() > 0;
+		
+		result.put("status", status);
+		result.put("data", status ? data : "조회된 매출 내역이 없습니다.");
+		System.out.println(">>>>> " + result);
+		
+		return result;
+		
 	}
 
 	

@@ -10,6 +10,47 @@
 	set image
 </update>
 
+	<!-- 품목명으로 품목아이디 찾기 -->
+	<select id="selectItemId" resultType="com.kr.pub.dto.ItemDTO">
+		SELECT ITEM_ID AS itemId
+		FROM item
+		WHERE ITEM_NAME = #{itemName}
+	</select>
+	
+	<insert id="insertStoreData">
+	<!-- STORE 테이블 데이터 삽입 -->
+		INSERT INTO store (
+			STORE_ID,
+			STORE_DATE,
+			EMP_ID,
+			CODE,
+			REMARKS
+		) VALUES (
+			'S' || LPAD(seq_store.NEXTVAL, 6, '0'),
+			SYSDATE,
+			'admin',
+			'CT001',
+			'X'
+		);
+	<!-- STORE_HISTORY 테이블 데이터 삽입 -->
+		INSERT INTO store_history(
+			STORE_ID,
+			ITEM_ID,
+			QUANTITY,
+			PRICE
+		) VALUES (
+			'S' || LPAD(seq_store.CURRVAL, 6, '0'),
+			#{itemId},
+			#{quantity},
+			#{price}
+		);
+		
+		<!-- ITEM 테이블 STOCK 업데이트 -->
+		UPDATE item
+		SET STOCK = STOCK + #{quantity}
+		WHERE ITEM_ID = #{itemId};
+	</insert>
+	
 	<!-- 입출고 내역 -->
 	<select id="statusList" resultType="java.util.Map">		
 	        SELECT
@@ -39,22 +80,22 @@
                 <![CDATA[
        				i.ITEM_ID <> 'ITEM000001'
        				]]>
- 				<if test="startDate != null">
+ 				<if test="startDate != null and startDate != '' ">
 	                AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
 	            </if>
 	            
-	            <if test="statusCode != null">
+	            <if test="statusCode != null and statusCode != '' ">
 	                AND i.ITEM_ID = #{statusCode}
 	            </if>
 
-				<if test="stockStatus == '입고'">
+				<if test="stockStatus == '입고' and stockStatus !='' ">
 				    AND ct.INC_DEC = '입고'
 				</if>
-				<if test="stockStatus == '출고'">
+				<if test="stockStatus == '출고' and stockStatus != '' ">
 				    AND ct.INC_DEC = '출고'
 				</if>
 				
-			    <if test="statusName != null">
+			    <if test="statusName != null and statusName != ''">
 			      	AND i.ITEM_NAME LIKE '%' || #{statusName} || '%'
 			    </if>				 
 	            ORDER BY
@@ -98,10 +139,10 @@
 	                AND i.ITEM_ID = #{statusCode}
 	            </if>	
 	                        
-				<if test="stockStatus == '입고'">
+				<if test="stockStatus == '입고' and stockStatus != '' ">
 				    AND ct.INC_DEC = '입고'
 				</if>
-				<if test="stockStatus == '출고'">
+				<if test="stockStatus == '출고' and stockStatus != '' ">
 				 	 AND ct.INC_DEC = '출고' 
 				</if>
 			    
@@ -166,6 +207,7 @@
 			<if test="stockItem == 3">
 			    AND i.STOCK = 0
 			</if>
+			 ORDER BY storeDate desc
 	</select>
 	
 </mapper>

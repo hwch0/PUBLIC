@@ -1,5 +1,133 @@
+//새로고침 버튼 클릭시
+//입출고
+function refreshStatusPage(){
+	document.getElementById('startDate2').value = '';
+    document.getElementById('endDate2').value = '';
+    document.querySelector('.statusCode').value = '';
+    document.querySelector('input[name="status"][value="all"]').checked = true;
+    document.querySelector('.statusName').value = '';
+
+	//location.reload();
+}
+//재고목록
+function refreshStockPage(){
+	document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.querySelector('.itemName').value = '';
+    document.querySelector('.itemSelect').selectedIndex = 0; 
+    document.querySelector('input[name="stockItem"][value="1"]').checked = true;
+
+	//location.reload();
+}
+
+//엑셀다운로드 등록 모달창
+const ExcelDownloadModel = $("#ExcelDownloadModel");
+
+$(document).ready(function() {
+
+    const ExcelBtn = $("#excelDownloadBnt");
+    const ExcelDownloadModel = $("#ExcelDownloadModel");
+
+    ExcelBtn.on("click", function() {
+        ExcelDownloadModel.addClass("on");
+    });
+
+    const closeModelBtn = $("#closeExcelDownloadlBtn");
+
+    closeModelBtn.on("click", function() {
+        ExcelDownloadModel.removeClass("on");
+    });
+});
+
+//엑셀 업로드 모달창
+$(document).ready(function() {
+
+    $("#excelUploadBnt").on("click", function() {
+        // 기존 모달창 닫기
+        $("#statusModel").removeClass("on");
+        
+        // 새로운 모달창 열기
+        $("#ExcelUploadModel").addClass("on");
+    });
+
+    const closeModelBtn = $("#closeExcelUploadModelBtn");
+
+    closeModelBtn.on("click", function() {
+        // 현재 열려있는 모든 모달창 닫기
+        $(".modal").removeClass("on");
+    });
+});
+
+//엑셀 업로드 alert창
+$(document).ready(function() {
+
+    $("#uploadBtn").on("click", function() {
+
+        alert("엑셀 업로드 되었습니다.");
+
+        $(".modal").removeClass("on");
+    });
+});
+
+//입출고 등록 모달창
+const statusModel = $("#statusModel");
+
+$(document).ready(function() {
+
+    const statusBtn = $("#stickBtn");
+    const statusModel = $("#statusModel");
+
+    statusBtn.on("click", function() {
+        statusModel.addClass("on");
+    });
+
+    const closeModelBtn = $("#closeStatusModelBtn");
+
+    closeModelBtn.on("click", function() {
+        statusModel.removeClass("on");
+    });
+});
+
+//입출고 등록버튼 alert창
+$(document).ready(function() {
+
+    $("#statusInsertBnt").on("click", function() {
+
+        alert("등록이 완료되었습니다.");
+
+        $(".modal").removeClass("on");
+    });
+});
+
+
 //품목 등록 모달창
 const stockModel = $("#stockModel");
+
+$(document).ready(function() {
+    const stockBtn = $("#stockBtn");
+    const stockModel = $("#stockModel");
+
+    stockBtn.on("click", function() {
+        stockModel.addClass("on");
+    });
+
+    const closeModelBtn = $("#closeModelBtn");
+
+    closeModelBtn.on("click", function() {
+        stockModel.removeClass("on");
+    });
+});
+
+//등록버튼 alert창
+$(document).ready(function() {
+
+    $("#insertBnt").on("click", function() {
+
+        alert("등록이 완료되었습니다.");
+
+        $(".modal").removeClass("on");
+    });
+});
 
 //재고 상태 계산 및 표시 1
  function stockStatus(stock) {
@@ -22,12 +150,63 @@ const stockModel = $("#stockModel");
         });
     });
 
-// 엑셀 다운로드
+// 재고목록 다운로드
 $(document).ready(function() {
     $('#Excel').on("click", function() {
         window.location.href = "/erp/download";
     })
 })
+
+//입출고 내역 다운
+$(document).ready(function() {
+    $('#ExcelDownload').on("click", function() {
+
+        $('#ExcelDownloadModel').modal('hide');
+
+         downloadFile("/erp/statusDownload");
+    });
+});
+
+//업로드용 다운로드
+$(document).ready(function() {
+    $('#ExcelFormDownload').on("click", function() {
+		
+        $('#ExcelDownloadModel').modal('hide');
+
+        downloadFile("/erp/excelDownload");
+    });
+});
+function downloadFile(url) {
+    // AJAX를 통해 파일 다운로드
+    $.ajax({
+        url: url,
+        method: "GET",
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function(data, status, xhr) {
+            // 다운로드 성공 시 파일 다운로드
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                var matches = filenameRegex.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = filename;
+
+            document.body.appendChild(link);
+            link.click();
+
+            document.body.removeChild(link);
+        }
+    });
+}
 
 //입출고 조회조건
 function statusSearch() {

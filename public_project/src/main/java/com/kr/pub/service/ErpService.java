@@ -11,6 +11,7 @@ import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dao.PaymentDAO;
 import com.kr.pub.dto.ErpDTO;
+import com.kr.pub.dto.ItemDTO;
 
 
 @Service
@@ -25,6 +26,12 @@ public class ErpService {
 	@Autowired
 	private OrderDAO orderDAO;
 	
+	//itemId 찾기
+	public List<ItemDTO> itemIdSearch(ItemDTO itemDTO) throws Exception{
+		
+		
+		return null;
+	}
 	
 	//주문 내역 상세보기
 	public List<Map<String, Object>> orderView(String orderId) throws Exception{

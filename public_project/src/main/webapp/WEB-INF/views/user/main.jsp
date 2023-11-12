@@ -134,7 +134,7 @@ function updateRemainingTime(userIdValue) {
       .catch(function(error) {
          console.error("로그인 정보 가져오는중 에러 발생: " + error);
       });
-
+}
 
 window.onload = function () {
 	const userInfoData = $('#userInfo').val();

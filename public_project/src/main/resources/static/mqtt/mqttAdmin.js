@@ -187,7 +187,8 @@ const recvOrder = () => {
 	  var priceList = [];
 	  var sum = 0;
       $.each(response.result, function(key, order){
-		 var seatNo = $("li.on .uid:contains('" + order[0].userId + "')").parent().find('em').text();
+		 var seatNo = $(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
+		 console.log(seatNo)
 		 $("#orderList").prepend(
 			 `<button class="accordion" data-paymentId='${key}'>${seatNo}번 좌석 주문</button>
 		 		<div class="panel"></div>`);

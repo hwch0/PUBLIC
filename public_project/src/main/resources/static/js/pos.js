@@ -29,10 +29,27 @@ const countSeat = () => {
 	$('.cont_top').find('em').first().text($("[data-seatNo].on").length);
 	$('.cont_top').find('em').last().text(50 - $("[data-seatNo].on").length);
 }
+$('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
+	const clickedUserId = $(e.currentTarget).find('.uid').text();
+	const params = {
+		userId: clickedUserId,
+	}
+	ajaxResponse("POST", "/getUserById", params)
+		.then(function(response) {
+			const userInfo = response.result;
+			console.log(userInfo);
+			$('#userSeatNo').text(userInfo.seatNo);
+			$('#userId').text(userInfo.userId);
+			$('#loginTime').text(formatDatenTime(userInfo.loginTime));
+			$('#remainingTime').text(formatTime(userInfo.remainingTime));
+			$('#regDate').text(formatDatenTime(userInfo.regDate));
+		});
+	infoModal.css('display', 'block');
+});//좌석 클릭시 사용자정보 띄우기
 
 const closeInfoModal = () => {
 	$.each($(".close"), function(index, close) {
-		$(close).on('click', e => infoModal.css('display', 'none'));
+		$(close).on('click', () => infoModal.css('display', 'none'));
 	});
 }
 
@@ -61,17 +78,6 @@ $(document).ready(function() {
 			}
 			addOption();
 			countSeat();
-			$('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
-				infoModal.css('display', 'block');
-				const clickedUserId = $(e.currentTarget).find('.uid').text();
-				const userInfo = loggedInUserList.find(user => user.userId == clickedUserId);
-				console.log(userInfo);
-				$('#userSeatNo').text(userInfo.seatNo);
-				$('#userId').text(userInfo.userId);
-				$('#loginTime').text(formatDatenTime(userInfo.loginTime));
-				$('#remainingTime').text(formatTime(userInfo.remainingTime));
-				$('#regDate').text(formatDatenTime(userInfo.regDate));
-			});
 			closeInfoModal();
 		});//로그인 유저 가져와서 좌석 띄우기, 모달창
 

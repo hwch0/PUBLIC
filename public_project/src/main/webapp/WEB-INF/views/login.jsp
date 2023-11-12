@@ -7,7 +7,8 @@
 <title>로그인</title>
 </head>
 <link rel="stylesheet" href="/css/user.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script src="/plugins/jquery/jquery.min.js"></script>
 <style>
 .payment_content {
    display: none;
@@ -139,7 +140,7 @@
 </style>
 <body>
     <div class="logo"><img src="/images/logo_w.png" alt="로고"></div>
-    <div class="login_content">
+    <div class="login_content" style="${showPaymentContent ? 'display:none;' : 'display:block;'}">
         <div class="id_pw_form">
             <h2>로그인</h2>
             <form id="loginForm" method="post" action="/login" >
@@ -159,7 +160,7 @@
             </form>
             
             <div class="btn kakao_btn">
-                <a href="https://kauth.kakao.com/oauth/authorize?client_id=c3fed459f31a0ba7732ba1f69446b5d1&redirect_uri=http://localhost:9000/auth/kakao/callback&response_type=code">
+                <a href="https://kauth.kakao.com/oauth/authorize?client_id=c3fed459f31a0ba7732ba1f69446b5d1&redirect_uri=http://localhost:8282/auth/kakao/callback&response_type=code">
                     <img src="/images/kakao_login.png" alt="kakao">
                 </a>
             </div>
@@ -172,7 +173,8 @@
             </div>
         </div>
     </div>
-	<div class="payment_content" style="display:none;">
+	<div class="payment_content" style="${showPaymentContent ? 'display:block;' : 'display:none;'}">
+
         <h2>시간 충전</h2>
         <div class="payment_form">
             <ul>
@@ -215,8 +217,18 @@
        <div class="canclePayment"><a>취소</a></div> 
     </div>
 </body>
-<script> 
-//로그인
+<script>
+// 잔여시간 없음
+window.addEventListener('DOMContentLoaded', (event) => {
+    const showPaymentContent = ${showPaymentContent};
+    const userId = "${userId}";
+    $('.getUserId').text(userId);
+    
+    if (!showPaymentContent) {
+        document.querySelector('.login_content').style.display ="none";
+        document.querySelector('.payment_content').style.display = 'block';
+    }
+});
 
 // 시간 충전
 $('.li_paymethod li').on('click', function(e) {
@@ -230,7 +242,7 @@ $('.li_paymethod li').on('click', function(e) {
         paymentMethodCode: paymentMethodCode
     };
 
-    fetch('/user/rechargeTime', {
+    fetch('/rechargeTime', {
         method: "POST",
         headers: {
             "Content-Type": "application/json; charset=UTF-8",
@@ -241,10 +253,10 @@ $('.li_paymethod li').on('click', function(e) {
     .then((json) =>{
         if (json.rs == "success") {
             alert('충전이 완료되었습니다!');
-            location.reload();
+            location.href = "/";
         } else {
             alert('결제가 정상적으로 이루어지지 않았습니다. 다시 시도해주세요.');
-            location.reload();
+            location.href = "/";
         }
     });
 });

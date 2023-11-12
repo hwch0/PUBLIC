@@ -18,9 +18,11 @@
                 주문 내역
             </h2>
 			<div class="button-group">
-	            <img id="refresh" src="/images/refresh.png" alt="새로고침" style="width:20px">
-	            <button id="paymCheck" onclick="orderSearch()">조회</button>
-	            <button id="Excel">엑셀</button>
+	            <input type="button" class="refresh-button" onclick="refreshOrderPage()">
+	            <button class="check" id="paymCheck" onclick="orderSearch()">조회</button>
+	            <button class="Excel" id="Excel">
+	            	<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 다운로드
+	            </button>
 	        </div>
 		</div>
 		

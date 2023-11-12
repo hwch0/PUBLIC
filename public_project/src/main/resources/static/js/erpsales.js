@@ -1,3 +1,25 @@
+//새로고침 버튼 클릭시
+//입출고
+function refreshOrderPage(){
+	document.getElementById('startDate2').value = '';
+    document.getElementById('endDate2').value = '';
+    document.querySelector('.orderCodes').value = '';
+    document.querySelector('.orderSelect').selectedIndex = 0; 
+    document.querySelector('input[name="orderOption"][value="all"]').checked = true;
+
+	//location.reload();
+}
+//재고목록
+function refreshSalesPage(){
+	document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.querySelector('.paymName').value = '';
+    document.querySelector('.orderCode').value = '';
+    document.querySelector('.userName').value = '';
+
+	//location.reload();
+}
+
 // 주문내역 상세 보기
 function orderDetail(orderId) {
     const orderData = {

@@ -7,8 +7,9 @@
 <title>사용자 화면</title>
 </head>
 <link rel="stylesheet" href="/css/user.css">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script src="/plugins/jquery/jquery.min.js"></script>
 <link rel="stylesheet" href="/css/clientChat.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 <body>
 <input type="hidden" id="userInfo" value="${map.rs}">
@@ -58,17 +59,63 @@
             </div>
          </div>
       </div>
+      <div class="cont-modal-wrap">
+      	<div class="modal modal-food">
+      		<div class="menu-category">
+      			<ul>
+      				<li class="on"><a href="javascript:void(0);">밥</a></li>
+      				<li><a href="javascript:void(0);">라면</a></li>
+      				<li><a href="javascript:void(0);">음료</a></li>
+      				<li><a href="javascript:void(0);">스낵</a></li>
+      			</ul>
+      		</div>
+      		<div class="cont-food">
+      			<!-- 밥 종류 리스트 -->
+      			<div class="food rice">
+	      			<ul class="food-list">
+	      				<!-- 상품반복 시작 -->
+	      				<li>
+	      					<div class="img-wrap">
+	      						<img alt="상품이미지" src="">
+	      					</div>
+	      					<div class="food-info-wrap">
+	      						<p class="food-name"></p>
+	      						<p class="food-price"></p>
+								<div class="food-option">
+			                    	<span class="btn-option minus"><a href="javascript:void(0);">-</a></span>
+			                    	<p>
+				                        <em id="foodNum">1</em>
+				                    </p>
+			                        <span class="btn-option plus"><a href="javascript:void(0);">+</a></span>
+			                    </div>
+		      					<div class="food-select-btn">
+		      						<a href="javascript:void(0);">장바구니에 담기</a>
+		      					</div>
+	      					</div>
+	      				</li>
+	      				<!-- 상품반복 끝 -->
+	      			</ul>
+	      		</div>
+      			<!-- 라면 종류 리스트 -->
+      			<!-- 음료 종류 리스트 -->
+      			<!-- 스낵 종류 리스트 -->
+      		</div>
+      	</div>
+      </div>
    </div>
 </body>
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>
 <script>
+// 로그아웃
 $('#logoutBtn').on('click', function(){
 	location.href = "/logout";
 });
 
+// 채팅 모달
 $(".nav-btn-wrap li").on('click', function(){
 	$(".cont-bot-wrap").css('display','block');
 });
+
 // 시간 js
 function ajaxResponse(method, url, params) {
     return new Promise(function(resolve, reject) {
@@ -134,7 +181,7 @@ function updateRemainingTime(userIdValue) {
       .catch(function(error) {
          console.error("로그인 정보 가져오는중 에러 발생: " + error);
       });
-
+}
 
 window.onload = function () {
 	const userInfoData = $('#userInfo').val();
@@ -165,6 +212,25 @@ window.onload = function () {
     userIdElement.textContent = loggedInUserId;
 }
 
+//메뉴수량 조절
+let foodNum = 1;
+
+$('.minus').on('click', function(e) {
+    if (foodNum > 1) {
+    	foodNum--; 
+        updatefoodNum();
+    }
+});
+
+$('.plus').on('click', function(e) {
+	foodNum++; 
+	updatefoodNum();
+});
+
+
+function updatefoodNum() {
+    $('.foodNum').text(foodNum);
+}
 
 </script>
 </html>

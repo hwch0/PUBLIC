@@ -183,7 +183,7 @@ label {
 
 .cont-top-wrap {
     position: fixed;
-    top: 3.333%;
+    top: 5%;
     right: 25px;
     width: 400px;
     height: 30%;
@@ -346,9 +346,135 @@ label {
 .cont-bot-wrap {
     position: fixed;
     display: none;
-    bottom: 3.333%;
+    bottom: 5%;
     right: 25px;
     width: 400px;
-    height: 60%;
+    height: 55%;
     background-color: #fff;
+}
+
+.cont-modal-wrap {
+	position: fixed;
+	top:5%;
+	left:25px;
+	width: calc(100vw - 475px);
+	height: calc(100vh - 10%);
+	background-color: rgba(0,0,0,0.9);
+}
+
+.modal-food {
+	position: relative;
+	padding: 125px 0 50px 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.modal-food .menu-category {
+	position: absolute;
+	width: 100%;
+	height: 50px;
+	top: 25px;
+	left: 0;
+}
+
+.modal-food .menu-category ul {
+	margin: 0 auto;
+	width: 60%;
+	height: 100%;
+}
+
+.modal-food .menu-category li {
+	position: relative;
+	float: left;
+	width: 25%;
+	height: 100%;
+	text-align: center;
+}
+.modal-food .menu-category li.on:before {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	height: 3px;
+	background-color: rgba(255,255,255,0.7);
+}
+.modal-food .menu-category li a {
+	display: block;
+	line-height: 50px;
+	color: #333;
+}
+.modal-food .cont-food {
+	
+}
+
+.modal-food .cont-food .food-list {
+	display: flex;
+	padding: 0 10px;
+	box-sizing: border-box;
+}
+
+.modal-food .cont-food .food li {
+	margin: 0 20px;
+	padding: 15px;
+	width: 250px;
+	height: 350px;
+	box-sizing: border-box;
+	background-color: #fff;
+}
+.modal-food .cont-food .food li .img-wrap {
+	width: 100%;
+	height: 60%;
+	background-color: #333;
+}
+
+.cont-food .food-option {
+	position: relative;
+	margin-top: 10px;
+	height: 40px;
+}
+
+.cont-food .food-option p {
+	height: 40px;
+	line-height: 40px;
+    text-align: center;
+    font-size: 14px;
+}
+.cont-food .food-option p em {
+	padding: 0 5px;
+	font-size: 22px;
+	font-weight: bold;
+	font-style: normal;
+}
+.cont-food li .btn-option {
+    position: absolute;
+    display: block;
+    top: 50%;
+    margin-top: -15px;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.cont-food li .btn-option.minus {
+	left: 30px;
+	background: url("/images/minus-button.png") no-repeat center;
+	background-size: 100%;
+}
+.cont-food li .btn-option.plus {
+	right: 30px;
+	background: url("/images/plus-button.png") no-repeat center;
+	background-size: 100%;
+}
+
+.cont-food li .btn-option a {
+    display: block;
+    line-height: 30px;
+    text-indent: -999em;
+}
+.cont-food li .foodNum {
+    text-align: center;
 }

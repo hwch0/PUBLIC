@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.UserDTO;
+import com.kr.pub.service.AdminService;
 import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
 import com.kr.pub.util.TimeApi;
@@ -36,6 +38,8 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/user")
 public class UserController {
 	
+	@Autowired
+	private AdminService adminService;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -97,5 +101,4 @@ public class UserController {
 		 * 최근인 데이터들만 가져와서 뷰단에 동적으로 출력 
 		 * */
 		
-
 }

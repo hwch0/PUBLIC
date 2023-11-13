@@ -26,8 +26,8 @@ public class MqttService {
 		outboundGateway.sendToMqtt(message, topic);
     }
 	
-	public void execute(String topic, String payload) throws Exception {
-    String [] cmdParams = StringUtils.split(topic, "/");
+	public void execute(String topic, String payload) throws Exception {//채팅 저장 로직
+    //String [] cmdParams = StringUtils.split(topic, "/");
     List<ChatDTO> chatList = (List<ChatDTO>) app.getAttribute("chatList");
     ChatDTO chat=  new ObjectMapper().readValue(payload, ChatDTO.class);
     if(chatList != null && chat.getType().equals("CHAT")) {

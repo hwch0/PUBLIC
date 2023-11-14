@@ -88,42 +88,74 @@
                   <i class="far fa-chart-bar"></i>
                   Hourly Users
                 </h3>
-
-<!--                 <div class="card-tools"> -->
-<!--                   Real time -->
-<!--                   <div class="btn-group" id="realtime" data-toggle="btn-toggle"> -->
-<!--                     <button type="button" class="btn btn-default btn-sm active" data-toggle="on">On</button> -->
-<!--                     <button type="button" class="btn btn-default btn-sm " data-toggle="off">Off</button> -->
-<!--                   </div> -->
-<!--                 </div> -->
-              </div>
-              
-           <!--     
-              <div class="card-body">
-                <div id="interactive" style="height: 200px;">
-                <canvas class="flot-base" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 100%; height: 200px;"></canvas>
-                <canvas class="flot-overlay" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 100%; height: 200	px;"></canvas>
-                <div  class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;">
-                </div>
                 
+                 <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#tap-areaChart1" data-toggle="tab">연</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#tap-areaChart2" data-toggle="tab">월</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#tap-areaChart3" data-toggle="tab">일</a>
+                    </li>
+                  </ul>
+                </div>
+
               </div>
-          
-            </div>
-            -->
             
-                  <div class="card-body">
-                    <div class="chart">
-                      <canvas
-                        id="areaChart"
-                        style="
-                          min-height: 200px;
-                          height: 200px;
-                          max-height: 250px;
-                          max-width: 100%;
-                        "
-                      ></canvas>
-                    </div>
-                  </div>
+               <div class="card-body">
+                <div class="tab-content p-0">
+                
+                   <div class="chart tab-pane active" id="tap-areaChart1"
+                       style="position: relative; height: 100%;">
+		                 <div class="chart">
+		                   <canvas
+		                     id="areaChart1"
+		                     style="
+		                       min-height: 200px;
+		                       height: 200px;
+		                       max-height: 250px;
+		                       max-width: 100%;
+		                     "
+		                   ></canvas>
+		                   </div>
+                   </div>
+                
+                
+                   <div class="chart tab-pane" id="tap-areaChart2"
+                       style="position: relative; height: 100%;">
+		                 <div class="chart">
+		                   <canvas
+		                     id="areaChart2"
+		                     style="
+		                       min-height: 200px;
+		                       height: 200px;
+		                       max-height: 250px;
+		                       max-width: 100%;
+		                     "
+		                   ></canvas>
+		                   </div>
+                   </div>
+                   
+                  <div class="chart tab-pane" id="tap-areaChart3"
+                       style="position: relative; height: 100%;">
+		                 <div class="chart">
+		                   <canvas
+		                     id="areaChart3"
+		                     style="
+		                       min-height: 200px;
+		                       height: 200px;
+		                       max-height: 250px;
+		                       max-width: 100%;
+		                     "
+		                   ></canvas>
+		                   </div>
+                   </div>
+                 
+                 </div>
+               </div>
             
             <!-- /.card -->
 
@@ -152,6 +184,7 @@
                     </li>
                   </ul>
                 </div>
+                
               </div>
               
               <div class="card-body">

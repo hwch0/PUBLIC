@@ -157,7 +157,7 @@ $(document).ready(function() {
     })
 })
 
-//입출고 내역 다운
+/*//입출고 내역 다운
 $(document).ready(function() {
     $('#ExcelDownload').on("click", function() {
 
@@ -165,7 +165,23 @@ $(document).ready(function() {
 
          downloadFile("/erp/statusDownload");
     });
-});
+});*/
+
+//입출고 내역 다운
+$(document).ready(function() {
+    $('#ExcelDownload').on("click", function() {
+		console.log("다운로드");
+	    $.ajax({
+        url: "/erp/statusDownload",
+        method: "GET",
+        success: function(data) {
+            // 다운로드 성공 시 파일 다운로드
+            alert(data.message);
+        }
+    });
+			
+		})
+    });
 
 //업로드용 다운로드
 $(document).ready(function() {

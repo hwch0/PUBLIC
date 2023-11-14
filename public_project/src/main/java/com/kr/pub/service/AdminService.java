@@ -64,7 +64,7 @@ public class AdminService {
 		return menuDAO.deleteMenu(menu) != 0;
 	}
 
-
+	@Transactional(readOnly = true)
 	public Map<String, Object> getChartData() {
 		Map<String, Object> result = new HashMap<>();
 		List<Map<String, Object>> rawData = adminDAO.getChartData();
@@ -96,15 +96,15 @@ public class AdminService {
 		return result;
 	}
 	
-	
+	@Transactional(readOnly = true)
 	public List<Map<String, Object>> getMonthlyUsers() {
 		return adminDAO.getMonthlyUsers();
 	}
-	
+	@Transactional(readOnly = true)
 	public List<OrderListDTO> getOrderList() {
 		return orderDAO.getOrderList();
 	}
-	
+	@Transactional(readOnly = true)
 	public Map<String, Object> getPieChartData() {
 		Map<String, Object> result = new HashMap<>(); 
 		String[] typeList = {"year", "month" ,"day"};
@@ -128,7 +128,7 @@ public class AdminService {
 		return result; // year -> ITEM_NAME, TOTAL_COUNT / month -> ITEM_NAME, TOTAL_COUNT / day -> ITEM_NAME, TOTAL_COUNT
 	}
 	
-	
+	@Transactional(readOnly = true)
 	public Map<String, Object> getUserCount() {
 		Map<String, Object> result = new HashMap<>(); 
 		//[{DAY=2023-11-09, USERCOUNT=1}, {DAY=2023-11-10, USERCOUNT=1}]
@@ -139,17 +139,25 @@ public class AdminService {
 		return result;
 	}
 	
+	@Transactional(readOnly = true)
 	public Map<String, Object> getHourlyUsers() {
 		Map<String, Object> result = new HashMap<>(); 
-		List<Map<String, Object>> dataMap = adminDAO.getHourlyUsers();
-		List<String> hours = new ArrayList<>();
-		List<String> users = new ArrayList<>();
-		for(Map<String, Object> data : dataMap) {
-			hours.add(data.get("HOUR").toString());
-			users.add(data.get("USER_COUNT").toString());
-		}
-		result.put("users", users);
-		result.put("hours", hours);
+		String[] typeList = {"year", "month" ,"day"};
+		
+		for(String type : typeList) {
+			Map<String, Object> dataList = new HashMap<>(); // 각 반복마다 초기화
+			List<String> hours = new ArrayList<>();
+			List<String> users = new ArrayList<>();
+		
+			List<Map<String, Object>> dataMap = adminDAO.getHourlyUsers(type);
+			for(Map<String, Object> data : dataMap) {
+				hours.add(data.get("HOUR").toString());
+				users.add(data.get("USER_COUNT").toString());
+				};
+			dataList.put("users", users);
+			dataList.put("hours", hours);
+			result.put(type, dataList);
+		};
 		
 		System.out.println(result);
 		return result;

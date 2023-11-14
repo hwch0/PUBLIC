@@ -114,7 +114,24 @@ SELECT
 ) sub 
 ]]>
 left outer join user_history h
-ON to_char(sub.hours, 'yyyy-mm-dd HH24')= to_char(h.login_time, 'yyyy-mm-dd HH24')
+<choose>
+    <when test="dateType == 'month'">
+        <![CDATA[
+      ON to_char(sub.hours, 'yyyy-mm HH24')= to_char(h.login_time, 'yyyy-mm HH24')
+      ]]>
+  </when>
+  <when test="dateType == 'day'">
+      <![CDATA[
+      ON to_char(sub.hours, 'yyyy-mm-dd HH24')= to_char(h.login_time, 'yyyy-mm-dd HH24')
+      ]]>
+  </when>
+  <otherwise>
+      <![CDATA[
+      ON to_char(sub.hours, 'yyyy HH24')= to_char(h.login_time, 'yyyy HH24')
+      ]]>
+    </otherwise>
+</choose>
+
 group by sub.hours
 order by hour
 

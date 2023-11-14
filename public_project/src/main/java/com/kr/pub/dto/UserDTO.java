@@ -36,7 +36,7 @@ public class UserDTO {
 	private String oauth;
 	
 	private int seatNo;
-	
+	private int chargeTime;//시간 충전을 위한 필드
 	// ENUM으로 안하고 ,로 해서 구분해서 ROLE을 입력 -> 그걸 파싱!!
 	// 예제 ROLL 값 : "ROLE_USER","ROLE_MANAGER","ROLE_ADMIN"  
 	public List<String> getRoleList() {

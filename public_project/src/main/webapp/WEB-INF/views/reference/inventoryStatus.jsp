@@ -21,10 +21,13 @@
 	            <input type="button" class="refresh-button" onclick="refreshStatusPage()">
 	            <button class="check" id="testCheck" onclick="statusSearch()">조회</button>
 	            <button class="insert" id="stickBtn">등록</button>
-			    <button class="Excel" id="excelDownloadBnt" type="button">
-    				<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px">
-    				다운로드
-    			</button>
+    	        <button class="Excel" id="ExcelDownload">
+					 <img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 다운로드
+				</button>
+<!-- 			    <button class="Excel" id="excelDownloadBnt" type="button"> -->
+<!--     				<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> -->
+<!--     				다운로드 -->
+<!--     			</button> -->
 	        </div>
 		</div>
 		

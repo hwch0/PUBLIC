@@ -16,6 +16,6 @@ public interface AdminDAO {
 
 	public List<Map<String, Object>> getMonthlyUsers();
 	
-	public List<Map<String, Object>> getHourlyUsers();
+	public List<Map<String, Object>> getHourlyUsers(String type);
 	
 }

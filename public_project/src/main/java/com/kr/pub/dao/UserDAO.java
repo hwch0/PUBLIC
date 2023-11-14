@@ -43,5 +43,4 @@ public interface UserDAO {
 	
 	public void updateRemainingTime(UserDTO user);
 
-	public List<MenuDTO> getMenuList();
 }

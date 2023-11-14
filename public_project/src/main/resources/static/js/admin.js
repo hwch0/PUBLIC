@@ -1,3 +1,5 @@
+
+
 /*function myFetch(url, param, handler) {
 
 	fetch(url, {

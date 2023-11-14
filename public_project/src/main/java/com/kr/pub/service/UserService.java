@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.kr.pub.controller.AppContextController;
 import com.kr.pub.dao.MenuDAO;
+import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.MenuDTO;
+import com.kr.pub.dto.OrderDTO;
+import com.kr.pub.dto.OrderListDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.exception.ExistMemberException;
 import com.kr.pub.util.TimeApi;
@@ -45,6 +49,8 @@ public class UserService {
 	private UserDAO userDAO;
 	@Autowired
 	private MenuDAO menuDAO;
+	@Autowired
+	private OrderDAO orderDAO;
 	@Autowired
 	private MqttService mqttService;
 	@Autowired
@@ -150,8 +156,7 @@ public class UserService {
 	    } else {
             map.put("message", "로그인 실패했습니다.");
         }
-        Cookie cookie = new Cookie("userId", rs.getUserId());
-        response.addCookie(cookie);
+        
         return map;
 	}
     
@@ -251,7 +256,21 @@ public class UserService {
 	    }
 	}
 
-	public List<MenuDTO> getMenuList() {
+	public List<Map<String, Object>> getMenuList() {
 		return menuDAO.getMenuList();
 	}
+
+
+	public void insertOrder(String userId) {
+		orderDAO.insertOrder(userId);
+	}
+
+	public void insertOrderItems(List<Map<String, Object>> orderList) {
+		orderDAO.insertOrderItems(orderList);
+	}
+
+	public String getOrderId() {
+		return orderDAO.getOrderId();
+	}
+
 }

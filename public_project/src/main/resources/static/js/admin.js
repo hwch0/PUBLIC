@@ -103,9 +103,8 @@ $('#closeModalBtn').on('click', () => {
 	 menuModal.removeClass('on');  
 });
 
-/* 메뉴 삭제 (menu_checked : N => Y) */
+/* 메뉴 등록 (menu_checked : N => Y) */
 $("#addMenuBnt").on("click", () => {
-	alert("메뉴 등록");
 	// 체크된 tr의 menuId 클래스명을 가진 요소의 텍스트 값을 저장할 배열을 만듭니다.
 	let checkedMenuIds = [];
 	
@@ -161,19 +160,20 @@ $("#addMenuBnt").on("click", () => {
 
 /* 메뉴 삭제 (menu_checked : Y => N) */
 function deleteMenu(element) {
-    let menuId = element.getAttribute('menuId');
-//    alert("attr 속성 값: " + menuId);
+	if(confirm("메뉴를 삭제하시겠습니까?")){
+		let menuId = element.getAttribute('menuId');
     
-    let url = "/admin/deleteMenu/" + menuId; // menuId = item테이블의 item_id
+    	let url = "/admin/deleteMenu/" + menuId; // menuId = item테이블의 item_id
     
-	myFetch(url, {mothod: "GET"}, data => {
-		if(data.status) {
-			alert(data.message);
-			
-			// 메뉴판에서 해당 메뉴 삭제하는 코드 추가
-		    element.closest('.col.mb-5').remove();
-		}
-	})
+		myFetch(url, {mothod: "GET"}, data => {
+			if(data.status) {
+				alert(data.message);
+				
+				// 메뉴판에서 해당 메뉴 삭제하는 코드 추가
+			    element.closest('.col.mb-5').remove();
+			}
+		})
+	}
 }
 
 /* 첨부파일 이벤트 핸들러 */
@@ -196,152 +196,12 @@ $(document).on("change", ".form-control", function(){
 });
 
 
-
-
-
-
 /*대시보드 */
-/*$(document).ready( ()=> {*/
-
-
-	/* -----------------------	
-     * Flot Interactive Chart
-     * -----------------------
-     */
-    // We use an inline data source in the example, usually data would
-    // be fetched from a server
-   /* var data        = [],
-        //totalPoints = 100
-        totalPoints = 10
-
-    function getRandomData() {
-
-      if (data.length > 0) {
-        data = data.slice(1)
-      }
-
-      // Do a random walk
-      while (data.length < totalPoints) {
-
-        var prev = data.length > 0 ? data[data.length - 1] : 50,
-            y    = prev + Math.random() * 10 - 5
-
-        if (y < 0) {
-          y = 0
-        } else if (y > 100) {
-          y = 100
-        }
-
-        data.push(y)
-      }
-
-      // Zip the generated y values with the x values
-      var res = []
-      for (var i = 0; i < data.length; ++i) {
-		  console.log([i, data[i]]);
-        res.push([i, data[i]])
-      }
-	
-		console.log(">> " + res);
-      return res
-    }
-    
-	let staticData = [10,20,30,40,50,60,70,80,90,10,20,30,40,50,60,70,80,90,10,20,30,40]
-    function getData() {
-		
-      if (staticData.length > 0) {
-        staticData = staticData.slice(1)
-      }
-		
-		let lastData = staticData[staticData.length -1]
-		while(staticData.length < totalPoints) {
-			staticData.push(lastData)
-		}
-      var res = []
-      for (var i = 0; i < staticData.length; ++i) {
-		  console.log([i, staticData[i]]);
-        res.push([i, staticData[i]])
-      }
-	
-		console.log(">> " + res);
-      return res
-	}
-    
-    var interactive_plot = $.plot('#interactive', [
-        {
-          //data: getRandomData(),
-          data:getData()        
-          }
-          
-      ],
-      {
-        grid: {
-          borderColor: '#f3f3f3',
-          borderWidth: 1,
-          tickColor: '#f3f3f3'
-        },
-        series: {
-          color: '#3c8dbc',
-          lines: {
-            lineWidth: 2,
-            show: true,
-            fill: true,
-          },
-        },
-        yaxis: {
-          min: 0,
-          max: 100,
-          show: true
-        },
-        xaxis: {
-          show: true
-        }
-      }
-    )
-
-    var updateInterval = 1000 //Fetch data ever x milliseconds
-    var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
-    function update() {
-
-      interactive_plot.setData([getData()]);
-
-      // Since the axes don't change, we don't need to call plot.setupGrid()
-      interactive_plot.draw()
-      if (realtime === 'on') {
-        setTimeout(update, updateInterval)
-      }
-      console.log("update");
-    }
-
-    //INITIALIZE REALTIME DATA FETCHING
-    if (realtime === 'on') {
-      update()
-    }
-    //REALTIME TOGGLE
-    $('#realtime .btn').click(function () {
-      if ($(this).data('toggle') === 'on') {
-        realtime = 'on'
-      }
-      else {
-        realtime = 'off'
-      }
-      update()
-    })
-    
-     * END INTERACTIVE CHART
-     
-*/
 /****** 시간대별 이용자 수 (로그인 시간 기준) ******/
 const getHourlyUsersUrl = "/admin/getHourlyUsers";
 myFetch(getHourlyUsersUrl, {method: "GET"}, response => {
-	const hourlyUsers = response.data.users;
-	
-	//--------------
-//- AREA CHART -
-//--------------
+	const hourlyUsersData = response.data;
 
-// Get context with jQuery - using jQuery's .get() method.
-var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
 
 const areaChartLabels = [];
 let hour = 0;
@@ -350,56 +210,58 @@ for(i=0; i<24; i++) {
 	hour++;
 }
 
-var areaChartData = {
-  labels: areaChartLabels,
-  datasets: [
-    {
-      label: "Hourly Users",
-      backgroundColor: "rgba(60,141,188,0.9)",
-      borderColor: "rgba(60,141,188,0.8)",
-      pointRadius: false,
-      pointColor: "#3b8bba",
-      pointStrokeColor: "rgba(60,141,188,1)",
-      pointHighlightFill: "#fff",
-      pointHighlightStroke: "rgba(60,141,188,1)",
-      data: hourlyUsers,
-    },
-/*     {
-      label: "Electronics",
-      backgroundColor: "rgba(210, 214, 222, 1)",
-      borderColor: "rgba(210, 214, 222, 1)",
-      pointRadius: false,
-      pointColor: "rgba(210, 214, 222, 1)",
-      pointStrokeColor: "#c1c7d1",
-      pointHighlightFill: "#fff",
-      pointHighlightStroke: "rgba(220,220,220,1)",
-      data: [65, 59, 80, 81, 56, 55, 40,65, 59, 80, 81, 56, 55, 40,65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40 ],
-    }, */
-  ],
-};
+createAreaChart($('#areaChart1'), areaChartLabels , hourlyUsersData.year.users);
+createAreaChart($('#areaChart2'), areaChartLabels , hourlyUsersData.month.users);
+createAreaChart($('#areaChart3'), areaChartLabels , hourlyUsersData.day.users);
+})
 
-var areaChartOptions = {
-  maintainAspectRatio: false,
-  responsive: true,
-  legend: {
-    display: false,
-  },
-  scales: {
-    xAxes: [
-      {
-        gridLines: {
-          display: false,
-        },
-      },
-    ],
-    yAxes: [
-      {
-        gridLines: {
-          display: false,
-        },
-      },
-    ],
-  },
+//--------------
+//- AREA CHART -
+//--------------
+
+function createAreaChart(chart, labels, data) {
+
+	var areaChartCanvas = chart.get(0).getContext("2d");
+		
+	var areaChartData = {
+	  labels: labels,
+	  datasets: [
+	    {
+	      label: "Hourly Users",
+	      backgroundColor: "rgba(60,141,188,0.9)",
+	      borderColor: "rgba(60,141,188,0.8)",
+	      pointRadius: false,
+	      pointColor: "#3b8bba",
+	      pointStrokeColor: "rgba(60,141,188,1)",
+	      pointHighlightFill: "#fff",
+	      pointHighlightStroke: "rgba(60,141,188,1)",
+	      data: data,
+	    },
+	  ],
+	};
+	
+	var areaChartOptions = {
+	  maintainAspectRatio: false,
+	  responsive: true,
+	  legend: {
+	    display: false,
+	  },
+	  scales: {
+	    xAxes: [
+	      {
+	        gridLines: {
+	          display: false,
+	        },
+	      },
+	    ],
+	    yAxes: [
+	      {
+	        gridLines: {
+	          display: false,
+	        },
+	      },
+	    ],
+	  },
 };
 
 // This will get the first returned node in the jQuery collection.
@@ -408,8 +270,9 @@ new Chart(areaChartCanvas, {
   data: areaChartData,
   options: areaChartOptions,
 });
-})
-
+	
+	
+}
 
 /****** 전일, 금일 이용자 수 (월별 매출) ******/
 const getUserCountUrl = "/admin/getUserCount";

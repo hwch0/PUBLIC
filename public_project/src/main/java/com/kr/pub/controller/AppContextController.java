@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import jakarta.servlet.ServletContext;
 public class AppContextController {
 	@Autowired
 	private ServletContext app;
+	
 	public static boolean searchUser(List<UserDTO> userList, UserDTO input) {
 		boolean result=false;
 		Optional<UserDTO> optionalUser = userList.stream()
@@ -53,6 +55,29 @@ public class AppContextController {
 		}
 		return result;
 	}
+	
+	@PostMapping("/chargeUserTime")
+	@ResponseBody
+	public void chargeUserTime(@RequestBody UserDTO input) {
+	    List<UserDTO> userList = (List<UserDTO>) app.getAttribute("loggedInUserList");
+
+	    if (userList != null) {
+	    		System.out.println("first userList =>" + userList);
+	        Optional<UserDTO> optionalUser = userList.stream()
+	                .filter(user -> user.getUserId().equals(input.getUserId()))
+	                .findFirst();
+
+	        optionalUser.ifPresent(user -> {
+	            user.setRemainingTime(user.getRemainingTime() + input.getChargeTime());
+	            // 리스트에서 해당 사용자를 교체하고 업데이트
+	            List<UserDTO> updatedList = userList.stream()
+	                    .map(obj -> obj.getUserId().equals(user.getUserId()) ? user : obj)
+	                    .collect(Collectors.toList());
+	            app.setAttribute("loggedInUserList", updatedList);
+	        });//컨트롤러 충전 부분에 합치는게  좋을듯, DB에 저장하기, mqtt도 같이 보내기
+	    }
+	}
+	
 	
 	@GetMapping("/getChatList")
 	@ResponseBody

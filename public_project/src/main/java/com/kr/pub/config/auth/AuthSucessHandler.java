@@ -15,6 +15,7 @@ import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.UserService;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +44,14 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		UserDetails userDetails = (UserDetails)principal;
 
 		UserDTO userInfo = ((PrincipalDetails) principal).getUser();
-
+		Cookie cookie = new Cookie("userId", userInfo.getUserId());
+        response.addCookie(cookie);
 		
 			
 		for (GrantedAuthority role : authentication.getAuthorities()) {
 		     if (role.getAuthority().contains("RT004")) {
 		    	 url = "/admin";
+		    	 
 		     } else if (role.getAuthority().contains("RT001")) {
 			    if(userInfo.getRemainingTime() > 0) {	
 		    	 	try {

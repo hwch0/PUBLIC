@@ -14,7 +14,7 @@ public interface MenuDAO {
 	
 	public boolean updateMenu(MenuDTO menuDTO);
 
-	public List<MenuDTO> getMenuList();
+	public List<Map<String, Object>> getMenuList();
 	
 	public List<Map<String, Object>> getMenuWithItems(MenuDTO menu);
 

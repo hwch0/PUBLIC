@@ -5,16 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kr.pub.dao.AdminDAO;
-import com.kr.pub.dao.ItemDAO;
+import com.kr.pub.dao.ImageDAO;
 import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dao.OrderDAO;
-import com.kr.pub.dto.ItemDTO;
 import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderListDTO;
 
@@ -29,6 +27,9 @@ public class AdminService {
 	
 	@Autowired
 	private MenuDAO menuDAO;
+	
+	@Autowired
+	private ImageDAO imageDAO;
 	
 	public List<MenuDTO> getMenuList() {
 		return menuDAO.getMenuList();
@@ -61,6 +62,8 @@ public class AdminService {
 		MenuDTO menu = MenuDTO.builder()
 						.itemId(itemId)
 						.build();
+		
+		// imageDAO.deleteImage(menu);
 		return menuDAO.deleteMenu(menu) != 0;
 	}
 

@@ -5,22 +5,34 @@
 
 <mapper namespace="com.kr.pub.dao.ChatDAO">
 	<insert id="insert">
-	    INSERT INTO chat(type, sender, receiver, message, seatNo, time)
-		VALUES (#{type}, #{sender},#{receiver}, #{message},#{seatNo}, #{time})
+	    INSERT INTO chat(type, sender, receiver, message, seatNo)
+		VALUES (#{type}, #{sender},#{receiver}, #{message},#{seatNo})
 	</insert>
 	
-	<select id="getChatLIst" resultType="com.kr.pub.dto.ChatDTO">
-		SELECT * FROM chat
+	<select id="getChatList" resultType="com.kr.pub.dto.ChatDTO">
+		SELECT type, sender, receiver, message, seatNo,
+		TO_CHAR(time, 'YYYY-MM-DD HH24:MI:SS') as time
+	    FROM chat
 		WHERE TRUNC(time) = TRUNC(SYSDATE)
 		ORDER BY time ASC
 	</select>
-	<select id="getChatLIstById" resultType="com.kr.pub.dto.ChatDTO">
-		SELECT *
-		FROM chat
-		WHERE TRUNC(time) = TRUNC(SYSDATE)
-		  AND
-		  AND user_Id IN (#{userId}, 'admin')
-		  AND seatNo = #{seatNo}
-		ORDER BY time ASC;
+	<select id="getChatListById" resultType="com.kr.pub.dto.ChatDTO">
+	<![CDATA[
+    SELECT
+        type,
+        sender,
+        receiver,
+        message,
+        seatNo,
+        TO_CHAR(time, 'HH24:MI:SS') AS time
+    FROM
+        chat
+    WHERE
+        TRUNC(time) = TRUNC(SYSDATE)
+        AND sender IN (#{userId}, 'admin')
+        AND receiver IN (#{userId}, 'admin')
+    ORDER BY
+        time ASC
+    ]]>
 	</select>
 </mapper>

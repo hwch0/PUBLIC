@@ -173,12 +173,12 @@ const sendMessage = () => {
 };
 //메세지 수신한 데이터를 삽입
 const recvMessage = (recv) => {
-  //console.log(recv);
+  console.log(recv);
   $("#chatList").append(
 	`<li class="you">
 		<div class="entete">
 			<p>${getNow()}</p>
-			<h2>${recv.sender}번 좌석(${recv.userId})</h2>
+			<h2>${recv.seatNo}번 좌석(${recv.sender})</h2>
 			</div>
 			<div class="triangle"></div>
 			<div class="message">${recv.message}</div>

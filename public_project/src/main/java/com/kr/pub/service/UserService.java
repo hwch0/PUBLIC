@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.kr.pub.controller.AppContextController;
+import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dao.SeatDAO;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderDTO;
+import com.kr.pub.dto.OrderHistoryDTO;
 import com.kr.pub.dto.OrderListDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.exception.ExistMemberException;
@@ -54,9 +56,11 @@ public class UserService {
 	@Autowired
 	private OrderDAO orderDAO;
 	@Autowired
-	private SeatDAO seatDAO;
+	private ItemDAO itemDAO;
 	@Autowired
 	private MqttService mqttService;
+	@Autowired
+	private SeatDAO seatDAO;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -243,16 +247,36 @@ public class UserService {
 	}
 
 
-	public void insertOrder(String userId) {
-		orderDAO.insertOrder(userId);
+	
+	public String insertOrder(OrderDTO order) {
+        orderDAO.insertOrder(order);
+        return order.getOrderId();
+    }
+
+	public void insertOrderHistory(String orderId, List<OrderHistoryDTO> cartItems) {
+	    for (OrderHistoryDTO item : cartItems) {
+	        OrderHistoryDTO orderHistory = OrderHistoryDTO.builder()
+	            .orderId(orderId)
+	            .itemId(item.getItemId())
+	            .quantity(item.getQuantity())
+	            .price(item.getPrice())
+	            .build();
+
+	        orderDAO.insertOrderHistory(orderHistory);
+	        
+	    }
 	}
 
-	public void insertOrderItems(List<Map<String, Object>> orderList) {
-		orderDAO.insertOrderItems(orderList);
-	}
+	public void updateItemStock(List<OrderHistoryDTO> cartItems) {
+		
+		for (OrderHistoryDTO item : cartItems) {
+	        OrderHistoryDTO orderHistory = OrderHistoryDTO.builder()
+	            .itemId(item.getItemId())
+	            .quantity(item.getQuantity())
+	            .build();
 
-	public String getOrderId() {
-		return orderDAO.getOrderId();
+	        itemDAO.updateItemStock(orderHistory);
+	    }
 	}
 
 }

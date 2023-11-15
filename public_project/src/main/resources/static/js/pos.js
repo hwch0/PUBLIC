@@ -83,7 +83,7 @@ $(document).ready(function() {
 		});//로그인 유저 가져와서 좌석 띄우기, 모달창
 
 
-	ajaxResponse("GET", "/getChatList")
+	ajaxResponse("GET", "/chat/list")
 		.then(function(response) {
 			console.log(response.result)
 			$.each(response.result, function(index, chat) {
@@ -111,7 +111,6 @@ $(document).ready(function() {
 					);
 				}
 			});
-
 		});
 	//채팅 데이터 불러오기		
 

@@ -9,7 +9,13 @@
 	update item 
 	set image
 </update>
-
+	<!-- 주문완료 후 수량 변경 -->
+	<update id="updateItemStock">
+        UPDATE item
+        SET stock = stock - #{quantity}
+        WHERE item_id = #{itemId}
+    </update>
+    
 	<!-- 품목명으로 품목아이디 찾기 -->
 	<select id="selectItemId" resultType="com.kr.pub.dto.ItemDTO">
 		SELECT ITEM_ID AS itemId

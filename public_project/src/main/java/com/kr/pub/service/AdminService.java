@@ -32,10 +32,11 @@ public class AdminService {
 	
 	@Autowired
 	private MenuDAO menuDAO;
-	
+
 	@Autowired
 	private ImageDAO imageDAO;
 	
+
 	public List<Map<String, Object>> getMenuList() {
 		return menuDAO.getMenuList();
 	}

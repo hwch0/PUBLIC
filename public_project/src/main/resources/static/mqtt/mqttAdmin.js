@@ -138,33 +138,38 @@ const unsubscribe = () => {
 };
 //서버에 메시지를 전송한다
 const sendMessage = () => {
-  if (!isNaN($("#seatSelector option:selected").val())) {
-    const seatNo = $("#seatSelector option:selected").val();
-    const message = $("#chatInputBox").val();
-    mqttClient.publish(
-      mqtt_topic + "chat",
-      JSON.stringify({
-        type: "CHAT",
-        sender: "admin",
-        receiver: $("#seatSelector option:selected").val(),
-        message: message,
-      })
-    );
-    $("#chatInputBox").val("");
-    $("#chatList").append(
-      `<li class="me">
+	if (!isNaN($("#seatSelector option:selected").val())) {
+		const seatNo = $("#seatSelector option:selected").val();
+		const message = $("#chatInputBox").val();
+		var receiver = "";
+		$.each($("[data-seatNo].on em"), function(index, seat){
+	    		if($(seat).text() == seatNo){
+					receiver = $(seat).siblings('.uid').text();
+				}
+		});
+		const param = {
+			type: "CHAT",
+			sender: "admin",
+			receiver: receiver,
+			message: message,
+			userId: "admin"
+		};
+		mqttClient.publish(mqtt_topic + "chat", JSON.stringify(param));
+		$("#chatInputBox").val("");
+		$("#chatList").append(
+			`<li class="me">
 					<div class="entete">
 						<p>${getNow()}</p>
 						<h2>좌석 ${seatNo}님에게 보냄</h2>
 					</div>
 					<div class="triangle"></div>
-					<div class="message">${message}</div>
+					<div class="message">${param.message}</div>
 				</li>`
-    );
-    $("#chatList").scrollTop($("#chatList")[0].scrollHeight);
-  } else {
-    alert("좌석을 선택해주세요");
-  }
+		);
+		$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
+	} else {
+		alert("좌석을 선택해주세요");
+	}
 };
 //메세지 수신한 데이터를 삽입
 const recvMessage = (recv) => {

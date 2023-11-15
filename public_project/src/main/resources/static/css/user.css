@@ -470,3 +470,23 @@ label {
 	height: 60%;
 	background-color: #333;
 }
+.addCart ul li {
+	display: flex;
+	width: 100%;
+	height: 30px;
+}
+.addCart ul li .food-name {
+	width: 40%;
+}
+.addCart ul li .food-price {
+	width: 20%;
+}
+
+.addCart ul li .food-option {
+	display: flex;
+	width: 20%;
+}
+.addCart ul li .remove-from-cart {
+	width: 20%;
+}
+.addCart ul .itemId { display: none; }

@@ -44,13 +44,7 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
 	
 	@Autowired
-	private AdminService adminService;
-	@Autowired
 	private UserService userService;
-	@Autowired
-	private MqttService mqttService;
-	@Autowired
-	private ServletContext app;
 	
 	
 	/*
@@ -103,10 +97,12 @@ public class UserController {
 	
 	@PostMapping("/getUser")
 	@ResponseBody
-	public String getUser(@RequestBody UserDTO userDTO) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(userService.getUser(userDTO));
-		return json;
+	public Map<String, UserDTO> getUser(@RequestBody UserDTO userDTO){
+		System.out.println("getUser 호출");
+		System.out.println(userDTO);
+		Map<String, UserDTO> result = new HashMap<>();
+		result.put("result", userService.getUser(userDTO));
+		return result;
 	}
 
 	@GetMapping("/getMenuList")

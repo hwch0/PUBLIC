@@ -2,7 +2,6 @@ package com.kr.pub.dto;
 
 
 import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;

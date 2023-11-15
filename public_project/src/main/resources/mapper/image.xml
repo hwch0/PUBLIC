@@ -23,5 +23,9 @@
 	select * from image where img_id = #{imgId}
 </select>
 
+<delete id="deleteImage">
+	delete from image where img_id = #{imgId}
+</delete>
+
 	
 </mapper>

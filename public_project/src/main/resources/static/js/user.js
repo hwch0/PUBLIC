@@ -293,7 +293,7 @@ function displayMenuList(menuList) {
         var menuItem = '<li>' +
             '<a href="javascript:void(0);">장바구니에 담기</a>' +
             '<div class="img-wrap">' +
-            '<img alt="상품이미지" src="/image/download/' + menu.imgId + '">' +
+            `<img alt="상품이미지" src="/image/download/${menu.imgId}">` +
             '</div>' +
             '<div class="food-info-wrap">' +
             '<p class="food-name">' + menu.itemName + '</p>' +

@@ -223,7 +223,7 @@ $('#orderList').on('click', '.served', function(e) {
 
 
 const recvLogin = () => {
-  ajaxResponse("GET", "/loggedInUserList")
+  ajaxResponse("GET", "/admin/loggedInUserList")
     .then(function (response) {
       console.log(response.result);
       $.each(response.result, function (index, user) {
@@ -244,7 +244,7 @@ const recvLogin = () => {
 
 const recvLogout = () => {
   let arr = [];
-  ajaxResponse("GET", "/loggedInUserList")
+  ajaxResponse("GET", "/admin/loggedInUserList")
     .then(function (response) {
       console.log(response.result);
       $.each(response.result, function (index, user) {

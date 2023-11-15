@@ -5,21 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kr.pub.dao.AdminDAO;
-import com.kr.pub.dao.ItemDAO;
+import com.kr.pub.dao.ImageDAO;
 import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dao.OrderDAO;
-import com.kr.pub.dto.ItemDTO;
 import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderListDTO;
+import com.kr.pub.dto.UserDTO;
 
 @Service
 public class AdminService {
+	@Autowired
+	CacheManager cacheManager;
 	
 	@Autowired
 	private AdminDAO adminDAO;
@@ -30,7 +33,10 @@ public class AdminService {
 	@Autowired
 	private MenuDAO menuDAO;
 	
-	public List<MenuDTO> getMenuList() {
+	@Autowired
+	private ImageDAO imageDAO;
+	
+	public List<Map<String, Object>> getMenuList() {
 		return menuDAO.getMenuList();
 	}
 	
@@ -61,6 +67,8 @@ public class AdminService {
 		MenuDTO menu = MenuDTO.builder()
 						.itemId(itemId)
 						.build();
+		
+		// imageDAO.deleteImage(menu);
 		return menuDAO.deleteMenu(menu) != 0;
 	}
 
@@ -161,6 +169,14 @@ public class AdminService {
 		
 		System.out.println(result);
 		return result;
+	}
+	
+	
+	@Transactional(readOnly = true)
+	@Cacheable(value = "loggedInUserList", key="'allUsers'")
+	public List<UserDTO> getLoggedInUserList() {
+		System.out.println("캐싱완료!!!");
+		return adminDAO.getLoggedInUserList();
 	}
 	
 }

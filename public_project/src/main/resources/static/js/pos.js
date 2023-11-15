@@ -34,7 +34,8 @@ $('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
 	const params = {
 		userId: clickedUserId,
 	}
-	ajaxResponse("POST", "/getUserById", params)
+	console.log(params);
+	ajaxResponse("POST", "/user/getUser", params)
 		.then(function(response) {
 			const userInfo = response.result;
 			console.log(userInfo);
@@ -56,7 +57,7 @@ const closeInfoModal = () => {
 
 $(document).ready(function() {
 	var loggedInUserList = [];
-	ajaxResponse("GET", "/loggedInUserList")
+	ajaxResponse("GET", "/admin/loggedInUserList")
 		.then(function(response) {
 			loggedInUserList = response.result;
 			if (loggedInUserList != null) {

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import com.kr.pub.controller.AppContextController;
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dao.OrderDAO;
+import com.kr.pub.dao.SeatDAO;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderDTO;
@@ -34,9 +36,9 @@ import com.kr.pub.dto.OrderHistoryDTO;
 import com.kr.pub.dto.OrderListDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.exception.ExistMemberException;
+import com.kr.pub.util.GetIpAddress;
 import com.kr.pub.util.TimeApi;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,7 +60,7 @@ public class UserService {
 	@Autowired
 	private MqttService mqttService;
 	@Autowired
-	private ServletContext app;
+	private SeatDAO seatDAO;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -79,7 +81,7 @@ public class UserService {
 		return userDAO.getUser(userId);
 	}
 	
-	public UserDTO login(UserDTO user) {
+	public UserDTO login(UserDTO user, HttpServletRequest request) {
         // 로그인 로직 구현
         UserDTO rs = userDAO.login(user);
 
@@ -91,10 +93,17 @@ public class UserService {
                 // 잔여시간이 있을 경우
                 Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
                 rs.setLoginTime(loginTime);
-                Random random = new Random();
-                // 1부터 50 사이의 랜덤 숫자 생성
-                int randomNumber = random.nextInt(50) + 1;
-                rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
+                
+                // 사용자 ip 받아와서 좌석번호 가져오는 로직
+                /*String ip = GetIpAddress.getLocation(request);
+                int seatNo = seatDAO.getSeatNo(ip);
+                rs.setSeatNo(seatNo);*/
+
+				 Random random = new Random(); // 1부터 50 사이의 랜덤 숫자 생성 int randomNumber =
+				 int randomNumber = random.nextInt(50) + 1; rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
+				 rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
+				
+                
                 updateLoginTime(rs);
                 userDAO.insertUserHistory(rs);
             }
@@ -128,25 +137,15 @@ public class UserService {
 		}
 	}
 	
+	@Transactional
+	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-        UserDTO rs = login(user);
+        UserDTO rs = login(user, request);
+        	System.out.println(rs);
         if (rs.getRemainingTime() > 0) {
             map.put("rs", rs);
             map.put("message", "로그인 성공했습니다.");
-			List<UserDTO> loggedInUserList = (List<UserDTO>) app.getAttribute("loggedInUserList");//app영역에서 로그인되어있는 회원의 배열 가져오기
-            System.out.println("application=> " + loggedInUserList);
-            	if(loggedInUserList != null) {//로그인된 회원이 있을떄
-            		if(!AppContextController.searchUser(loggedInUserList, rs)){//리스트에서 현재 로그인한 회원을 스트림으로 찾고 없다면
-            				loggedInUserList.add(rs);//로그인유저 리스트에 추가
-                        app.setAttribute("loggedInUserList", loggedInUserList);//app영역에 update하기
-            			}
-            	}else {
-            		loggedInUserList = new ArrayList<>();//현재 로그인한 회원이 아무도 없다면(배열이 null) 새로운 배열 객체 만들기
-            		loggedInUserList.add(rs);//로그인 유저 리스트에 추가
-            		app.setAttribute("loggedInUserList", loggedInUserList);//app영역에 update
-            		System.out.println("getapplication=>" + app.getAttribute("loggedInUserList"));
-            	}
             	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
             	loginSeat(rs);//random번 사용중으로 변경
             	JSONObject jsonObject = new JSONObject(Map.of(
@@ -188,20 +187,11 @@ public class UserService {
 		return userDAO.loginHistory(user);
 	}
 
-	
+	@Transactional
+	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public void logout(UserDTO userInfo) throws Exception {
-	    System.out.println(userInfo);
-	    List<UserDTO> loggedInUserList = (List<UserDTO>) app.getAttribute("loggedInUserList");
-	    
-	    if (loggedInUserList != null) {
-	        Optional<UserDTO> logoutUserOptional = loggedInUserList.stream()
-	                .filter(user -> user.getUserId().equals(userInfo.getUserId()))
-	                .findFirst();
-
-	        if (logoutUserOptional.isPresent()) {
-	            UserDTO logoutUser = logoutUserOptional.get();
-	            System.out.println(logoutUser);
-
+		UserDTO logoutUser = getUser(userInfo);
+	        if (logoutUser != null) {
 	            int remainingTime = logoutUser.getRemainingTime();
 	            // 입장시간
 	            Timestamp loginTime = logoutUser.getLoginTime();
@@ -219,9 +209,7 @@ public class UserService {
 	            } else {
 	                logoutUser.setRemainingTime(remainingTime);
 	            }
-
 	            updateAllTime(logoutUser); // DB에 업데이트
-
 	            System.out.println(logoutUser);
 	            logoutSeat(logoutUser);
 
@@ -230,18 +218,10 @@ public class UserService {
 	                    "receiver", "admin"
 	            ));
 	            mqttService.publishMessage(jsonObject.toString(), "/public/login"); // 로그아웃한 알림 관리자에게
-	            loggedInUserList = loggedInUserList.stream()
-	                    .filter(user -> !user.getUserId().equals(userInfo.getUserId())) // 특정 아이디와 일치하지 않는 요소를 필터링
-	                    .collect(Collectors.toCollection(ArrayList::new)); // 필터링된 요소로 새 ArrayList 생성
-	            app.setAttribute("loggedInUserList", loggedInUserList);//app 영역에 업데이트
-	            // 삭제된 후의 ArrayList 출력
-	            System.out.println(loggedInUserList);
 	        } else {
 	            // 해당 사용자 정보를 찾을 수 없는 경우에 대한 처리
 	            System.out.println("User not found in loggedInUserList");
 	        }
-	    }
-
 	    return; // 로그인 페이지로 리다이렉트
 	}
 	

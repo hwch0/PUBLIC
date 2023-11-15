@@ -39,13 +39,7 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
 	
 	@Autowired
-	private AdminService adminService;
-	@Autowired
 	private UserService userService;
-	@Autowired
-	private MqttService mqttService;
-	@Autowired
-	private ServletContext app;
 	
 	@GetMapping("")
     public String login() {
@@ -81,24 +75,11 @@ public class UserController {
 	}
 	@PostMapping("/getUser")
 	@ResponseBody
-	public String getUser(@RequestBody UserDTO userDTO) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(userService.getUser(userDTO));
-		return json;
+	public Map<String, UserDTO> getUser(@RequestBody UserDTO userDTO){
+		System.out.println("getUser 호출");
+		System.out.println(userDTO);
+		Map<String, UserDTO> result = new HashMap<>();
+		result.put("result", userService.getUser(userDTO));
+		return result;
 	}
-
-		/*
-		 * 순서:
-		 * 1.사용자가 주문 버튼 누름
-		 * 2.DB에 insert하는 api호출
-		 * 3.Admin에게 알림 보내기
-		 * 4.Admin측에서 알림이 오면 Ajax로 api호출해서
-		 * update되지 않은 데이터 모두 가져와서 뷰단에 동적으로 출력
-		 * 
-		 * 주문이 DB에 insert 되면 Admin에게 알림 보내서
-		 * insert된 Data를 Admin측에서 select
-		 * select할때 화면상에 위치하는 가장 위의 데이터 보다
-		 * 최근인 데이터들만 가져와서 뷰단에 동적으로 출력 
-		 * */
-		
 }

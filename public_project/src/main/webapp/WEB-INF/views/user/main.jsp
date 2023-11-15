@@ -162,7 +162,7 @@ function updateCountdown(remainingTime) {
 
 function updateRemainingTime(userIdValue) {
    const data = {userId : userIdValue}; //JWT 토큰 구현 이후 userID가져와야함
-   ajaxResponse('POST', '/getUserById', data)
+   ajaxResponse('POST', '/user/getUser', data)
       .then(function(response) {         
          var userInfo = response.result;
          localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장

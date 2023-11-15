@@ -39,14 +39,15 @@
          </div>
          <div class="nav-btn-wrap">
             <ul>
-               <li id ="orderBtn"><a href="javascript:void(0);">주문</a></li>
-               <li><a href="javascript:void(0);">충전</a></li>
-               <li><a href="javascript:void(0);">채팅</a></li>
+               <li id="orderBtn22"><a href="javascript:void(0);" onClick="navBtn(this);"></a>주문</li>
+               <li id ="rechargeBtn"><a href="javascript:void(0);" onClick="navBtn(this);">></a>충전</li>
+               <li id ="chattingBtn"><a href="javascript:void(0);" onClick="navBtn(this);">></a>채팅</li>
             </ul>
          </div>
       </div>
       <div class="cont-bot-wrap">
-         <div class="chat-wrap">
+         <div class="bot chat-wrap">
+         	<!-- 채팅 영역 -->
             <div class="wrap_chat">
                <div class="wrap_chat_main">
                   <ul id="chatList">
@@ -58,8 +59,19 @@
                </div>
             </div>
          </div>
+   		 <!-- 장바구니 영역 -->
+         <div class="bot wrap_cart">
+         	<div class="addCart">
+         		<ul>
+         			
+         		</ul>
+         	</div>
+         	<div id="orderBtn">
+         		<a href="javascript:void(0);" onClick="order();">주문하기</a>
+         	</div>
+         </div>
       </div>
-      <div class="cont-modal-wrap">
+      <div class="cont-modal-wrap" style="display:none;">
       	<div class="modal modal-food">
       		<div class="menu-category">
       			<ul>
@@ -73,27 +85,6 @@
       			<!-- 밥 종류 리스트 -->
       			<div class="food rice">
 	      			<ul class="food-list">
-	      				<!-- 상품반복 시작 -->
-	      				<li>
-	      					<div class="img-wrap">
-	      						<img alt="상품이미지" src="">
-	      					</div>
-	      					<div class="food-info-wrap">
-	      						<p class="food-name"></p>
-	      						<p class="food-price"></p>
-								<div class="food-option">
-			                    	<span class="btn-option minus"><a href="javascript:void(0);">-</a></span>
-			                    	<p>
-				                        <em id="foodNum">1</em>
-				                    </p>
-			                        <span class="btn-option plus"><a href="javascript:void(0);">+</a></span>
-			                    </div>
-		      					<div class="food-select-btn">
-		      						<a href="javascript:void(0);">장바구니에 담기</a>
-		      					</div>
-	      					</div>
-	      				</li>
-	      				<!-- 상품반복 끝 -->
 	      			</ul>
 	      		</div>
       			<!-- 라면 종류 리스트 -->
@@ -112,7 +103,7 @@ $('#logoutBtn').on('click', function(){
 });
 
 // 채팅 모달
-$(".nav-btn-wrap li").on('click', function(){
+$("#chattingBtn").on('click', function(){
 	$(".cont-bot-wrap").css('display','block');
 });
 
@@ -208,29 +199,175 @@ window.onload = function () {
     
     var userIdElement = document.getElementById("userId");
     //var loggedInUserId = localStorage.getItem("userId"); 
+    
     var loggedInUserId = userIdValue; 
     userIdElement.textContent = loggedInUserId;
+    
 }
 
-//메뉴수량 조절
-let foodNum = 1;
 
-$('.minus').on('click', function(e) {
-    if (foodNum > 1) {
-    	foodNum--; 
-        updatefoodNum();
+//주문창 
+function navBtn(element) {
+	const thisNavLi = $(element).parent();
+	
+	if (thisNavLi.hasClass('on')) {
+		$(".cont-modal-wrap").css('display', 'none');
+		$(".cont-bot-wrap").css('display', 'none');
+		$(".wrap_cart").removeClass('on');
+		thisNavLi.removeClass('on');
+	} else {
+		$(".cont-modal-wrap").css('display', 'block');
+		$(".cont-bot-wrap").css('display', 'block');
+		$(".wrap_cart").addClass('on');
+		thisNavLi.addClass('on');
+		getMenuList();
+	}
+}
+
+// 장바구니 담기
+function addCart(element) {
+	const thisNavLi = $(element).parent();
+	const itemId = $(element).data('menu-id');
+	const itemName = $(thisNavLi).find(".food-name").text();
+	const sellingPrice = $(thisNavLi).find(".food-price").text();
+	
+    
+	 var cartItem = '<li>' +
+	     '<p class="itemId">' + itemId + '</p>' +
+	     '<p class="food-name">' + itemName + '</p>' +
+	     '<p class="food-price">' + sellingPrice + '</p>' +
+	     '<div class="food-option">' +
+	         '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
+	         '<p><em class="optionNum" data-option-num="1">1</em></p>' +
+	         '<span class="btn_option plus" onClick="updateOptionNum(this)">+</span>' +
+	     '</div>' +
+	     '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">Remove</a>' +
+	     '</li>';
+	
+	 $('.addCart ul').append(cartItem);
+}
+
+// 메뉴옵션 수정
+function updateOptionNum(element) {
+    const optionNumElement = $(element).closest('.food-option').find('.optionNum');
+    let optionNum = parseInt(optionNumElement.data('option-num'));
+
+    if ($(element).hasClass('minus')) {
+        if (optionNum > 1) {
+            optionNum--;
+        }
+    } else if ($(element).hasClass('plus')) {
+        optionNum++;
     }
-});
 
-$('.plus').on('click', function(e) {
-	foodNum++; 
-	updatefoodNum();
-});
-
-
-function updatefoodNum() {
-    $('.foodNum').text(foodNum);
+    optionNumElement.data('option-num', optionNum);
+    optionNumElement.text(optionNum);
 }
 
+//해당 메뉴 삭제
+function removeCart(element) {
+    $(element).closest('li').remove();
+}                         
+
+//주문하기
+function order() {
+	   const userId = $("#userId").text();
+	   const param = { userId: userId };
+
+	   fetch('/user/order', {
+	      method: 'POST',
+	      headers: {
+	         'Content-Type': 'application/json; charset=UTF-8',
+	      },
+	      body: JSON.stringify(param),
+	   })
+	      .then((rs) => rs.json())
+	      .then((json) => {
+	         if (json.rs == 'success') {
+	            alert('주문이 정상적으로 이루어졌습니다.');
+	            orderItems();
+	         } else {
+	            alert('주문이 정상적으로 이루어지지 않았습니다. ');
+	         }
+	      })
+	      .catch((error) => {
+	         console.error('주문 에러:', error);
+	      });
+	}
+
+ // 결제하기
+// 결제하기
+function orderItems() {
+    const cartItems = [];
+
+    $('.addCart ul li').each(function () {
+        const itemId = $(this).find('.food-name').text();
+        const quantity = $(this).find('.food-option .optionNum').data('option-num');
+        const itemPrice = $(this).find('.food-price').text();
+        const itemTotalPrice = itemPrice * quantity;
+
+        cartItems.push({ itemId: itemId, quantity: quantity, price: itemTotalPrice });
+    });
+
+    // 서버로 주문 정보 전송
+    fetch('/user/orderItems', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({ cartItems: cartItems }),
+    })
+    .then((rs) => rs.json())
+    .then((json) => {
+        if (json.rs === 'success') {
+            alert('주문이 완료되었습니다!');
+            $('.addCart ul').empty();
+        } else {
+            alert('주문이 정상적으로 이루어지지 않았습니다. 다시 시도해주세요.');
+        }
+    })
+    .catch((error) => {
+        console.error('Error during order:', error);
+    });
+}
+
+
+function getMenuList() {
+    $.ajax({
+        url: "/user/getMenuList",
+        type: "GET",
+        success: function (menuList) {
+            console.log("서버에서 받은 메뉴 리스트:", menuList);
+            displayMenuList(menuList.menuList);
+        },
+        error: function (error) {
+            console.error("오류: " + error);
+        }
+    });
+}
+function displayMenuList(menuList) {
+
+    var foodList = document.querySelector(".food-list");
+    
+	$('.food-list').empty();
+
+    if (menuList != null) {
+    	 menuList.forEach(function(menu) {
+            var row = '<li>' +
+            	'<a href="javascript:void(0);" class="add-to-cart" onClick="addCart(this);" data-menu-id="' + menu.ITEMID +'">' +
+                '<div class="img-wrap">' +
+                '<img alt="상품이미지" src="/image/download/' + menu.IMGID + '"/>' +
+                '</div>' +
+                '<div class="food-info-wrap">' +
+                '<p class="food-name">' + menu.ITEMNAME + '</p>' +
+                '<p class="food-price">' + menu.SELLINGPRICE + '</p>' +
+                '</div>' +
+                '</li>';
+            $('.food-list').append(row);
+        });
+    } else {
+        console.error("메뉴가 없습니다.", menuList);
+    }
+}
 </script>
 </html>

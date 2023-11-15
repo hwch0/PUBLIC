@@ -46,7 +46,19 @@
 		SET used = 'N', user_id = null
 		WHERE user_id = #{userId}
 	</update>
-	
+	<insert id="insertMember" >
+		insert into users (
+			userId
+			,email
+			,password
+			,oauth
+		) values (
+			 #{user_id}
+			,#{email}
+			,'1234'
+			,#{oauth}
+		) 
+	</insert>
 	<insert id="insertUserHistory">
 	insert into user_history(seat_no, user_id, login_time, logout_time) 
 	values(#{seatNo}, #{userId}, #{loginTime}, #{logoutTime} )

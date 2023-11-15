@@ -9,10 +9,9 @@
 		select * from users
 	</select>
 	<select id="getUser" resultType="com.kr.pub.dto.UserDTO">
-		select * from users 
-		<![CDATA[
-			where user_id = #{userId}
-		]]>
+		select u.*, s.seat_no from users u
+		inner join seat s on u.user_id = s.user_id
+		where s.used ='Y' and u.user_id = #{userId}
 	</select>
 	<select id="findByUserId" resultType="com.kr.pub.dto.UserDTO">
 		select 
@@ -45,7 +44,7 @@
 	<update id="logoutSeat">
 		UPDATE seat
 		SET used = 'N', user_id = null
-		WHERE seat_no = #{seatNo}
+		WHERE user_id = #{userId}
 	</update>
 	<insert id="insertMember" >
 		insert into users (

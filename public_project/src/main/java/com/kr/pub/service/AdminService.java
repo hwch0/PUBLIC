@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +19,12 @@ import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dto.ItemDTO;
 import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderListDTO;
+import com.kr.pub.dto.UserDTO;
 
 @Service
 public class AdminService {
+	@Autowired
+	CacheManager cacheManager;
 	
 	@Autowired
 	private AdminDAO adminDAO;
@@ -161,6 +166,14 @@ public class AdminService {
 		
 		System.out.println(result);
 		return result;
+	}
+	
+	
+	@Transactional(readOnly = true)
+	@Cacheable(value = "loggedInUserList", key="'allUsers'")
+	public List<UserDTO> getLoggedInUserList() {
+		System.out.println("캐싱완료!!!");
+		return adminDAO.getLoggedInUserList();
 	}
 	
 }

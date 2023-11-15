@@ -27,12 +27,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.kr.pub.controller.AppContextController;
 import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dao.OrderDAO;
+import com.kr.pub.dao.SeatDAO;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderDTO;
 import com.kr.pub.dto.OrderListDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.exception.ExistMemberException;
+import com.kr.pub.util.GetIpAddress;
 import com.kr.pub.util.TimeApi;
 
 import jakarta.servlet.http.Cookie;
@@ -51,6 +53,8 @@ public class UserService {
 	private MenuDAO menuDAO;
 	@Autowired
 	private OrderDAO orderDAO;
+	@Autowired
+	private SeatDAO seatDAO;
 	@Autowired
 	private MqttService mqttService;
 	@Autowired
@@ -73,7 +77,7 @@ public class UserService {
 		return userDAO.getUser(userId);
 	}
 	
-	public UserDTO login(UserDTO user) {
+	public UserDTO login(UserDTO user, HttpServletRequest request) {
         // 로그인 로직 구현
         UserDTO rs = userDAO.login(user);
 
@@ -85,10 +89,17 @@ public class UserService {
                 // 잔여시간이 있을 경우
                 Timestamp loginTime = TimeApi.encodingTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
                 rs.setLoginTime(loginTime);
-                Random random = new Random();
-                // 1부터 50 사이의 랜덤 숫자 생성
-                int randomNumber = random.nextInt(50) + 1;
-                rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
+                
+                // 사용자 ip 받아와서 좌석번호 가져오는 로직
+                /*String ip = GetIpAddress.getLocation(request);
+                int seatNo = seatDAO.getSeatNo(ip);
+                rs.setSeatNo(seatNo);*/
+
+				 Random random = new Random(); // 1부터 50 사이의 랜덤 숫자 생성 int randomNumber =
+				 int randomNumber = random.nextInt(50) + 1; rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
+				 rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
+				
+                
                 updateLoginTime(rs);
                 userDAO.insertUserHistory(rs);
             }
@@ -126,7 +137,7 @@ public class UserService {
 	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-        UserDTO rs = login(user);
+        UserDTO rs = login(user, request);
         	System.out.println(rs);
         if (rs.getRemainingTime() > 0) {
             map.put("rs", rs);

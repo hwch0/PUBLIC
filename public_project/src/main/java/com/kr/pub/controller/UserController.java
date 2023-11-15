@@ -1,5 +1,6 @@
 package com.kr.pub.controller;
 
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.ZoneId;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kr.pub.dto.ItemDTO;
 import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderDTO;
+import com.kr.pub.dto.OrderHistoryDTO;
 import com.kr.pub.dto.OrderListDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.AdminService;
@@ -124,43 +127,31 @@ public class UserController {
 
 	@PostMapping("/order")
 	@ResponseBody
-	public Map<String, String> order(@RequestBody Map<String, String> request) {
-	   String userId = request.get("userId");
-	   System.out.println("사용자 아이디 : " + userId);
-	   
-	   Map<String, String> map = new HashMap<>();
+	public Map<String, String> order(@RequestBody OrderDTO order,OrderHistoryDTO orderHistory,ItemDTO item ) {
+	    String userId = order.getUserId();
+	    order.setUserId(userId);
+	    System.out.println("사용자 아이디 : " + userId);
 
-	   try {
-	       userService.insertOrder(userId);
-
-	       map.put("rs", "success");
-	   } catch (Exception e) {
-	       map.put("rs", "failure");
-	   }
-
-	   return map;
-	}
-	
-	@PostMapping("/orderItems")
-	@ResponseBody
-	public Map<String, Object> orderItems(@RequestBody Map<String, List<Map<String, Object>>> request) {
-	    List<Map<String, Object>> orderList = request.get("cartItems");
-	    System.out.println(orderList);
-	    
-	    String orderId = userService.getOrderId();
-	    System.out.println(orderId);
-	    
-	    System.out.println("주문 리스트: " + orderList);
-
-	    Map<String, Object> map = new HashMap<>();
+	    Map<String, String> map = new HashMap<>();
 
 	    try {
-	        userService.insertOrderItems(orderList); 
-	        map.put("rs", "success");
+	        String orderId = userService.insertOrder(order);
+	        order.setOrderId(orderId);
+	        System.out.println("주문아이디" + orderId);
+	        
+	        List<OrderHistoryDTO> cartItems = order.getItems();
+	        order.setItems(cartItems);
+	        System.out.println("장바구니 목록 : " + cartItems);
+	        
+	        userService.insertOrderHistory(orderId, cartItems);
+	        
+	        userService.updateItemStock(cartItems);
+	        map.put("rs", "true");
 	    } catch (Exception e) {
-	        map.put("rs", "failure");
+	        map.put("rs", "false");
 	    }
 
 	    return map;
 	}
+
 }

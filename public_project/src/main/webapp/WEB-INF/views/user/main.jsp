@@ -92,6 +92,9 @@
       			<!-- 스낵 종류 리스트 -->
       		</div>
       	</div>
+      	<div class="modal modal-payment">
+			
+      	</div>
       </div>
    </div>
 </body>

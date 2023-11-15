@@ -46,8 +46,8 @@
          </div>
       </div>
       <div class="cont-bot-wrap">
+    	  <!-- 채팅 영역 -->
          <div class="bot chat-wrap">
-         	<!-- 채팅 영역 -->
             <div class="wrap_chat">
                <div class="wrap_chat_main">
                   <ul id="chatList">
@@ -96,11 +96,7 @@
    </div>
 </body>
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>
-<script>
-// 로그아웃
-$('#logoutBtn').on('click', function(){
-	location.href = "/logout";
-});
+<script type="text/javascript" src="/js/user.js"></script>
 
 // 채팅 모달
 $("#chattingBtn").on('click', function(){
@@ -391,4 +387,5 @@ function displayMenuList(menuList) {
     }
 }
 </script>
+
 </html>

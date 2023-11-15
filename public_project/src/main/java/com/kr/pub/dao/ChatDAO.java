@@ -10,6 +10,6 @@ import com.kr.pub.dto.ChatDTO;
 public interface ChatDAO {
 	int insert(ChatDTO chatDTO);
 
-	List<ChatDTO> getChatLIst();
-	List<ChatDTO> getChatLIstById(ChatDTO chatDTO);
+	List<ChatDTO> getChatList();
+	List<ChatDTO> getChatListById(ChatDTO chatDTO);
 }

@@ -72,9 +72,10 @@ function updateCountdown(remainingTime) {
 
 function updateRemainingTime(userIdValue) {
    const data = {userId : userIdValue}; //JWT 토큰 구현 이후 userID가져와야함
-   ajaxResponse('POST', '/getUserById', data)
-      .then(function(response) {         
+   ajaxResponse('POST', '/user/getUser', data)
+      .then(function(response) {        
          var userInfo = response.result;
+         localStorage.setItem("userId", userInfo.userId);//테스트용 userId저장
          localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
          var remainingTime = userInfo.remainingTime;
          if (remainingTime >= 0) {
@@ -93,9 +94,9 @@ function updateRemainingTime(userIdValue) {
       });
 }
 
-window.onload = function () {
+window.onload = function() {
 	const userInfoData = $('#userInfo').val();
-	
+
 	// 쿠키에서 모든 쿠키를 가져옵니다.
 	var allCookies = document.cookie;
 
@@ -104,7 +105,7 @@ window.onload = function () {
 
 	// userId 쿠키를 찾습니다.
 	var userIdCookie = cookiesArray.find(function(cookie) {
-	    return cookie.trim().startsWith('userId=');
+		return cookie.trim().startsWith('userId=');
 	});
 
 	// userId 쿠키에서 값만 추출합니다.
@@ -113,28 +114,52 @@ window.onload = function () {
 	// userId 값을 출력합니다.
 	console.log('userId 값:', userIdValue);
 
-	
-    updateRemainingTime(userIdValue);
-    
-    var userIdElement = document.getElementById("userId");
-    //var loggedInUserId = localStorage.getItem("userId"); 
-    
-    var loggedInUserId = userIdValue; 
-    userIdElement.textContent = loggedInUserId;
-    
-    //채팅 가져오기
-    
-    const data = {	
-    		userId : loggedInUserId,
-    		seatNo : parseInt(localStorage.getItem("seatNo")),
-    		}; //JWT 토큰 구현 이후 userID가져와야함
-    ajaxResponse('POST', '/chat/getLIstById', data)
-      .then(function(response) {      
-         var chatList = response.result;
-         console.log(chatList);
-         console.log(data);
-         	
-      })
+
+	updateRemainingTime(userIdValue);
+
+	var userIdElement = document.getElementById("userId");
+	//var loggedInUserId = localStorage.getItem("userId"); 
+
+	var loggedInUserId = userIdValue;
+	userIdElement.textContent = loggedInUserId;
+
+	//채팅 가져오기
+
+	const data = {
+		userId: loggedInUserId,
+	}; //JWT 토큰 구현 이후 userID가져와야함
+	ajaxResponse('POST', '/chat/getListById', data)
+		.then(function(response) {
+			var chatList = response.result;
+			if (chatList != null) {
+				console.log(chatList);
+				$.each(response.result, function(index, chat) {
+					if (chat.sender === 'admin') {
+						$("#chatList").append(
+							`<li class="you">
+						<div class="entete">
+							<p>${chat.time}</p>
+							<h2>${chat.sender}</h2>
+							</div>
+							<div class="triangle"></div>
+							<div class="message">${chat.message}</div>
+					</li>`
+						);
+					} else {
+						$("#chatList").append(
+							`<li class="me">
+									<div class="entete">
+										<p>${chat.time}</p>
+										<h2>${chat.sender}</h2>
+									</div>
+									<div class="triangle"></div>
+									<div class="message">${chat.message}</div>
+								</li>`
+						);
+					}
+				});
+			}
+		});
 }
 
 

@@ -53,10 +53,10 @@ function getNow() {
     		const message = $("#chatInputBox").val();
             mqttClient.publish(mqtt_topic+"chat", JSON.stringify({
             	type:'CHAT',
-            	sender : localStorage.getItem("seatNo"),
-            	userId : localStorage.getItem("userId"),
+            	sender : localStorage.getItem("userId"),
             	receiver :"admin",
-            	message:message
+            	message:message,
+            	seatNo : localStorage.getItem("seatNo"),
             	}));
             $("#chatInputBox").val("");
             	$("#chatList").append(//h2변경 필요
@@ -97,10 +97,9 @@ function getNow() {
     
  // 구독 메시지 수신 
     mqttClient.on('message', function (topic, message) {
-        // message is Buffer
-        //console.log("mqtt message receive :", message.toString())
+        console.log("mqtt message receive :", message.toString())
         	const data = JSON.parse(message.toString())
-        	if(data.receiver === localStorage.getItem("seatNo")){//좌석에따라 수동적으로 바뀌는거 필요함
+        	if(data.receiver === localStorage.getItem("userId")){//좌석에따라 수동적으로 바뀌는거 필요함
         		recvMessage(data);
         	}
     })

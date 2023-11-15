@@ -104,7 +104,8 @@ $('#logoutBtn').on('click', function(){
 
 // 채팅 모달
 $("#chattingBtn").on('click', function(){
-	$(".cont-bot-wrap").css('display','block');
+   $(".cont-bot-wrap").css('display','block');
+   $(".chat-wrap").css('display','block');
 });
 
 // 시간 js
@@ -156,6 +157,7 @@ function updateRemainingTime(userIdValue) {
    ajaxResponse('POST', '/user/getUser', data)
       .then(function(response) {         
          var userInfo = response.result;
+         localStorage.setItem("userId", userInfo.userId);//테스트용 userId저장
          localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
          var remainingTime = userInfo.remainingTime;
          if (remainingTime >= 0) {
@@ -202,6 +204,25 @@ window.onload = function () {
     
     var loggedInUserId = userIdValue; 
     userIdElement.textContent = loggedInUserId;
+    
+    //채팅 가져오기
+    
+    const data = {	
+    		userId : loggedInUserId,
+    		seatNo : parseInt(localStorage.getItem("seatNo")),
+    		}; //JWT 토큰 구현 이후 userID가져와야함
+    ajaxResponse('POST', '/chat/getLIstById', data)
+      .then(function(response) {      
+         var chatList = response.result;
+         console.log(chatList);
+         console.log(data);
+         	
+      })
+    
+    
+    
+    
+    
     
 }
 

@@ -24,38 +24,6 @@ public class AppContextController {
 	@Autowired
 	private ServletContext app;
 	
-//	public static boolean searchUser(List<UserDTO> userList, UserDTO input) {
-//		boolean result=false;
-//		Optional<UserDTO> optionalUser = userList.stream()
-//			    .filter(user -> user.getUserId().equals(input.getUserId()))
-//			    .findFirst();
-//		if (optionalUser.isPresent()) {
-//			result = true;}
-//		return result;
-//	}
-//	
-//	@GetMapping("/loggedInUserList")
-//	@ResponseBody
-//	public Map<String, List<UserDTO>> getLoggedInUser(){
-//		Map<String, List<UserDTO>> result = new HashMap<>();
-//		result.put("result", (List<UserDTO>) app.getAttribute("loggedInUserList"));
-//		return result;
-//	}
-//	
-//	@PostMapping("/getUserById")
-//	@ResponseBody
-//	public Map<String, UserDTO> getUserById(@RequestBody UserDTO input){
-//		Map<String, UserDTO> result = new HashMap<>();
-//		List<UserDTO> userList = (List<UserDTO>) app.getAttribute("loggedInUserList");
-//		if(userList != null) {
-//			Optional<UserDTO> optionalUser = userList.stream()
-//				    .filter(user -> user.getUserId().equals(input.getUserId()))
-//				    .findFirst();
-//			if (optionalUser.isPresent()) {result.put("result", optionalUser.get());}
-//		}
-//		return result;
-//	}
-//	
 //	@PostMapping("/chargeUserTime")
 //	@ResponseBody
 //	public void chargeUserTime(@RequestBody UserDTO input) {

@@ -35,7 +35,7 @@ public class AdminService {
 	@Autowired
 	private MenuDAO menuDAO;
 	
-	public List<MenuDTO> getMenuList() {
+	public List<Map<String, Object>> getMenuList() {
 		return menuDAO.getMenuList();
 	}
 	

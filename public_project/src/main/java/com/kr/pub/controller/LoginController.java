@@ -171,10 +171,14 @@ public class LoginController {
 			String mail = kakaoMember.getEmail();
 			int index = mail.indexOf("@"); ;
 			
-			String kakaoId = new String();
-			kakaoId.substring(0, index);
+//			String kakaoId = new String();
+//			kakaoId.substring(0, index);
 			
+			 String[] parts = mail.split("@");
+			 String kakaoId = parts[0];
 			kakaoMember.setUserId(kakaoId);
+			
+			System.out.println("카카오 멤버 >>>>> " + kakaoMember);
 			userService.insertMember(kakaoMember);
 			
 			System.out.println(kakaoMember);

@@ -1,5 +1,6 @@
 package com.kr.pub.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -22,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kr.pub.config.MqttConfig.OutboundGateway;
 import com.kr.pub.config.auth.PrincipalDetails;
 import com.kr.pub.dto.KakaoProfile;
 import com.kr.pub.dto.OAuthToken;
@@ -63,10 +68,24 @@ public class LoginController {
 	
 	// 잔여시간 없음
 	@GetMapping("/recharge")
-    public String showPayment(Model model) {
-		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		 String userId = ((PrincipalDetails) authentication.getPrincipal()).getUser().getUserId();
-		    
+    public String showPayment(Model model, Authentication authentication) {
+		 //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		 //String userId = ((PrincipalDetails) authentication.getPrincipal()).getUser().getUserId();
+		String userId = "";
+		System.out.println(" >>> " + "충전 진입");
+		System.out.println("SecurityContextHolder.getContext()  >>>>>" + SecurityContextHolder.getContext());
+		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
+		
+		//authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(" >>> " + authentication);
+		if (authentication != null) {
+			Object  principal =  authentication.getPrincipal();
+			//PrincipalDetails principal =  (PrincipalDetails) authentication.getPrincipal();
+			//userId = principal.getUser().getUserId();
+			System.out.println(" >>>> " +  principal.getClass().getName());
+			System.out.println(" >>>> " +  principal);
+		}
+		
         model.addAttribute("showPaymentContent", true);
         model.addAttribute("userId", userId);
         
@@ -77,7 +96,7 @@ public class LoginController {
 	public String kakaoCallback(String code) { // Data를 리턴해주는 컨트롤러 함수
 		
 		System.out.println("code = " + code);
-		
+		String returnPath = "redirect:/";
 		// POST방식으로 key=value 데이터를 요청 (카카오쪽으로)
 		// Retrofit2
 		// OkHttp
@@ -165,6 +184,7 @@ public class LoginController {
 				.roleId("RT001")
 				.oauth("kakao")
 				.build();
+		UserDTO userDTO = new UserDTO();
 		
 		// 가입자 혹은 비가입자 체크 해서 처리
 		try {
@@ -180,31 +200,43 @@ public class LoginController {
 			
 			System.out.println("카카오 멤버 >>>>> " + kakaoMember);
 			userService.insertMember(kakaoMember);
-			
 			System.out.println(kakaoMember);
 			
 			System.out.println("기존 회원이 아니기에 자동 회원가입을 진행함");
+			
 		} catch (ExistMemberException e) {
 			System.out.println("기존에 회원 가입된 경우 다음으로 진행함");
+			ExistMemberException ex = (ExistMemberException)e;
+			userDTO = ex.getUserDTO();
+			
+			System.out.println("userDTO >>>>"  +userDTO);
+			returnPath = userDTO.getRemainingTime() > 0 ? returnPath + "user/main" : returnPath + "recharge";
+			System.out.println(">>> " +returnPath);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		System.out.println("자동 로그인을 진행합니다.");
-
+	
 		// 로그인 처리 
-		PrincipalDetails principalDetails = new PrincipalDetails(kakaoMember);
+		PrincipalDetails principalDetails = new PrincipalDetails(userDTO);
 		Authentication authentication = new UsernamePasswordAuthenticationToken(
 				principalDetails, // 나중에 컨트롤러에서 DI해서 쓸 때 사용하기 편함.
 				null, // 토큰 인증시 패스워드는 알수 없어 null 값을 전달하는 것임  
 				principalDetails.getAuthorities()); //사용자가 소유한 역할 권한을 전달한다 
 
+		System.out.println("principalDetails." + principalDetails);
+		System.out.println("authentication." + authentication);
+		
 		// 강제로 시큐리티의 세션에 접근하여 값 저장
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		System.out.println("SecurityContextHolder.getContext()  >>>>>" + SecurityContextHolder.getContext());
+		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
+		//SecurityContextHolder.getContext().setAuthentication(authentication);
+		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
 		
-		
-		return "redirect:/";
-		
+
+		return returnPath;
 	}
 	
 	// 시간 충전

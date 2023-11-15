@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.UserDTO;
 
+import lombok.ToString;
 
+
+@ToString
 public class PrincipalDetails implements UserDetails {
 
     private static final long serialVersionUID = -951226953749557253L;

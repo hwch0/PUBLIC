@@ -118,7 +118,9 @@ public class UserService {
 			}
 			UserDTO existMember = userDAO.findByEmail(user.getEmail());
 			if (existMember != null && !Objects.isNull(user.getEmail())) {
-				throw new ExistMemberException(user.getEmail());
+				
+				System.out.println(" >>>>> " + existMember);
+				throw new ExistMemberException(existMember);
 			}
 			//비밀번호 암호화 한다
 			//비밀번호가 있을때만 암호화를 진행한다.
@@ -128,7 +130,7 @@ public class UserService {
 			userDAO.insertMember(user);
 			System.out.println(user);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
 			throw ex;
 		}
 	}

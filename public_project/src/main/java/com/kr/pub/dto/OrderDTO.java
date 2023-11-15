@@ -1,6 +1,7 @@
 package com.kr.pub.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,4 +19,7 @@ public class OrderDTO {
 	private String code;
 	private String remarks;
 	private String served;
+	
+	private List<OrderHistoryDTO> items;
+	
 }

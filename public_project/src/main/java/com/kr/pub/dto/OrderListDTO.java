@@ -19,5 +19,4 @@ public class OrderListDTO {//사용자가 주문한 데이터를 출력하기 �
 	private int quantity;
 	private String userId;
 	private char served;
-
 }

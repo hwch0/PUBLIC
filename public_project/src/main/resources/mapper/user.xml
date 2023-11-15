@@ -60,7 +60,7 @@
 		) 
 	</insert>
 	<insert id="insertUserHistory">
-	insert into user_history(seat_no, user_id, login_time, logout_time) 
+	insert into user_history (seat_no, user_id, login_time, logout_time) 
 	values(#{seatNo}, #{userId}, #{loginTime}, #{logoutTime} )
 	</insert>
 	<update id="updateUserHistory">

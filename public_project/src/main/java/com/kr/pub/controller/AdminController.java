@@ -6,21 +6,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dto.ImageDTO;
 import com.kr.pub.dto.OrderListDTO;
+import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.AdminService;
 import com.kr.pub.service.ImageService;
 
@@ -31,6 +35,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping("/admin")
 public class AdminController {
 	
+	@Autowired
+	CacheManager cacheManager;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -201,5 +207,43 @@ public class AdminController {
 	}
 	
 	
-
+	//admin 좌석 부분
+	
+	@GetMapping("/loggedInUserList")
+	@ResponseBody
+	public Map<String, List<UserDTO>> getLoggedInUser(){
+		Map<String, List<UserDTO>> result = new HashMap<>();
+		Cache.ValueWrapper valueWrapper = cacheManager.getCache("loggedInUserList").get("allUsers");
+		if(valueWrapper != null) {
+			System.out.println("controller -> CACHE=>"+valueWrapper.get());
+		}
+		result.put("result", adminService.getLoggedInUserList());
+		return result;
+	}
+	
+	
+//	@PostMapping("/chargeUserTime")
+//	@ResponseBody
+//	public void chargeUserTime(@RequestBody UserDTO input) {
+//	    List<UserDTO> userList = adminService.getLoggedInUserList();
+//
+//	    if (userList != null) {
+//	    		System.out.println("first userList =>" + userList);
+//	        Optional<UserDTO> optionalUser = userList.stream()
+//	                .filter(user -> user.getUserId().equals(input.getUserId()))
+//	                .findFirst();
+//
+//	        optionalUser.ifPresent(user -> {
+//	            user.setRemainingTime(user.getRemainingTime() + input.getChargeTime());
+//	            // 리스트에서 해당 사용자를 교체하고 업데이트
+//	            List<UserDTO> updatedList = userList.stream()
+//	                    .map(obj -> obj.getUserId().equals(user.getUserId()) ? user : obj)
+//	                    .collect(Collectors.toList());
+//	            app.setAttribute("loggedInUserList", updatedList);
+//	            //유저리스트를 가져오는게 아니라 유저가 사용중 시간 충전되면 캐시 무효화, 
+//			javascript에서는 로그아웃, 시간충전등 loggedInUserList에 변화가 생기면 좌석리스트
+// 			다시 뿌리는 식으로 해야됨
+//	        });//컨트롤러 충전 부분에 합치는게  좋을듯, DB에 저장하기, mqtt도 같이 보내기
+//	    }
+//	}
 }

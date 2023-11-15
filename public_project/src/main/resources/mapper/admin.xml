@@ -4,6 +4,11 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.kr.pub.dao.AdminDAO">
+<select id="getLoggedInUserList" resultType="com.kr.pub.dto.UserDTO">
+	select u.*, s.seat_no from users u
+	inner join seat s on u.user_id = s.user_id
+	where s.used ='Y'
+</select>
 
 <select id="getChartData" resultType="java.util.LinkedHashMap">
 SELECT

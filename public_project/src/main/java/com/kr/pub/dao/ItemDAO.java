@@ -9,7 +9,6 @@ import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.dto.ItemDTO;
 import com.kr.pub.dto.OrderHistoryDTO;
 
-import io.lettuce.core.dynamic.annotation.Param;
 
 @Mapper
 public interface ItemDAO {
@@ -25,7 +24,7 @@ public interface ItemDAO {
 	public List<Map<String, Object>> statusList() throws Exception;
 	
 	//재고 등록
-	public Map<String, Object> insertStoreData(Map<String, Object> itemId)throws Exception;
+	public int insertStoreData(ItemDTO itemDTO) throws Exception;
 	
 	//재고 조회 조건 
 	public List<Map<String, Object>> itemSearch(Map<String, Object> params)throws Exception;

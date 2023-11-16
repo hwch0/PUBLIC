@@ -248,21 +248,11 @@ const recvLogin = () => {
 }; //사용자 로그인시 관리자 좌석 동적으로 변경
 
 const recvLogout = () => {
-  let arr = [];
-  ajaxResponse("GET", "/admin/loggedInUserList")
-    .then(function (response) {
-      console.log(response.result);
-      $.each(response.result, function (index, user) {
-        arr.push(user.seatNo);
-      });
-      const result = Array.from({ length: 50 }, (_, index) => index + 1).filter(
-        (number) => !arr.includes(number)
-      );
-
-      console.log("logout=>" + result);
-      $.each(result, function (index, seatNo) {
-        var seat = $(`li[data-seatNo=${seatNo}]`);
-        if (seat.has("on")) {
+ $.each($('[data-seatNo].on'), function (index, seat) {
+        var seat = $(seat);
+        var seatNo = seat.find('em').text();
+        console.log("seatNo+>" + seatNo)
+        if (seat.hasClass("on")) {
           seat.removeClass("on");
           seat.find("p").first().text("");
           clearInterval(timers[seatNo]);
@@ -271,7 +261,18 @@ const recvLogout = () => {
           $(`option[value=${seatNo}]`).remove();
         }
       });
+  ajaxResponse("GET", "/admin/loggedInUserList")
+    .then(function (response) {
+       $.each(response.result, function (index, user) {
+        var seat = $(`li[data-seatNo=${user.seatNo}]`);
+        	if(!seat.hasClass('on')){
+				seat.addClass("on");
+		        seat.find("p").first().text(user.userId);
+		        updateCountdown(seat.find("p").last(), user.remainingTime, user.seatNo);
+			}
+      });
       countSeat();
+      addOption();
     })
     .catch(function (error) {
       console.error("로그아웃 정보 가져오는중 에러 발생: " + error);
@@ -298,7 +299,7 @@ mqttClient.on("message", function (topic, message) {
     recvLogin(data);
     incUsersNumber(data);
   } else if (data.receiver === "admin" && data.type === "LOGOUT") {
-    recvLogout(data);
+    recvLogout();
   } else if(data.receiver === "admin" && data.type === "ORDER"){
     recvOrder(data);
   }//충전시 잔여시간 변경 기능 추가

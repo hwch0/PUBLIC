@@ -18,38 +18,47 @@
     </update>
     
 	<insert id="insertStoreData">
-	<!-- STORE 테이블 데이터 삽입 -->
-		INSERT INTO store (
-			STORE_ID,
-			STORE_DATE,
-			EMP_ID,
-			CODE,
-			REMARKS
-		) VALUES (
-			'S' || LPAD(seq_store.NEXTVAL, 6, '0'),
-			SYSDATE,
-			'admin',
-			'CT001',
-			'X'
-		);
-	<!-- STORE_HISTORY 테이블 데이터 삽입 -->
-		INSERT INTO store_history(
-			STORE_ID,
-			ITEM_ID,
-			QUANTITY,
-			PRICE
-		) VALUES (
-			'S' || LPAD(seq_store.CURRVAL, 6, '0'),
-			#{itemId},
-			#{stock},
-			#{price}
-		);
-		
-		<!-- ITEM 테이블 STOCK 업데이트 -->
-		UPDATE item
-		SET STOCK = STOCK + #{stock},
-		ITEM_TYPE_CODE = #{itemTypeCode}
-		WHERE ITEM_ID = #{itemId}
+BEGIN
+
+  INSERT INTO store (
+    STORE_ID,
+    STORE_DATE,
+    EMP_ID,
+    CODE,
+    REMARKS
+  ) VALUES (
+    'S' || LPAD(seq_store.NEXTVAL, 6, '0'),
+    SYSDATE,
+    'admin',
+    'CT001',
+    'X'
+  );
+
+  INSERT INTO store_history (
+    STORE_ID,
+    ITEM_ID,
+    QUANTITY,
+    PRICE
+  ) VALUES (
+    'S' || LPAD(seq_store.CURRVAL, 6, '0'),
+    #{itemId},
+    #{stock},
+    #{price}
+  );
+
+
+  UPDATE item
+  SET STOCK = STOCK + #{stock},
+      ITEM_TYPE_CODE = #{itemTypeCode}
+  WHERE ITEM_ID = #{itemId};
+
+
+  COMMIT;
+EXCEPTION
+  WHEN OTHERS THEN
+
+    ROLLBACK;
+END;
 	</insert>
 	
 	<!-- 입출고 내역 -->
@@ -236,7 +245,7 @@
 	</select>
 
 	<select id="itemSearch" resultType="java.util.Map">
-		SELECT /*+ INDEX(store IDX_STORE_DATE)*/
+		SELECT DISTINCT /*+ INDEX(store IDX_STORE_DATE)*/
 	       i.ITEM_ID AS itemId,
 	       i.ITEM_NAME AS itemName,
 	       c.TYPE AS type,
@@ -279,7 +288,7 @@
 	</select>
 	
 	<select id="itemList" resultType="java.util.Map">
-		SELECT /*+ INDEX(store IDX_STORE_DATE)*/
+		SELECT DISTINCT /*+ INDEX(store IDX_STORE_DATE)*/
 		     i.ITEM_ID AS itemId,
 		     i.ITEM_NAME AS itemName,
 		     c.TYPE AS type,

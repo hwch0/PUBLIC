@@ -38,14 +38,19 @@ public class ErpController {
 	private ExcelService excelService;
 
 	//입고 등록하기
-	@PostMapping("/insertStock")
+	@PostMapping("/insertStatus")
 	@ResponseBody
 	public Map<String, Object> insertStock(@RequestBody ItemDTO itemId) throws Exception{
 		System.out.println("등록확인");
 		
-		Map<String, Object> result = erpService.insertStock(itemId);
+		Map<String, Object> result = new HashMap<>();
+		
+		if(erpService.insertStock(itemId)) {
 				
 		result.put("message", "입고 등록이 완료 되었습니다.");
+		}else {
+			result.put("message", "입고 등록중 오류가 발생했습니다.");
+		}
 		return result;
 	}
 	

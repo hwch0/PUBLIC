@@ -21,8 +21,9 @@ public class MqttService {
     }
 	
 	public void execute(String topic, String payload) throws Exception {//채팅 저장 로직
+	System.out.println(topic);
     String [] cmdParams = StringUtils.split(topic, "/");
-	if(cmdParams[1].equals("chat")) {
+	if(cmdParams.length >= 2 && cmdParams[1].equals("chat")) {
 		ChatDTO chat = new ObjectMapper().readValue(payload, ChatDTO.class);
 		System.out.println("MQTTSERVICE=>" + chat);
 		if (chat != null && chat.getType().equals("CHAT")) {

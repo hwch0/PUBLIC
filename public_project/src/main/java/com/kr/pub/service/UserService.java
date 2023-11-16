@@ -149,7 +149,7 @@ public class UserService {
 		}
 	}
 	
-	@Transactional
+	//@Transactional
 	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws Exception {
 		Map<String, Object> map = new HashMap<>();
@@ -199,7 +199,7 @@ public class UserService {
 		return userDAO.loginHistory(user);
 	}
 
-	@Transactional
+	//@Transactional
 	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public void logout(UserDTO userInfo) throws Exception {
 		UserDTO logoutUser = getUser(userInfo);

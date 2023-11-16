@@ -1,3 +1,95 @@
+//테이블 공백 생성
+function addEmptyRowsToTable(tableId) {
+    var rowCount = $(tableId + ' tr').length;
+    var remainingRows = 10 - rowCount;
+
+    if (remainingRows > 0) {
+        for (var i = 0; i < remainingRows; i++) {
+            $(tableId).append('<tr>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '</tr>');
+        }
+    }
+}
+
+$(document).ready(function () {
+    addEmptyRowsToTable('#itemTbody');
+    addEmptyRowsToTable('#statusTbody');
+});
+
+//입출고 합계 구하기
+document.addEventListener("DOMContentLoaded", function() {
+	statusTotals();
+});
+
+function statusTotals(){
+	let totalStock = 0;
+	let totalPrice = 0;
+	let totalPrices = 0;
+	
+	const rows = document.querySelectorAll("#statusTbody tr");
+	rows.forEach(function (row){
+				
+		const stockElement = row.querySelector(".status-stock");
+		const stock = stockElement ? parseInt(stockElement.dataset.status) : 0;
+
+		const priceElement = row.querySelector("td:nth-child(7)");
+        const priceString = priceElement ? priceElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
+        const price = priceString !== "-" ? parseFloat(priceString) : 0;
+		
+		//총계 누적
+		totalStock += isNaN(stock) ? 0 : stock;
+		totalPrice += isNaN(price) ? 0 : price;
+		totalPrices += isNaN(stock) || isNaN(price) ? 0 : stock * price;
+
+	});
+	  const totalStockElement = document.getElementById("statusTotalStock");
+	  totalStockElement.innerText = totalStock.toLocaleString() + ' EA';
+	  
+	   const formStatusTotalPrice = document.getElementById("form-status-TotalPrice");
+	   formStatusTotalPrice.innerText = totalPrice.toLocaleString();
+	   
+	   const formStatusTotalPrices = document.getElementById("form-status-TotalPrices");
+	   formStatusTotalPrices.innerText = totalPrices.toLocaleString();
+
+}
+
+// 입고 합계 구하기
+document.addEventListener("DOMContentLoaded", function() {
+	stockTotals();
+});
+
+function stockTotals(){
+	let totalStock = 0;
+	let totalPrice = 0;
+	
+	const rows = document.querySelectorAll("#itemTbody tr");
+	rows.forEach(function (row){
+		const stockElement = row.querySelector(".stock-data");
+    	const stock = stockElement ? parseInt(stockElement.dataset.stock) : 0;
+    	
+        const priceElement = row.querySelector("td:nth-child(7)");
+		const priceString = priceElement ? priceElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
+		const price = priceString !== '-' ? parseFloat(priceString) : 0;
+		
+		//총계 누적
+		totalStock += isNaN(stock) ? 0 : stock;
+		totalPrice += isNaN(price) ? 0 : price;
+	});
+	  const totalStockElement = document.getElementById("totalStock");
+	  totalStockElement.innerText = totalStock.toLocaleString() + ' EA';
+	  
+	   const formattedTotalPriceElement = document.getElementById("formattedTotalPrice");
+	   formattedTotalPriceElement.innerText = totalPrice.toLocaleString();
+}
+
 //새로고침 버튼 클릭시
 //입출고
 function refreshStatusPage(){
@@ -15,7 +107,7 @@ function refreshStockPage(){
     document.getElementById('endDate').value = '';
     document.querySelector('.itemName').value = '';
     document.querySelector('.itemSelect').selectedIndex = 0; 
-    document.querySelector('input[name="stockItem"][value="1"]').checked = true;
+    document.querySelector('.itemSituation').selectedIndex = 0; 
 
 	//location.reload();
 }
@@ -88,6 +180,28 @@ $(document).ready(function() {
     });
 });
 
+function statusInsert(){
+	
+	const param = {
+		itemId: statusCode.value,
+    	stock: statusQuantity.value,
+    	price: statusPrices.value,
+    	itemTypeCode: statusType.value
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "/erp/insertStock",
+		contentType: "application/json; charset=UTF-8",
+		data: JSON.stringify(param),
+		dataType: "json",
+		success: function(json){
+			alert(json.message);
+			statusModel.dialog("close");
+		},
+	});
+}
+/*
 //입출고 등록버튼 alert창
 $(document).ready(function() {
 
@@ -98,7 +212,7 @@ $(document).ready(function() {
         $(".modal").removeClass("on");
     });
 });
-
+*/
 
 //품목 등록 모달창
 const stockModel = $("#stockModel");
@@ -151,6 +265,7 @@ $(document).ready(function() {
     });
 
 // 재고목록 다운로드
+
 $(document).ready(function() {
     $('#Excel').on("click", function() {
         window.location.href = "/erp/download";
@@ -258,13 +373,17 @@ function statusSearch() {
         '<td style="color: ' + 
             (status['INCDEC'] === '입고' ? 'blue' : (status['INCDEC'] === '출고' ? 'red' : 'black')) + '">' +
             status['INCDEC'] + '</td>' +
-        '<td>' + status['STOCK'] + '</td>' +
+        '<td class="status-stock" data-status="' + status['STOCK'] + ' EA">' + status['STOCK'] + '</td>' +
         '<td>₩' + new Intl.NumberFormat().format(status['PRICE']) + '</td>' +
         '<td>₩' + new Intl.NumberFormat().format(status['STOCK'] * status['PRICE']) + '</td>' +
         '</tr>';
 
     $('#statusTbody').append(row);
 			});
+            
+            addEmptyRowsToTable('#statusTbody');
+            
+            statusTotals();
             
         },
         error: function (error) {
@@ -280,14 +399,12 @@ function statusSearch() {
 function searchData() {
     LoadingWithMask('/images/loading.gif');
     
-    const selectedStockStatus = $('input[name="stockItem"]:checked').val();
-    
 	const searchParams = {
 	    startDate: $('#startDate').val().replace(/\//g, '-'),
 	    endDate: $('#endDate').val().replace(/\//g, '-'),
 	    name: $('.itemName').val(),
 	    select: $('.itemSelect').val(),
-	    stock: selectedStockStatus
+	    stock: $('.itemSituation').val()
 	};
         
     $.ajax({
@@ -296,33 +413,36 @@ function searchData() {
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(searchParams),
         success: function (data) {
-            console.log(searchParams);
-            console.log(data.itemsearch);
-            console.log(data);
+            
             $('#itemTbody').empty();
             
             $.each(data.itemsearch, function(index, item){
-				 let row = '<tr>' +
-        '<td>' + (item['index'] || '') + '</td>' +
-        '<td>' + item['ITEMID'] + '</td>' +
-        '<td>' + item['ITEMNAME'] + '</td>' +
-        '<td>' + item['TYPE'] + '</td>' +
-        '<td>' + (item['STOREDATE'] == null ? '-' : item['STOREDATE']) + '</td>' +
-        '<td>' + (item['STOCK'] == null ? '-' : item['STOCK']) + ' EA</td>' +        
-        '<td>';
-
-    if (item['PRICE'] != null) {
-        row += new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(item['PRICE'])
-    } else {
-        row += '-';
-    }
-
-    row += '</td>' +
-    '<td>' + stockStatus(item['STOCK']) + '</td></tr>';
-
-    $('#itemTbody').append(row);
-			});
-            
+			 let row = '<tr>' +
+		        '<td>' + (item['index'] || '') + '</td>' +
+		        '<td>' + item['ITEMID'] + '</td>' +
+		        '<td>' + item['ITEMNAME'] + '</td>' +
+		        '<td>' + item['TYPE'] + '</td>' +
+		        '<td>' + (item['STOREDATE'] == null ? '-' : item['STOREDATE']) + '</td>' +
+		        '<td class="stock-data" data-stock="' + (item['STOCK'] == null ? '-' : item['STOCK']) + 
+		        		' EA">' + (item['STOCK'] == null ? '-' : item['STOCK']) + ' EA</td>' +       
+		        '<td>';
+		
+		    if (item['PRICE'] != null) {
+		        row += new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(item['PRICE'])
+		    } else {
+		        row += '-';
+		    }
+		
+		    row += '</td>' +
+		    '<td>' + stockStatus(item['STOCK']) + '</td></tr>';
+		
+		    $('#itemTbody').append(row);
+					});
+					
+			 addEmptyRowsToTable('#itemTbody');
+			
+             stockTotals();
+             
         },
         error: function (error) {
             console.error('Ajax 요청 중 오류 발생: ', error);
@@ -333,17 +453,16 @@ function searchData() {
     });
 }
 
-
 //입출고 정렬
 $(document).ready(function () {
-	const originalRows = $('.statusSortable').closest('table').find('tbody > tr').toArray();
+	const originalRows = $('.statusSortable').closest('table').find('tbody:first > tr').toArray();
     $('.statusSortable').click(function () {
         const table = $(this).closest('table');
         const index = $(this).index();
         let rows;
 
         if ($(this).hasClass('asc')) {
-            rows = table.find('tbody > tr').toArray().sort(comparator(index)).reverse();
+            rows = table.find('tbody:first > tr').toArray().sort(comparator(index)).reverse();
             $(this).removeClass('asc').addClass('desc');
         } else if ($(this).hasClass('desc')) {
             $(this).removeClass('desc');
@@ -351,7 +470,7 @@ $(document).ready(function () {
             rows = originalRows;
         }else{
 			$(this).addClass('asc');
-			rows = table.find('tbody > tr').toArray().sort(comparator(index));
+			rows = table.find('tbody:first > tr').toArray().sort(comparator(index));
 		}
 		
 		if($(this).hasClass('reset')){
@@ -361,7 +480,7 @@ $(document).ready(function () {
 		
 		table.find('.statusSortable').not(this).removeClass('asc desc reset');
 
-        table.find('tbody').empty().append(rows);
+        table.find('tbody:first').empty().append(rows);
     });
 
     function comparator(index) {
@@ -393,9 +512,9 @@ $(document).ready(function () {
     }
 });
 
-//품목 목록 정렬 
+//품목 목록 정렬     
 $(document).ready(function () {
-   const originalRows = $('.itemSortable').closest('table').find('tbody > tr').toArray();
+    const originalRows = $('.itemSortable').closest('table').find('tbody:first > tr').toArray();
 
     $('.itemSortable').click(function () {
         const table = $(this).closest('table');
@@ -403,7 +522,7 @@ $(document).ready(function () {
         let rows;
 
         if ($(this).hasClass('asc')) {
-            rows = table.find('tbody > tr').toArray().sort(comparator(index)).reverse();
+            rows = table.find('tbody:first > tr').toArray().sort(comparator(index)).reverse();
             $(this).removeClass('asc').addClass('desc');
         } else if ($(this).hasClass('desc')) {
             $(this).removeClass('desc');
@@ -411,17 +530,17 @@ $(document).ready(function () {
             rows = originalRows;
         } else {
             $(this).addClass('asc');
-             rows = table.find('tbody > tr').toArray().sort(comparator(index));
+            rows = table.find('tbody:first > tr').toArray().sort(comparator(index));
         }
-        
+
         if ($(this).hasClass('reset')) {
-		    $(this).removeClass('reset');
-		    rows = originalRows;
-		}
-        
+          //  searchData();
+            $(this).removeClass('reset');
+            rows = originalRows;
+        }
+
         table.find('.itemSortable').not(this).removeClass('asc desc reset');
-        
-        table.find('tbody').empty().append(rows);
+        table.find('tbody:first').empty().append(rows);
     });
 
     function comparator(index) {
@@ -429,19 +548,19 @@ $(document).ready(function () {
             const valA = getCellValue(a, index);
             const valB = getCellValue(b, index);
 
-            if (index === 1 || index === 2 || index === 4) { // 품목코드, 품목명, 현재재고
+            if (index === 1 || index === 2 || index === 4) {
                 return valA.localeCompare(valB);
-            } else if (index === 3) { // 입고일
+            } else if (index === 3) {
                 const dateA = new Date(valA);
                 const dateB = new Date(valB);
-                
-                if(dateA.getFullYear() !== dateB.getFullYear()){
-					return dateA.getFullYear() - dateB.getFullYear();
-				}else if(dateA.getMonth() !== dateB.getMonth()){
-					return dateA.getMonth() - dateB.getMonth();
-				}else{
-					return dateA.getDate() - dateB.getDate();
-				}
+
+                if (dateA.getFullYear() !== dateB.getFullYear()) {
+                    return dateA.getFullYear() - dateB.getFullYear();
+                } else if (dateA.getMonth() !== dateB.getMonth()) {
+                    return dateA.getMonth() - dateB.getMonth();
+                } else {
+                    return dateA.getDate() - dateB.getDate();
+                }
             } else {
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
             }

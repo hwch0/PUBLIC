@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kr.pub.dao.AdminDAO;
 import com.kr.pub.dao.ItemDAO;
@@ -27,11 +28,17 @@ public class ErpService {
 	@Autowired
 	private OrderDAO orderDAO;
 	
-	//itemId 찾기
-	public List<ItemDTO> itemIdSearch(ItemDTO itemDTO) throws Exception{
-				
-		return null;
+	//입고 등록하기
+	@Transactional
+	public Map<String, Object> insertStock(ItemDTO itemId)throws Exception{
+		Map<String, Object> params = new HashMap<>();
+		params.put("itemId", itemId);
+		
+		Map<String, Object> insertStore = itemDAO.insertStoreData(params);
+		
+		return insertStore;
 	}
+	
 	
 	//주문 내역 상세보기
 	public List<Map<String, Object>> orderView(String orderId) throws Exception{
@@ -55,7 +62,7 @@ public class ErpService {
 		params.put("paymentMethod", search.getSelect());
 		params.put("orderOption", search.getCode());
 		
-		List<Map<String, Object>> orderList = orderDAO.erpOrderList(params);
+		List<Map<String, Object>> orderList = orderDAO.erpOrderSearch(params);
 		
 		indexList(orderList);
 		System.out.println("서비스 확인: " + params);
@@ -64,9 +71,8 @@ public class ErpService {
 	
 	//주문 내역
 	public List<Map<String, Object>> orderList() throws Exception{
-		Map<String, Object> params = new HashMap<>();
 		
-		List<Map<String, Object>> orderList = orderDAO.erpOrderList(params);
+		List<Map<String, Object>> orderList = orderDAO.erpOrderList();
 		
 		indexList(orderList);
 		
@@ -83,17 +89,17 @@ public class ErpService {
 		params.put("orderId", search.getOrderId());
 		params.put("unme", search.getUnme());
 		
-		List<Map<String, Object>> salesList = paymentDAO.salesList(params);
-		System.out.println("서비스 확인: " + params);
+		List<Map<String, Object>> salesList = paymentDAO.salesSearch(params);
+		System.out.println("서비스 확인1: " + params);
 		indexList(salesList);
 		
 		return salesList;
 	}
+	
 	//매출 내역
 	public List<Map<String, Object>> salesList() throws Exception{
-		Map<String, Object> params = new HashMap<>();
 		
-		List<Map<String, Object>> paymentList = paymentDAO.salesList(params);
+		List<Map<String, Object>> paymentList = paymentDAO.salesList();
 		
 		indexList(paymentList);
 		
@@ -110,7 +116,7 @@ public class ErpService {
 		params.put("stockStatus", search.getStatus());
 		params.put("statusName", search.getName());
 		
-		List<Map<String, Object>> statusList = itemDAO.statusList(params);
+		List<Map<String, Object>> statusList = itemDAO.statusSearch(params);
         
 		indexList(statusList);
 		
@@ -122,9 +128,7 @@ public class ErpService {
 	//입출고 목록 
 	public List<Map<String, Object>> statusList() throws Exception{
 		
-		Map<String, Object> Params = new HashMap<>();
-		
-		List<Map<String, Object>> statusList = itemDAO.statusList(Params);
+		List<Map<String, Object>> statusList = itemDAO.statusList();
 		
 		indexList(statusList);
 		
@@ -135,16 +139,13 @@ public class ErpService {
 	public List<Map<String, Object>> itemSearch(ErpDTO erpDTO) throws Exception {
 		Map<String, Object> searchParams = new HashMap<>();
 		
-//		searchParams.put("startNo", erpDTO.getStartNo());
-//		searchParams.put("endNo", erpDTO.getPageSize());	
-		
 		searchParams.put("startDate", erpDTO.getStartDate());
         searchParams.put("endDate", erpDTO.getEndDate());
         searchParams.put("itemName", erpDTO.getName());
         searchParams.put("itemSelect", erpDTO.getSelect());
         searchParams.put("stockItem", erpDTO.getStock());
 		
-		List<Map<String, Object>> itemList = itemDAO.itemList(searchParams);
+		List<Map<String, Object>> itemList = itemDAO.itemSearch(searchParams);
         
         indexList(itemList);
         
@@ -152,11 +153,9 @@ public class ErpService {
     }
 	
 	//재고 목록
-	public List<Map<String, Object>> itemList() throws Exception {
-	
-		Map<String, Object> params = new HashMap<>();
+	public List<Map<String, Object>> itemList() throws Exception {	
 
-		List<Map<String, Object>> itemList = itemDAO.itemList(params);
+		List<Map<String, Object>> itemList = itemDAO.itemList();
 
         indexList(itemList);
 
@@ -170,12 +169,6 @@ public class ErpService {
 		}
 	}
 
-	public List<Map<String, Object>> getSalesList(ErpDTO search) {
-		List<Map<String, Object>> salesList = paymentDAO.getSalesList(search);
-		
-		return salesList;
-	
-	}
 //	@Transactional
 //	public void download(ExcelDTO excelDTO, ResultRowDataHandler resultRowDataHandler) throws Exception{	      
 //		  List<ExcelDTO> excelData = itemDAO.excelDownload(excelDTO, resultRowDataHandler);

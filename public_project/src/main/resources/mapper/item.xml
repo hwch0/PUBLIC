@@ -9,6 +9,7 @@
 	update item 
 	set image
 </update>
+
 	<!-- 주문완료 후 수량 변경 -->
 	<update id="updateItemStock">
         UPDATE item
@@ -16,13 +17,6 @@
         WHERE item_id = #{itemId}
     </update>
     
-	<!-- 품목명으로 품목아이디 찾기 -->
-	<select id="selectItemId" resultType="com.kr.pub.dto.ItemDTO">
-		SELECT ITEM_ID AS itemId
-		FROM item
-		WHERE ITEM_NAME = #{itemName}
-	</select>
-	
 	<insert id="insertStoreData">
 	<!-- STORE 테이블 데이터 삽입 -->
 		INSERT INTO store (
@@ -47,18 +41,19 @@
 		) VALUES (
 			'S' || LPAD(seq_store.CURRVAL, 6, '0'),
 			#{itemId},
-			#{quantity},
+			#{stock},
 			#{price}
 		);
 		
 		<!-- ITEM 테이블 STOCK 업데이트 -->
 		UPDATE item
-		SET STOCK = STOCK + #{quantity}
-		WHERE ITEM_ID = #{itemId};
+		SET STOCK = STOCK + #{stock},
+		ITEM_TYPE_CODE = #{itemTypeCode}
+		WHERE ITEM_ID = #{itemId}
 	</insert>
 	
 	<!-- 입출고 내역 -->
-	<select id="statusList" resultType="java.util.Map">		
+	<select id="statusSearch" resultType="java.util.Map">		
 	        SELECT
 	            ITEM_ID,
 			    ITEM_NAME,
@@ -163,6 +158,73 @@
 	            statusDate DESC	    
 	</select>
 
+	<select id="statusList" resultType="java.util.Map">
+		SELECT
+	            ITEM_ID,
+			    ITEM_NAME,
+			    statusDate,
+			    incDec,
+			    stock,
+			    price
+	        FROM (
+	            SELECT
+	                i.ITEM_ID,
+	                i.ITEM_NAME,	                
+	                TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') AS statusDate,	                
+	                ct.INC_DEC AS incDec,
+	                sh.QUANTITY AS stock,
+	                sh.PRICE AS price
+	            FROM
+	                ITEM i
+	            JOIN
+	                STORE_HISTORY sh ON i.ITEM_ID = sh.ITEM_ID
+	            JOIN
+	                STORE s ON sh.STORE_ID = s.STORE_ID
+	            JOIN
+	                CHANGE_TYPE ct ON s.CODE = ct.CODE
+                WHERE
+                <![CDATA[
+       				i.ITEM_ID <> 'ITEM000001'
+       				]]>	 
+				AND TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	        ) q1
+	
+	        UNION ALL
+	
+	        SELECT
+	           	ITEM_ID,
+			    ITEM_NAME,
+			    statusDate,
+			    incDec,
+			    stock,
+			    price
+	        FROM (
+	            SELECT
+	                i.ITEM_ID,
+	                i.ITEM_NAME,
+	                TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') AS statusDate,
+	                ct.INC_DEC AS incDec,
+	                oh.QUANTITY AS stock,
+	                oh.PRICE AS price
+	            FROM
+	                ITEM i
+	            JOIN
+	                order_history oh ON i.ITEM_ID = oh.ITEM_ID
+	            JOIN
+	                orders o ON oh.ORDER_ID = o.ORDER_ID
+	            JOIN
+	                change_type ct ON o.CODE = ct.CODE
+               WHERE
+               <![CDATA[
+       				i.ITEM_ID <> 'ITEM000001'
+       				]]>
+				AND TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	        ) q2
+	        	        
+	        ORDER BY
+	            statusDate DESC	    
+	</select>
+
 
 	<!-- 재고 관리 -->
 	<select id="itemTotalCount" resultType="int">
@@ -173,7 +235,7 @@
 		    LEFT JOIN common_code c ON i.ITEM_TYPE_CODE = c.CODE
 	</select>
 
-	<select id="itemList" resultType="java.util.Map">
+	<select id="itemSearch" resultType="java.util.Map">
 		SELECT /*+ INDEX(store IDX_STORE_DATE)*/
 	       i.ITEM_ID AS itemId,
 	       i.ITEM_NAME AS itemName,
@@ -214,6 +276,26 @@
 			    AND i.STOCK = 0
 			</if>
 			 ORDER BY storeDate desc
+	</select>
+	
+	<select id="itemList" resultType="java.util.Map">
+		SELECT /*+ INDEX(store IDX_STORE_DATE)*/
+		     i.ITEM_ID AS itemId,
+		     i.ITEM_NAME AS itemName,
+		     c.TYPE AS type,
+		     TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') AS storeDate,
+		     i.STOCK AS stock,
+		     sh.PRICE AS price
+		FROM
+			  item i
+		LEFT JOIN
+			  store_history sh ON i.ITEM_ID = sh.ITEM_ID
+		LEFT JOIN
+			  store s ON sh.STORE_ID = s.STORE_ID
+		LEFT JOIN
+			  common_code c ON i.ITEM_TYPE_CODE = c.CODE
+		WHERE
+		 	  to_char(s.STORE_DATE,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
 	</select>
 	
 </mapper>

@@ -19,4 +19,6 @@ public class ItemDTO {
 	private String itemTypeCode;
 	private Date regDate;
 	
+	private int price;
+	
 }

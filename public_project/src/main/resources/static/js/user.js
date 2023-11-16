@@ -1,5 +1,9 @@
 // 로그아웃
 $('#logoutBtn').on('click', function(){
+	mqttClient.publish(mqtt_topic, JSON.stringify(
+		 {type: "LOGOUT",
+		  receiver: "admin"}
+	));
 	location.href = "/logout";
 });
 
@@ -95,6 +99,10 @@ function updateRemainingTime(userIdValue) {
 }
 
 window.onload = function() {
+	mqttClient.publish(mqtt_topic, JSON.stringify(
+		 {type: "LOGIN",
+		  receiver: "admin"}
+	));
 	const userInfoData = $('#userInfo').val();
 
 	// 쿠키에서 모든 쿠키를 가져옵니다.

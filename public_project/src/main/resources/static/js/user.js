@@ -1,5 +1,9 @@
 // 로그아웃
 $('#logoutBtn').on('click', function(){
+	mqttClient.publish(mqtt_topic, JSON.stringify(
+		 {type: "LOGOUT",
+		  receiver: "admin"}
+	));
 	location.href = "/logout";
 });
 
@@ -9,8 +13,10 @@ $("#chattingBtn").on('click', function(){
    $(".chat-wrap").css('display','block');
 });
 
+//주문버튼
 function navBtn(element) {
 	const thisNavLi = $(element).parent();
+	
 	
 	if (thisNavLi.hasClass('on')) {
 		$(".cont-modal-wrap").css('display', 'none');
@@ -75,6 +81,7 @@ function updateRemainingTime(userIdValue) {
    ajaxResponse('POST', '/user/getUser', data)
       .then(function(response) {         
          var userInfo = response.result;
+         localStorage.setItem("userId", userInfo.userId);//테스트용 userId저장
          localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
          var remainingTime = userInfo.remainingTime;
          if (remainingTime >= 0) {
@@ -93,9 +100,9 @@ function updateRemainingTime(userIdValue) {
       });
 }
 
-window.onload = function () {
+window.onload = function() {
 	const userInfoData = $('#userInfo').val();
-	
+
 	// 쿠키에서 모든 쿠키를 가져옵니다.
 	var allCookies = document.cookie;
 
@@ -104,7 +111,7 @@ window.onload = function () {
 
 	// userId 쿠키를 찾습니다.
 	var userIdCookie = cookiesArray.find(function(cookie) {
-	    return cookie.trim().startsWith('userId=');
+		return cookie.trim().startsWith('userId=');
 	});
 
 	// userId 쿠키에서 값만 추출합니다.
@@ -113,6 +120,7 @@ window.onload = function () {
 	// userId 값을 출력합니다.
 	console.log('userId 값:', userIdValue);
 
+<<<<<<< HEAD
 	
     updateRemainingTime(userIdValue);
     
@@ -122,63 +130,138 @@ window.onload = function () {
     var loggedInUserId = userIdValue; 
     userIdElement.textContent = loggedInUserId;
     
-    //채팅 가져오기
     
-    const data = {	
-    		userId : loggedInUserId,
-    		seatNo : parseInt(localStorage.getItem("seatNo")),
-    		}; //JWT 토큰 구현 이후 userID가져와야함
-    ajaxResponse('POST', '/chat/getLIstById', data)
-      .then(function(response) {      
-         var chatList = response.result;
-         console.log(chatList);
-         console.log(data);
-         	
-      })
-}
-
-
-//주문창 
-function navBtn(element) {
-	const thisNavLi = $(element).parent();
+    mqttClient.publish(mqtt_topic, JSON.stringify(
+		 {type: "LOGIN",
+		  receiver: "admin"}
+	));
 	
-	if (thisNavLi.hasClass('on')) {
-		$(".cont-modal-wrap").css('display', 'none');
-		$(".cont-bot-wrap").css('display', 'none');
-		$(".wrap_cart").removeClass('on');
-		thisNavLi.removeClass('on');
-	} else {
-		$(".cont-modal-wrap").css('display', 'block');
-		$(".cont-bot-wrap").css('display', 'block');
-		$(".wrap_cart").addClass('on');
-		thisNavLi.addClass('on');
-		getMenuList();
-	}
+   //채팅 가져오기
+
+	const data = {
+		userId: loggedInUserId,
+	}; //JWT 토큰 구현 이후 userID가져와야함
+	ajaxResponse('POST', '/chat/getListById', data)
+		.then(function(response) {
+			var chatList = response.result;
+			if (chatList != null) {
+				console.log(chatList);
+				$.each(response.result, function(index, chat) {
+					if (chat.sender === 'admin') {
+						$("#chatList").append(
+							`<li class="you">
+						<div class="entete">
+							<p>${chat.time}</p>
+							<h2>${chat.sender}</h2>
+							</div>
+							<div class="triangle"></div>
+							<div class="message">${chat.message}</div>
+					</li>`
+						);
+					} else {
+						$("#chatList").append(
+							`<li class="me">
+									<div class="entete">
+										<p>${chat.time}</p>
+										<h2>${chat.sender}</h2>
+									</div>
+									<div class="triangle"></div>
+									<div class="message">${chat.message}</div>
+								</li>`
+						);
+					}
+				});
+			}
+		});
+}      
+
+	updateRemainingTime(userIdValue);
+
+	var userIdElement = document.getElementById("userId");
+	//var loggedInUserId = localStorage.getItem("userId"); 
+
+	var loggedInUserId = userIdValue;
+	userIdElement.textContent = loggedInUserId;
+
+	//채팅 가져오기
+
+	const data = {
+		userId: loggedInUserId,
+	}; //JWT 토큰 구현 이후 userID가져와야함
+	ajaxResponse('POST', '/chat/getListById', data)
+		.then(function(response) {
+			var chatList = response.result;
+			if (chatList != null) {
+				console.log(chatList);
+				$.each(response.result, function(index, chat) {
+					if (chat.sender === 'admin') {
+						$("#chatList").append(
+							`<li class="you">
+						<div class="entete">
+							<p>${chat.time}</p>
+							<h2>${chat.sender}</h2>
+							</div>
+							<div class="triangle"></div>
+							<div class="message">${chat.message}</div>
+					</li>`
+						);
+					} else {
+						$("#chatList").append(
+							`<li class="me">
+									<div class="entete">
+										<p>${chat.time}</p>
+										<h2>${chat.sender}</h2>
+									</div>
+									<div class="triangle"></div>
+									<div class="message">${chat.message}</div>
+								</li>`
+						);
+					}
+				});
+			}
+		});
+>>>>>>> branch 'main' of https://github.com/hwch0/PUBLIC.git
 }
+
+
+
 
 // 장바구니 담기
 function addCart(element) {
-	const thisNavLi = $(element).parent();
-	const itemId = $(element).data('menu-id');
-	const itemName = $(thisNavLi).find(".food-name").text();
-	const sellingPrice = $(thisNavLi).find(".food-price").text();
-	
-    
-    
-	 var cartItem = '<li>' +
-	     '<p class="itemId">' + itemId + '</p>' +
-	     '<p class="food-name">' + itemName + '</p>' +
-	     '<p class="food-price">' + sellingPrice + '</p>' +
-	     '<div class="food-option">' +
-	         '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
-	         '<p><em class="optionNum" data-option-num="1">1</em></p>' +
-	         '<span class="btn_option plus" onClick="updateOptionNum(this)">+</span>' +
-	     '</div>' +
-	     '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">Remove</a>' +
-	     '</li>';
-	
-	 $('.addCart ul').append(cartItem);
+    const thisNavLi = $(element).parent();
+    const itemId = $(element).data('menu-id');
+    const itemName = $(thisNavLi).find(".food-name").text();
+    const sellingPrice = $(thisNavLi).find(".food-price").text();
+
+    // 이미 장바구니에 존재하는지 확인
+    const existingCartItem = $('.addCart ul li').filter(function() {
+        return $(this).find('.itemId').text() === itemId;
+    });
+
+    if (existingCartItem.length > 0) {
+        // 이미 존재하면 수량만 증가
+        const optionNumElement = existingCartItem.find('.optionNum');
+        const optionNum = parseInt(optionNumElement.data('option-num'));
+        optionNumElement.data('option-num', optionNum + 1);
+        optionNumElement.text(optionNum + 1);
+    } else {
+        // 존재하지 않으면 새로운 아이템 추가
+        var cartItem = '<li>' +
+            '<p class="itemId">' + itemId + '</p>' +
+            '<p class="food-name">' + itemName + '</p>' +
+            '<p class="food-price">' + sellingPrice + '</p>' +
+            '<div class="food-option">' +
+                '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
+                '<p><em class="optionNum" data-option-num="1">1</em></p>' +
+                '<span class="btn_option plus" onClick="updateOptionNum(this)">+</span>' +
+            '</div>' +
+            '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">Remove</a>' +
+            '</li>';
+
+        $('.addCart ul').append(cartItem);
+    }
 }
+
 
 // 메뉴옵션 수정
 function updateOptionNum(element) {
@@ -200,7 +283,26 @@ function updateOptionNum(element) {
 //해당 메뉴 삭제
 function removeCart(element) {
     $(element).closest('li').remove();
-}                         
+}    
+                     
+function showCategory(no) {
+  $(".menu-category li").removeClass('on');
+  $("#menu0" + no).addClass('on');
+
+  if (no == 1) {
+    $(".food-list li").not('#MC001').hide();
+  	$(".food-list li[id='MC001']").show();
+  } else if(no == 2){ 
+	$(".food-list li").not('#MC002').hide();
+    $(".food-list li[id='MC002']").show();
+  } else if(no == 3){ 
+	$(".food-list li").not('#MC003').hide();
+    $(".food-list li[id='MC003']").show();
+  } else {
+    $(".food-list li").not('#MC004').hide();
+    $(".food-list li[id='MC004']").show();
+  }
+}
 
 //주문하기
 function order() {
@@ -241,6 +343,7 @@ function order() {
 }
 
 
+// 메뉴리스트 호출
 function getMenuList() {
     $.ajax({
         url: "/user/getMenuList",
@@ -254,6 +357,7 @@ function getMenuList() {
         }
     });
 }
+// 호출된 메뉴 리스트 출력
 function displayMenuList(menuList) {
 
     var foodList = document.querySelector(".food-list");
@@ -262,14 +366,15 @@ function displayMenuList(menuList) {
 
     if (menuList != null) {
     	 menuList.forEach(function(menu) {
-            var row = '<li>' +
-            	'<a href="javascript:void(0);" class="add-to-cart" onClick="addCart(this);" data-menu-id="' + menu.ITEMID +'">' +'</a>' + 
+            var row = '<li id="' + menu.MENUCATEGORYCODE + '">'+
+            	'<a href="javascript:void(0);" class="add-to-cart" onClick="addCart(this);" data-menu-id="' + menu.ITEMID +'">' +
+                '</a>' +
                 '<div class="img-wrap">' +
                 '<img alt="상품이미지" src="/image/download/' + menu.IMGID + '"/>' +
                 '</div>' +
                 '<div class="food-info-wrap">' +
-                '<p class="food-name">' + menu.ITEMNAME + '</p>' +
-                '<p class="food-price">' + menu.SELLINGPRICE + '</p>' +
+                '<p class="food-name" style="margin-top: 15px; text-align:center; font-size: 22px; font-weight: bold; line-height: 30px;">' + menu.ITEMNAME + '</p>' +
+                '<p class="food-price" style="margin-top:15px; text-align: center; line-height:22px; font-size: 18px;">' + menu.SELLINGPRICE + '원</p>' +
                 '</div>' +
                 '</li>';
             $('.food-list').append(row);
@@ -277,6 +382,7 @@ function displayMenuList(menuList) {
     } else {
         console.error("메뉴가 없습니다.", menuList);
     }
+     showCategory(1);
 }
 
 

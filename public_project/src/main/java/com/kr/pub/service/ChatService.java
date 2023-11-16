@@ -18,8 +18,8 @@ public class ChatService {
 	}
 
 	public List<ChatDTO> getChatList() {
-		return chatDAO.getChatLIst();
+		return chatDAO.getChatList();
 	}
-	public List<ChatDTO> getChatLIstById(ChatDTO chatDTO) {return chatDAO.getChatLIst();}
+	public List<ChatDTO> getChatListById(ChatDTO chatDTO) {return chatDAO.getChatListById(chatDTO);}
 	
 }

@@ -1,14 +1,4 @@
-//날자 관련 
-makeCalendar = () => {
-	$('.input-group.date').datepicker({
-        calendarWeeks: false,
-        todayHighlight: true,
-        autoclose: true,
-        format: "yyyy/mm/dd",
-        language: "kr"
-    })
-}
-
+//날자 관련 코드
 $(document).ready(() => {
 
 	$.fn.datepicker.dates['kr'] = {
@@ -19,18 +9,45 @@ $(document).ready(() => {
 		monthsShort: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
 	};
 
-	makeCalendar();
-/*
-	const today = new Date();
-	const todayFormatted = today.getFullYear() +
-    '-' +
-    (today.getMonth() + 1).toString().padStart(2, '0') +
-    '-' +
-    today.getDate().toString().padStart(2, '0');
-	$('#startDate').val(todayFormatted);
-	$('#endDate').val(todayFormatted);*/
-});
+	const startDate = $('#startDate');
+    const endDate = $('#endDate');
+    const startDate2 = $('#startDate2')
+    const endDate2 = $('#endDate2')
+	        
+    const datepickerReset = () => {
+        $('.input-group.date').datepicker({
+            calendarWeeks: false,
+            todayHighlight: true,
+            autoclose: true,
+            format: "yyyy/mm/dd",
+            language: "kr"
+        });
+    };
 
+    datepickerReset();
+    
+	     $('#startDate, #endDate').on('change', function(){
+		const selectedDate1 = new Date(startDate.val());
+		const selectedDate2 = new Date(endDate.val());
+
+	        const diffInMilliseconds = Math.abs(selectedDate2 - selectedDate1);
+	        const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24));
+	
+	        if (diffInDays > 90) {
+                alert("최대 3개월을 넘어서 검색을 할 수 없습니다.");
+
+                startDate.val('');
+                endDate.val('');
+                startDate2.val('');
+                endDate2.val('');
+                                
+                 $('.input-group.date').datepicker('destroy');
+                 
+                 datepickerReset();
+            }
+        });
+    });
+    
 //재고관리 품목 & 입·출고 
 function changeItemPage() {
 		$('#item').css("display", "block");

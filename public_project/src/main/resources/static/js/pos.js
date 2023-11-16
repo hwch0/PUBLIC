@@ -92,7 +92,7 @@ $(document).ready(function() {
 						`<li class="you">
 						<div class="entete">
 							<p>${getNow()}</p>
-							<h2>${chat.sender}번 좌석(${chat.userId})</h2>
+							<h2>${chat.seatNo}번 좌석(${chat.sender})</h2>
 							</div>
 							<div class="triangle"></div>
 							<div class="message">${chat.message}</div>

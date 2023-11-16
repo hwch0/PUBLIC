@@ -20,7 +20,7 @@
 			<div class="button-group">
 	            <input type="button" class="refresh-button" onclick="refreshSalesPage()">
 	            <button class="check" id="paymCheck" onclick="salesSearch()">조회</button>
-	            <button class="Excel" id="Excel">
+	            <button class="Excel" id="excelDownload">
 	            	<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px"> 다운로드
 	            </button>
 	        </div>
@@ -31,7 +31,7 @@
                     <tr>
                        <td class="tr_th">매출 일자</td>
 			            <td style="padding:0 10px;">
-						    <div class="input-group date" style="display: inline-block; ">
+						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
 						        <input type="text" class="form-control" id="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
@@ -40,7 +40,7 @@
 						    
 						    <div style="display: inline-block; margin: 0 10px;">~</div>
 						    
-						    <div class="input-group date" style="display: inline-block;">
+						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
 						        <input type="text" class="form-control" id="endDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
@@ -80,6 +80,7 @@
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
                 매출 목록
             </h2>            
+         <form id="salesExcel" method="POST" action="/erp/salesExcel" >
             <table style="width: 100%;border-color: #a49f9f; border-collapse:collapse; display:block;">
                 <thead>
                     <th style="width: 45px;">순번</th>
@@ -117,7 +118,21 @@
                    		</tr>
                    	</c:forEach>
                  </tbody>
+                 
+   				<tbody class="total-row" style="background-color: #FFDCDC;">
+				      <tr>
+			            <td style="width: 641px; font-weight: bold; text-align: center;">합계</td>
+			            <td style="width: 121px; text-align: center;" id="salesTotalPrice">
+			                <span id="salesTotalPrice"></span>
+			            </td>
+			            <td style="width: 144px; text-align: center;" id="netProfitTotalPrices">
+			                ₩<span id="formNetProfitTotalPrices"></span>
+			            </td>
+       				 </tr>
+				</tbody> 
             </table>
+        	 <input type="hidden" name="salesData" id="rowDataInput" />
+		 </form>
         </div>
     </div>
    

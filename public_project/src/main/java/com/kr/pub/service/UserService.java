@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.kr.pub.config.auth.PrincipalDetails;
 import com.kr.pub.controller.AppContextController;
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.MenuDAO;
@@ -81,7 +84,7 @@ public class UserService {
 		return userDAO.getUser(userId);
 	}
 	
-	public UserDTO login(UserDTO user, HttpServletRequest request) {
+	public UserDTO login(UserDTO user, HttpServletRequest request, Authentication authentication) {
         // 로그인 로직 구현
         UserDTO rs = userDAO.login(user);
 
@@ -95,14 +98,21 @@ public class UserService {
                 rs.setLoginTime(loginTime);
                 
                 // 사용자 ip 받아와서 좌석번호 가져오는 로직
-                /*String ip = GetIpAddress.getLocation(request);
+                String ip = GetIpAddress.getLocation(request);
                 int seatNo = seatDAO.getSeatNo(ip);
-                rs.setSeatNo(seatNo);*/
+                rs.setSeatNo(seatNo);
+                
+                PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+                // PrincipalDetails의 정보 업데이트
+                principalDetails.getUser().setSeatNo(seatNo);
+                // SecurityContextHolder에서 Authentication 객체 업데이트
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-				 Random random = new Random(); // 1부터 50 사이의 랜덤 숫자 생성 int randomNumber =
-				 int randomNumber = random.nextInt(50) + 1; rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
-				 rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
-				
+				/*
+				 * Random random = new Random(); // 1부터 50 사이의 랜덤 숫자 생성 int randomNumber = int
+				 * randomNumber = random.nextInt(50) + 1; rs.setSeatNo(randomNumber);//테스트를 위해
+				 * 랜덤 숫자 생성 rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
+				 */
                 
                 updateLoginTime(rs);
                 userDAO.insertUserHistory(rs);
@@ -141,10 +151,10 @@ public class UserService {
 	
 	@Transactional
 	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
-	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-        UserDTO rs = login(user, request);
-        	System.out.println(rs);
+        UserDTO rs = login(user, request, authentication);
+        System.out.println(rs);
         if (rs.getRemainingTime() > 0) {
             map.put("rs", rs);
             map.put("message", "로그인 성공했습니다.");

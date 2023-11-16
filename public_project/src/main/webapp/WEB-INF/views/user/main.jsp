@@ -27,7 +27,7 @@
          <div class="seat-wrap">   
             <h4>
                NO.
-               <span id="seatNum">06</span>
+               <span id="seatNum">${principal.user.seatNo }</span>
             </h4>
             <div class="seat-btn">
                <ul>
@@ -37,7 +37,7 @@
             </div>
          </div>
          <div class="info-wrap">
-            <em id="userId">user1</em> 님
+            <em id="userId">${principal.user.userId }</em> 님
          </div>
          <div class="time-wrap">
             <p id="remainingTime">0</p>

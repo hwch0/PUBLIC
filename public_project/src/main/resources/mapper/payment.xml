@@ -6,7 +6,7 @@
 <mapper namespace="com.kr.pub.dao.PaymentDAO">
 
 	<!-- 매출 내역 -->
-	<select id="salesList" resultType="java.util.Map">
+	<select id="salesSearch" resultType="java.util.Map">
 	SELECT
 	    p.PAYMENT_ID AS "paymentId",
 	    o.ORDER_ID AS "orderId",
@@ -46,52 +46,30 @@
 	ORDER BY
 	    p.PAYMENT_DATE DESC, p.PAYMENT_ID DESC
 	</select>
-	
-	
-		<!-- 매출 내역 -->
-	<select id="getSalesList" resultType="java.util.Map">
-	SELECT
-	    p.PAYMENT_ID AS "paymentId",
-	    o.ORDER_ID AS "orderId",
-	    TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') AS "paymentDate",
-	    u.UNAME AS "uname",
-	    cc.TYPE AS "type",
-	    oh.PRICE AS "price",
-	    oh.PRICE - (oh.PRICE * 0.10) AS "netProfit"
-	FROM
-	    payment p
-	JOIN
-	    orders o ON p.ORDER_ID = o.ORDER_ID
-	JOIN
-	    users u ON o.USER_ID = u.USER_ID
-	JOIN
-	    order_history oh ON o.ORDER_ID = oh.ORDER_ID
-	JOIN
-	    common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
-	 WHERE
-	    1=1
-	    <!-- startDate, endDate -->
-	    <if test="startDate != null and startDate != ''">
-	       AND TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
-	    </if>
-	   	<!-- paymName -->
-	   	<if test="paymentId != null and paymentId != '' ">
-	   		AND p.PAYMENT = #{paymentId}
-	   	</if>
-	   	<!-- orderId -->
-	   	<if test="orderId != null and orderId != '' ">
-	   		AND o.ORDER_ID = #{orderId}
-	   	</if>
-	   	<!-- unme -->
-	   	 <if test="unme != null and unme != '' ">
-	   	 	AND u.UNAME LIKE '%' || #{unme} || '%'
-	   	 </if>	   	 
-	   	<!-- select -->
-	   	 <if test="select != null and select != '' and select != '전체' ">
-	   	 	AND p.PAYMENT_TYPE_CODE = #{select}
-	   	 </if>	   	 
-	ORDER BY
-	    p.PAYMENT_DATE DESC, p.PAYMENT_ID DESC
+
+
+	<select id="salesList" resultType="java.util.Map">
+		SELECT
+		    p.PAYMENT_ID AS "paymentId",
+		    o.ORDER_ID AS "orderId",
+		    TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') AS "paymentDate",
+		    u.UNAME AS "uname",
+		    cc.TYPE AS "type",
+		    oh.PRICE AS "price",
+		    oh.PRICE - (oh.PRICE * 0.10) AS "netProfit"
+		FROM
+		    payment p
+		JOIN
+		    orders o ON p.ORDER_ID = o.ORDER_ID
+		JOIN
+		    users u ON o.USER_ID = u.USER_ID
+		JOIN
+		    order_history oh ON o.ORDER_ID = oh.ORDER_ID
+		JOIN
+		    common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
+		 WHERE
+	   	 	to_char(p.PAYMENT_DATE,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
+		ORDER BY p.PAYMENT_ID DESC
 	</select>
 
 </mapper>

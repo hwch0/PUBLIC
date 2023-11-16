@@ -28,12 +28,12 @@ public class ChatController {
 		result.put("result", chatService.getChatList());
 		return result;
 	}
-	@PostMapping("/getLIstById")
+	@PostMapping("/getListById")
 	@ResponseBody
-	public Map<String, List<ChatDTO>> getLIstById(@RequestBody ChatDTO chatDTO) {
-		System.out.println(chatDTO);
+	public Map<String, List<ChatDTO>> getListById(@RequestBody ChatDTO chatDTO) {
+		System.out.println("getListById" + chatDTO);
 		Map<String, List<ChatDTO>> result = new HashMap<>();
-		result.put("result", chatService.getChatLIstById(chatDTO));
+		result.put("result", chatService.getChatListById(chatDTO));
 		return result;
 	}
 }

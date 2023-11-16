@@ -34,7 +34,8 @@ $('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
 	const params = {
 		userId: clickedUserId,
 	}
-	ajaxResponse("POST", "/getUserById", params)
+	console.log(params);
+	ajaxResponse("POST", "/user/getUser", params)
 		.then(function(response) {
 			const userInfo = response.result;
 			console.log(userInfo);
@@ -56,7 +57,7 @@ const closeInfoModal = () => {
 
 $(document).ready(function() {
 	var loggedInUserList = [];
-	ajaxResponse("GET", "/loggedInUserList")
+	ajaxResponse("GET", "/admin/loggedInUserList")
 		.then(function(response) {
 			loggedInUserList = response.result;
 			if (loggedInUserList != null) {
@@ -82,7 +83,7 @@ $(document).ready(function() {
 		});//로그인 유저 가져와서 좌석 띄우기, 모달창
 
 
-	ajaxResponse("GET", "/getChatList")
+	ajaxResponse("GET", "/chat/list")
 		.then(function(response) {
 			console.log(response.result)
 			$.each(response.result, function(index, chat) {
@@ -91,7 +92,7 @@ $(document).ready(function() {
 						`<li class="you">
 						<div class="entete">
 							<p>${getNow()}</p>
-							<h2>${chat.sender}번 좌석(${chat.userId})</h2>
+							<h2>${chat.seatNo}번 좌석(${chat.sender})</h2>
 							</div>
 							<div class="triangle"></div>
 							<div class="message">${chat.message}</div>
@@ -110,7 +111,6 @@ $(document).ready(function() {
 					);
 				}
 			});
-
 		});
 	//채팅 데이터 불러오기		
 

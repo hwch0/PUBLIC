@@ -9,7 +9,14 @@
 	update item 
 	set image
 </update>
-	
+
+	<!-- 주문완료 후 수량 변경 -->
+	<update id="updateItemStock">
+        UPDATE item
+        SET stock = stock - #{quantity}
+        WHERE item_id = #{itemId}
+    </update>
+    
 	<insert id="insertStoreData">
 	<!-- STORE 테이블 데이터 삽입 -->
 		INSERT INTO store (

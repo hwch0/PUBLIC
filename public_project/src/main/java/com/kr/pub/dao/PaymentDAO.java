@@ -13,4 +13,5 @@ public interface PaymentDAO {
 	
 	//매출 내역
 	public List<Map<String, Object>> salesList()throws Exception;
+
 }

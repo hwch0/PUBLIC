@@ -5,9 +5,13 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.kr.pub.dto.UserDTO;
+
 @Mapper
 public interface AdminDAO {
 	
+	public List<UserDTO> getLoggedInUserList();
+
 	public List<Map<String, Object>> getChartData();
 	
 	public List<Map<String, Object>> getPieChartData(String dateType);
@@ -16,6 +20,6 @@ public interface AdminDAO {
 
 	public List<Map<String, Object>> getMonthlyUsers();
 	
-	public List<Map<String, Object>> getHourlyUsers();
+	public List<Map<String, Object>> getHourlyUsers(String type);
 	
 }

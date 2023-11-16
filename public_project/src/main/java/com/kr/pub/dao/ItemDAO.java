@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.dto.ItemDTO;
+import com.kr.pub.dto.OrderHistoryDTO;
+
+import io.lettuce.core.dynamic.annotation.Param;
 
 @Mapper
 public interface ItemDAO {
@@ -30,4 +33,6 @@ public interface ItemDAO {
 	//재고 목록 출력
 	public List<Map<String, Object>> itemList() throws Exception;
 	
+	//주문완료 후 수량 업데이트
+	public void updateItemStock(OrderHistoryDTO orderHistory);
 }

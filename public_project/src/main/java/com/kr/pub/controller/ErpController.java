@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.dto.ItemDTO;
@@ -175,8 +176,9 @@ public class ErpController {
 	}
 	
 	// 입출고 목록 엑셀 DB 다운로드
+	@ResponseBody
 	@GetMapping("/statusDownload")
-	public void statusExcelDownload(HttpServletResponse res) throws Exception {
+	public Map<String, Object> statusExcelDownload(HttpServletResponse res) throws Exception {
 		List<Map<String, Object>> dataList = erpService.statusList();
 		List<String> headerNames = Arrays.asList("index","ITEM_ID", "ITEM_NAME", "STATUSDATE", "INCDEC", "STOCK", "PRICE");
 		List<String> headerLabels = Arrays.asList("순번","품목코드", "품목명", "일자", "상세", "수량", "단가");
@@ -186,6 +188,9 @@ public class ErpController {
 		System.out.println("데이터 확인: " + dataList);
 		
 		excelService.excelDownload(res, sheetName, headerNames, headerLabels, dataList, fileName);
+		Map<String, Object> result = new HashMap<>();
+		result.put("message", "성공했습니다");
+		return result;
 	}
 
 	// 재고 목록 엑셀 DB 다운로드
@@ -202,6 +207,7 @@ public class ErpController {
 		
 		excelService.excelDownload(res, sheetName, headerNames, headerLabels, dataList, fileName);		
 	}
+	
 
 	
 }

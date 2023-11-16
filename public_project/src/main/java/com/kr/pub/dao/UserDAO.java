@@ -3,6 +3,8 @@ package com.kr.pub.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+
+import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.UserDTO;
 
 
@@ -38,4 +40,7 @@ public interface UserDAO {
 	public void insertUserHistory(UserDTO user);
 	
 	public void updateUserHistory(UserDTO user);
+	
+	public void updateRemainingTime(UserDTO user);
+
 }

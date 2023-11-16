@@ -47,6 +47,7 @@
 	    p.PAYMENT_DATE DESC, p.PAYMENT_ID DESC
 	</select>
 
+
 	<select id="salesList" resultType="java.util.Map">
 		SELECT
 		    p.PAYMENT_ID AS "paymentId",

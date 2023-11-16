@@ -13,7 +13,15 @@
 		where served = 'N' and p.Payment_id = 'P000006' and p.Payment_Type_code ='PT002'
 	</select>
 	
+	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
+	    insert into orders (user_id, code) 
+	    values (#{userId}, 'CT004')
+	</insert>
 	
+	<insert id="insertOrderHistory"  parameterType="com.kr.pub.dto.OrderHistoryDTO">
+	    INSERT INTO order_history (item_id, order_id, quantity, price)
+	    VALUES (#{itemId}, #{orderId}, #{quantity}, #{price})
+	</insert>
 	<!-- 주문 내역 상세보기 -->
 	<select id="erpOrderView" resultType="java.util.Map">
 		SELECT

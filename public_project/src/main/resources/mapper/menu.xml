@@ -18,17 +18,31 @@
     </association>
 </resultMap>
 
-
 <update id="updateMenu">
 	update menu
 	set img_id = #{imgId}, menu_checked = 'Y'
 	where item_id = #{itemId}
 </update>
 
-<select id="getMenuList" resultType="com.kr.pub.dto.MenuDTO">
-	select * from menu where menu_checked = 'Y'
+<!--<select id="getMenuList" resultType="com.kr.pub.dto.MenuDTO"> -->
+<!--	select * from menu where menu_checked = 'Y' -->
+<!--</select> -->
+<select id="getMenuList" resultType="map">
+    SELECT
+        m.item_id AS itemId,
+        m.img_id AS imgId,
+        m.menu_category_code AS menuCategoryCode,
+        m.menu_checked AS menuChecked,
+        c.type AS menuCategory,
+        i.item_name AS itemName, 
+        i.selling_price AS sellingPrice 
+    FROM
+        menu m
+        LEFT JOIN item i ON m.item_id = i.item_id
+        LEFT JOIN common_code c ON m.menu_category_code = c.code
+    WHERE
+        m.menu_checked = 'Y'
 </select>
-
 <!-- <select id="getMenuWithItems" resultMap="menuItemResultMap"> -->
 <!--     SELECT -->
 <!--         m.item_id, -->
@@ -48,21 +62,22 @@
 
 <select id="getMenuWithItems" resultType="map">
     SELECT
-    m.item_id,
-    m.img_id,
-    m.menu_category_code,
-    m.menu_checked,
-    i.item_id,
-    i.item_name,
-    i.selling_price,
-    i.stock,
-    i.item_type_code,
-    i.reg_date,
-    c.type as menu_category
+	    m.item_id,
+	    m.img_id,
+	    m.menu_category_code,
+	    m.menu_checked,
+	    i.item_id,
+	    i.item_name,
+	    i.selling_price,
+	    i.stock,
+	    i.item_type_code,
+	    i.reg_date,
+	    c.type as menu_category
 	FROM menu m
-	INNER JOIN item i ON m.item_id = i.item_id
-	INNER JOIN common_code c ON m.menu_category_code = c.code
-	WHERE m.menu_checked = #{menuChecked}
+		INNER JOIN item i ON m.item_id = i.item_id
+		INNER JOIN common_code c ON m.menu_category_code = c.code
+	WHERE 
+		m.menu_checked = #{menuChecked}
 	<if test="menuCategoryCode != null">
         <![CDATA[
         and m.menu_category_code = #{menuCategoryCode}

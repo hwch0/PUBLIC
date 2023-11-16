@@ -1,8 +1,5 @@
 package com.kr.pub.dto;
 
-import java.security.Timestamp;
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +12,8 @@ public class ChatDTO {
   private String sender;
   private String receiver;
   private String message;
-  private String seatNo;
+  private int seatNo;
   private String userId;
-  private LocalDateTime time = LocalDateTime.now();
+  private String recvUserId;
+  private String time;
 }

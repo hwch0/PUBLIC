@@ -1,9 +1,13 @@
 package com.kr.pub.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +17,10 @@ import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -54,6 +61,18 @@ public class LoginController {
 		return "login";
 	}
 	
+	// 잔여시간 없음
+	@GetMapping("/recharge")
+    public String showPayment(Model model) {
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		 String userId = ((PrincipalDetails) authentication.getPrincipal()).getUser().getUserId();
+		    
+        model.addAttribute("showPaymentContent", true);
+        model.addAttribute("userId", userId);
+        
+        return "login"; 
+    }
+	
 	@GetMapping("/auth/kakao/callback")
 	public String kakaoCallback(String code) { // Data를 리턴해주는 컨트롤러 함수
 		
@@ -72,13 +91,15 @@ public class LoginController {
 		// HttpBody 오브젝트 생성
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("grant_type", "authorization_code");
-		params.add("client_id", "c3fed459f31a0ba7732ba1f69446b5d1");
+		params.add("client_id", "f9233fa5fb65f7da3addba11aa52d18a");
 		params.add("redirect_uri", "http://localhost:8282/auth/kakao/callback");
 		params.add("code", code);
+		
 		
 		// HttpHeader와 HttpBody를 하나의 오브젝트에 담기
 		HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers); //이 부분은 변경할 필요가 없다.
 		
+
 		// Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음.
 		//exchange : 클라이언트에서 서버로 값을 보내준다.
 		ResponseEntity<String> response = restTemplate.exchange(
@@ -134,9 +155,9 @@ public class LoginController {
 			e.printStackTrace();
 		}
 		
-		// User 오브젝트 : username, password, email
-		System.out.println("카카오 아이디(번호) : "+kakaoProfile.getId());
-		System.out.println("카카오 이메일 : "+kakaoProfile.getKakao_account().getEmail());
+//		// User 오브젝트 : username, password, email
+//		System.out.println("카카오 아이디(번호) : "+kakaoProfile.getId());
+//		System.out.println("카카오 이메일 : "+kakaoProfile.getKakao_account().getEmail());
 		
 		//DB에 기록하기....
 		UserDTO kakaoMember = UserDTO.builder()
@@ -147,7 +168,17 @@ public class LoginController {
 		
 		// 가입자 혹은 비가입자 체크 해서 처리
 		try {
+			String mail = kakaoMember.getEmail();
+			int index = mail.indexOf("@"); ;
+			
+			String kakaoId = new String();
+			kakaoId.substring(0, index);
+			
+			kakaoMember.setUserId(kakaoId);
 			userService.insertMember(kakaoMember);
+			
+			System.out.println(kakaoMember);
+			
 			System.out.println("기존 회원이 아니기에 자동 회원가입을 진행함");
 		} catch (ExistMemberException e) {
 			System.out.println("기존에 회원 가입된 경우 다음으로 진행함");
@@ -169,5 +200,25 @@ public class LoginController {
 		
 		
 		return "redirect:/";
+		
 	}
+	
+	// 시간 충전
+    @PostMapping("/rechargeTime")
+    @ResponseBody
+    public Map<String, String> rechargeTime(@RequestBody UserDTO user) {
+        Map<String, String> map = new HashMap<>();
+        
+        int rechargeResult = userService.rechargeTime(user);
+        if (rechargeResult == 1) { 
+            map.put("rs", "success");
+            map.put("message", "시간 충전이 완료되었습니다.");
+        } else { 
+            map.put("rs", "fail");
+            map.put("message", "시간 충전에 실패했습니다. 다시 시도해주세요.");
+        }
+        
+        return map;
+    }
+    
 }

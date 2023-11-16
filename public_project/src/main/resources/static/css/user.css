@@ -434,6 +434,7 @@ label {
 
 .modal-food .cont-food .food ul {
 	display: flex;
+ 	flex-wrap: wrap;
 	width: 100%;
 	height: 700px;
 	padding: 0 10px;
@@ -467,8 +468,11 @@ label {
 
 .modal-food .cont-food .food li .img-wrap {
 	width: 100%;
-	height: 60%;
-	background-color: #333;
+	height: 70%;
+}
+.modal-food .cont-food .food li img {
+	width: 100%;
+	height: 100%;
 }
 .addCart ul li {
 	display: flex;

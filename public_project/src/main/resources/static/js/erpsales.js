@@ -1,5 +1,102 @@
+//엑셀 다운로드
+$(document).ready(function() {
+    $('#excelDownload').on("click", function() {
+        var form = $("#salesExcel");
+		
+		form.target="_blank";
+        // 폼 서브밋
+       	form.submit();
+    });
+});
+
+
+//테이블 공백 생성
+function addEmptyRowsToTable(tableId) {
+    var rowCount = $(tableId + ' tr').length;
+    var remainingRows = 10 - rowCount;
+
+    if (remainingRows > 0) {
+        for (var i = 0; i < remainingRows; i++) {
+            $(tableId).append('<tr>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '<td>&nbsp;</td>' +
+                '</tr>');
+        }
+    }
+}
+
+$(document).ready(function () {
+    addEmptyRowsToTable('#paymTbody');
+    addEmptyRowsToTable('#orderTbody');
+});
+
+//주문내역 합계 구하기
+document.addEventListener("DOMContentLoaded", function() {
+    orderTotals();
+});
+
+function orderTotals(){
+	let totalStock = 0;
+	let totalPrice = 0;
+	
+	const rows = document.querySelectorAll("#orderTbody tr");
+	rows.forEach(function (row){
+		const stockElement = row.querySelector(".order-data");
+		const stock = stockElement ? parseInt(stockElement.dataset.order) : 0;
+		
+		const priceElement = row.querySelector("td:nth-child(6)");
+		const priceString = priceElement ? priceElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
+		const price = priceString !== "-" ? parseFloat(priceString) : 0;
+		
+		totalStock += isNaN(stock) ? 0 : stock;
+		totalPrice += isNaN(price) ? 0 : price;
+	});
+	
+	  const totaTotalQuantity = document.getElementById("TotalQuantity");
+	  totaTotalQuantity.innerText = totalStock.toLocaleString() + ' EA';
+	  
+	  const formOrderTotalPrice = document.getElementById("formOrderTotalPrice");
+	  formOrderTotalPrice.innerText = totalPrice.toLocaleString();
+}
+
+//매출내역 합계 구하기
+document.addEventListener("DOMContentLoaded", function() {
+    salesTotals();
+});
+
+function salesTotals() {
+    let totalPrice = 0;
+    let totalNetProfit = 0;
+
+    const rows = document.querySelectorAll("#paymTbody tr");
+    rows.forEach(function (row) {
+		const priceElement = row.querySelector("td:nth-child(7)");
+        const priceString = priceElement ? priceElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
+        const price = priceString !== "-" ? parseFloat(priceString) : 0;
+
+		const netProfitElement = row.querySelector("td:nth-child(8)");
+        const netProfitString = netProfitElement ? netProfitElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
+        const netProfit = netProfitString !== "-" ? parseFloat(netProfitString) : 0;
+
+        totalPrice += isNaN(price) ? 0 : price;
+        totalNetProfit += isNaN(netProfit) ? 0 : netProfit;
+    });
+
+    const fromSalesTotalPrice = document.getElementById("salesTotalPrice");
+    fromSalesTotalPrice.innerText = '₩' + totalPrice.toLocaleString();
+
+    const fromSalesTotalNetProfit = document.getElementById("formNetProfitTotalPrices");
+    fromSalesTotalNetProfit.innerText = totalNetProfit.toLocaleString();
+}
+
 //새로고침 버튼 클릭시
-//입출고
+//주문내역
 function refreshOrderPage(){
 	document.getElementById('startDate2').value = '';
     document.getElementById('endDate2').value = '';
@@ -9,7 +106,7 @@ function refreshOrderPage(){
 
 	//location.reload();
 }
-//재고목록
+//매출내역
 function refreshSalesPage(){
 	document.getElementById('startDate').value = '';
     document.getElementById('endDate').value = '';
@@ -85,7 +182,7 @@ function orderSearch(){
 		            '<td onclick="orderDetail(\'' + order['orderId'] + '\')" class="clickable-cell">' + order['orderId'] + '</td>' +
 		            '<td>' + order['orderDate'] + '</td>' +
 		            '<td>' + order['type'] + '</td>' +
-		            '<td>' + order['quantity'] + '</td>' +
+		            '<td class="order-data" data-order="' + order['quantity'] + ' EA">' + order['quantity'] + '</td>' +
 		            '<td>₩' + new Intl.NumberFormat().format(order['price']) + '</td>' +
 		            '<td>' + order['paymentMethod'] + '</td>' +
 		            '<td style="color: ' + (order['paymentStatus'] === '판매' ? 'blue' : order['paymentStatus'] === '주문취소' ? 'red' : 'black')
@@ -93,6 +190,11 @@ function orderSearch(){
 		            '</tr>';
 				$('#orderTbody').append(row);
 			});
+			
+			addEmptyRowsToTable('#orderTbody');
+			
+			orderTotals();
+			
 		 },
         error: function (error) {
             console.error('Ajax 요청 중 오류 발생: ', error);
@@ -147,6 +249,10 @@ function salesSearch(){
 			
 				$('#paymTbody').append(row);
 			});
+			
+			addEmptyRowsToTable('#paymTbody');
+			
+			salesTotals();
 		 },
         error: function (error) {
             console.error('Ajax 요청 중 오류 발생: ', error);
@@ -159,14 +265,14 @@ function salesSearch(){
 
 //주문 내역 정렬
 $(document).ready(function () {
-	const originalRows = $('.orderSortable').closest('table').find('tbody > tr').toArray();
+	const originalRows = $('.orderSortable').closest('table').find('tbody:first > tr').toArray();
     $('.orderSortable').click(function () {
         const table = $(this).closest('table');
         const index = $(this).index();
         let rows;
 
         if ($(this).hasClass('asc')) {
-            rows = table.find('tbody > tr').toArray().sort(comparator(index)).reverse();
+            rows = table.find('tbody:first > tr').toArray().sort(comparator(index)).reverse();
             $(this).removeClass('asc').addClass('desc');
         } else if ($(this).hasClass('desc')) {
             $(this).removeClass('desc');
@@ -174,7 +280,7 @@ $(document).ready(function () {
             rows = originalRows;
         }else{
 			$(this).addClass('asc');
-			rows = table.find('tbody > tr').toArray().sort(comparator(index));
+			rows = table.find('tbody:first > tr').toArray().sort(comparator(index));
 		}
 		
 		if($(this).hasClass('reset')){
@@ -184,7 +290,7 @@ $(document).ready(function () {
 		
 		table.find('.orderSortable').not(this).removeClass('asc desc reset');
 
-        table.find('tbody').empty().append(rows);
+        table.find('tbody:first').empty().append(rows);
     });
 
     function comparator(index) {
@@ -218,14 +324,15 @@ $(document).ready(function () {
 
 //매출 내역 정렬
 $(document).ready(function () {
-	const originalRows = $('.salesSortable').closest('table').find('tbody > tr').toArray();
+	const originalRows = $('.salesSortable').closest('table').find('tbody:first > tr').toArray();
+	
     $('.salesSortable').click(function () {
         const table = $(this).closest('table');
         const index = $(this).index();
         let rows;
 
         if ($(this).hasClass('asc')) {
-            rows = table.find('tbody > tr').toArray().sort(comparator(index)).reverse();
+            rows = table.find('tbody:first > tr').toArray().sort(comparator(index)).reverse();
             $(this).removeClass('asc').addClass('desc');
         } else if ($(this).hasClass('desc')) {
             $(this).removeClass('desc');
@@ -233,7 +340,7 @@ $(document).ready(function () {
             rows = originalRows;
         }else{
 			$(this).addClass('asc');
-			rows = table.find('tbody > tr').toArray().sort(comparator(index));
+			rows = table.find('tbody:first > tr').toArray().sort(comparator(index));
 		}
 		
 		if($(this).hasClass('reset')){
@@ -242,8 +349,7 @@ $(document).ready(function () {
 		}
 		
 		table.find('.salesSortable').not(this).removeClass('asc desc reset');
-
-        table.find('tbody').empty().append(rows);
+        table.find('tbody:first').empty().append(rows);
     });
 
     function comparator(index) {
@@ -372,25 +478,3 @@ function resetModal() {
 }
 
 
-/*
-//모달창
-const Modal = document.getElementById('erpModal');
-
-console.log(Modal);
-
-const paymFideBtn = $('#paymCodeFide');
-
-paymFideBtn.on('click', function() {
-    Modal.classList.add('on'); 
-});
-
-$(window).on('click', function(event) {
-    if (event.target === Modal) {
-        Modal.classList.remove('on'); 
-    }
-});
-
-$('.close').on('click', function(e){
-	 Modal.classList.remove('on'); 
-});
-*/

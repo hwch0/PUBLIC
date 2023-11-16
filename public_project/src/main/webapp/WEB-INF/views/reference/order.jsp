@@ -31,7 +31,7 @@
                     <tr>
                        <td class="tr_th">주문 일자</td>
 			            <td style="padding:0 10px;">
-						    <div class="input-group date" style="display: inline-block; ">
+						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
 						        <input type="text" class="form-control" id="startDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
@@ -40,7 +40,7 @@
 						    
 						    <div style="display: inline-block; margin: 0 10px;">~</div>
 						    
-						    <div class="input-group date" style="display: inline-block;">
+						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
 						        <input type="text" class="form-control" id="endDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
@@ -108,14 +108,23 @@
                     	<td onclick="orderDetail('${order['orderId']}')" class="clickable-cell">${order['orderId']}</td>
                     	<td>${order['orderDate']}</td>
                     	<td>${order['type']}</td>
-                    	<td>${order['quantity']}</td>
+                    	<td class="order-data" data-order="${order['quantity']}">${order['quantity']}</td>
                     	<td>₩<fmt:formatNumber value="${order['price']}" /></td>
                     	<td>${order['paymentMethod']}</td>
                     	<td style="color: ${order['paymentStatus'] eq '판매' ? 'blue' : order['paymentStatus'] eq '주문취소' ? 'red' : 'black'}">
                     		${order['paymentStatus']}</td>
                     </tr>
                     </c:forEach>
-                 </tbody>
+                 </tbody>                 
+                <tbody class="total-row" style="background-color: #FFDCDC;">
+				      <tr>
+			            <td style="width: 452px; font-weight: bold; text-align: center;">합계</td>
+			            <td style="width: 84px; text-align: center;" id="TotalQuantity"></td>
+			            <td style="width: 369px; text-align: center;" id="orderTotalPrice">
+			                ₩<span id="formOrderTotalPrice"></span>
+			            </td>
+       				 </tr>
+				</tbody>
             </table>
         </div>
 

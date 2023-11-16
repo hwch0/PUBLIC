@@ -685,7 +685,8 @@
 
 /*select*/
 .itemSelect,
-.orderSelect {
+.orderSelect,
+.itemSituation {
 	width: 200px;
 }
 
@@ -955,10 +956,16 @@ span.orderDetail {
   position: relative;
 }
 
+.check:hover {
+    background-color: #1E821E; 
+    color: white; 
+}
+
+
 /* 등록 버튼 */
 .insert {
-  background-color: #343a40; 
-  color: white;
+  background-color: #d2d2d2; 
+  color: black;
   border: none;
   padding: 10px 20px;
   text-align: center;
@@ -969,10 +976,15 @@ span.orderDetail {
   border-radius: 5px;
 }
 
+.insert:hover {
+    background-color: #505050; 
+    color: #fff; 
+}
+
 /* 엑셀 다운로드 버튼 */
 .Excel {
-  background-color: #9A7745; 
-  color: white;
+  background-color: #d2d2d2; 
+  color: black;
   border: none;
   padding: 10px 20px;
   text-align: center;
@@ -985,7 +997,7 @@ span.orderDetail {
 }
 
 .Excel:hover {
-    background-color: #C29F6D; 
+    background-color: #505050; 
     color: #fff; 
 }
 
@@ -1001,15 +1013,15 @@ span.orderDetail {
     font-size: 16px;
     border-radius: 5px;
 
-    background-color: #343a40;
-    color: #fff; 
-    border: 1px solid #343a40;
+    background-color: #d2d2d2;
+    color: #212529; 
+    border: 1px solid #d2d2d2;
 
     transition: background-color 0.3s, color 0.3s;
 }
 
 #insertBnt:hover {
-    background-color: #212529; 
+    background-color: #505050; 
     color: #fff; 
 }
 
@@ -1018,15 +1030,15 @@ span.orderDetail {
     font-size: 16px;
     border-radius: 5px;
 
-    background-color: #343a40;
-    color: #fff; 
-    border: 1px solid #343a40;
+    background-color: #d2d2d2;
+    color: #212529; 
+    border: 1px solid #d2d2d2;
 
     transition: background-color 0.3s, color 0.3s;
 }
 
 #statusInsertBnt:hover {
-    background-color: #212529; 
+    background-color: #505050; 
     color: #fff; 
 }
 
@@ -1035,15 +1047,15 @@ span.orderDetail {
     font-size: 16px;
     border-radius: 5px;
 
-    background-color: #9A7745;
-    color: #fff; 
-    border: 1px solid #343a40;
+    background-color: #d2d2d2;
+    color: #212529; 
+    border: 1px solid #d2d2d2;
 
     transition: background-color 0.3s, color 0.3s;
 }
 
 #excelUploadBnt:hover {
-    background-color: #C29F6D; 
+    background-color: #505050; 
     color: #fff; 
 }
 
@@ -1089,7 +1101,7 @@ span.orderDetail {
     margin: -250px 0 0 -200px;
     padding: 20px;
     width: 430px;
-    height: 590px;
+    height: 520px;
     text-align: center;
     border-radius: 5px;
     box-sizing: border-box;
@@ -1144,15 +1156,15 @@ span.orderDetail {
 }
 
 /* 파일 업로드 모달 내 컨텐츠 스타일 */
-    #excelFile {
-        width: 210px;
-        height: 31px;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #fff;
-    }
+#excelFile {
+    width: 210px;
+    height: 31px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
 
 /* 업로드 버튼 스타일 */
 #uploadBtn button {

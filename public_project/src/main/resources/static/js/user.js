@@ -1,10 +1,10 @@
 // 로그아웃
 $('#logoutBtn').on('click', function(){
-	mqttClient.publish(mqtt_topic, JSON.stringify(
-		 {type: "LOGOUT",
-		  receiver: "admin"}
-	));
-	location.href = "/logout";
+   mqttClient.publish(mqtt_topic, JSON.stringify(
+       {type: "LOGOUT",
+        receiver: "admin"}
+   ));
+   location.href = "/logout";
 });
 
 // 채팅 모달
@@ -15,21 +15,21 @@ $("#chattingBtn").on('click', function(){
 
 //주문버튼
 function navBtn(element) {
-	const thisNavLi = $(element).parent();
-	
-	
-	if (thisNavLi.hasClass('on')) {
-		$(".cont-modal-wrap").css('display', 'none');
-		$(".cont-bot-wrap").css('display', 'none');
-		$(".wrap_cart").removeClass('on');
-		thisNavLi.removeClass('on');
-	} else {
-		$(".cont-modal-wrap").css('display', 'block');
-		$(".cont-bot-wrap").css('display', 'block');
-		$(".wrap_cart").addClass('on');
-		thisNavLi.addClass('on');
-		getMenuList();
-	}
+   const thisNavLi = $(element).parent();
+   
+   
+   if (thisNavLi.hasClass('on')) {
+      $(".cont-modal-wrap").css('display', 'none');
+      $(".cont-bot-wrap").css('display', 'none');
+      $(".wrap_cart").removeClass('on');
+      thisNavLi.removeClass('on');
+   } else {
+      $(".cont-modal-wrap").css('display', 'block');
+      $(".cont-bot-wrap").css('display', 'block');
+      $(".wrap_cart").addClass('on');
+      thisNavLi.addClass('on');
+      getMenuList();
+   }
 }
 
 // 시간 js
@@ -101,27 +101,32 @@ function updateRemainingTime(userIdValue) {
 }
 
 window.onload = function() {
-	const userInfoData = $('#userInfo').val();
+   const userInfoData = $('#userInfo').val();
 
-	// 쿠키에서 모든 쿠키를 가져옵니다.
-	var allCookies = document.cookie;
+   // 쿠키에서 모든 쿠키를 가져옵니다.
+   var allCookies = document.cookie;
 
-	// 각 쿠키를 분리합니다.
-	var cookiesArray = allCookies.split(';');
+   // 각 쿠키를 분리합니다.
+   var cookiesArray = allCookies.split(';');
 
-	// userId 쿠키를 찾습니다.
-	var userIdCookie = cookiesArray.find(function(cookie) {
-		return cookie.trim().startsWith('userId=');
-	});
+   // userId 쿠키를 찾습니다.
+   var userIdCookie = cookiesArray.find(function(cookie) {
+      return cookie.trim().startsWith('userId=');
+   });
 
-	// userId 쿠키에서 값만 추출합니다.
-	var userIdValue = userIdCookie ? userIdCookie.split('=')[1] : null;
+   // userId 쿠키에서 값만 추출합니다.
+   var userIdValue = userIdCookie ? userIdCookie.split('=')[1] : null;
 
-	// userId 값을 출력합니다.
-	console.log('userId 값:', userIdValue);
+   // userId 값을 출력합니다.
+   console.log('userId 값:', userIdValue);
+   updateRemainingTime(userIdValue);
 
-<<<<<<< HEAD
-	
+   var userIdElement = document.getElementById("userId");
+   //var loggedInUserId = localStorage.getItem("userId"); 
+
+   var loggedInUserId = userIdValue;
+   userIdElement.textContent = loggedInUserId;
+   
     updateRemainingTime(userIdValue);
     
     var userIdElement = document.getElementById("userId");
@@ -132,97 +137,48 @@ window.onload = function() {
     
     
     mqttClient.publish(mqtt_topic, JSON.stringify(
-		 {type: "LOGIN",
-		  receiver: "admin"}
-	));
-	
+       {type: "LOGIN",
+        receiver: "admin"}
+   ));
+   
    //채팅 가져오기
 
-	const data = {
-		userId: loggedInUserId,
-	}; //JWT 토큰 구현 이후 userID가져와야함
-	ajaxResponse('POST', '/chat/getListById', data)
-		.then(function(response) {
-			var chatList = response.result;
-			if (chatList != null) {
-				console.log(chatList);
-				$.each(response.result, function(index, chat) {
-					if (chat.sender === 'admin') {
-						$("#chatList").append(
-							`<li class="you">
-						<div class="entete">
-							<p>${chat.time}</p>
-							<h2>${chat.sender}</h2>
-							</div>
-							<div class="triangle"></div>
-							<div class="message">${chat.message}</div>
-					</li>`
-						);
-					} else {
-						$("#chatList").append(
-							`<li class="me">
-									<div class="entete">
-										<p>${chat.time}</p>
-										<h2>${chat.sender}</h2>
-									</div>
-									<div class="triangle"></div>
-									<div class="message">${chat.message}</div>
-								</li>`
-						);
-					}
-				});
-			}
-		});
+   const data = {
+      userId: loggedInUserId,
+   }; //JWT 토큰 구현 이후 userID가져와야함
+   ajaxResponse('POST', '/chat/getListById', data)
+      .then(function(response) {
+      var chatList = response.result;
+      if (chatList != null) {
+         console.log(chatList);
+         $.each(response.result, function(index, chat) {
+            if (chat.sender === 'admin') {
+               $("#chatList").append(
+                  `<li class="you">
+               <div class="entete">
+                  <p>${chat.time}</p>
+                  <h2>${chat.sender}</h2>
+                  </div>
+                  <div class="triangle"></div>
+                  <div class="message">${chat.message}</div>
+            </li>`
+               );
+            } else {
+               $("#chatList").append(
+                  `<li class="me">
+                        <div class="entete">
+                           <p>${chat.time}</p>
+                           <h2>${chat.sender}</h2>
+                        </div>
+                        <div class="triangle"></div>
+                        <div class="message">${chat.message}</div>
+                     </li>`
+               );
+            }
+         });
+      }
+   });
 }      
-
-	updateRemainingTime(userIdValue);
-
-	var userIdElement = document.getElementById("userId");
-	//var loggedInUserId = localStorage.getItem("userId"); 
-
-	var loggedInUserId = userIdValue;
-	userIdElement.textContent = loggedInUserId;
-
-	//채팅 가져오기
-
-	const data = {
-		userId: loggedInUserId,
-	}; //JWT 토큰 구현 이후 userID가져와야함
-	ajaxResponse('POST', '/chat/getListById', data)
-		.then(function(response) {
-			var chatList = response.result;
-			if (chatList != null) {
-				console.log(chatList);
-				$.each(response.result, function(index, chat) {
-					if (chat.sender === 'admin') {
-						$("#chatList").append(
-							`<li class="you">
-						<div class="entete">
-							<p>${chat.time}</p>
-							<h2>${chat.sender}</h2>
-							</div>
-							<div class="triangle"></div>
-							<div class="message">${chat.message}</div>
-					</li>`
-						);
-					} else {
-						$("#chatList").append(
-							`<li class="me">
-									<div class="entete">
-										<p>${chat.time}</p>
-										<h2>${chat.sender}</h2>
-									</div>
-									<div class="triangle"></div>
-									<div class="message">${chat.message}</div>
-								</li>`
-						);
-					}
-				});
-			}
-		});
->>>>>>> branch 'main' of https://github.com/hwch0/PUBLIC.git
-}
-
 
 
 
@@ -249,13 +205,12 @@ function addCart(element) {
         var cartItem = '<li>' +
             '<p class="itemId">' + itemId + '</p>' +
             '<p class="food-name">' + itemName + '</p>' +
-            '<p class="food-price">' + sellingPrice + '</p>' +
             '<div class="food-option">' +
                 '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
                 '<p><em class="optionNum" data-option-num="1">1</em></p>' +
                 '<span class="btn_option plus" onClick="updateOptionNum(this)">+</span>' +
             '</div>' +
-            '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">Remove</a>' +
+            '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">취소</a>' +
             '</li>';
 
         $('.addCart ul').append(cartItem);
@@ -284,19 +239,23 @@ function updateOptionNum(element) {
 function removeCart(element) {
     $(element).closest('li').remove();
 }    
-                     
+    
+function removeCartAll() {
+    $('.addCart ul li').remove();
+}    
+                 
 function showCategory(no) {
   $(".menu-category li").removeClass('on');
   $("#menu0" + no).addClass('on');
 
   if (no == 1) {
     $(".food-list li").not('#MC001').hide();
-  	$(".food-list li[id='MC001']").show();
+     $(".food-list li[id='MC001']").show();
   } else if(no == 2){ 
-	$(".food-list li").not('#MC002').hide();
+   $(".food-list li").not('#MC002').hide();
     $(".food-list li[id='MC002']").show();
   } else if(no == 3){ 
-	$(".food-list li").not('#MC003').hide();
+   $(".food-list li").not('#MC003').hide();
     $(".food-list li[id='MC003']").show();
   } else {
     $(".food-list li").not('#MC004').hide();
@@ -320,26 +279,26 @@ function order() {
     
     console.log(cartItems);
     
-	const param = { userId: userId, items: cartItems };
-	fetch('/user/order', {
-	   method: 'POST',
-	   headers: {
-	      'Content-Type': 'application/json; charset=UTF-8',
-	   },
-	   body: JSON.stringify(param),
-	})
-	.then((rs) => rs.json())
-	.then((json) => {
-	   if (json.rs == 'true') {
-	      alert('주문이 정상적으로 이루어졌습니다.');
-	      $('.addCart ul').empty();
-	   } else {
-	      alert('주문이 정상적으로 이루어지지 않았습니다. ');
-	   }
-	})
-	.catch((error) => {
-	   console.error('주문 에러:', error);
-	});
+   const param = { userId: userId, items: cartItems };
+   fetch('/user/order', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify(param),
+   })
+   .then((rs) => rs.json())
+   .then((json) => {
+      if (json.rs == 'true') {
+         alert('주문이 정상적으로 이루어졌습니다.');
+         $('.addCart ul').empty();
+      } else {
+         alert('주문이 정상적으로 이루어지지 않았습니다. ');
+      }
+   })
+   .catch((error) => {
+      console.error('주문 에러:', error);
+   });
 }
 
 
@@ -362,12 +321,12 @@ function displayMenuList(menuList) {
 
     var foodList = document.querySelector(".food-list");
     
-	$('.food-list').empty();
+   $('.food-list').empty();
 
     if (menuList != null) {
-    	 menuList.forEach(function(menu) {
+        menuList.forEach(function(menu) {
             var row = '<li id="' + menu.MENUCATEGORYCODE + '">'+
-            	'<a href="javascript:void(0);" class="add-to-cart" onClick="addCart(this);" data-menu-id="' + menu.ITEMID +'">' +
+               '<a href="javascript:void(0);" class="add-to-cart" onClick="addCart(this);" data-menu-id="' + menu.ITEMID +'">' +
                 '</a>' +
                 '<div class="img-wrap">' +
                 '<img alt="상품이미지" src="/image/download/' + menu.IMGID + '"/>' +

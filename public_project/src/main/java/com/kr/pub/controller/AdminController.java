@@ -47,6 +47,19 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
+	@ResponseBody
+	@GetMapping("/shutdown")
+	public Map<String, Object> shutDown() {
+		System.out.println("전체 사용자 로그아웃");
+		Map<String, Object> result = new HashMap<>();
+		
+		boolean status = adminService.shutDown();
+		
+		result.put("status", status);
+		return result;
+	}
+	
+	
 	@GetMapping("")
 	public String adminMain(Model model) {
 		List<Map<String, Object>> menuList = adminService.getMenuWithItems("Y", "N");

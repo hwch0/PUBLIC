@@ -179,5 +179,10 @@ public class AdminService {
 		System.out.println("캐싱완료!!!");
 		return adminDAO.getLoggedInUserList();
 	}
+
+	public boolean shutDown() {
+		adminDAO.shutDown();
+		return true;
+	}
 	
 }

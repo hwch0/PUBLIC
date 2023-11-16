@@ -191,7 +191,7 @@ function statusInsert(){
 	
 	$.ajax({
 		type: "POST",
-		url: "/erp/insertStock",
+		url: "/erp/insertStatus",
 		contentType: "application/json; charset=UTF-8",
 		data: JSON.stringify(param),
 		dataType: "json",

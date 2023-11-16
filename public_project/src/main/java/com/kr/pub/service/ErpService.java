@@ -29,14 +29,10 @@ public class ErpService {
 	private OrderDAO orderDAO;
 	
 	//입고 등록하기
-	@Transactional
-	public Map<String, Object> insertStock(ItemDTO itemId)throws Exception{
-		Map<String, Object> params = new HashMap<>();
-		params.put("itemId", itemId);
+	public boolean insertStock(ItemDTO itemId)throws Exception{
+		System.out.println("insert확인: ");
 		
-		Map<String, Object> insertStore = itemDAO.insertStoreData(params);
-		
-		return insertStore;
+		return 0 != itemDAO.insertStoreData(itemId);
 	}
 	
 	

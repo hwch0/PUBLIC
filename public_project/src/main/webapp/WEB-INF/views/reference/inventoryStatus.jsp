@@ -33,7 +33,7 @@
                     <tr>
                        <td class="tr_th">일자</td>
 			            <td style="padding:0 10px;">
-						    <div class="input-group date" style="display: inline-block; ">
+						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
 						        <input type="text" class="form-control" id="startDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold; z-index: auto;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
@@ -42,7 +42,7 @@
 						    
 						    <div style="display: inline-block; margin: 0 10px;">~</div>
 						    
-						    <div class="input-group date" style="display: inline-block;">
+						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
 						        <input type="text" class="form-control" id="endDate2" readonly style="background-color: #d3d3d3; color: black; font-weight: bold; z-index: auto;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
@@ -106,12 +106,26 @@
 							<td>${status['STATUSDATE']}</td>
 							<td style="color: ${status['INCDEC'] eq '입고' ? 'blue' : status['INCDEC'] eq '출고' ? 'red' : 'black'}">
 							${status['INCDEC']}</td>
-							<td>${status['STOCK']}</td>
+							<td class="status-stock" data-status="${status['STOCK']}">${status['STOCK']} EA</td>
 							<td>₩<fmt:formatNumber value="${status['PRICE']}" /></td>
 							<td>₩<fmt:formatNumber value="${status['STOCK'] * status['PRICE']}" /></td>
                     	</tr>                    	
                     </c:forEach>
                  </tbody>
+                 
+   				<tbody class="total-row" style="background-color: #FFDCDC;">
+				      <tr>
+			            <td style="width: 604px; font-weight: bold; text-align: center;">합계</td>
+			            <td style="width: 73px; text-align: center;" id="statusTotalStock"></td>
+			            <td style="width: 107px; text-align: center;" id="statusTotalPrice">
+			                ₩<span id="form-status-TotalPrice"></span>
+			            </td>
+			            <td style="width: 121px; text-align: center;" id="statusTotalPrices">
+			                ₩<span id="form-status-TotalPrices"></span>
+			            </td>
+       				 </tr>
+				</tbody>
+				
             </table>
            </div>           
         </div>
@@ -125,37 +139,32 @@
     			
 	    			 <!-- 품목명 입력 -->
 	            <div class="status-form-group">
-	                <label for="itemCode">품목 코드</label>
+	                <label for="statusCode">품목 코드</label>
 	                <input type="text" class="form-control" id="statusCode" required>
 	            </div>
 	            
 	            <!-- 입고 수량 -->
    	            <div class="status-form-group">
-	                <label for="itemQuantity">입고 수량</label>
+	                <label for="statusQuantity">입고 수량</label>
 	                <input type="text" class="form-control" id="statusQuantity" required>
 	            </div>
 	
 	            <!-- 품목가격 입력 -->
 	            <div class="status-form-group">
-	                <label for="itemPrice">입고 가격</label>
+	                <label for="statusPrices">입고 가격</label>
 	                <input type="text" class="form-control" id="statusPrices" required>
-	            </div>
-		
-				<div class="status-form-group">
-	                <label for="remarks">비고란</label>
-	                <input type="text" class="form-control" id="remarks" required>
 	            </div>
 	            	
 	            <!-- 품목유형 선택 -->
 	            <div class="status-form-group" style="padding-left: 1px;">
-	                <label for="itemType">품목유형</label>
+	                <label for="statusType">품목유형</label>
 	                <select class="form-control" id="statusType" name="statusType" required>
-	                    <option value="type1">상품</option>
-	                    <option value="type2">비품</option>
-	                    <option value="type2">소모품</option>
+	                    <option value="IT001">상품</option>
+	                    <option value="IT003">비품</option>
+	                    <option value="IT004">소모품</option>
 	                </select>
 	            </div>
-    			<button class="btn btn-outline-dark mt-auto" id="statusInsertBnt" type="button">등록</button>
+    			<button class="btn btn-outline-dark mt-auto" id="statusInsertBnt" type="button" onclick="statusInsert()">등록</button>
     			<button class="btn btn-outline-dark mt-auto" id="excelUploadBnt" type="button">
     				<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px">
     				업로드

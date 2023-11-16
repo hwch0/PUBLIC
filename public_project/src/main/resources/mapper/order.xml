@@ -38,9 +38,10 @@
 		    oh.PRICE DESC		
 	</select>
 	
+
+	<!-- 주문 내역 리스트, 조회조건 -->
 	
-	<!-- 주문 내역 리스트 -->
-	<select id="erpOrderList" resultType="java.util.Map">
+	<select id="erpOrderSearch" resultType="java.util.Map">
 		SELECT 
 		    o.ORDER_ID AS "orderId",           
 		    TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') AS "orderDate",         
@@ -85,6 +86,32 @@
 	   	 </if>
 		ORDER BY
 		    o.ORDER_DATE DESC, o.ORDER_ID DESC
+	</select>
+	
+	<select id="erpOrderList" resultType="java.util.Map">
+		SELECT 
+		    o.ORDER_ID AS "orderId",           
+		    TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') AS "orderDate",         
+		    cc_type.TYPE AS "type",            
+		    oh.QUANTITY AS "quantity",             
+		    oh.PRICE AS "price",                
+		    cc_method.TYPE AS "paymentMethod",      
+		    ct.TYPE AS "paymentStatus"              
+		FROM
+		    orders o
+		JOIN
+		   order_history oh ON o.ORDER_ID = oh.ORDER_ID
+		JOIN
+		    payment pm ON o.ORDER_ID = pm.ORDER_ID  
+		JOIN
+		    common_code cc_type ON pm.PAYMENT_TYPE_CODE = cc_type.CODE   
+		JOIN
+		    common_code cc_method ON pm.PAYMENT_METHOD_CODE = cc_method.CODE  
+		JOIN
+		    change_type ct ON o.CODE = ct.CODE
+		 WHERE
+	   		to_char(o.ORDER_DATE,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
+		ORDER BY o.ORDER_ID DESC
 	</select>
 	
 </mapper>

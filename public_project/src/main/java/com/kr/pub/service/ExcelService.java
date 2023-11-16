@@ -29,48 +29,48 @@ public class ExcelService {
 		sheet.setDefaultColumnWidth(28); //디폴트 너비 설정
 		
 		//헤더 생성
-				XSSFFont headerXSSFFont = (XSSFFont) workbook.createFont();
-				headerXSSFFont.setColor(new XSSFColor(new byte[]{(byte) 255, (byte) 255, (byte) 255}));
-		        
-				 //header cell style
-		        XSSFCellStyle headerXssfCellStyle = (XSSFCellStyle) workbook.createCellStyle();
+		XSSFFont headerXSSFFont = (XSSFFont) workbook.createFont();
+		headerXSSFFont.setColor(new XSSFColor(new byte[]{(byte) 255, (byte) 255, (byte) 255}));
+        
+		 //header cell style
+        XSSFCellStyle headerXssfCellStyle = (XSSFCellStyle) workbook.createCellStyle();
 
-		        // 테두리 설정
-		        headerXssfCellStyle.setBorderLeft(BorderStyle.THIN);
-		        headerXssfCellStyle.setBorderRight(BorderStyle.THIN);
-		        headerXssfCellStyle.setBorderTop(BorderStyle.THIN);
-		        headerXssfCellStyle.setBorderBottom(BorderStyle.THIN);
+        // 테두리 설정
+        headerXssfCellStyle.setBorderLeft(BorderStyle.THIN);
+        headerXssfCellStyle.setBorderRight(BorderStyle.THIN);
+        headerXssfCellStyle.setBorderTop(BorderStyle.THIN);
+        headerXssfCellStyle.setBorderBottom(BorderStyle.THIN);
 
-		        // 배경 설정
-		        headerXssfCellStyle.setFillForegroundColor(new XSSFColor(new byte[]{(byte) 34, (byte) 37, (byte) 41}));
-		        headerXssfCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		        headerXssfCellStyle.setFont(headerXSSFFont);
-		        
-		        //body cell style
-		        XSSFCellStyle bodyXssfCellStyle = (XSSFCellStyle) workbook.createCellStyle();
+        // 배경 설정
+        headerXssfCellStyle.setFillForegroundColor(new XSSFColor(new byte[]{(byte) 34, (byte) 37, (byte) 41}));
+        headerXssfCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerXssfCellStyle.setFont(headerXSSFFont);
+        
+        //body cell style
+        XSSFCellStyle bodyXssfCellStyle = (XSSFCellStyle) workbook.createCellStyle();
 
-		        // 테두리 설정
-		        bodyXssfCellStyle.setBorderLeft(BorderStyle.THIN);
-		        bodyXssfCellStyle.setBorderRight(BorderStyle.THIN);
-		        bodyXssfCellStyle.setBorderTop(BorderStyle.THIN);
-		        bodyXssfCellStyle.setBorderBottom(BorderStyle.THIN);
-		        
-		        Row headerRow = sheet.createRow(0);
-		        
-		        for (int i = 0; i < headerNames.size(); i++) {
-		            Cell headerCell = headerRow.createCell(i);
-		            headerCell.setCellValue(headerNames.get(i));
-		            headerCell.setCellStyle(headerXssfCellStyle);
-		        }
-		        
-		        res.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-		        res.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
-		        ServletOutputStream servletOutputStream = res.getOutputStream();
+        // 테두리 설정
+        bodyXssfCellStyle.setBorderLeft(BorderStyle.THIN);
+        bodyXssfCellStyle.setBorderRight(BorderStyle.THIN);
+        bodyXssfCellStyle.setBorderTop(BorderStyle.THIN);
+        bodyXssfCellStyle.setBorderBottom(BorderStyle.THIN);
+        
+        Row headerRow = sheet.createRow(0);
+        
+        for (int i = 0; i < headerNames.size(); i++) {
+            Cell headerCell = headerRow.createCell(i);
+            headerCell.setCellValue(headerNames.get(i));
+            headerCell.setCellStyle(headerXssfCellStyle);
+        }
+        
+        res.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+        ServletOutputStream servletOutputStream = res.getOutputStream();
 
-		        workbook.write(servletOutputStream);
-		        workbook.close();
-		        servletOutputStream.flush();
-		        servletOutputStream.close();         
+        workbook.write(servletOutputStream);
+        workbook.close();
+        servletOutputStream.flush();
+        servletOutputStream.close();         
 	}
 	
 	//목록 다운로드

@@ -32,7 +32,7 @@
                     <tr>
                        <td class="tr_th">입고 일자</td>
 			            <td style="padding:0 10px;">
-						    <div class="input-group date" style="display: inline-block;">
+						    <div class="input-group date" style="display: inline-block; vertical-align: middle; ">
 						        <input type="text" class="form-control" id="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold; z-index: auto;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
@@ -41,7 +41,7 @@
 						    
 						    <div style="display: inline-block; margin: 0 10px;">~</div>
 						    
-						    <div class="input-group date" style="display: inline-block;">
+						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
 						        <input type="text" class="form-control" id="endDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold; z-index: auto;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
@@ -61,19 +61,24 @@
                     <tr>
                         <td class="tr_th">품목 유형</td>
                         <td style="padding: 0 30px;">
-                            <select class="itemSelect">
+                            <select class="itemSelect">                            	
+                                <option value="">모두보기</option>
                                 <option value="상품">상품</option>
                                 <option value="비품">비품</option>
                                 <option value="소모품">소모품</option>
                             </select>
                         </td>
 
+
                         <td class="tr_th">재고 상태</td>
-						<td style="padding: 0 30px;">
-						    <label style="font-size: 13px"><input type="radio" name="stockItem" value="1" checked> 양호</label>
-						    <label style="font-size: 13px"><input type="radio" name="stockItem" value="2"> 부족</label>
-						    <label style="font-size: 13px"><input type="radio" name="stockItem" value="3"> 품절</label>
-						</td>
+                        <td style="padding: 0 30px;">
+                            <select class="itemSituation">
+                                <option value="">모두보기</option>
+                                <option value="1">양호</option>
+                                <option value="2">부족</option>
+                                <option value="3">품절</option>
+                            </select>
+                        </td>                       
                     </tr>
                 </table>
             </div>
@@ -83,7 +88,7 @@
             <h2>
                 <em><img src="/images/icon1.png" alt="아이콘"></em>
                 재고 목록
-            </h2>
+            </h2>        
             <table style="width: 100%;border-color: #a49f9f; border-collapse:collapse; display:block;">
                 <thead>
 			        <th style="width: 45px;">순번</th>
@@ -95,9 +100,7 @@
 			        <th style="width: 128px;" class="amount-cell">입고단가</th>
 			        <th style="width: 90px;">재고상태</th>
 			    </thead>
-
                 <tbody class="itemTbody itemScroll" id="itemTbody" varStatus="loop">
-                	
                 	<c:forEach var="item" items="${stock}">
 						    <tr>
 						        <td>${item['index']}</td>
@@ -105,7 +108,7 @@
 						        <td>${item['ITEMNAME']}</td>
 						        <td>${item['TYPE']}</td>
 						        <td>${item['STOREDATE'] == null ? '-' : item['STOREDATE']}</td>
-						        <td>${item['STOCK'] == null ? '-' : item['STOCK']} EA</td>
+						        <td class="stock-data" data-stock="${item['STOCK']}">${item['STOCK'] == null ? '-' : item['STOCK']} EA</td>
 						        <td>
 						            <c:choose>
 						                <c:when test="${item['PRICE'] != null}">
@@ -120,6 +123,15 @@
 						   </tr>     
                 	</c:forEach>
                 </tbody>
+				<tbody class="total-row" style="background-color: #FFDCDC;">
+				      <tr>
+			            <td style="width: 598px; font-weight: bold; text-align: center;">합계</td>
+			            <td style="width: 91px; text-align: center;" id="totalStock"></td>
+			            <td style="width: 216px; text-align: center;" id="totalPrice">
+			                ₩<span id="formattedTotalPrice"></span>
+			            </td>
+       				 </tr>
+				</tbody>
             </table>
         </div>
     </div>

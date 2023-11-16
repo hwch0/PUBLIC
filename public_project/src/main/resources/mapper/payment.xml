@@ -6,7 +6,7 @@
 <mapper namespace="com.kr.pub.dao.PaymentDAO">
 
 	<!-- 매출 내역 -->
-	<select id="salesList" resultType="java.util.Map">
+	<select id="salesSearch" resultType="java.util.Map">
 	SELECT
 	    p.PAYMENT_ID AS "paymentId",
 	    o.ORDER_ID AS "orderId",
@@ -33,7 +33,7 @@
 	    </if>
 	   	<!-- paymName -->
 	   	<if test="paymentId != null and paymentId != '' ">
-	   		AND p.PAYMENT = #{paymentId}
+	   		AND p.PAYMENT_ID = #{paymentId}
 	   	</if>
 	   	<!-- orderId -->
 	   	<if test="orderId != null and orderId != '' ">
@@ -45,6 +45,30 @@
 	   	 </if>	   	 
 	ORDER BY
 	    p.PAYMENT_DATE DESC, p.PAYMENT_ID DESC
+	</select>
+
+	<select id="salesList" resultType="java.util.Map">
+		SELECT
+		    p.PAYMENT_ID AS "paymentId",
+		    o.ORDER_ID AS "orderId",
+		    TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') AS "paymentDate",
+		    u.UNAME AS "uname",
+		    cc.TYPE AS "type",
+		    oh.PRICE AS "price",
+		    oh.PRICE - (oh.PRICE * 0.10) AS "netProfit"
+		FROM
+		    payment p
+		JOIN
+		    orders o ON p.ORDER_ID = o.ORDER_ID
+		JOIN
+		    users u ON o.USER_ID = u.USER_ID
+		JOIN
+		    order_history oh ON o.ORDER_ID = oh.ORDER_ID
+		JOIN
+		    common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
+		 WHERE
+	   	 	to_char(p.PAYMENT_DATE,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
+		ORDER BY p.PAYMENT_ID DESC
 	</select>
 
 </mapper>

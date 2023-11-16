@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kr.pub.dto.ErpDTO;
+import com.kr.pub.dto.ItemDTO;
 import com.kr.pub.service.ErpService;
 import com.kr.pub.service.ExcelService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 
 
@@ -34,6 +36,18 @@ public class ErpController {
 	@Autowired
 	private ExcelService excelService;
 
+	//입고 등록하기
+	@PostMapping("/insertStock")
+	@ResponseBody
+	public Map<String, Object> insertStock(@RequestBody ItemDTO itemId) throws Exception{
+		System.out.println("등록확인");
+		
+		Map<String, Object> result = erpService.insertStock(itemId);
+				
+		result.put("message", "입고 등록이 완료 되었습니다.");
+		return result;
+	}
+	
 	//주문 상세보기
 	@PostMapping("/orderView")
 	@ResponseBody
@@ -66,10 +80,12 @@ public class ErpController {
 	//매출 내역 조회조건
 	@PostMapping("/salesSearch")
 	@ResponseBody
-	public Map<String, Object> salesSearch(@RequestBody ErpDTO search) throws Exception{
+	public Map<String, Object> salesSearch(@RequestBody ErpDTO search, HttpSession session) throws Exception{
 		Map<String, Object> salesSearch = new HashMap<>();
 		
 		List<Map<String, Object>> salesResult = erpService.salesSearch(search);
+		
+		session.setAttribute("setErpDTO", salesResult);
 		
 		salesSearch.put("salesSearch", salesResult);
 		System.out.println("조회 조건 Data확인: " + salesResult);
@@ -133,6 +149,22 @@ public class ErpController {
 		return "/reference/stockLayout";
 	}
 	
+	//매출목록 다운로드
+	@PostMapping("/salesExcel")
+	public void salceExcelDownload(HttpServletResponse res, ErpDTO erpDTO, HttpSession session) throws Exception {
+		List<Map<String, Object>> salesResult = (List<Map<String, Object>>) session.getAttribute("setErpDTO");
+	    
+			
+		List<String> headerNames = Arrays.asList("index","paymentId", "orderId", "paymentDate", "uname", "type", "price", "netProfit");
+		List<String> headerLabels = Arrays.asList("순번","매출 전표", "주문 저표", "매출 일자", "회원 이름", "구분 상태", "매출액", "순이익");
+		String sheetName = "매출내역";
+		String fileName = "sales_excel_download";
+
+		
+		excelService.excelDownload(res, sheetName, headerNames, headerLabels, salesResult, fileName);
+
+	}
+
 	// 입출고 목록 업로드용 엑셀 다운로드
 	@GetMapping("/excelDownload")
 	public void excelDownload(HttpServletResponse res) throws Exception {
@@ -158,16 +190,17 @@ public class ErpController {
 
 	// 재고 목록 엑셀 DB 다운로드
 	@GetMapping("/download")
-	public void itemExcelDownload(HttpServletResponse res) throws Exception {
-		List<Map<String, Object>> dataList = erpService.itemList();
+	public void itemExcelDownload(HttpServletResponse res, ErpDTO erpDTO) throws Exception {
+		List<Map<String, Object>> dataList = erpService.itemSearch(erpDTO);
+		 
 		List<String> headerNames = Arrays.asList("index","ITEMID", "ITEMNAME", "TYPE", "STOREDATE", "STOCK", "PRICE");
 		List<String> headerLabels = Arrays.asList("순번","품목코드", "품목명", "품목유형", "입고일", "현재재고", "입고단가");
 		String sheetName = "재고목록";
-		String fileName = "stock_excel_download";
-		
+		String fileName = "stock_excel_download";		
+	
 		System.out.println("데이터 확인: " + dataList);
 		
-		excelService.excelDownload(res, sheetName, headerNames, headerLabels, dataList, fileName);
+		excelService.excelDownload(res, sheetName, headerNames, headerLabels, dataList, fileName);		
 	}
 
 	

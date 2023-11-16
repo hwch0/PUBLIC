@@ -40,13 +40,13 @@
          <div class="nav-btn-wrap">
             <ul>
                <li id="orderBtn22"><a href="javascript:void(0);" onClick="navBtn(this);"></a>주문</li>
-               <li id ="rechargeBtn"><a href="javascript:void(0);" onClick="navBtn(this);">></a>충전</li>
-               <li id ="chattingBtn"><a href="javascript:void(0);" onClick="navBtn(this);">></a>채팅</li>
+               <li id ="rechargeBtn"><a href="javascript:void(0);" onClick="navBtn(this);"></a>충전</li>
+               <li id ="chattingBtn"><a href="javascript:void(0);" onClick="navBtn(this);"></a>채팅</li>
             </ul>
          </div>
       </div>
       <div class="cont-bot-wrap">
-    	  <!-- 채팅 영역 -->
+         <!-- 채팅 영역 -->
          <div class="bot chat-wrap">
             <div class="wrap_chat">
                <div class="wrap_chat_main">
@@ -59,42 +59,47 @@
                </div>
             </div>
          </div>
-   		 <!-- 장바구니 영역 -->
+          <!-- 장바구니 영역 -->
          <div class="bot wrap_cart">
-         	<div class="addCart">
-         		<ul>
-         			
-         		</ul>
-         	</div>
-         	<div id="orderBtn">
-         		<a href="javascript:void(0);" onClick="order();">주문하기</a>
-         	</div>
+            <div class="cart-header">
+            <ul>
+               <li>상품명</li>
+               <li>수량</li>
+               <li>취소</li>
+            </ul>
+         </div>
+            <div class="addCart">
+               <ul>
+                  
+               </ul>
+            </div>
+            <div id="orderBtn">
+               <a href="javascript:void(0);" onClick="order();">주문하기</a>
+               <a href="javascript:void(0);" onClick="removeCartAll();">장바구니 초기화</a>
+            </div>
          </div>
       </div>
       <div class="cont-modal-wrap" style="display:none;">
-      	<div class="modal modal-food">
-      		<div class="menu-category">
-      			<ul>
-      				<li class="on"><a href="javascript:void(0);">밥</a></li>
-      				<li><a href="javascript:void(0);">라면</a></li>
-      				<li><a href="javascript:void(0);">음료</a></li>
-      				<li><a href="javascript:void(0);">스낵</a></li>
-      			</ul>
-      		</div>
-      		<div class="cont-food">
-      			<!-- 밥 종류 리스트 -->
-      			<div class="food rice">
-	      			<ul class="food-list">
-	      			</ul>
-	      		</div>
-      			<!-- 라면 종류 리스트 -->
-      			<!-- 음료 종류 리스트 -->
-      			<!-- 스낵 종류 리스트 -->
-      		</div>
-      	</div>
-      	<div class="modal modal-payment">
-			
-      	</div>
+         <div class="modal modal-food">
+            <div class="menu-category">
+               <ul>
+                  <li id="menu01" class="on"><a href="javascript:void(0);" onclick="showCategory(1);">밥</a></li>
+                  <li id="menu02"><a href="javascript:void(0);"  onclick="showCategory(2);">라면</a></li>
+                  <li id="menu03"><a href="javascript:void(0);"  onclick="showCategory(3);">음료</a></li>
+                  <li id="menu04"><a href="javascript:void(0);"  onclick="showCategory(4);">스낵</a></li>
+               </ul>
+            </div>
+            <div class="cont-food">
+               <!-- 밥 종류 리스트 -->
+               <div class="food">
+                  <ul class="food-list">
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="modal modal-payment">
+         
+         </div>
       </div>
    </div>
 </body>

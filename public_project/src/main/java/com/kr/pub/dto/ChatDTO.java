@@ -13,7 +13,5 @@ public class ChatDTO {
   private String receiver;
   private String message;
   private int seatNo;
-  private String userId;
-  private String recvUserId;
   private String time;
 }

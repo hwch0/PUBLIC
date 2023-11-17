@@ -5,6 +5,20 @@
 
 <mapper namespace="com.kr.pub.dao.PaymentDAO">
 
+	<insert id="insert">
+	insert into payment(
+	ORDER_ID,
+	PAYMENT_METHOD_CODE,
+	PAYMENT_TYPE_CODE)
+	values(
+	#{orderId},
+	#{paymentMethodCode},
+	#{paymentTypeCode}
+	)
+</insert>
+	
+	
+	
 	<!-- 매출 내역 -->
 	<select id="salesSearch" resultType="java.util.Map">
 	SELECT

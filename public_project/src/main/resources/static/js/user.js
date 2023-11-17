@@ -293,6 +293,10 @@ function order() {
       if (json.rs == 'true') {
          alert('주문이 정상적으로 이루어졌습니다.');
          $('.addCart ul').empty();
+          mqttClient.publish(mqtt_topic+"order", JSON.stringify(
+       {type: "ORDER",
+        receiver: "admin"}
+   ));
       } else {
          alert('주문이 정상적으로 이루어지지 않았습니다. ');
       }

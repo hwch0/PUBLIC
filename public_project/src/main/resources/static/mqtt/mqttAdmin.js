@@ -152,7 +152,6 @@ const sendMessage = () => {
 			sender: "admin",
 			receiver: receiver,
 			message: message,
-			userId: "admin"
 		};
 		mqttClient.publish(mqtt_topic + "chat", JSON.stringify(param));
 		$("#chatInputBox").val("");

@@ -11,6 +11,7 @@ $('#logoutBtn').on('click', function(){
 $("#chattingBtn").on('click', function(){
    $(".cont-bot-wrap").css('display','block');
    $(".chat-wrap").css('display','block');
+   $("#chatList").scrollTop($("#chatList")[0].scrollHeight);
 });
 
 //주문버튼
@@ -144,7 +145,7 @@ window.onload = function() {
    //채팅 가져오기
 
    const data = {
-      userId: loggedInUserId,
+      receiver: loggedInUserId,
    }; //JWT 토큰 구현 이후 userID가져와야함
    ajaxResponse('POST', '/chat/getListById', data)
       .then(function(response) {

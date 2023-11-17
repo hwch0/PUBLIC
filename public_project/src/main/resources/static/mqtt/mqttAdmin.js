@@ -152,7 +152,6 @@ const sendMessage = () => {
 			sender: "admin",
 			receiver: receiver,
 			message: message,
-			userId: "admin"
 		};
 		mqttClient.publish(mqtt_topic + "chat", JSON.stringify(param));
 		$("#chatInputBox").val("");
@@ -187,36 +186,48 @@ const recvMessage = (recv) => {
   $("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
 };
 const recvOrder = () => {
+	var orderIds = [];
+	$.each($('[data-orderId]'), function(index, orderId) {
+				orderIds.push($(orderId).attr('data-orderId'));
+			});
+			/*$('[data-orderId]').map(function() {
+						return $(this).data('orderId');
+					}).get();*/
 	ajaxResponse("GET", "/admin/getOrderList")
-    .then(function (response) {
-	  var priceList = [];
-	  var sum = 0;
-      $.each(response.result, function(key, order){
-		 var seatNo = $(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
-		 console.log(seatNo)
-		 $("#orderList").prepend(
-			 `<button class="accordion" data-paymentId='${key}'>${seatNo}번 좌석 주문</button>
-		 		<div class="panel"></div>`);
-		 $.each(order, function(index, detailOrder){
-			 $("#orderList").children().next().first()
-			.append(
-				`<p>상품 이름 : ${detailOrder.itemName}</p>
-				<p>상품 가격 : ${detailOrder.sellingPrice}</p>
-				<p>수량 : ${detailOrder.quantity}</p>`
-				);
-				priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
-		 });
-		 $.each(priceList, function(index, price){
-			 sum = sum+price
-		 })
-		  $("#orderList").children().next().first()
-			.append(`
-			<p>주문 일시 : ${getNow()}</p>
-			<p>총 금액 : ${sum}</p>
-			<button class="served">주문 확인</button>
-			`);
-	  });
-    });
+		.then(function(response) {
+			var priceList = [];
+			var sum = 0;
+			$.each(response.result, function(key, order) {
+				if (!orderIds.includes(key)) {
+					orderIds.push(key);
+					console.log(orderIds)
+					var seatNo = $(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
+					console.log(seatNo)
+					$("#orderList").prepend(
+						`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
+		 				<div class="panel"></div>`);
+					$.each(order, function(index, detailOrder) {
+						$("#orderList").children().next().first()
+							.append(
+								  `<p>상품 이름 : ${detailOrder.itemName}</p>
+									<p>상품 가격 : ${detailOrder.sellingPrice}</p>
+							     	<p>수량 : ${detailOrder.quantity}</p>`
+							);
+						priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
+					});
+					$.each(priceList, function(index, price) {
+						sum = sum + price
+					})
+					$("#orderList").children().next().first()
+						.append(`
+						<p>주문 일시 : ${getNow()}</p>
+						<p>총 금액 : ${sum}</p>
+						<button class="served">주문 확인</button>
+						`);
+				}
+
+			});
+		});
 }; //주문리스트 받기
 
 $('#orderList').on('click', '.served', function(e) {

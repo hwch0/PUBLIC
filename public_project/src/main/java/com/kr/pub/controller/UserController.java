@@ -31,9 +31,11 @@ import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderDTO;
 import com.kr.pub.dto.OrderHistoryDTO;
 import com.kr.pub.dto.OrderListDTO;
+import com.kr.pub.dto.PaymentDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.AdminService;
 import com.kr.pub.service.MqttService;
+import com.kr.pub.service.PaymentService;
 import com.kr.pub.service.UserService;
 import com.kr.pub.util.TimeApi;
 
@@ -48,6 +50,8 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private PaymentService paymentService;
 	
 	/*
 	 * 순서:
@@ -142,8 +146,16 @@ public class UserController {
 	        System.out.println("장바구니 목록 : " + cartItems);
 	        
 	        userService.insertOrderHistory(orderId, cartItems);
-	        
 	        userService.updateItemStock(cartItems);
+	        
+	        PaymentDTO paymentDTO =  PaymentDTO.builder()
+	        	    .paymentTypeCode("PT002")
+	        	    .paymentMethodCode("PM001")
+	        	    .orderId(orderId)
+	        	    .build();
+	        System.out.println(paymentDTO);
+	        paymentService.insertPayment(paymentDTO);//결제 눌렀을때 분리해야됨
+	        
 	        map.put("rs", "true");
 	    } catch (Exception e) {
 	        map.put("rs", "false");

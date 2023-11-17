@@ -7,33 +7,31 @@ $('#logoutBtn').on('click', function(){
    location.href = "/logout";
 });
 
-// 버튼 js
+// 채팅 모달
+$("#chattingBtn").on('click', function(){
+   $(".cont-bot-wrap").css('display','block');
+   $(".chat-wrap").css('display','block');
+   $("#chatList").scrollTop($("#chatList")[0].scrollHeight);
+});
+
+//주문버튼
 function navBtn(element) {
-    const thisNavLi = $(element).parent();
-
-    $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .chat-wrap").css('display', 'none');
-    $(".wrap_cart").removeClass('on');
-    $('#orderBtn22, #rechargeBtn, #chattingBtn').removeClass('on');
-
-    if (thisNavLi.hasClass('on')) {
-        $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .chat-wrap").css('display', 'none');
-        thisNavLi.removeClass('on');
-    } else {
-        if (thisNavLi.attr('id') === 'orderBtn22') {
-            $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart").css('display', 'block');
-            $('#orderBtn22').addClass('on');
-            getMenuList(); 
-        } else if (thisNavLi.attr('id') === 'rechargeBtn') {
-        } else if (thisNavLi.attr('id') === 'chattingBtn') {
-            $(".cont-bot-wrap, .chat-wrap").css('display', 'block');
-            $(".wrap_cart").removeClass('on');
-            $('#chattingBtn').toggleClass('on');
-        }
-
-        thisNavLi.addClass('on');
-    }
+   const thisNavLi = $(element).parent();
+   
+   
+   if (thisNavLi.hasClass('on')) {
+      $(".cont-modal-wrap").css('display', 'none');
+      $(".cont-bot-wrap").css('display', 'none');
+      $(".wrap_cart").removeClass('on');
+      thisNavLi.removeClass('on');
+   } else {
+      $(".cont-modal-wrap").css('display', 'block');
+      $(".cont-bot-wrap").css('display', 'block');
+      $(".wrap_cart").addClass('on');
+      thisNavLi.addClass('on');
+      getMenuList();
+   }
 }
-
 
 // 시간 js
 function ajaxResponse(method, url, params) {
@@ -147,7 +145,7 @@ window.onload = function() {
    //채팅 가져오기
 
    const data = {
-      userId: loggedInUserId,
+      receiver: loggedInUserId,
    }; //JWT 토큰 구현 이후 userID가져와야함
    ajaxResponse('POST', '/chat/getListById', data)
       .then(function(response) {
@@ -295,6 +293,10 @@ function order() {
       if (json.rs == 'true') {
          alert('주문이 정상적으로 이루어졌습니다.');
          $('.addCart ul').empty();
+          mqttClient.publish(mqtt_topic+"order", JSON.stringify(
+       {type: "ORDER",
+        receiver: "admin"}
+   ));
       } else {
          alert('주문이 정상적으로 이루어지지 않았습니다. ');
       }

@@ -162,11 +162,11 @@ public class AdminController {
 		Map<String, List<OrderListDTO>> groupedResult = new HashMap<>();
 
 		for (OrderListDTO item : originalResult) {
-			String paymentId = item.getPaymentId();
-			if (!groupedResult.containsKey(paymentId)) {
-				groupedResult.put(paymentId, new ArrayList<>());
+			String orderId = item.getOrderId();
+			if (!groupedResult.containsKey(orderId)) {
+				groupedResult.put(orderId, new ArrayList<>());
 			}
-			groupedResult.get(paymentId).add(item);
+			groupedResult.get(orderId).add(item);
 		}
 
 		result.put("result", groupedResult);

@@ -7,30 +7,33 @@ $('#logoutBtn').on('click', function(){
    location.href = "/logout";
 });
 
-// 채팅 모달
-$("#chattingBtn").on('click', function(){
-   $(".cont-bot-wrap").css('display','block');
-   $(".chat-wrap").css('display','block');
-});
-
-//주문버튼
+// 버튼 js
 function navBtn(element) {
-   const thisNavLi = $(element).parent();
-   
-   
-   if (thisNavLi.hasClass('on')) {
-      $(".cont-modal-wrap").css('display', 'none');
-      $(".cont-bot-wrap").css('display', 'none');
-      $(".wrap_cart").removeClass('on');
-      thisNavLi.removeClass('on');
-   } else {
-      $(".cont-modal-wrap").css('display', 'block');
-      $(".cont-bot-wrap").css('display', 'block');
-      $(".wrap_cart").addClass('on');
-      thisNavLi.addClass('on');
-      getMenuList();
-   }
+    const thisNavLi = $(element).parent();
+
+    $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .chat-wrap").css('display', 'none');
+    $(".wrap_cart").removeClass('on');
+    $('#orderBtn22, #rechargeBtn, #chattingBtn').removeClass('on');
+
+    if (thisNavLi.hasClass('on')) {
+        $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .chat-wrap").css('display', 'none');
+        thisNavLi.removeClass('on');
+    } else {
+        if (thisNavLi.attr('id') === 'orderBtn22') {
+            $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart").css('display', 'block');
+            $('#orderBtn22').addClass('on');
+            getMenuList(); 
+        } else if (thisNavLi.attr('id') === 'rechargeBtn') {
+        } else if (thisNavLi.attr('id') === 'chattingBtn') {
+            $(".cont-bot-wrap, .chat-wrap").css('display', 'block');
+            $(".wrap_cart").removeClass('on');
+            $('#chattingBtn').toggleClass('on');
+        }
+
+        thisNavLi.addClass('on');
+    }
 }
+
 
 // 시간 js
 function ajaxResponse(method, url, params) {

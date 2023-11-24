@@ -16,22 +16,31 @@ $("#chattingBtn").on('click', function(){
 
 //주문버튼
 function navBtn(element) {
-   const thisNavLi = $(element).parent();
-   
-   
-   if (thisNavLi.hasClass('on')) {
-      $(".cont-modal-wrap").css('display', 'none');
-      $(".cont-bot-wrap").css('display', 'none');
-      $(".wrap_cart").removeClass('on');
-      thisNavLi.removeClass('on');
-   } else {
-      $(".cont-modal-wrap").css('display', 'block');
-      $(".cont-bot-wrap").css('display', 'block');
-      $(".wrap_cart").addClass('on');
-      thisNavLi.addClass('on');
-      getMenuList();
-   }
+    const thisNavLi = $(element).parent();
+
+    $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .chat-wrap").css('display', 'none');
+    $(".wrap_cart").removeClass('on');
+    $('#orderBtn22, #rechargeBtn, #chattingBtn').removeClass('on');
+
+    if (thisNavLi.hasClass('on')) {
+        $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .chat-wrap").css('display', 'none');
+        thisNavLi.removeClass('on');
+    } else {
+        if (thisNavLi.attr('id') === 'orderBtn22') {
+            $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart").css('display', 'block');
+            $('#orderBtn22').addClass('on');
+            getMenuList(); 
+        } else if (thisNavLi.attr('id') === 'rechargeBtn') {
+        } else if (thisNavLi.attr('id') === 'chattingBtn') {
+            $(".cont-bot-wrap, .chat-wrap").css('display', 'block');
+            $(".wrap_cart").removeClass('on');
+            $('#chattingBtn').toggleClass('on');
+        }
+
+        thisNavLi.addClass('on');
+    }
 }
+
 
 // 시간 js
 function ajaxResponse(method, url, params) {
@@ -122,12 +131,12 @@ window.onload = function() {
    console.log('userId 값:', userIdValue);
    updateRemainingTime(userIdValue);
 
-   var userIdElement = document.getElementById("userId");
-   //var loggedInUserId = localStorage.getItem("userId"); 
+	var userIdElement = document.getElementById("userId");
+	//var loggedInUserId = localStorage.getItem("userId"); 
 
-   var loggedInUserId = userIdValue;
-   userIdElement.textContent = loggedInUserId;
-   
+	var loggedInUserId = userIdValue;
+	userIdElement.textContent = loggedInUserId;
+	
     updateRemainingTime(userIdValue);
     
     var userIdElement = document.getElementById("userId");
@@ -138,47 +147,47 @@ window.onload = function() {
     
     
     mqttClient.publish(mqtt_topic, JSON.stringify(
-       {type: "LOGIN",
-        receiver: "admin"}
-   ));
-   
-   //채팅 가져오기
+		 {type: "LOGIN",
+		  receiver: "admin"}
+	));
+	
+	//채팅 가져오기
 
-   const data = {
-      receiver: loggedInUserId,
-   }; //JWT 토큰 구현 이후 userID가져와야함
-   ajaxResponse('POST', '/chat/getListById', data)
-      .then(function(response) {
-      var chatList = response.result;
-      if (chatList != null) {
-         console.log(chatList);
-         $.each(response.result, function(index, chat) {
-            if (chat.sender === 'admin') {
-               $("#chatList").append(
-                  `<li class="you">
-               <div class="entete">
-                  <p>${chat.time}</p>
-                  <h2>${chat.sender}</h2>
-                  </div>
-                  <div class="triangle"></div>
-                  <div class="message">${chat.message}</div>
-            </li>`
-               );
-            } else {
-               $("#chatList").append(
-                  `<li class="me">
-                        <div class="entete">
-                           <p>${chat.time}</p>
-                           <h2>${chat.sender}</h2>
-                        </div>
-                        <div class="triangle"></div>
-                        <div class="message">${chat.message}</div>
-                     </li>`
-               );
-            }
-         });
-      }
-   });
+	const data = {
+		userId: loggedInUserId,
+	}; //JWT 토큰 구현 이후 userID가져와야함
+	ajaxResponse('POST', '/chat/getListById', data)
+		.then(function(response) {
+		var chatList = response.result;
+		if (chatList != null) {
+			console.log(chatList);
+			$.each(response.result, function(index, chat) {
+				if (chat.sender === 'admin') {
+					$("#chatList").append(
+						`<li class="you">
+					<div class="entete">
+						<p>${chat.time}</p>
+						<h2>${chat.sender}</h2>
+						</div>
+						<div class="triangle"></div>
+						<div class="message">${chat.message}</div>
+				</li>`
+					);
+				} else {
+					$("#chatList").append(
+						`<li class="me">
+								<div class="entete">
+									<p>${chat.time}</p>
+									<h2>${chat.sender}</h2>
+								</div>
+								<div class="triangle"></div>
+								<div class="message">${chat.message}</div>
+							</li>`
+					);
+				}
+			});
+		}
+	});
 }      
 
 
@@ -206,6 +215,7 @@ function addCart(element) {
         var cartItem = '<li>' +
             '<p class="itemId">' + itemId + '</p>' +
             '<p class="food-name">' + itemName + '</p>' +
+            '<p class="food-price" style="display:none;">' + sellingPrice + '</p>' +
             '<div class="food-option">' +
                 '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
                 '<p><em class="optionNum" data-option-num="1">1</em></p>' +
@@ -241,10 +251,12 @@ function removeCart(element) {
     $(element).closest('li').remove();
 }    
     
+// 장바구니 비우기
 function removeCartAll() {
     $('.addCart ul li').remove();
 }    
-                 
+
+// 키테고리별 메뉴 출력       
 function showCategory(no) {
   $(".menu-category li").removeClass('on');
   $("#menu0" + no).addClass('on');
@@ -321,12 +333,14 @@ function getMenuList() {
         }
     });
 }
+
 // 호출된 메뉴 리스트 출력
 function displayMenuList(menuList) {
 
     var foodList = document.querySelector(".food-list");
     
    $('.food-list').empty();
+
 
     if (menuList != null) {
         menuList.forEach(function(menu) {
@@ -338,7 +352,7 @@ function displayMenuList(menuList) {
                 '</div>' +
                 '<div class="food-info-wrap">' +
                 '<p class="food-name" style="margin-top: 15px; text-align:center; font-size: 22px; font-weight: bold; line-height: 30px;">' + menu.ITEMNAME + '</p>' +
-                '<p class="food-price" style="margin-top:15px; text-align: center; line-height:22px; font-size: 18px;">' + menu.SELLINGPRICE + '원</p>' +
+                '<p class="food-price-wrap" style="margin-top:15px; text-align: center; line-height:22px; font-size: 18px;">' + '<span class="food-price">' + menu.SELLINGPRICE + '</span>' + '원 </p>' +
                 '</div>' +
                 '</li>';
             $('.food-list').append(row);

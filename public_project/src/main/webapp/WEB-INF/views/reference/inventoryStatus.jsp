@@ -143,7 +143,9 @@
 	    			 <!-- 품목명 입력 -->
 	            <div class="status-form-group">
 	                <label for="statusCode">품목 코드</label>
-	                <input type="text" class="form-control" id="statusCode" required>
+	                <select class="form-control" id="statusCode" required>
+	                	<option value=""></option>
+	                </select>
 	            </div>
 	            
 	            <!-- 입고 수량 -->

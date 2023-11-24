@@ -809,6 +809,31 @@
     padding: 0 12px;
 }
 
+/*userList Css*/
+.userTbody{
+	text-align: center;
+	max-height: 232px;  
+	overflow-y: auto;
+	display: block;
+}
+
+.userScroll > tr > td:nth-child(1) { width: 50px; }
+.userScroll > tr > td:nth-child(2) { width: 135px; }
+.userScroll > tr > td:nth-child(3) { width: 120px; }
+.userScroll > tr > td:nth-child(4) { width: 142px; }
+.userScroll > tr > td:nth-child(5) { width: 115px; }
+.userScroll > tr > td:nth-child(6) { width: 80px; }
+.userScroll > tr > td:nth-child(7) { width: 129px; }
+.userScroll > tr > td:nth-child(8) { width: 115px; }
+
+
+.userTbody .amount-cell {
+    text-align: end;
+    padding: 0 12px;
+}
+
+
+
 /*품목 정렬 css*/
 .sortable {
     cursor: pointer;
@@ -1195,3 +1220,12 @@ span.orderDetail {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     background-color: #fff;
 }
+
+/*휴먼계정*/
+    .dormant {
+        color: red;
+    }
+
+    .active {
+        color: blue;
+    }

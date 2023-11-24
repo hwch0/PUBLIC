@@ -82,10 +82,12 @@ function showChat(){
 	if($(".wrap_alert").hasClass('on')){
 		$(".wrap_alert").removeClass("on");
 		$(".wrap_chat").toggleClass('on');
+		$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
 	}else{
 		$('.wrap_cont').toggleClass("lft");
 		$('.py-5').toggleClass('lft');
 		$(".wrap_chat").toggleClass("on");
+		$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
 	}
 }
 /* 아코디언 */

@@ -1,13 +1,20 @@
 // 로그아웃
 $('#logoutBtn').on('click', function(){
-	mqttClient.publish(mqtt_topic, JSON.stringify(
-		 {type: "LOGOUT",
-		  receiver: "admin"}
-	));
-	location.href = "/logout";
+   mqttClient.publish(mqtt_topic, JSON.stringify(
+       {type: "LOGOUT",
+        receiver: "admin"}
+   ));
+   location.href = "/logout";
 });
 
-// 버튼 js
+// 채팅 모달
+$("#chattingBtn").on('click', function(){
+   $(".cont-bot-wrap").css('display','block');
+   $(".chat-wrap").css('display','block');
+   $("#chatList").scrollTop($("#chatList")[0].scrollHeight);
+});
+
+//주문버튼
 function navBtn(element) {
     const thisNavLi = $(element).parent();
 
@@ -104,25 +111,25 @@ function updateRemainingTime(userIdValue) {
 }
 
 window.onload = function() {
-	const userInfoData = $('#userInfo').val();
+   const userInfoData = $('#userInfo').val();
 
-	// 쿠키에서 모든 쿠키를 가져옵니다.
-	var allCookies = document.cookie;
+   // 쿠키에서 모든 쿠키를 가져옵니다.
+   var allCookies = document.cookie;
 
-	// 각 쿠키를 분리합니다.
-	var cookiesArray = allCookies.split(';');
+   // 각 쿠키를 분리합니다.
+   var cookiesArray = allCookies.split(';');
 
-	// userId 쿠키를 찾습니다.
-	var userIdCookie = cookiesArray.find(function(cookie) {
-		return cookie.trim().startsWith('userId=');
-	});
+   // userId 쿠키를 찾습니다.
+   var userIdCookie = cookiesArray.find(function(cookie) {
+      return cookie.trim().startsWith('userId=');
+   });
 
-	// userId 쿠키에서 값만 추출합니다.
-	var userIdValue = userIdCookie ? userIdCookie.split('=')[1] : null;
+   // userId 쿠키에서 값만 추출합니다.
+   var userIdValue = userIdCookie ? userIdCookie.split('=')[1] : null;
 
-	// userId 값을 출력합니다.
-	console.log('userId 값:', userIdValue);
-	updateRemainingTime(userIdValue);
+   // userId 값을 출력합니다.
+   console.log('userId 값:', userIdValue);
+   updateRemainingTime(userIdValue);
 
 	var userIdElement = document.getElementById("userId");
 	//var loggedInUserId = localStorage.getItem("userId"); 
@@ -256,12 +263,12 @@ function showCategory(no) {
 
   if (no == 1) {
     $(".food-list li").not('#MC001').hide();
-  	$(".food-list li[id='MC001']").show();
+     $(".food-list li[id='MC001']").show();
   } else if(no == 2){ 
-	$(".food-list li").not('#MC002').hide();
+   $(".food-list li").not('#MC002').hide();
     $(".food-list li[id='MC002']").show();
   } else if(no == 3){ 
-	$(".food-list li").not('#MC003').hide();
+   $(".food-list li").not('#MC003').hide();
     $(".food-list li[id='MC003']").show();
   } else {
     $(".food-list li").not('#MC004').hide();
@@ -285,26 +292,30 @@ function order() {
     
     console.log(cartItems);
     
-	const param = { userId: userId, items: cartItems };
-	fetch('/user/order', {
-	   method: 'POST',
-	   headers: {
-	      'Content-Type': 'application/json; charset=UTF-8',
-	   },
-	   body: JSON.stringify(param),
-	})
-	.then((rs) => rs.json())
-	.then((json) => {
-	   if (json.rs == 'true') {
-	      alert('주문이 정상적으로 이루어졌습니다.');
-	      $('.addCart ul').empty();
-	   } else {
-	      alert('주문이 정상적으로 이루어지지 않았습니다. ');
-	   }
-	})
-	.catch((error) => {
-	   console.error('주문 에러:', error);
-	});
+   const param = { userId: userId, items: cartItems };
+   fetch('/user/order', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify(param),
+   })
+   .then((rs) => rs.json())
+   .then((json) => {
+      if (json.rs == 'true') {
+         alert('주문이 정상적으로 이루어졌습니다.');
+         $('.addCart ul').empty();
+          mqttClient.publish(mqtt_topic+"order", JSON.stringify(
+       {type: "ORDER",
+        receiver: "admin"}
+   ));
+      } else {
+         alert('주문이 정상적으로 이루어지지 않았습니다. ');
+      }
+   })
+   .catch((error) => {
+      console.error('주문 에러:', error);
+   });
 }
 
 
@@ -328,13 +339,13 @@ function displayMenuList(menuList) {
 
     var foodList = document.querySelector(".food-list");
     
-	$('.food-list').empty();
+   $('.food-list').empty();
 
 
     if (menuList != null) {
-    	 menuList.forEach(function(menu) {
+        menuList.forEach(function(menu) {
             var row = '<li id="' + menu.MENUCATEGORYCODE + '">'+
-            	'<a href="javascript:void(0);" class="add-to-cart" onClick="addCart(this);" data-menu-id="' + menu.ITEMID +'">' +
+               '<a href="javascript:void(0);" class="add-to-cart" onClick="addCart(this);" data-menu-id="' + menu.ITEMID +'">' +
                 '</a>' +
                 '<div class="img-wrap">' +
                 '<img alt="상품이미지" src="/image/download/' + menu.IMGID + '"/>' +

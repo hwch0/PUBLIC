@@ -17,7 +17,6 @@
 		ORDER BY time ASC
 	</select>
 	<select id="getChatListById" resultType="com.kr.pub.dto.ChatDTO">
-	<![CDATA[
     SELECT
         type,
         sender,
@@ -29,10 +28,9 @@
         chat
     WHERE
         TRUNC(time) = TRUNC(SYSDATE)
-        AND sender IN (#{userId}, 'admin')
-        AND receiver IN (#{userId}, 'admin')
+        AND sender IN (#{receiver}, 'admin')
+        AND receiver IN (#{receiver}, 'admin')
     ORDER BY
         time ASC
-    ]]>
 	</select>
 </mapper>

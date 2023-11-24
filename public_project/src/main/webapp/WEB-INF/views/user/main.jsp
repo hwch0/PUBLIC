@@ -46,7 +46,7 @@
          </div>
       </div>
       <div class="cont-bot-wrap">
-    	  <!-- 채팅 영역 -->
+         <!-- 채팅 영역 -->
          <div class="bot chat-wrap">
             <div class="wrap_chat">
                <div class="wrap_chat_main">
@@ -59,7 +59,7 @@
                </div>
             </div>
          </div>
-   		 <!-- 장바구니 영역 -->
+          <!-- 장바구니 영역 -->
          <div class="bot wrap_cart">
         	 <div class="cart-header">
 				<ul>
@@ -80,26 +80,26 @@
          </div>
       </div>
       <div class="cont-modal-wrap" style="display:none;">
-      	<div class="modal modal-food">
-      		<div class="menu-category">
-      			<ul>
-      				<li id="menu01" class="on"><a href="javascript:void(0);" onclick="showCategory(1);">밥</a></li>
-      				<li id="menu02"><a href="javascript:void(0);"  onclick="showCategory(2);">라면</a></li>
-      				<li id="menu03"><a href="javascript:void(0);"  onclick="showCategory(3);">음료</a></li>
-      				<li id="menu04"><a href="javascript:void(0);"  onclick="showCategory(4);">스낵</a></li>
-      			</ul>
-      		</div>
-      		<div class="cont-food">
-      			<!-- 밥 종류 리스트 -->
-      			<div class="food">
-	      			<ul class="food-list">
-	      			</ul>
-	      		</div>
-      		</div>
-      	</div>
-      	<div class="modal modal-payment">
-			
-      	</div>
+         <div class="modal modal-food">
+            <div class="menu-category">
+               <ul>
+                  <li id="menu01" class="on"><a href="javascript:void(0);" onclick="showCategory(1);">밥</a></li>
+                  <li id="menu02"><a href="javascript:void(0);"  onclick="showCategory(2);">라면</a></li>
+                  <li id="menu03"><a href="javascript:void(0);"  onclick="showCategory(3);">음료</a></li>
+                  <li id="menu04"><a href="javascript:void(0);"  onclick="showCategory(4);">스낵</a></li>
+               </ul>
+            </div>
+            <div class="cont-food">
+               <!-- 밥 종류 리스트 -->
+               <div class="food">
+                  <ul class="food-list">
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="modal modal-payment">
+         
+         </div>
       </div>
    </div>
 </body>

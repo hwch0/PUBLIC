@@ -1,7 +1,9 @@
 package com.kr.pub.service;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kr.pub.config.MqttConfig;
@@ -16,19 +18,22 @@ public class MqttService {
 	MqttConfig.OutboundGateway outboundGateway;
 	@Autowired
 	ChatService chatService;
+
 	public void publishMessage(String message, String topic) throws Exception {
 		outboundGateway.sendToMqtt(message, topic);
-    }
-	
-	public void execute(String topic, String payload) throws Exception {//채팅 저장 로직
-    String [] cmdParams = StringUtils.split(topic, "/");
-	if(cmdParams[1].equals("chat")) {
-		ChatDTO chat = new ObjectMapper().readValue(payload, ChatDTO.class);
-		System.out.println("MQTTSERVICE=>" + chat);
-		if (chat != null && chat.getType().equals("CHAT")) {
-			chatService.insert(chat);
-		}
 	}
-   
+	
+
+	public void execute(String topic, String payload) throws Exception {// MQTT 메세지 수신시 실행
+		System.out.println(topic);
+		String[] cmdParams = StringUtils.split(topic, "/");
+		if (cmdParams.length >= 2 && cmdParams[1].equals("chat")) {
+			ChatDTO chat = new ObjectMapper().readValue(payload, ChatDTO.class);
+			System.out.println("MQTTSERVICE=>" + chat);
+			if (chat != null && chat.getType().equals("CHAT")) {
+				System.out.println("CHATINSERT!!!!");
+				chatService.insert(chat);
+			}
+		}
 	}
 }

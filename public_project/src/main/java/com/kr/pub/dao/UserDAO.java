@@ -1,16 +1,18 @@
 package com.kr.pub.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.UserDTO;
 
 
 @Mapper
 public interface UserDAO {
 
+	public List<Map<String, Object>>erpUserList();
+	
 	public List<UserDTO> getUserList();
 
 	public UserDTO getUser(UserDTO user);

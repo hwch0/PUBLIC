@@ -66,7 +66,7 @@
                 </li>
                 <li>
                 	<em class="arrow"><img src="/images/sub_nav.png" alt="화살표"></em>
-                    <a href="javascript:void(0);" onclick="navOn(this);">회원관리</a>
+                    <a href="/erp/user" onclick="navOn(this);">회원관리</a>
                 </li>
             </ul>
         </div>

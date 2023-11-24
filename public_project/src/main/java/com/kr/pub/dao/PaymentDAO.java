@@ -5,6 +5,10 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.kr.pub.dto.OrderDTO;
+import com.kr.pub.dto.OrderHistoryDTO;
+import com.kr.pub.dto.PaymentDTO;
+
 @Mapper
 public interface PaymentDAO {
 
@@ -13,5 +17,8 @@ public interface PaymentDAO {
 	
 	//매출 내역
 	public List<Map<String, Object>> salesList()throws Exception;
+
+//	public void insertPayment(OrderDTO order);
+	public int insert(PaymentDTO paymentDTO);
 
 }

@@ -4,13 +4,15 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.kr.pub.dao.OrderDAO">
+	
 	<select id="getOrderList" resultType="com.kr.pub.dto.OrderListDTO">
-		SELECT p.payment_id, p.payment_date, i.item_name, i.selling_price , oh.quantity, o.served, o.user_Id
+		SELECT p.payment_id, 
+					  p.payment_date, i.item_name, i.selling_price , oh.quantity, o.served, o.user_Id, o.order_Id
 		FROM payment p
 		inner JOIN orders o ON o.order_id = p.order_id
 		inner Join order_history oh on o.order_id = oh.order_Id
 		inner join item i on oh.item_id = i.item_id
-		where served = 'N' and p.Payment_id = 'P000006' and p.Payment_Type_code ='PT002'
+		where served = 'N' and p.Payment_Type_code ='PT002'
 	</select>
 	
 	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">

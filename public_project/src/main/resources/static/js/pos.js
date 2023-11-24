@@ -56,7 +56,7 @@ const closeInfoModal = () => {
 
 
 $(document).ready(function() {
-	var loggedInUserList = [];
+	//var loggedInUserList = [];
 	ajaxResponse("GET", "/admin/loggedInUserList")
 		.then(function(response) {
 			loggedInUserList = response.result;
@@ -111,9 +111,44 @@ $(document).ready(function() {
 					);
 				}
 			});
+		});//채팅 데이터 불러오기		
+	ajaxResponse("GET", "/admin/getOrderList")
+		.then(function(response) {
+			$.each(response.result, function(key, order) {
+				var priceList = [];
+				var sum = 0;
+				var seatNo = order[0].seatNo;
+				//$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
+				console.log(seatNo)
+				$("#orderList").prepend(
+					`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
+		 				<div class="panel"></div>`);
+				$.each(order, function(index, detailOrder) {
+					$("#orderList").children().next().first()
+						.append(
+							`<p>상품 이름 : ${detailOrder.itemName}</p>
+									<p>상품 가격 : ${detailOrder.sellingPrice}</p>
+							     	<p>수량 : ${detailOrder.quantity}</p>`
+						);
+					priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
+				});
+				$.each(priceList, function(index, price) {
+					sum = sum + price
+				})
+				$("#orderList").children().next().first()
+					.append(`
+						<p>주문 일시 : ${getNow()}</p>
+						<p>총 금액 : ${sum}</p>
+						<button class="served">주문 확인</button>
+						`);
+			});
 		});
-	//채팅 데이터 불러오기		
-
 	//주문데이터 불러오기
 });
 
+$('#orderList').on('click', '.served', function(e) {
+	console.log($(e.currentTarget).parent().prev().data('orderid'));
+	//$(e.currentTarget).parent().prev().remove();
+	//$(e.currentTarget).parent().remove();
+	//DB에 Orders 테이블 served를 Y로 바꾸는 로직 들어가야함
+});

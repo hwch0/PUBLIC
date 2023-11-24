@@ -4,6 +4,10 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.kr.pub.dao.PaymentDAO">
+	<!-- <insert id="insertPayment">
+    	insert into payment (order_id, payment_method_code,payment_type_code) 
+    	values (#{orderId}, 'PM001' , 'PT002')
+	</insert> -->
 
 	<insert id="insert">
 	insert into payment(
@@ -16,8 +20,6 @@
 	#{paymentTypeCode}
 	)
 </insert>
-	
-	
 	
 	<!-- 매출 내역 -->
 	<select id="salesSearch" resultType="java.util.Map">

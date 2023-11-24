@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dao.OrderDAO;
+import com.kr.pub.dao.PaymentDAO;
 import com.kr.pub.dao.SeatDAO;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.OrderDTO;
@@ -45,6 +46,8 @@ public class UserService {
 	private OrderDAO orderDAO;
 	@Autowired
 	private ItemDAO itemDAO;
+	@Autowired
+	private PaymentDAO paymentDAO;
 	@Autowired
 	private MqttService mqttService;
 	@Autowired
@@ -236,6 +239,7 @@ public class UserService {
 	
 	public String insertOrder(OrderDTO order) {
         orderDAO.insertOrder(order);
+		/* paymentDAO.insertPayment(order); */
         return order.getOrderId();
     }
 
@@ -249,8 +253,9 @@ public class UserService {
 	            .build();
 
 	        orderDAO.insertOrderHistory(orderHistory);
-	        
 	    }
+	    
+	   
 	}
 
 	public void updateItemStock(List<OrderHistoryDTO> cartItems) {

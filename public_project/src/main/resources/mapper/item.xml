@@ -10,6 +10,14 @@
 	set image
 </update>
 
+	<!-- 품목 코드 가져오기 -->
+	<select id="statusCode" resultType="java.util.Map">
+		select ITEM_ID  as itemId
+		, ITEM_NAME as itemName
+		 from item
+		 order by ITEM_NAME
+	</select>
+	
 	<!-- 주문완료 후 수량 변경 -->
 	<update id="updateItemStock">
         UPDATE item

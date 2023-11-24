@@ -1,3 +1,27 @@
+function statusCodeList() {
+    $.ajax({
+        url: '/erp/statusCode',
+        contentType: "application/json; charset=UTF-8",
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            const selectElement = $('#statusCode');
+            console.log("데이터 확인: ", data);  // 전체 데이터 확인
+            $.each(data, function(index, item) {
+                console.log("각 항목 확인: ", item);  // 각 항목 확인
+                selectElement.append('<option value="' + item.ITEMID + '">' + item.ITEMNAME + '</option>');
+            });
+        },
+        error: function(err){
+            console.error('데이터를 불러오는 도중 에러 발생: ' , err);
+        }
+    });
+}
+
+$(document).ready(function(){
+	statusCodeList();
+});
+
 //테이블 공백 생성
 function addEmptyRowsToTable(tableId) {
     var rowCount = $(tableId + ' tr').length;

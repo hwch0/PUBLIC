@@ -45,6 +45,19 @@ $('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
 			$('#remainingTime').text(formatTime(userInfo.remainingTime));
 			$('#regDate').text(formatDatenTime(userInfo.regDate));
 		});
+	ajaxResponse("POST", "/order/listById", params)
+		.then(function(response) {
+			$.each(response.result, function(index, order){
+				$('#userOrder').append(
+					`<tr>
+						<td class="text-left">${order.paymentDate}</td>
+						<td class="text-left">${order.itemName}</td>
+						<td class="text-left">${order.quantity}</td>
+						<td class="text-left">${parseInt(order.quantity) * parseInt(order.sellingPrice)}</td>
+					</tr>`
+				);
+			})
+		});
 	infoModal.css('display', 'block');
 });//좌석 클릭시 사용자정보 띄우기
 
@@ -147,8 +160,16 @@ $(document).ready(function() {
 });
 
 $('#orderList').on('click', '.served', function(e) {
-	console.log($(e.currentTarget).parent().prev().data('orderid'));
-	//$(e.currentTarget).parent().prev().remove();
-	//$(e.currentTarget).parent().remove();
-	//DB에 Orders 테이블 served를 Y로 바꾸는 로직 들어가야함
-});
+	const orderId = $(e.currentTarget).parent().prev().data('orderid');
+	const params = {
+		orderId : orderId,
+	}
+	ajaxResponse("POST", "/order/served", params)
+		.then(function(response) {
+			if(response.result){
+				alert("정상적으로 처리되었습니다.")
+				$(e.currentTarget).parent().prev().remove();
+				$(e.currentTarget).parent().remove();
+			}
+		});
+});//DB에 Orders 테이블 served를 Y로 바꾸는 로직

@@ -26,26 +26,29 @@ $(document).ready(() => {
 
     datepickerReset();
     
-	     $('#startDate, #endDate').on('change', function(){
-		const selectedDate1 = new Date(startDate.val());
-		const selectedDate2 = new Date(endDate.val());
-
-	        const diffInMilliseconds = Math.abs(selectedDate2 - selectedDate1);
-	        const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24));
+	$('[id^=startDate], [id^=endDate]').on('change', function() {
+	    const id = this.id;
+	    const startDateVal = $('#' + id).val();
+	    const endDateID = id.includes('startDate') ? id.replace('startDate', 'endDate') : id.replace('endDate', 'startDate');
+	    const endDateVal = $('#' + endDateID).val();
+	    
+	    const selectedStartDate = new Date(startDateVal);
+	    const selectedEndDate = new Date(endDateVal);
 	
-	        if (diffInDays > 90) {
-                alert("최대 3개월을 넘어서 검색을 할 수 없습니다.");
-
-                startDate.val('');
-                endDate.val('');
-                startDate2.val('');
-                endDate2.val('');
-                                
-                 $('.input-group.date').datepicker('destroy');
-                 
-                 datepickerReset();
-            }
-        });
+	    const diffInMilliseconds = Math.abs(selectedEndDate - selectedStartDate);
+	    const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24));
+	
+	    if (diffInDays > 90) {
+	        alert("최대 3개월을 넘어서 검색을 할 수 없습니다.");
+	
+	        $('#' + id).val('');
+	        $('#' + endDateID).val('');
+	
+	        $('.input-group.date').datepicker('destroy');
+	
+	        datepickerReset();
+	    }
+	 });
     });
     
 //재고관리 품목 & 입·출고 

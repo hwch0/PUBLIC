@@ -14,6 +14,9 @@ import com.kr.pub.dto.OrderHistoryDTO;
 public interface ItemDAO {
 
 	
+	//품목코드 가져오기
+	public List<Map<String, Object>> statusCode() throws Exception;
+	
 	//재고 토탈 카운트
 	public int itemTotalCount(ErpDTO erpDTO)throws Exception;
 	

@@ -6,14 +6,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.kr.pub.dao.AdminDAO;
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dao.PaymentDAO;
+import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.dto.ItemDTO;
+import com.kr.pub.dto.UserDTO;
 
 
 @Service
@@ -27,6 +27,25 @@ public class ErpService {
 	
 	@Autowired
 	private OrderDAO orderDAO;
+	
+	@Autowired
+	private UserDAO userDAO;
+	
+	//회원관리
+	public List<Map<String, Object>> userList() throws Exception{
+		List<Map<String, Object>> userList = userDAO.erpUserList();
+		
+		indexList(userList);
+		
+		return userList;
+	}
+	
+	//품목 코드 가져오기
+	public List<Map<String, Object>> statusCode() throws Exception{
+		List<Map<String, Object>> itemCode = itemDAO.statusCode();
+		
+		return itemCode;
+	}
 	
 	//입고 등록하기
 	public boolean insertStock(ItemDTO itemId)throws Exception{

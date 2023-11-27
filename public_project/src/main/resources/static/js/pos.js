@@ -45,6 +45,19 @@ $('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
 			$('#remainingTime').text(formatTime(userInfo.remainingTime));
 			$('#regDate').text(formatDatenTime(userInfo.regDate));
 		});
+	ajaxResponse("POST", "/order/listById", params)
+		.then(function(response) {
+			$.each(response.result, function(index, order){
+				$('#userOrder').append(
+					`<tr>
+						<td class="text-left">${order.paymentDate}</td>
+						<td class="text-left">${order.itemName}</td>
+						<td class="text-left">${order.quantity}</td>
+						<td class="text-left">${parseInt(order.quantity) * parseInt(order.sellingPrice)}</td>
+					</tr>`
+				);
+			})
+		});
 	infoModal.css('display', 'block');
 });//좌석 클릭시 사용자정보 띄우기
 
@@ -56,7 +69,7 @@ const closeInfoModal = () => {
 
 
 $(document).ready(function() {
-	var loggedInUserList = [];
+	//var loggedInUserList = [];
 	ajaxResponse("GET", "/admin/loggedInUserList")
 		.then(function(response) {
 			loggedInUserList = response.result;
@@ -111,9 +124,52 @@ $(document).ready(function() {
 					);
 				}
 			});
+		});//채팅 데이터 불러오기		
+	ajaxResponse("GET", "/admin/getOrderList")
+		.then(function(response) {
+			$.each(response.result, function(key, order) {
+				var priceList = [];
+				var sum = 0;
+				var seatNo = order[0].seatNo;
+				//$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
+				console.log(seatNo)
+				$("#orderList").prepend(
+					`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
+		 				<div class="panel"></div>`);
+				$.each(order, function(index, detailOrder) {
+					$("#orderList").children().next().first()
+						.append(
+							`<p>상품 이름 : ${detailOrder.itemName}</p>
+									<p>상품 가격 : ${detailOrder.sellingPrice}</p>
+							     	<p>수량 : ${detailOrder.quantity}</p>`
+						);
+					priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
+				});
+				$.each(priceList, function(index, price) {
+					sum = sum + price
+				})
+				$("#orderList").children().next().first()
+					.append(`
+						<p>주문 일시 : ${getNow()}</p>
+						<p>총 금액 : ${sum}</p>
+						<button class="served">주문 확인</button>
+						`);
+			});
 		});
-	//채팅 데이터 불러오기		
-
 	//주문데이터 불러오기
 });
 
+$('#orderList').on('click', '.served', function(e) {
+	const orderId = $(e.currentTarget).parent().prev().data('orderid');
+	const params = {
+		orderId : orderId,
+	}
+	ajaxResponse("POST", "/order/served", params)
+		.then(function(response) {
+			if(response.result){
+				alert("정상적으로 처리되었습니다.")
+				$(e.currentTarget).parent().prev().remove();
+				$(e.currentTarget).parent().remove();
+			}
+		});
+});//DB에 Orders 테이블 served를 Y로 바꾸는 로직

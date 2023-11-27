@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.dto.ItemDTO;
+import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.ErpService;
 import com.kr.pub.service.ExcelService;
 
@@ -37,6 +37,27 @@ public class ErpController {
 	@Autowired
 	private ExcelService excelService;
 
+	//회원 리스트
+	@GetMapping("/user")
+	public String userList(Model model) throws Exception{
+		List<Map<String, Object>> userList = erpService.userList();
+		
+		model.addAttribute("userList", userList);
+		System.out.println(" userList확인용: " + userList);
+		
+		return "/reference/userList";
+	}
+	
+	//품목 코드 리스트
+	@GetMapping("/statusCode")
+	@ResponseBody
+	public List<Map<String, Object>> itemCode(ItemDTO itemId) throws Exception {
+	    
+	    List<Map<String, Object>> statusCodeList = erpService.statusCode();
+	    
+	    return statusCodeList;
+	}	
+	
 	//입고 등록하기
 	@PostMapping("/insertStatus")
 	@ResponseBody

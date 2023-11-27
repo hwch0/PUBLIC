@@ -5,6 +5,16 @@
 
 <mapper namespace="com.kr.pub.dao.UserDAO">
 
+	<!-- erp 회원관리 -->
+	<select id="erpUserList" resultType="java.util.Map">
+		SELECT USER_ID, UNAME, PHONE_NUMBER, LOGOUT_TIME, LOGIN_FAILURE, OAUTH, 
+		       TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REG_DATE,
+		       CASE WHEN TRUNC(MONTHS_BETWEEN(SYSDATE, LOGOUT_TIME)) >= 6 THEN '휴면계정' ELSE '사용중' END AS ACCOUNT_STATUS
+		FROM users
+		WHERE USER_ID != 'admin'
+		ORDER BY LOGOUT_TIME DESC
+	</select>
+	
 	<select id="getUserList" resultType="com.kr.pub.dto.UserDTO">
 		select * from users
 	</select>

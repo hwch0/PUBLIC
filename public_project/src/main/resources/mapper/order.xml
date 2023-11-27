@@ -6,14 +6,51 @@
 <mapper namespace="com.kr.pub.dao.OrderDAO">
 	
 	<select id="getOrderList" resultType="com.kr.pub.dto.OrderListDTO">
-		SELECT p.payment_id, 
-					  p.payment_date, i.item_name, i.selling_price , oh.quantity, o.served, o.user_Id, o.order_Id
+	SELECT
+	p.payment_id,
+	TO_CHAR(p.payment_date, 'YYYY-MM-DD HH24:MI:SS') as payment_date,
+	i.item_name,
+	i.selling_price ,
+	oh.quantity,
+	o.served,
+	o.user_Id,
+	o.order_Id,
+	s.seat_no
+	FROM payment p
+	inner JOIN orders o ON o.order_id = p.order_id
+	inner Join order_history oh on o.order_id = oh.order_Id
+	inner join item i on oh.item_id = i.item_id
+	inner join seat s on o.user_id = s.user_id
+	where served = 'N' and p.Payment_Type_code ='PT002'
+	</select>
+	
+	<update id = "served">
+	update orders
+	set served ='Y'
+	where order_Id = #{orderId}
+	</update>
+	<select id="orderListById" resultType="com.kr.pub.dto.OrderListDTO">
+		SELECT
+		p.payment_id,
+		TO_CHAR(p.payment_date, 'YYYY-MM-DD') as payment_date,
+		i.item_name,
+		i.selling_price ,
+		oh.quantity,
+		o.served,
+		o.user_Id,
+		o.order_Id,
+		s.seat_no
 		FROM payment p
 		inner JOIN orders o ON o.order_id = p.order_id
 		inner Join order_history oh on o.order_id = oh.order_Id
 		inner join item i on oh.item_id = i.item_id
-		where served = 'N' and p.Payment_Type_code ='PT002'
+		inner join seat s on o.user_id = s.user_id
+		where p.Payment_Type_code ='PT002'
+	    AND TRUNC(p.payment_date) = TRUNC(SYSDATE)
+	    AND o.user_id = #{userId}
 	</select>
+	
+	
 	
 	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
 	    insert into orders (user_id, code) 

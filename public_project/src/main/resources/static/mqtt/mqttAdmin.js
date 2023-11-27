@@ -201,7 +201,8 @@ const recvOrder = () => {
 				if (!orderIds.includes(key)) {
 					orderIds.push(key);
 					console.log(orderIds)
-					var seatNo = $(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
+					var seatNo = order[0].seatNo;
+					//$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
 					console.log(seatNo)
 					$("#orderList").prepend(
 						`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
@@ -230,12 +231,7 @@ const recvOrder = () => {
 		});
 }; //주문리스트 받기
 
-$('#orderList').on('click', '.served', function(e) {
-	console.log($(e.currentTarget).parent().prev());
-	$(e.currentTarget).parent().prev().remove();
-	$(e.currentTarget).parent().remove();
-	//DB에 Orders 테이블 served를 Y로 바꾸는 로직 들어가야함
-});
+
 
 
 const recvLogin = () => {

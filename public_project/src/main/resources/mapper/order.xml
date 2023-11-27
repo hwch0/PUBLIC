@@ -63,6 +63,15 @@
 	    INSERT INTO order_history (item_id, order_id, quantity, price)
 	    VALUES (#{itemId}, #{orderId}, #{quantity}, #{price})
 	</insert>
+	
+	<insert id="insertChargeOrderHistory"  parameterType="com.kr.pub.dto.OrderHistoryDTO">
+	    INSERT INTO order_history (item_id, order_id, quantity, price)
+	    VALUES 
+	    <foreach collection="list" item="item" separator=",">
+        (#{item.itemId}, #{item.orderId}, #{item.quantity}, #{item.price})
+    	</foreach>
+	</insert>
+	
 	<!-- 주문 내역 상세보기 -->
 	<select id="erpOrderView" resultType="java.util.Map">
 		SELECT

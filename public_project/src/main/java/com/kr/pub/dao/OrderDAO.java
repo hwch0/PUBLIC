@@ -25,11 +25,12 @@ public interface OrderDAO {
 
 	public void insertOrder(OrderDTO order);
 
-	public void insertOrderItems(List<Map<String, Object>> orderList);
-
 	public void insertOrderHistory(OrderHistoryDTO orderHistory);
+
 
 	int served(OrderDTO orderDTO);
 
 	List<OrderListDTO> orderListById(OrderDTO orderDTO);
+
+	public void insertChargeOrderHistory(List<OrderHistoryDTO> cartItems);
 }

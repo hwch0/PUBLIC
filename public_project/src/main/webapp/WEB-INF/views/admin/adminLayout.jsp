@@ -5,13 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin</title>
-
 </head>
 <jsp:include page="/WEB-INF/views/common/commonCSS.jsp"></jsp:include>
-
 <!-- 관리자 좌석현황 영역 CSS -->
 <link rel="stylesheet" href="css/reference02.css"> 
-
 <body>
 
 	<div class="wrap">

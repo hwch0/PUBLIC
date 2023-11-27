@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -245,6 +246,21 @@ public class UserService {
 	    }
 	}
 
+	public void chargeTime(OrderDTO order) {
+		int remainingTime = userDAO.getRemainingTime(order.getUserId()); 
+		System.out.println(remainingTime);
+
+	    remainingTime += order.getRemainingTime();
+	    UserDTO user = new UserDTO();
+	    order.setUserId(order.getUserId());
+	    order.setRemainingTime(remainingTime);
+	    
+	    System.out.println("시간" + remainingTime);
+	    System.out.println("아이디" + order.getUserId());
+	    userDAO.updateRemainingTime(order); 
+	}
+
+	
 	public List<Map<String, Object>> getMenuList() {
 		return menuDAO.getMenuList();
 	}
@@ -258,7 +274,11 @@ public class UserService {
     }
 
 	public void insertOrderHistory(String orderId, List<OrderHistoryDTO> cartItems) {
-	    for (OrderHistoryDTO item : cartItems) {
+	    
+		System.out.println(orderId);
+		System.out.println(cartItems);
+		
+		for (OrderHistoryDTO item : cartItems) {
 	        OrderHistoryDTO orderHistory = OrderHistoryDTO.builder()
 	            .orderId(orderId)
 	            .itemId(item.getItemId())
@@ -268,10 +288,30 @@ public class UserService {
 
 	        orderDAO.insertOrderHistory(orderHistory);
 	    }
-	    
-	   
 	}
 
+	
+	public void insertChargeOrderHistory(OrderDTO order,Map<String, Object> requestData) {
+	    String orderId = order.getOrderId();
+	    List<Map<String, Object>> cartItemsMapList = (List<Map<String, Object>>) requestData.get("items");
+	    System.out.println(cartItemsMapList);
+	    List<OrderHistoryDTO> cartItems = new ArrayList<>();
+	    
+	    
+	    for (Map<String, Object> itemMap : cartItemsMapList) {
+	        OrderHistoryDTO orderHistoryDTO = new OrderHistoryDTO();
+	        orderHistoryDTO.setOrderId(orderId);
+	        orderHistoryDTO.setItemId((String) itemMap.get("itemId"));
+	        orderHistoryDTO.setItemId((String) itemMap.get("itemId"));
+	        orderHistoryDTO.setQuantity((int) itemMap.get("quantity"));
+	        orderHistoryDTO.setPrice((int) itemMap.get("price"));
+
+	        cartItems.add(orderHistoryDTO);
+	        System.out.println(cartItems);
+	    }
+	    orderDAO.insertChargeOrderHistory(cartItems);
+	}
+	
 	public void updateItemStock(List<OrderHistoryDTO> cartItems) {
 		
 		for (OrderHistoryDTO item : cartItems) {

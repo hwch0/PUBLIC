@@ -9,6 +9,7 @@
 	SELECT
 	p.payment_id,
 	TO_CHAR(p.payment_date, 'YYYY-MM-DD HH24:MI:SS') as payment_date,
+	m.img_id,
 	i.item_name,
 	i.selling_price ,
 	oh.quantity,
@@ -20,6 +21,7 @@
 	inner JOIN orders o ON o.order_id = p.order_id
 	inner Join order_history oh on o.order_id = oh.order_Id
 	inner join item i on oh.item_id = i.item_id
+	inner join menu m on i.item_id = m.item_id
 	inner join seat s on o.user_id = s.user_id
 	where served = 'N' and p.Payment_Type_code ='PT002'
 	</select>
@@ -61,6 +63,15 @@
 	    INSERT INTO order_history (item_id, order_id, quantity, price)
 	    VALUES (#{itemId}, #{orderId}, #{quantity}, #{price})
 	</insert>
+	
+	<insert id="insertChargeOrderHistory"  parameterType="com.kr.pub.dto.OrderHistoryDTO">
+	    INSERT INTO order_history (item_id, order_id, quantity, price)
+	    VALUES 
+	    <foreach collection="list" item="item" separator=",">
+        (#{item.itemId}, #{item.orderId}, #{item.quantity}, #{item.price})
+    	</foreach>
+	</insert>
+	
 	<!-- 주문 내역 상세보기 -->
 	<select id="erpOrderView" resultType="java.util.Map">
 		SELECT

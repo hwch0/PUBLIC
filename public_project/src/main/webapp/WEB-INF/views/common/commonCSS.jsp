@@ -29,7 +29,8 @@
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css" />
     <!-- summernote -->
     <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css" />
-    
+    <!-- 토스트  -->
+    <link rel="stylesheet" href="../../plugins/toastr/toastr.min.css">
 <!-- ********** 관리자 메뉴판 관리 ********** -->
 	
 

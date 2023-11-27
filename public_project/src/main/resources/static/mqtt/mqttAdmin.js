@@ -172,9 +172,17 @@ const sendMessage = () => {
 };
 //메세지 수신한 데이터를 삽입
 const recvMessage = (recv) => {
-  console.log(recv);
-  $("#chatList").append(
-	`<li class="you">
+	if(!$('.wrap_chat.on').length > 0){
+		$(document).Toasts('create', {
+			title: recv.seatNo+'번 좌석 채팅이 도착했습니다.',
+			autohide: true,
+			delay: 5000,
+			body: recv.message
+		});
+	}
+	console.log(recv);
+	$("#chatList").append(
+		`<li class="you">
 		<div class="entete">
 			<p>${getNow()}</p>
 			<h2>${recv.seatNo}번 좌석(${recv.sender})</h2>
@@ -182,8 +190,8 @@ const recvMessage = (recv) => {
 			<div class="triangle"></div>
 			<div class="message">${recv.message}</div>
 	</li>`
-  );
-  $("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
+	);
+	$("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
 };
 const recvOrder = () => {
 	var orderIds = [];
@@ -202,6 +210,14 @@ const recvOrder = () => {
 					orderIds.push(key);
 					console.log(orderIds)
 					var seatNo = order[0].seatNo;
+					if (!$('.wrap_alert.on').length > 0) {
+						$(document).Toasts('create', {
+							title: seatNo + '번 좌석 주문이 도착했습니다.',
+							autohide: true,
+							delay: 5000,
+							body: order.length + "건의 주문"
+						});
+					}
 					//$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
 					console.log(seatNo)
 					$("#orderList").prepend(

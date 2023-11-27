@@ -19,7 +19,7 @@
 	#{paymentMethodCode},
 	#{paymentTypeCode}
 	)
-</insert>
+	</insert>
 	
 	<!-- 매출 내역 -->
 	<select id="salesSearch" resultType="java.util.Map">

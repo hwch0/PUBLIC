@@ -51,6 +51,10 @@ dependencies {
 	//POI라이브러리 excel
 	implementation 'org.apache.poi:poi:5.2.4'
 	implementation 'org.apache.poi:poi-ooxml:5.2.4'
+	
+    // 다중 파일 업로드
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+    implementation 'commons-io:commons-io:2.14.0'
 
 	//redis 관련 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'

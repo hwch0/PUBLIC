@@ -6,9 +6,9 @@ function statusCodeList() {
         dataType: 'json',
         success: function(data){
             const selectElement = $('#statusCode');
-            console.log("데이터 확인: ", data);  // 전체 데이터 확인
+
             $.each(data, function(index, item) {
-                console.log("각 항목 확인: ", item);  // 각 항목 확인
+
                 selectElement.append('<option value="' + item.ITEMID + '">' + item.ITEMNAME + '</option>');
             });
         },
@@ -75,14 +75,19 @@ function statusTotals(){
 
 	});
 	  const totalStockElement = document.getElementById("statusTotalStock");
-	  totalStockElement.innerText = totalStock.toLocaleString() + ' EA';
+	  if(totalStockElement){
+	  	totalStockElement.innerText = totalStock.toLocaleString() + ' EA';
+	  }
 	  
 	   const formStatusTotalPrice = document.getElementById("form-status-TotalPrice");
-	   formStatusTotalPrice.innerText = totalPrice.toLocaleString();
+	   if(formStatusTotalPrice){
+	   	formStatusTotalPrice.innerText = totalPrice.toLocaleString();
+	   }
 	   
 	   const formStatusTotalPrices = document.getElementById("form-status-TotalPrices");
-	   formStatusTotalPrices.innerText = totalPrices.toLocaleString();
-
+	   if(formStatusTotalPrices){
+	   	formStatusTotalPrices.innerText = totalPrices.toLocaleString();
+	   }
 }
 
 // 입고 합계 구하기
@@ -107,11 +112,15 @@ function stockTotals(){
 		totalStock += isNaN(stock) ? 0 : stock;
 		totalPrice += isNaN(price) ? 0 : price;
 	});
-	  const totalStockElement = document.getElementById("totalStock");
-	  totalStockElement.innerText = totalStock.toLocaleString() + ' EA';
-	  
-	   const formattedTotalPriceElement = document.getElementById("formattedTotalPrice");
-	   formattedTotalPriceElement.innerText = totalPrice.toLocaleString();
+		const totalStockElement = document.getElementById("totalStock");
+		if (totalStockElement) {
+		  totalStockElement.innerText = totalStock.toLocaleString() + ' EA';
+		}
+		
+		const formattedTotalPriceElement = document.getElementById("formattedTotalPrice");
+		if (formattedTotalPriceElement) {
+		  formattedTotalPriceElement.innerText = totalPrice.toLocaleString();
+		}
 }
 
 //새로고침 버튼 클릭시

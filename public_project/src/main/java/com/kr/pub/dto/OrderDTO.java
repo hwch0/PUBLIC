@@ -21,5 +21,5 @@ public class OrderDTO {
 	private String served;
 	
 	private List<OrderHistoryDTO> items;
-	
+	private PaymentDTO paymentMethodCode;
 }

@@ -22,6 +22,7 @@
 		select u.*, s.seat_no from users u
 		inner join seat s on u.user_id = s.user_id
 		where s.used ='Y' and u.user_id = #{userId}
+		fetch first 1 rows only
 	</select>
 	<select id="findByUserId" resultType="com.kr.pub.dto.UserDTO">
 		select 

@@ -74,7 +74,7 @@
          		</ul>
          	</div>
          	<div class="cart-btn-grp"> <!-- id= "orderBtn" -->
-         		<a href="javascript:void(0);" onClick="order();">주문하기</a>
+         		<a href="javascript:void(0);" onClick="orderBtn();">주문하기</a>
          		<a href="javascript:void(0);" onClick="removeCartAll();">장바구니 초기화</a>
          	</div>
          </div>
@@ -98,7 +98,24 @@
             </div>
          </div>
          <div class="modal modal-payment">
-         
+         	<div class="modal-paymentList">
+         		<h3>결제 방식</h3>
+         		<ul>
+         			<li><a href="javascript:void(0);" onClick="payment(1);">카드결제</a></li>
+         			<li><a href="javascript:void(0);" onClick="payment(2);">현금결제</a></li>
+         			<li><a href="javascript:void(0);" onClick="payment(3);">간편결제</a></li>
+         		</ul>
+         	</div>
+         	<div class="modal-order">
+         		<p>총 금액 <em id="total-price"></em>원</p>
+         		<p>결제하시겠습니까?</p>
+         		<div class="order-btn-list">
+         			<ul>
+         				<li><a href="javascript:void(0);" onclick="order()">결제</a></li>
+         				<li><a href="javascript:void(0);" onclick="cancle()">취소</a></li>
+         			</ul>
+         		</div>
+         	</div>
          </div>
       </div>
    </div>

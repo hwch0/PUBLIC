@@ -29,7 +29,7 @@ public interface OrderDAO {
 
 	public void insertOrderHistory(OrderHistoryDTO orderHistory);
 
-	
+	int served(OrderDTO orderDTO);
 
-
+	List<OrderListDTO> orderListById(OrderDTO orderDTO);
 }

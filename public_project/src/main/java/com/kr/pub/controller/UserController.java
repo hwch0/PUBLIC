@@ -1,17 +1,9 @@
 package com.kr.pub.controller;
 
-import java.sql.Array;
-import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,24 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kr.pub.dto.ItemDTO;
-import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderDTO;
 import com.kr.pub.dto.OrderHistoryDTO;
-import com.kr.pub.dto.OrderListDTO;
 import com.kr.pub.dto.PaymentDTO;
 import com.kr.pub.dto.UserDTO;
-import com.kr.pub.service.AdminService;
-import com.kr.pub.service.MqttService;
 import com.kr.pub.service.PaymentService;
 import com.kr.pub.service.UserService;
-import com.kr.pub.util.TimeApi;
 
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
@@ -127,7 +108,8 @@ public class UserController {
 
 	@PostMapping("/order")
 	@ResponseBody
-	public Map<String, String> order(@RequestBody OrderDTO order,OrderHistoryDTO orderHistory,ItemDTO item ) {
+	public Map<String, String> order(@RequestBody OrderDTO order) {
+		System.out.println("결제페이지");
 	    String userId = order.getUserId();
 	    order.setUserId(userId);
 	    System.out.println("사용자 아이디 : " + userId);
@@ -138,27 +120,29 @@ public class UserController {
 	        String orderId = userService.insertOrder(order);
 	        order.setOrderId(orderId);
 	        System.out.println("주문아이디" + orderId);
-	        
+
 	        List<OrderHistoryDTO> cartItems = order.getItems();
+	        PaymentDTO paymentMethodCode = order.getPaymentMethodCode();
 	        order.setItems(cartItems);
 	        System.out.println("장바구니 목록 : " + cartItems);
-	        
+	        System.out.println(paymentMethodCode);
+
 	        userService.insertOrderHistory(orderId, cartItems);
 	        userService.updateItemStock(cartItems);
-	        
-	        PaymentDTO paymentDTO =  PaymentDTO.builder()
-	        	    .paymentTypeCode("PT002")
-	        	    .paymentMethodCode("PM001")
-	        	    .orderId(orderId)
-	        	    .build();
-	        System.out.println(paymentDTO);
-	        paymentService.insertPayment(paymentDTO);//결제 눌렀을때 분리해야됨
-	        
-	        map.put("rs", "true");
-	    } catch (Exception e) {
-	        map.put("rs", "false");
-	    }
 
+	        PaymentDTO paymentDTO =  PaymentDTO.builder()
+	                .paymentTypeCode("PT002")
+	                .paymentMethodCode(paymentMethodCode.getPaymentMethodCode())
+	                .orderId(orderId)
+	                .build();
+	        System.out.println(paymentDTO);
+	        paymentService.insertPayment(paymentDTO);
+
+	        map.put("rs", "true");
+	    }  catch (Exception e) {
+	        e.printStackTrace();
+	        map.put("rs", "false");
+	     }
 	    return map;
 	}
 

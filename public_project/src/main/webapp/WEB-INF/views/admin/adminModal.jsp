@@ -51,19 +51,7 @@
 						<th>총금액</th>
 					</tr>
 				</thead>
-				<tbody class="table-hover">
-					<tr>
-						<td class="text-left">2023-10-10</td>
-						<td class="text-left">라면</td>
-						<td class="text-left">3</td>
-						<td class="text-left">15000</td>
-					</tr>
-					<tr>
-						<td class="text-left">2023-10-10</td>
-						<td class="text-left">라면</td>
-						<td class="text-left">3</td>
-						<td class="text-left">15000</td>
-					</tr>
+				<tbody id="userOrder" class="table-hover">
 				</tbody>
 			</table>
 		</div>

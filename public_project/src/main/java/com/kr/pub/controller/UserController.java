@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.PaymentService;
 import com.kr.pub.service.UserService;
 
+import jakarta.servlet.ServletContext;
 
 @Controller
 @RequestMapping("/user")
@@ -35,6 +37,12 @@ public class UserController {
 	
 	@Autowired
 	private PaymentService paymentService;
+	
+	@Autowired
+	private ServletContext servletContext;
+	
+	@Value("${file.upload.directory}")
+	private String filePath;
 	
 	/*
 	 * 순서:
@@ -53,6 +61,9 @@ public class UserController {
 	
 	@GetMapping("")
     public String login() {
+		// 어플리케이션 영역에 경로 저장
+		servletContext.setAttribute("newPath", filePath);
+		System.out.println(filePath);
 		return "/user/login";
     }
 	@GetMapping("/test")
@@ -149,6 +160,7 @@ public class UserController {
 	    return map;
 	}
 	
+	//시간충전
 	@PostMapping("/recharge")
 	@ResponseBody
 	public Map<String, String> recharge(@RequestBody Map<String, Object> requestData, OrderDTO order) {
@@ -170,10 +182,8 @@ public class UserController {
 	        order.setOrderId(orderId);
 	        System.out.println(order);
 	        userService.chargeTime(order);
-	        System.out.println("충전완!!!!");
 	        
 	        userService.insertChargeOrderHistory(order, requestData);
-	        System.out.println("결제내역 완!!!");
 
 	        PaymentDTO paymentDTO = PaymentDTO.builder()
 	                .paymentTypeCode("PT001")

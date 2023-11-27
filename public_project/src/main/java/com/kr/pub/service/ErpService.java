@@ -183,11 +183,5 @@ public class ErpService {
 			list.get(i).put("index", i + 1);
 		}
 	}
-
-//	@Transactional
-//	public void download(ExcelDTO excelDTO, ResultRowDataHandler resultRowDataHandler) throws Exception{	      
-//		  List<ExcelDTO> excelData = itemDAO.excelDownload(excelDTO, resultRowDataHandler);
-//
-//	}
 	
 }

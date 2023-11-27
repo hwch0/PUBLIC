@@ -59,10 +59,14 @@ function orderTotals(){
 	});
 	
 	  const totaTotalQuantity = document.getElementById("TotalQuantity");
-	  totaTotalQuantity.innerText = totalStock.toLocaleString() + ' EA';
+	  if(totaTotalQuantity){
+	  	totaTotalQuantity.innerText = totalStock.toLocaleString() + ' EA';
+	  }
 	  
 	  const formOrderTotalPrice = document.getElementById("formOrderTotalPrice");
-	  formOrderTotalPrice.innerText = totalPrice.toLocaleString();
+	  if(formOrderTotalPrice){
+	  	formOrderTotalPrice.innerText = totalPrice.toLocaleString();
+	  }
 }
 
 //매출내역 합계 구하기
@@ -89,10 +93,14 @@ function salesTotals() {
     });
 
     const fromSalesTotalPrice = document.getElementById("salesTotalPrice");
-    fromSalesTotalPrice.innerText = '₩' + totalPrice.toLocaleString();
+    if(fromSalesTotalPrice){
+    	fromSalesTotalPrice.innerText = '₩' + totalPrice.toLocaleString();
+    }
 
     const fromSalesTotalNetProfit = document.getElementById("formNetProfitTotalPrices");
-    fromSalesTotalNetProfit.innerText = totalNetProfit.toLocaleString();
+    if(fromSalesTotalNetProfit){
+    	fromSalesTotalNetProfit.innerText = totalNetProfit.toLocaleString();
+    }
 }
 
 //새로고침 버튼 클릭시

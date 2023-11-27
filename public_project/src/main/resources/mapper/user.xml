@@ -22,6 +22,7 @@
 		select u.*, s.seat_no from users u
 		inner join seat s on u.user_id = s.user_id
 		where s.used ='Y' and u.user_id = #{userId}
+		fetch first 1 rows only
 	</select>
 	<select id="findByUserId" resultType="com.kr.pub.dto.UserDTO">
 		select 
@@ -29,8 +30,17 @@
 		from users
 		where user_id = #{userId} 
 	</select> 
+	<select id="findByEmail" resultType="com.kr.pub.dto.UserDTO">
+		select 
+			*
+		from users
+		where email = #{email} 
+	</select> 
 	<select id="login" resultType="com.kr.pub.dto.UserDTO">
-	    SELECT * FROM users WHERE user_id = #{userId} AND password = #{password}
+	    SELECT * FROM users WHERE user_id = #{userId} 
+	    <if test="password != null and password != ''">
+	       	    AND password = #{password}
+	    </if>
 	</select>
 
 	<select id="getRemainingTime" resultType="int">
@@ -58,14 +68,12 @@
 	</update>
 	<insert id="insertMember" >
 		insert into users (
-			userId
+			user_id
 			,email
-			,password
 			,oauth
 		) values (
-			 #{user_id}
+			 #{userId}
 			,#{email}
-			,'1234'
 			,#{oauth}
 		) 
 	</insert>

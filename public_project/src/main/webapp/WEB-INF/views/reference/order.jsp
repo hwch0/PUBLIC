@@ -108,7 +108,7 @@
                     	<td onclick="orderDetail('${order['orderId']}')" class="clickable-cell">${order['orderId']}</td>
                     	<td>${order['orderDate']}</td>
                     	<td>${order['type']}</td>
-                    	<td class="order-data" data-order="${order['quantity']}">${order['quantity']}</td>
+                    	<td class="order-data" data-order="${order['quantity']}">${order['quantity']} EA</td>
                     	<td>₩<fmt:formatNumber value="${order['price']}" /></td>
                     	<td>${order['paymentMethod']}</td>
                     	<td style="color: ${order['paymentStatus'] eq '판매' ? 'blue' : order['paymentStatus'] eq '주문취소' ? 'red' : 'black'}">

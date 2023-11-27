@@ -50,7 +50,7 @@
 		where p.Payment_Type_code ='PT002'
 	    AND TRUNC(p.payment_date) = TRUNC(SYSDATE)
 	    AND o.user_id = #{userId}
-	    order by p.payment_id desc;
+	    order by p.payment_id desc
 	</select>
 	
 	

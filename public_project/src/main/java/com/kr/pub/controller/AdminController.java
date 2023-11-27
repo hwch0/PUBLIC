@@ -48,7 +48,7 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
-	@Value("${file.upload.directroy}")
+	@Value("${file.upload.directory}")
 	private String filePath;
 
 	@ResponseBody

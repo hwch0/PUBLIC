@@ -246,6 +246,7 @@ public class UserService {
 	    }
 	}
 
+	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public void chargeTime(OrderDTO order) {
 		int remainingTime = userDAO.getRemainingTime(order.getUserId()); 
 		System.out.println(remainingTime);
@@ -257,7 +258,7 @@ public class UserService {
 	    
 	    System.out.println("시간" + remainingTime);
 	    System.out.println("아이디" + order.getUserId());
-	    userDAO.updateRemainingTime(order); 
+	    userDAO.updateRemainingTime(order);
 	}
 
 	

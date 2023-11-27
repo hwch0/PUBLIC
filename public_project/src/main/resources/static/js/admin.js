@@ -361,7 +361,7 @@ function createPieChart(chart, labels, data) {
 
 
 /****** 스택 바 차트 (월별 매출), 라인 차트 (월별 이용자수) ******/
-const url = "/admin/chartData";
+const url = "/admin/getChartData";
 const labels = [];
 
 const today = new Date();
@@ -376,10 +376,16 @@ myFetch(url, {method: "GET"}, response =>{
 	const total = response.data.total;
 	const users = response.data.users;
 	
-	/*console.log("지난달 매출" +  menuData);
-	console.log("이번달 매출" +  pcData);
-	console.log("지난달 매출" +  total[thisMonth -1]);
-	console.log("이번달 매출" +  total[thisMonth]);*/
+	fetch("/admin/chartData",  {method: "GET"})
+	.then((response) => response.json())
+	.then((data) => {
+		if(data.status) {
+			let thisMonthData = data.data;
+			menuData.push(thisMonthData.menu[0]);
+			pcData.push(thisMonthData.pc[0]);
+			total.push(thisMonthData.total[0]);
+			users.push(thisMonthData.users[0]);
+			
 	lastMonthSalse.text(Number(total[thisMonth -1]).toLocaleString('ko-KR') + "원");
 	thisMonthSalse.text(Number(total[thisMonth]).toLocaleString('ko-KR') + "원");
 
@@ -521,6 +527,9 @@ myFetch(url, {method: "GET"}, response =>{
       data: lineChartData,
       options: lineChartOptions,
     });
+		}
+	})
+
 }) 
 
 	

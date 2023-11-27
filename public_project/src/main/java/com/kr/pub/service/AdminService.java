@@ -7,7 +7,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +75,7 @@ public class AdminService {
 		return menuDAO.deleteMenu(menu) != 0;
 	}
 
+	// 이번달 데이터
 	@Transactional(readOnly = true)
 	public Map<String, Object> getChartData() {
 		Map<String, Object> result = new HashMap<>();
@@ -133,7 +136,6 @@ public class AdminService {
 			dataList.put("top6Sales", top6Sales);
 			result.put(type, dataList);
 		}
-		System.out.println("result >>>> " + result);
 		return result; // year -> ITEM_NAME, TOTAL_COUNT / month -> ITEM_NAME, TOTAL_COUNT / day -> ITEM_NAME, TOTAL_COUNT
 	}
 	
@@ -184,5 +186,44 @@ public class AdminService {
 		adminDAO.shutDown();
 		return true;
 	}
+	
+	@Scheduled(cron = "59 59 23 L * ?")
+	@CacheEvict(value = "chartData", key="'lastMonthsData'")
+	public void insertChartData() {
+	    System.out.println("이번달 차트 데이터 insert");
+	    adminDAO.insertChartData();
+	    adminDAO.updateChartDataUser();
+	}
+
+	// 지난달까지의 데이터
+	@Transactional(readOnly = true)
+	@Cacheable(value = "chartData", key="'lastMonthsData'")
+	public Map<String, Object> getChartData2() {
+		System.out.println("대시보드 캐싱 완료!!!");
+		Map<String, Object> result = new HashMap<>();
+		List<Map<String, Object>> rawData = adminDAO.getChartData2();
+		
+		List<String> month = new ArrayList<>();
+		List<String> menu = new ArrayList<>();
+		List<String> pc = new ArrayList<>();
+		List<String> total = new ArrayList<>();
+		List<String> users = new ArrayList<>();
+		
+		for(Map<String, Object> data : rawData) {
+			month.add(data.get("YEAR_MONTH").toString());
+			menu.add(data.get("SALES_FOOD").toString());
+			pc.add(data.get("SALES_PC").toString());
+			total.add(data.get("SALES_TOTAL").toString());
+			users.add(data.get("USERS").toString());
+		};
+		result.put("month", month);
+		result.put("menu", menu);
+		result.put("pc", pc);
+		result.put("total", total);
+		result.put("users", users);
+		return result;
+	}
+	
+	
 	
 }

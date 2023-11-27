@@ -148,6 +148,7 @@ $("#addMenuBnt").on("click", () => {
 				cardItem.find('.fw-bolder.menuName').text(cardDate.ITEM_NAME);
 				cardItem.find('.fw-bolder.menuPrice').text(cardDate.SELLING_PRICE);
 				cardItem.find('#deleteMenuBnt').attr('menuId', cardDate.ITEM_ID);
+				cardItem.find('#deleteMenuBnt').attr('imgId', cardDate.IMG_ID);
 				cardItem.show();
 				
 				menuList.append(cardItem);
@@ -162,8 +163,9 @@ $("#addMenuBnt").on("click", () => {
 function deleteMenu(element) {
 	if(confirm("메뉴를 삭제하시겠습니까?")){
 		let menuId = element.getAttribute('menuId');
+		let imgId = element.getAttribute('imgId');
     
-    	let url = "/admin/deleteMenu/" + menuId; // menuId = item테이블의 item_id
+    	let url = "/admin/deleteMenu/" + menuId +'/'+imgId; // menuId = item테이블의 item_id
     
 		myFetch(url, {mothod: "GET"}, data => {
 			if(data.status) {

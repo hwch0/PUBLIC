@@ -110,12 +110,13 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/deleteMenu/{itemId}")
-	public Map<String, Object> deleteMenu(@PathVariable String itemId) {
+	@GetMapping("/deleteMenu/{itemId}/{imgId}")
+	public Map<String, Object> deleteMenu(@PathVariable String itemId, @PathVariable String imgId) {
 		System.out.println("AdminController deleteMenu");
 		Map<String, Object> result = new HashMap<>();
 		
 		boolean status = adminService.deleteMenu(itemId);
+		status = imageService.removeFile(imgId);
 		result.put("status", status);
 		result.put("message", status ? "메뉴가 삭제 되었습니다." : "메뉴 삭제 중 오류 발생");
 		

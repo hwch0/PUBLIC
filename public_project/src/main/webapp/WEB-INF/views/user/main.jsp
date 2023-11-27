@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %><!-- 태크라이브러리 -->
+
+<sec:authorize access="isAuthenticated()">
+<sec:authentication property="principal" var="principal"/>
+</sec:authorize>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +17,7 @@
 <link rel="stylesheet" href="/css/clientChat.css">
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 <body>
-<input type="hidden" id="userInfo" value="${map.rs}">
+<%-- <input type="hidden" id="userInfo" value="${map.rs}"> --%>
    <div class="body-wrap">
       <div class="cont-top-wrap">
          <div class="cont-header">
@@ -22,7 +27,7 @@
          <div class="seat-wrap">   
             <h4>
                NO.
-               <span id="seatNum">06</span>
+               <span id="seatNum">${principal.user.seatNo }</span>
             </h4>
             <div class="seat-btn">
                <ul>
@@ -32,7 +37,7 @@
             </div>
          </div>
          <div class="info-wrap">
-            <em id="userId">user1</em> 님
+            <em id="userId">${principal.user.userId }</em> 님
          </div>
          <div class="time-wrap">
             <p id="remainingTime">0</p>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.PaymentService;
 import com.kr.pub.service.UserService;
 
+import jakarta.servlet.ServletContext;
 
 @Controller
 @RequestMapping("/user")
@@ -31,6 +33,12 @@ public class UserController {
 	
 	@Autowired
 	private PaymentService paymentService;
+	
+	@Autowired
+	private ServletContext servletContext;
+	
+	@Value("${file.upload.directroy}")
+	private String filePath;
 	
 	/*
 	 * 순서:
@@ -49,6 +57,9 @@ public class UserController {
 	
 	@GetMapping("")
     public String login() {
+		// 어플리케이션 영역에 경로 저장
+		servletContext.setAttribute("newPath", filePath);
+		System.out.println(filePath);
 		return "/user/login";
     }
 	@GetMapping("/test")

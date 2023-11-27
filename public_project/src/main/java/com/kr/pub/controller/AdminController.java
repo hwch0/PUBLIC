@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -47,6 +48,9 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
+	@Value("${file.upload.directroy}")
+	private String filePath;
+
 	@ResponseBody
 	@GetMapping("/shutdown")
 	public Map<String, Object> shutDown() {
@@ -59,7 +63,6 @@ public class AdminController {
 		return result;
 	}
 	
-	
 	@GetMapping("")
 	public String adminMain(Model model) {
 		List<Map<String, Object>> menuList = adminService.getMenuWithItems("Y", "N");
@@ -68,19 +71,19 @@ public class AdminController {
 		model.addAttribute("menuList", menuList);
 		model.addAttribute("menuCategory", menuCategory);
 		
-		String classpath = System.getProperty("java.class.path"); // 클래스 패스
-		String os = System.getProperty("os.name").toLowerCase(); // os 정보
+//		String classpath = System.getProperty("java.class.path"); // 클래스 패스
+//		String os = System.getProperty("os.name").toLowerCase(); // os 정보
 		// "public_project" 까지의 클래스 패스 가져오기
-		int endIndex = classpath.indexOf("public_project") + "public_project".length();
-		String pathUpToPublicProject = classpath.substring(0, endIndex);
+//		int endIndex = classpath.indexOf("public_project") + "public_project".length();
+//		String pathUpToPublicProject = classpath.substring(0, endIndex);
 		
 		// static 이미지 폴더 경로 추가
-		String addPath = os.contains("win") ? "\\src\\main\\resources\\static\\images\\menu\\" : "/src/main/resources/static/images/menu/";
-		String newPath = pathUpToPublicProject + addPath;
+//		String addPath = os.contains("win") ? "\\src\\main\\resources\\static\\images\\menu\\" : "/src/main/resources/static/images/menu/";
+//		String newPath = pathUpToPublicProject + addPath;
 		
 		// 어플리케이션 영역에 경로 저장
-		servletContext.setAttribute("newPath", newPath);
-		
+		servletContext.setAttribute("newPath", filePath);
+		System.out.println(filePath);
 		return "/admin/adminLayout";
 	}
 	

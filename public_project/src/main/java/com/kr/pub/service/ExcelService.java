@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dto.ExcelReadDTO;
+import com.kr.pub.dto.ItemDTO;
 import com.kr.pub.util.ExcelFileType;
 
 import jakarta.servlet.ServletOutputStream;
@@ -167,6 +168,23 @@ public class ExcelService {
 		excelReadOption.setStartRow(2);
 		
 		List<Map<String, String>> excelData =read(excelReadOption);
+		
+		System.out.println("Read Excel Data: " + excelData);
+		
+		saveDB(excelData);
+	}
+	
+	private void saveDB(List<Map<String, String>> excelData) throws Exception{
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		for(Map<String, String> dataMap : excelData) {
+			ItemDTO itemDTO = new ItemDTO();
+			
+			System.out.println("DataMap: " + dataMap);
+			System.out.println("value of A: " +dataMap.get("A"));
+			
+			itemDTO.setItemId(dataMap.get("A"));
+			
+		}
 	}
 	
 	//업로드용 excel

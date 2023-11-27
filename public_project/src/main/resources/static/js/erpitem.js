@@ -234,18 +234,6 @@ function statusInsert(){
 		},
 	});
 }
-/*
-//입출고 등록버튼 alert창
-$(document).ready(function() {
-
-    $("#statusInsertBnt").on("click", function() {
-
-        alert("등록이 완료되었습니다.");
-
-        $(".modal").removeClass("on");
-    });
-});
-*/
 
 //품목 등록 모달창
 const stockModel = $("#stockModel");
@@ -305,7 +293,7 @@ $(document).ready(function() {
     })
 })
 
-/*//입출고 내역 다운
+//입출고 내역 다운
 $(document).ready(function() {
     $('#ExcelDownload').on("click", function() {
 
@@ -313,23 +301,7 @@ $(document).ready(function() {
 
          downloadFile("/erp/statusDownload");
     });
-});*/
-
-//입출고 내역 다운
-$(document).ready(function() {
-    $('#ExcelDownload').on("click", function() {
-		console.log("다운로드");
-	    $.ajax({
-        url: "/erp/statusDownload",
-        method: "GET",
-        success: function(data) {
-            // 다운로드 성공 시 파일 다운로드
-            alert(data.message);
-        }
-    });
-			
-		})
-    });
+});
 
 //업로드용 다운로드
 $(document).ready(function() {

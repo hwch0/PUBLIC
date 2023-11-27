@@ -23,4 +23,12 @@ public interface AdminDAO {
 	public List<Map<String, Object>> getHourlyUsers(String type);
 
 	public void shutDown();
+
+	public List<Map<String, Object>> getChartData2();
+
+	public void insertChartData();
+	
+	public void updateChartDataUser();
+
+	public List<Map<String, Object>> getThisMonthData();
 }

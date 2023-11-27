@@ -157,8 +157,9 @@ window.onload = function() {
 	//채팅 가져오기
 
 	const data = {
-		userId: loggedInUserId,
+		receiver: userIdValue,
 	}; //JWT 토큰 구현 이후 userID가져와야함
+	console.log(data);
 	ajaxResponse('POST', '/chat/getListById', data)
 		.then(function(response) {
 		var chatList = response.result;

@@ -26,47 +26,47 @@
     </update>
     
 	<insert id="insertStoreData">
-BEGIN
-
-  INSERT INTO store (
-    STORE_ID,
-    STORE_DATE,
-    EMP_ID,
-    CODE,
-    REMARKS
-  ) VALUES (
-    'S' || LPAD(seq_store.NEXTVAL, 6, '0'),
-    SYSDATE,
-    'admin',
-    'CT001',
-    'X'
-  );
-
-  INSERT INTO store_history (
-    STORE_ID,
-    ITEM_ID,
-    QUANTITY,
-    PRICE
-  ) VALUES (
-    'S' || LPAD(seq_store.CURRVAL, 6, '0'),
-    #{itemId},
-    #{stock},
-    #{price}
-  );
-
-
-  UPDATE item
-  SET STOCK = STOCK + #{stock},
-      ITEM_TYPE_CODE = #{itemTypeCode}
-  WHERE ITEM_ID = #{itemId};
-
-
-  COMMIT;
-EXCEPTION
-  WHEN OTHERS THEN
-
-    ROLLBACK;
-END;
+		BEGIN
+		
+		  INSERT INTO store (
+		    STORE_ID,
+		    STORE_DATE,
+		    EMP_ID,
+		    CODE,
+		    REMARKS
+		  ) VALUES (
+		    'S' || LPAD(seq_store.NEXTVAL, 6, '0'),
+		    SYSDATE,
+		    'admin',
+		    'CT001',
+		    'X'
+		  );
+		
+		  INSERT INTO store_history (
+		    STORE_ID,
+		    ITEM_ID,
+		    QUANTITY,
+		    PRICE
+		  ) VALUES (
+		    'S' || LPAD(seq_store.CURRVAL, 6, '0'),
+		    #{itemId},
+		    #{stock},
+		    #{price}
+		  );
+		
+		
+		  UPDATE item
+		  SET STOCK = STOCK + #{stock},
+		      ITEM_TYPE_CODE = #{itemTypeCode}
+		  WHERE ITEM_ID = #{itemId};
+		
+		
+		  COMMIT;
+		EXCEPTION
+		  WHEN OTHERS THEN
+		
+		    ROLLBACK;
+		END;
 	</insert>
 	
 	<!-- 입출고 내역 -->

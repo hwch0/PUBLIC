@@ -201,6 +201,7 @@
         height: calc(100vh - 100px);
         animation: fadeInRight 1s;
         background-color: #fff;
+        overflow: scroll;
     }
     
         
@@ -474,14 +475,15 @@
 아코디언 시작
 */
 .accordion {
-	background-color: #eee;
-	color: #444;
+	color: #fff;
+    box-shadow: 0 0 5px 2px rgba(255,255,255, 0.3);
+    background-color: #450877;
 	cursor: pointer;
 	width: 100%;
 	border: none;
 	text-align: left;
 	outline: none;
-	font-size: 15px;
+	font-size: 20px;
 	transition: .4s;
 	padding: 18px;
 }
@@ -516,7 +518,12 @@
 }
 .p-show {
 	display: block
+} 
+.panel img{
+	width: 100px;
+	height: 100px;
 }
+
 /*탭 메뉴*/
 .tab {
   display: flex;
@@ -653,4 +660,11 @@ td.text-center {
 
 td.text-right {
   text-align: right;
+}
+
+.toasts-top-right{
+	top:11.5%;/*토스트 높이조절*/
+}
+.tab__content-wrapper{
+	overflow: scroll;
 }

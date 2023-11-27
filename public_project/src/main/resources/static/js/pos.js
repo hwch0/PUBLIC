@@ -61,18 +61,23 @@ $('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
 	infoModal.css('display', 'block');
 });//좌석 클릭시 사용자정보 띄우기
 
-const closeInfoModal = () => {
+/*const closeInfoModal = () => {
 	$.each($(".close"), function(index, close) {
 		$(close).on('click', () => infoModal.css('display', 'none'));
+		$('#tab2 tbody').empty();
 	});
-}
+}*/
+
+$('.close').on('click', function(){
+	infoModal.css('display', 'none');
+	$('#tab1').addClass('active');
+	$('.tab__item').first().addClass('active');
+	$('.tab__item').last().removeClass('active');
+	$('#tab2 tbody').empty();
+});
 
 
 $(document).ready(function() {
-	toastr.options = {
-        "positionClass": "toast-bottom-right", // 토스트 메시지의 위치 설정
-        "containerId": "toastsContainerBottomRight", // 특정 컨테이너의 ID 설정
-    };
 	//var loggedInUserList = [];
 	ajaxResponse("GET", "/admin/loggedInUserList")
 		.then(function(response) {
@@ -96,7 +101,7 @@ $(document).ready(function() {
 			}
 			addOption();
 			countSeat();
-			closeInfoModal();
+			//closeInfoModal();
 		});//로그인 유저 가져와서 좌석 띄우기, 모달창
 
 
@@ -131,6 +136,7 @@ $(document).ready(function() {
 		});//채팅 데이터 불러오기		
 	ajaxResponse("GET", "/admin/getOrderList")
 		.then(function(response) {
+			console.log(response.result)
 			$.each(response.result, function(key, order) {
 				var priceList = [];
 				var sum = 0;
@@ -143,9 +149,16 @@ $(document).ready(function() {
 				$.each(order, function(index, detailOrder) {
 					$("#orderList").children().next().first()
 						.append(
-							`<p>상품 이름 : ${detailOrder.itemName}</p>
-									<p>상품 가격 : ${detailOrder.sellingPrice}</p>
-							     	<p>수량 : ${detailOrder.quantity}</p>`
+							`<div>
+								<div>
+									<img src="/image/download/${detailOrder.imgId}"/>
+								</div>
+								<div>
+									<p>${detailOrder.itemName}</p>
+									<p>${detailOrder.sellingPrice}</p>
+									<p>${detailOrder.quantity}</p>
+								</div>
+							</div>`
 						);
 					priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
 				});

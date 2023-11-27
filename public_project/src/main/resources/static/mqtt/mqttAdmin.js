@@ -172,12 +172,14 @@ const sendMessage = () => {
 };
 //메세지 수신한 데이터를 삽입
 const recvMessage = (recv) => {
-	$(document).Toasts('create', {
-		title: recv.seatNo+'번 좌석 채팅이 도착했습니다.',
-		//autohide: true,
-		delay: 10000,
-		body: recv.message
-	});
+	if(!$('.wrap_chat.on').length > 0){
+		$(document).Toasts('create', {
+			title: recv.seatNo+'번 좌석 채팅이 도착했습니다.',
+			autohide: true,
+			delay: 5000,
+			body: recv.message
+		});
+	}
 	console.log(recv);
 	$("#chatList").append(
 		`<li class="you">
@@ -208,6 +210,14 @@ const recvOrder = () => {
 					orderIds.push(key);
 					console.log(orderIds)
 					var seatNo = order[0].seatNo;
+					if (!$('.wrap_alert.on').length > 0) {
+						$(document).Toasts('create', {
+							title: seatNo + '번 좌석 주문이 도착했습니다.',
+							autohide: true,
+							delay: 5000,
+							body: order.length + "건의 주문"
+						});
+					}
 					//$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
 					console.log(seatNo)
 					$("#orderList").prepend(

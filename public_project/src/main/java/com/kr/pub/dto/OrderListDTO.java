@@ -12,6 +12,7 @@ public class OrderListDTO {//사용자가 주문한 데이터를 출력하기 �
 	
 	private String paymentId;
 	private String paymentDate;
+	private String imgId;
 	private String itemName;
 	private int sellingPrice;
 	private int quantity;

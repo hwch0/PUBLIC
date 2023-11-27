@@ -65,10 +65,7 @@ public class AdminController {
 	
 	@GetMapping("")
 	public String adminMain(Model model) {
-		List<Map<String, Object>> menuList = adminService.getMenuWithItems("Y", "N");
 		List<Map<String, Object>> menuCategory = adminService.getMenuCategory();
-		
-		model.addAttribute("menuList", menuList);
 		model.addAttribute("menuCategory", menuCategory);
 		
 		// 어플리케이션 영역에 경로 저장
@@ -106,6 +103,8 @@ public class AdminController {
 		if(status) {
 			result.put("menuList", menuList);
 		}
+		
+		System.out.println("menuList >>>> " + result);
 		return result;
 	}
 	

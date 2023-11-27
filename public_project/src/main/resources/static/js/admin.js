@@ -33,6 +33,66 @@ function myFetch(url, option,  handler) {
 	})
 }
 
+
+// 메뉴리스트 호출
+$(document).ready(() =>{
+	    $.ajax({
+        url: "/admin/menulist/Y/N",
+        type: "GET",
+        success: function (response) {
+            console.log("서버에서 받은 메뉴 리스트:", response.menuList);
+            displayMenuList(response.menuList);
+        },
+        error: function (error) {
+            console.error("오류: " + error);
+        }
+    });
+});
+
+function displayMenuList(menuList) {
+	menuList.forEach((menu) => {
+		const cardDate = menu;
+		const menuList = $('.menuList');
+		const cardItem = $('#cardItem').clone();
+		cardItem.find('img').attr('src', '/image/download/' + cardDate.IMG_ID);
+		cardItem.find('.fw-bolder.menuName').text(cardDate.ITEM_NAME);
+		
+		let menuPrice = parseInt(cardDate.SELLING_PRICE).toLocaleString() + '원';
+		
+		cardItem.find('.fw-bolder.menuPrice').text(menuPrice);
+		cardItem.find('#deleteMenuBnt').attr('menuId', cardDate.ITEM_ID);
+		cardItem.find('#deleteMenuBnt').attr('imgId', cardDate.IMG_ID);
+		cardItem.attr('menuCategory', cardDate.MENU_CATEGORY_CODE);
+		cardItem.show();
+		
+		menuList.append(cardItem);
+		menuModal.removeClass('on'); 
+	})
+}
+
+
+function showCategory(num) {
+	
+  $(".menu-category li").removeClass('on');
+  $("#menu0" + num).addClass('on');
+	
+	if(num === 1) {
+		$('.col.mb-5[menuCategory!=""]').show();
+	} else if(num === 2) {
+		$('.col.mb-5[menuCategory!=""]').hide();
+        $('[menuCategory="MC001"]').show();
+	} else if(num === 3) {
+		$('.col.mb-5[menuCategory!=""]').hide();
+        $('[menuCategory="MC002"]').show();
+	} else if(num === 4) {
+		$('.col.mb-5[menuCategory!=""]').hide();
+        $('[menuCategory="MC003"]').show();
+	} else if(num === 5) {
+		$('.col.mb-5[menuCategory!=""]').hide();
+        $('[menuCategory="MC004"]').show();
+	}
+}
+
 /* 메뉴 관리 모달창 */
 const menuModal = $("#menuModal");
 
@@ -136,23 +196,9 @@ $("#addMenuBnt").on("click", () => {
 		.then((response) => response.json())
 		.then((data) => {
 			if(data.status) {
-				
 				alert(data.message); 
 				console.log(data.menu);
-				
-				// 메뉴 등록 후 반환받은 정보를 menuList 그리드에 추가
-				const cardDate = data.menu;
-				const menuList = $('.menuList');
-				const cardItem = $('#cardItem').clone();
-				cardItem.find('img').attr('src', '/image/download/' + cardDate.IMG_ID);
-				cardItem.find('.fw-bolder.menuName').text(cardDate.ITEM_NAME);
-				cardItem.find('.fw-bolder.menuPrice').text(cardDate.SELLING_PRICE);
-				cardItem.find('#deleteMenuBnt').attr('menuId', cardDate.ITEM_ID);
-				cardItem.find('#deleteMenuBnt').attr('imgId', cardDate.IMG_ID);
-				cardItem.show();
-				
-				menuList.append(cardItem);
-				menuModal.removeClass('on'); 
+				displayMenuList([data.menu]);
 
 			}
 		})

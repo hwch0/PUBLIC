@@ -69,6 +69,10 @@ const closeInfoModal = () => {
 
 
 $(document).ready(function() {
+	toastr.options = {
+        "positionClass": "toast-bottom-right", // 토스트 메시지의 위치 설정
+        "containerId": "toastsContainerBottomRight", // 특정 컨테이너의 ID 설정
+    };
 	//var loggedInUserList = [];
 	ajaxResponse("GET", "/admin/loggedInUserList")
 		.then(function(response) {

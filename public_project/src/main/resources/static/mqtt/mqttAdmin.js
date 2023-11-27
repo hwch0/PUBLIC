@@ -172,9 +172,15 @@ const sendMessage = () => {
 };
 //메세지 수신한 데이터를 삽입
 const recvMessage = (recv) => {
-  console.log(recv);
-  $("#chatList").append(
-	`<li class="you">
+	$(document).Toasts('create', {
+		title: recv.seatNo+'번 좌석 채팅이 도착했습니다.',
+		//autohide: true,
+		delay: 10000,
+		body: recv.message
+	});
+	console.log(recv);
+	$("#chatList").append(
+		`<li class="you">
 		<div class="entete">
 			<p>${getNow()}</p>
 			<h2>${recv.seatNo}번 좌석(${recv.sender})</h2>
@@ -182,8 +188,8 @@ const recvMessage = (recv) => {
 			<div class="triangle"></div>
 			<div class="message">${recv.message}</div>
 	</li>`
-  );
-  $("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
+	);
+	$("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
 };
 const recvOrder = () => {
 	var orderIds = [];

@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %><!-- 태크라이브러리 -->
+
+<sec:authorize access="isAuthenticated()">
+<sec:authentication property="principal" var="principal"/>
+</sec:authorize>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +17,7 @@
 <link rel="stylesheet" href="/css/clientChat.css">
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 <body>
-<input type="hidden" id="userInfo" value="${map.rs}">
+<%-- <input type="hidden" id="userInfo" value="${map.rs}"> --%>
    <div class="body-wrap">
       <div class="cont-top-wrap">
          <div class="cont-header">
@@ -22,7 +27,7 @@
          <div class="seat-wrap">   
             <h4>
                NO.
-               <span id="seatNum">06</span>
+               <span id="seatNum">${principal.user.seatNo }</span>
             </h4>
             <div class="seat-btn">
                <ul>
@@ -32,7 +37,7 @@
             </div>
          </div>
          <div class="info-wrap">
-            <em id="userId">user1</em> 님
+            <em id="userId">${principal.user.userId }</em> 님
          </div>
          <div class="time-wrap">
             <p id="remainingTime">0</p>
@@ -74,7 +79,7 @@
          		</ul>
          	</div>
          	<div class="cart-btn-grp"> <!-- id= "orderBtn" -->
-         		<a href="javascript:void(0);" onClick="order();">주문하기</a>
+         		<a href="javascript:void(0);" onClick="orderBtn();">주문하기</a>
          		<a href="javascript:void(0);" onClick="removeCartAll();">장바구니 초기화</a>
          	</div>
          </div>
@@ -98,7 +103,24 @@
             </div>
          </div>
          <div class="modal modal-payment">
-         
+         	<div class="modal-paymentList">
+         		<h3>결제 방식</h3>
+         		<ul>
+         			<li><a href="javascript:void(0);" onClick="payment(1);">카드결제</a></li>
+         			<li><a href="javascript:void(0);" onClick="payment(2);">현금결제</a></li>
+         			<li><a href="javascript:void(0);" onClick="payment(3);">간편결제</a></li>
+         		</ul>
+         	</div>
+         	<div class="modal-order">
+         		<p>총 금액 <em id="total-price"></em>원</p>
+         		<p>결제하시겠습니까?</p>
+         		<div class="order-btn-list">
+         			<ul>
+         				<li><a href="javascript:void(0);" onclick="order()">결제</a></li>
+         				<li><a href="javascript:void(0);" onclick="cancle()">취소</a></li>
+         			</ul>
+         		</div>
+         	</div>
          </div>
       </div>
    </div>

@@ -71,16 +71,6 @@ public class AdminController {
 		model.addAttribute("menuList", menuList);
 		model.addAttribute("menuCategory", menuCategory);
 		
-//		String classpath = System.getProperty("java.class.path"); // 클래스 패스
-//		String os = System.getProperty("os.name").toLowerCase(); // os 정보
-		// "public_project" 까지의 클래스 패스 가져오기
-//		int endIndex = classpath.indexOf("public_project") + "public_project".length();
-//		String pathUpToPublicProject = classpath.substring(0, endIndex);
-		
-		// static 이미지 폴더 경로 추가
-//		String addPath = os.contains("win") ? "\\src\\main\\resources\\static\\images\\menu\\" : "/src/main/resources/static/images/menu/";
-//		String newPath = pathUpToPublicProject + addPath;
-		
 		// 어플리케이션 영역에 경로 저장
 		servletContext.setAttribute("newPath", filePath);
 		System.out.println(filePath);
@@ -144,7 +134,6 @@ public class AdminController {
 		
 		result.put("status", status);
 		result.put("data", data); // data -> month, menu, pc, total
-		System.out.println(">>>>>>>>>>>>>>>>>>> data : " + result);
 		
 		return result;
 	}
@@ -153,7 +142,6 @@ public class AdminController {
 	@GetMapping("/chartMontlyUsers")
 	public void chartMontlyUsers() {
 		System.out.println("AdminController chartMontlyUsers");
-		System.out.println(">>>>>>>>>>>> " + adminService.getMonthlyUsers());;
 	}
 	
 
@@ -189,7 +177,6 @@ public class AdminController {
 		
 		result.put("status", status);
 		result.put("data", data);
-		System.out.println(">>>>>>>>>>>>>>>>>>> data : " + result);
 		
 		return result;
 	}
@@ -222,6 +209,20 @@ public class AdminController {
 		
 	}
 	
+	@ResponseBody
+	@GetMapping("/getChartData")
+	public Map<String, Object> getChartData2() {
+		System.out.println("AdminController getChartData2");
+		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> data = adminService.getChartData2();
+		boolean status = data != null;
+		
+		result.put("status", status);
+		result.put("data", data);
+		
+		return result;
+		
+	}
 	
 	//admin 좌석 부분
 	
@@ -236,6 +237,7 @@ public class AdminController {
 		result.put("result", adminService.getLoggedInUserList());
 		return result;
 	}
+	
 	
 	
 //	@PostMapping("/chargeUserTime")

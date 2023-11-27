@@ -155,7 +155,7 @@
 	          	<div class="card-body p-4">
 	          		<div class="text-center">
 	          			<h5 class="fw-bolder menuName">${menu.ITEM_NAME }</h5>
-	          			<h6 class="fw-bolder menuPrice">${menu.SELLING_PRICE }</h6>
+	          			<h6 class="fw-bolder menuPrice" id="menuPriceForm" value="${menu.SELLING_PRICE }"><span>원</span></h6>
 	          		</div>
 	          	</div>
     	        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -202,3 +202,12 @@
     <!-- Bootstrap core JS-->
 <!--     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
   </div>
+  
+  <script>
+  $(document).ready(function() {
+      var $listLI = $("h6");
+      $listLI.each(function(){
+          $(this).text(parseInt($(this).attr('value')).toLocaleString() + '원');
+      })
+  });
+  </script>

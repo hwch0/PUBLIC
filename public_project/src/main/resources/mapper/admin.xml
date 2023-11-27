@@ -26,7 +26,8 @@ SELECT
         ELSE 0
     END) AS total_sales
 FROM
-    payment p
+    (select * from payment where to_char(payment_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
+    ) p
 JOIN (
     SELECT
         order_id,
@@ -35,7 +36,7 @@ JOIN (
         SELECT
             item_id,
             order_id,
-            (quantity * price) AS total_price
+            price AS total_price
         FROM
             order_history
     ) sub
@@ -102,6 +103,7 @@ FROM user_history
 select to_char(login_time, 'yyyy-mm') as month
 , count(user_id) userCount
 from user_history 
+where to_char(login_time, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
 group by to_char(login_time, 'yyyy-mm')
 order by month
 </select>
@@ -143,6 +145,23 @@ group by sub.hours
 order by hour
 
 
+</select>
+
+
+<!-- <select id="update_statistics_data" statementType="CALLABLE"> -->
+<!--     {call update_statistics_data} -->
+<!-- </select> -->
+
+<select id="getChartData2" resultType="java.util.LinkedHashMap">
+select * from statistics order by year_month
+</select>
+
+<select id="insertChartData" statementType="CALLABLE">
+{call insert_statistics_data1}
+</select>
+
+<select id="updateChartDataUser" statementType="CALLABLE">
+{call update_statistics_data2}
 </select>
 
 </mapper>

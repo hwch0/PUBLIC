@@ -61,9 +61,6 @@ public class UserController {
 	
 	@GetMapping("")
     public String login() {
-		// 어플리케이션 영역에 경로 저장
-		servletContext.setAttribute("newPath", filePath);
-		System.out.println(filePath);
 		return "/user/login";
     }
 	@GetMapping("/test")
@@ -73,6 +70,9 @@ public class UserController {
 	
     @GetMapping("/main")
   	public String Main() {
+		// 어플리케이션 영역에 경로 저장
+		servletContext.setAttribute("newPath", filePath);
+		System.out.println(filePath);
   		return "/user/main";
   	}
     @GetMapping("/userTest")

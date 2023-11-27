@@ -46,6 +46,7 @@ import com.kr.pub.service.UserService;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
@@ -66,7 +67,10 @@ public class LoginController {
 	@GetMapping("/loginForm")
 	public String loginForm(Model model,
 			@RequestParam(value = "error", required = false) String error, 
-			@RequestParam(value = "exception", required = false) String exception) {
+			@RequestParam(value = "exception", required = false) String exception, HttpSession session) {
+		
+		System.out.println("loginForm.SessionId >>>>>" + session.getId());
+
 		model.addAttribute("error", error);
 		model.addAttribute("exception", exception);
 		return "login";
@@ -265,6 +269,7 @@ public class LoginController {
 		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
+		System.out.println("SessionId >>>>>" + httpServletRequest.getSession().getId());
 
 		return returnPath;
 	}

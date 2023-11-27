@@ -77,6 +77,12 @@ public class PrincipalDetails implements UserDetails {
                 return r;
             });
         });
+        
+        authorities.forEach(a -> {
+        	System.out.println("3 getAuthority() -> " + a.getAuthority());
+        });
+        System.out.println("getAuthorities()-->" + authorities);
+        
         return authorities;
     }
 }

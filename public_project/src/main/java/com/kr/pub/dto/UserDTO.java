@@ -43,6 +43,7 @@ public class UserDTO {
 //	        return Arrays.asList(this.roleId.split(","));
 //	    }
 //	    return new ArrayList<>();
+		System.out.println("getRoleList()->" + Arrays.toString(this.roleId.split(",")));
 		return Arrays.asList(this.roleId.split(","));
 	}
 }

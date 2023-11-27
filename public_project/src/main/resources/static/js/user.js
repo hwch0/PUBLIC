@@ -288,7 +288,7 @@ function payment(no){
 	$(".modal-order").show();
 }
 
-//결제하기
+// 결제하기
 function order() {
    const userId = $("#userId").text();
    const cartItems = [];
@@ -305,34 +305,34 @@ function order() {
     console.log("payment코드 확인 >>" + paymentMethodCodeValue)
     
     console.log(cartItems);
-  	const param = { userId: userId, items: cartItems , paymentMethodCode : paymentMethodCodeValue};
-  	
-  	console.log(param);
   
-   fetch('/user/order', {
-      method: 'POST',
-      headers: {
-         'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(param),
-   })
-   .then((rs) => rs.json())
-   .then((json) => {
-      if (json.rs == 'true') {
-         alert('주문이 정상적으로 이루어졌습니다.');
-         $('.addCart ul').empty();
-          mqttClient.publish(mqtt_topic+"order", JSON.stringify(
-       {type: "ORDER",
-        receiver: "admin"}
-   ));
-      } else {
-         alert('주문이 정상적으로 이루어지지 않았습니다. ');
-      }
-   })
-   .catch((error) => {
-      console.error('주문 에러:', error);
-   });
+    const param = { userId: userId, items: cartItems , paymentMethodCode : paymentMethodCodeValue};
+  	
+    console.log(param);
+  
+    $.ajax({
+        url: '/user/order',
+        type: 'POST',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(param),
+        success: function(response) {
+            if (response.rs == 'true') {
+                alert('주문이 정상적으로 이루어졌습니다.');
+                $('.addCart ul').empty();
+                mqttClient.publish(mqtt_topic + "order", JSON.stringify({
+                    type: "ORDER",
+                    receiver: "admin"
+                }));
+            } else {
+                alert('주문이 정상적으로 이루어지지 않았습니다. ');
+            }
+        },
+        error: function(error) {
+            console.error('주문 에러:', error);
+        }
+    });
 }
+
 
 // 메뉴리스트 호출
 function getMenuList() {

@@ -47,77 +47,28 @@
       </div>
       <div class="cont-bot-wrap">
          <!-- 채팅 영역 -->
-         <div class="bot chat-wrap">
-            <div class="wrap_chat">
-               <div class="wrap_chat_main">
-                  <ul id="chatList">
-                  </ul>
-                  <footer>
-                     <textarea placeholder="Type your message" id="chatInputBox"></textarea>
-                     <a href="javascript:void(0);" id="send_chat_button">Send</a>
-                  </footer>
+         <jsp:include page="userChat.jsp"></jsp:include>
+         <!-- 장바구니 영역 -->
+         <jsp:include page="userCart.jsp"></jsp:include>
+         <!-- 시간충전 영역 -->
+         <div class="bot wrap_recharge">
+			<div class="div-recharge">
+				<p>충전 시간</p>
+                    
+               <div class="charge_time">
+               		<span class="btn_charge minus"><a href="javascript:void(0);">-</a></span>
+               		<p>
+                    	<em id="chargeTime">1</em>시간
+               		</p>
+                   <span class="btn_charge plus"><a href="javascript:void(0);">+</a></span>
                </div>
-            </div>
-         </div>
-          <!-- 장바구니 영역 -->
-         <div class="bot wrap_cart">
-        	 <div class="cart-header">
-				<ul>
-					<li>상품명</li>
-					<li>수량</li>
-					<li>취소</li>
-				</ul>
+               <div class="order-recharge"><a href="javascript:void(0);" onclick="rechargeBtn();">충전하기</a></div>
 			</div>
-         	<div class="addCart">
-         		<ul>
-         			
-         		</ul>
-         	</div>
-         	<div class="cart-btn-grp"> <!-- id= "orderBtn" -->
-         		<a href="javascript:void(0);" onClick="orderBtn();">주문하기</a>
-         		<a href="javascript:void(0);" onClick="removeCartAll();">장바구니 초기화</a>
-         	</div>
-         </div>
       </div>
       <div class="cont-modal-wrap" style="display:none;">
-         <div class="modal modal-food">
-            <div class="menu-category">
-               <ul>
-                  <li id="menu01" class="on"><a href="javascript:void(0);" onclick="showCategory(1);">밥</a></li>
-                  <li id="menu02"><a href="javascript:void(0);"  onclick="showCategory(2);">라면</a></li>
-                  <li id="menu03"><a href="javascript:void(0);"  onclick="showCategory(3);">음료</a></li>
-                  <li id="menu04"><a href="javascript:void(0);"  onclick="showCategory(4);">스낵</a></li>
-               </ul>
-            </div>
-            <div class="cont-food">
-               <!-- 밥 종류 리스트 -->
-               <div class="food">
-                  <ul class="food-list">
-                  </ul>
-               </div>
-            </div>
-         </div>
-         <div class="modal modal-payment">
-         	<div class="modal-paymentList">
-         		<h3>결제 방식</h3>
-         		<ul>
-         			<li><a href="javascript:void(0);" onClick="payment(1);">카드결제</a></li>
-         			<li><a href="javascript:void(0);" onClick="payment(2);">현금결제</a></li>
-         			<li><a href="javascript:void(0);" onClick="payment(3);">간편결제</a></li>
-         		</ul>
-         	</div>
-         	<div class="modal-order">
-         		<p>총 금액 <em id="total-price"></em>원</p>
-         		<p>결제하시겠습니까?</p>
-         		<div class="order-btn-list">
-         			<ul>
-         				<li><a href="javascript:void(0);" onclick="order()">결제</a></li>
-         				<li><a href="javascript:void(0);" onclick="cancle()">취소</a></li>
-         			</ul>
-         		</div>
-         	</div>
-         </div>
+          <jsp:include page="userFood.jsp"></jsp:include>
       </div>
+      <jsp:include page="userPayment.jsp"></jsp:include>
    </div>
 </body>
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>

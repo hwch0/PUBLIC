@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,4 +48,8 @@ public class UserDTO {
 	    }
 	    return new ArrayList<>();
 	}
+	public UserDTO(int remainingTime) {
+        this.remainingTime = remainingTime;
+    }
+	
 }

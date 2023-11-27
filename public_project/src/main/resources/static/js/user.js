@@ -31,6 +31,10 @@ function navBtn(element) {
             $('#orderBtn22').addClass('on');
             getMenuList(); 
         } else if (thisNavLi.attr('id') === 'rechargeBtn') {
+			$(".cont-modal-wrap, .cont-bot-wrap, .wrap_recharge").css('display', 'block');
+            $('#rechargeBtn').addClass('on');
+            $("#chattingBtn").removeClass('on');
+            $("#orderBtn22").removeClass('on');
         } else if (thisNavLi.attr('id') === 'chattingBtn') {
             $(".cont-bot-wrap, .chat-wrap").css('display', 'block');
             $(".wrap_cart").removeClass('on');
@@ -190,7 +194,7 @@ window.onload = function() {
 	});
 }      
 
-
+var totalPrice = 0;
 
 // 장바구니 담기
 function addCart(element) {
@@ -226,8 +230,37 @@ function addCart(element) {
 
         $('.addCart ul').append(cartItem);
     }
+    updateTotalPrice();
+    updateOrderButtonState();
 }
 
+function updateTotalPrice() {
+    totalPrice = 0;
+
+    $('.addCart ul li').each(function () {
+        const itemPrice = $(this).find('.food-price').text();
+        const quantity = $(this).find('.food-option .optionNum').data('option-num');
+        totalPrice += itemPrice * quantity;
+    });
+
+    // 업데이트된 총 금액을 표시
+    $("#total-price").text(totalPrice);
+    updateOrderButtonState();
+}
+
+// 주문하기 버튼 활성화
+function updateOrderButtonState() {
+    const orderButton = $('#orderBtn22');
+    const rechargeButton = $('#rechargeBtn');
+    
+    if ($('.addCart ul li').length > 0) {
+        orderButton.prop('disabled', false);
+        rechargeButton.prop('disabled', false);
+    } else {
+        orderButton.prop('disabled', true);
+        rechargeButton.prop('disabled', false);
+    }
+}
 
 // 메뉴옵션 수정
 function updateOptionNum(element) {
@@ -254,6 +287,8 @@ function removeCart(element) {
 // 장바구니 비우기
 function removeCartAll() {
     $('.addCart ul li').remove();
+    totalPrice = 0;
+    updateTotalPrice();
 }    
 
 // 키테고리별 메뉴 출력       
@@ -277,7 +312,23 @@ function showCategory(no) {
 }
 
 function orderBtn(){
-	$(".modal-payment").show();
+	$('.order-btn-list .recharge-order').hide();
+	if ($('.addCart ul li').length > 0) {
+        updateTotalPrice(); 
+        $(".modal-payment").show();
+        $(".modal-paymentList").show();
+    } else {
+        alert("장바구니가 비어있습니다.");
+    }
+}
+
+function rechargeBtn(){
+	$('.order-btn-list .menu-order').hide();
+	$('.modal-food').hide();
+    $(".modal-payment").show();
+    $(".modal-paymentList").show();
+    updateTotalPrice();
+    updateOrderButtonState();
 }
 
 var paymentMethodCode;
@@ -301,10 +352,9 @@ function order() {
         const itemTotalPrice = itemPrice * quantity;
 
         cartItems.push({ itemId: itemId, quantity: quantity, price: itemTotalPrice });
+    	
     });
-    console.log("payment코드 확인 >>" + paymentMethodCodeValue)
     
-    console.log(cartItems);
   
     const param = { userId: userId, items: cartItems , paymentMethodCode : paymentMethodCodeValue};
   	
@@ -319,6 +369,10 @@ function order() {
             if (response.rs == 'true') {
                 alert('주문이 정상적으로 이루어졌습니다.');
                 $('.addCart ul').empty();
+                $(".modal-payment").hide();
+				$(".modal-order").hide();
+				$(".modal-paymentList").hide();
+				$(".modal-order #total-price").empty();
                 mqttClient.publish(mqtt_topic + "order", JSON.stringify({
                     type: "ORDER",
                     receiver: "admin"
@@ -331,8 +385,18 @@ function order() {
             console.error('주문 에러:', error);
         }
     });
+	 updateTotalPrice();
+	 $('.order-btn-list .menu-order').show();
+	 $('.order-btn-list .recharge-order').show();
 }
 
+function cancle(){
+	$(".modal-payment").hide();
+	$(".modal-order").hide(); 
+	$('.order-btn-list .menu-order').show();
+	$('.order-btn-list .recharge-order').show();
+	$(".modal-order #total-price").empty();
+}
 
 // 메뉴리스트 호출
 function getMenuList() {
@@ -378,6 +442,104 @@ function displayMenuList(menuList) {
      showCategory(1);
 }
 
+/*// 시간 충전
+function recharge() {
+    const userId = $('#userId').text(); 
+    const chargeTime = parseInt($('#chargeTime').text());
+    
+    const paymentMethodCodeValue = paymentMethodCode;
+
+    const param = {
+        userId: userId,
+        remainingTime: chargeTime * 3600,
+        paymentMethodCode: paymentMethodCodeValue
+    };
+
+    $.ajax({
+        url: '/user/recharge', 
+        type: 'POST',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(param),
+        success: function(response) {
+            if (response.rs == 'true') {
+                alert('충전이 정상적으로 이루어졌습니다.');
+            } else {
+                alert('충전이 정상적으로 이루어지지 않았습니다.');
+            }
+        },
+        error: function(error) {
+            console.error('충전 에러:', error);
+        }
+    });
+}*/
+
+// 시간 충전
+function recharge() {
+   const userId = $("#userId").text();
+   const chargeItems = [];
+   const chargeTime = parseInt($('#chargeTime').text());
+   const paymentMethodCodeValue = paymentMethodCode;
+
+    const quantity = chargeTime;
+    const itemTotalPrice = chargeTime * 1000;
+
+    chargeItems.push({ itemId: 'ITEM000001', quantity: quantity, price: itemTotalPrice });
+
+	console.log(chargeItems);
+    const param = { userId: userId, remainingTime: chargeTime * 3600, items: chargeItems , paymentMethodCode : paymentMethodCodeValue};
+  	
+    
+    console.log(param);
+  
+    $.ajax({
+        url: '/user/recharge',
+        type: 'POST',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(param),
+        success: function(response) {
+            if (response.rs == 'true') {
+                alert('주문이 정상적으로 이루어졌습니다.');
+                updateRemainingTime(userId);
+                $(".modal-payment").hide();
+				$(".modal-order").hide();
+				$(".modal-paymentList").hide();
+				$(".modal-order #total-price").empty();
+                mqttClient.publish(mqtt_topic + "order", JSON.stringify({
+                    type: "ORDER",
+                    receiver: "admin"
+                }));
+            } else {
+                alert('주문이 정상적으로 이루어지지 않았습니다. ');
+            }
+        },
+        error: function(error) {
+            console.error('주문 에러:', error);
+        }
+    });
+	 updateTotalPrice();
+	 $('.order-btn-list .menu-order').show();
+	 $('.order-btn-list .recharge-order').show();
+}
+
+// 충전시간 조절
+let chargeTime = 1;
+
+$('.minus').on('click', function(e) {
+    if (chargeTime > 1) {
+        chargeTime--; 
+        updateChargeTime();
+    }
+});
+
+$('.plus').on('click', function(e) {
+    chargeTime++; 
+    updateChargeTime();
+});
+
+
+function updateChargeTime() {
+    $('.charge_time em').text(chargeTime);
+}
 
 
 

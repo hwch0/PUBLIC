@@ -37,7 +37,7 @@ public class UserController {
 	@Autowired
 	private ServletContext servletContext;
 	
-	@Value("${file.upload.directroy}")
+	@Value("${file.upload.directory}")
 	private String filePath;
 	
 	/*

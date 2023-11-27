@@ -276,10 +276,23 @@ function showCategory(no) {
   }
 }
 
-//주문하기
+function orderBtn(){
+	$(".modal-payment").show();
+}
+
+var paymentMethodCode;
+
+function payment(no){
+	paymentMethodCode = "PM00" + no;
+	$(".modal-paymentList").hide();
+	$(".modal-order").show();
+}
+
+//결제하기
 function order() {
    const userId = $("#userId").text();
    const cartItems = [];
+   const paymentMethodCodeValue = paymentMethodCode;
 
     $('.addCart ul li').each(function () {
         const itemId = $(this).find('.itemId').text(); 
@@ -289,10 +302,13 @@ function order() {
 
         cartItems.push({ itemId: itemId, quantity: quantity, price: itemTotalPrice });
     });
+    console.log("payment코드 확인 >>" + paymentMethodCodeValue)
     
     console.log(cartItems);
-    
-   const param = { userId: userId, items: cartItems };
+  	const param = { userId: userId, items: cartItems , paymentMethodCode : paymentMethodCodeValue};
+  	
+  	console.log(param);
+  
    fetch('/user/order', {
       method: 'POST',
       headers: {
@@ -317,7 +333,6 @@ function order() {
       console.error('주문 에러:', error);
    });
 }
-
 
 // 메뉴리스트 호출
 function getMenuList() {

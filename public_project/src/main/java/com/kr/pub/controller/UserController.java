@@ -127,7 +127,8 @@ public class UserController {
 
 	@PostMapping("/order")
 	@ResponseBody
-	public Map<String, String> order(@RequestBody OrderDTO order,OrderHistoryDTO orderHistory,ItemDTO item ) {
+	public Map<String, String> order(@RequestBody OrderDTO order) {
+		System.out.println("결제페이지");
 	    String userId = order.getUserId();
 	    order.setUserId(userId);
 	    System.out.println("사용자 아이디 : " + userId);
@@ -138,27 +139,29 @@ public class UserController {
 	        String orderId = userService.insertOrder(order);
 	        order.setOrderId(orderId);
 	        System.out.println("주문아이디" + orderId);
-	        
+
 	        List<OrderHistoryDTO> cartItems = order.getItems();
+	        PaymentDTO paymentMethodCode = order.getPaymentMethodCode();
 	        order.setItems(cartItems);
 	        System.out.println("장바구니 목록 : " + cartItems);
-	        
+	        System.out.println(paymentMethodCode);
+
 	        userService.insertOrderHistory(orderId, cartItems);
 	        userService.updateItemStock(cartItems);
-	        
-	        PaymentDTO paymentDTO =  PaymentDTO.builder()
-	        	    .paymentTypeCode("PT002")
-	        	    .paymentMethodCode("PM001")
-	        	    .orderId(orderId)
-	        	    .build();
-	        System.out.println(paymentDTO);
-	        paymentService.insertPayment(paymentDTO);//결제 눌렀을때 분리해야됨
-	        
-	        map.put("rs", "true");
-	    } catch (Exception e) {
-	        map.put("rs", "false");
-	    }
 
+	        PaymentDTO paymentDTO =  PaymentDTO.builder()
+	                .paymentTypeCode("PT002")
+	                .paymentMethodCode(paymentMethodCode.getPaymentMethodCode())
+	                .orderId(orderId)
+	                .build();
+	        System.out.println(paymentDTO);
+	        paymentService.insertPayment(paymentDTO);
+
+	        map.put("rs", "true");
+	    }  catch (Exception e) {
+	        e.printStackTrace();
+	        map.put("rs", "false");
+	     }
 	    return map;
 	}
 

@@ -26,7 +26,10 @@
 		where email = #{email} 
 	</select> 
 	<select id="login" resultType="com.kr.pub.dto.UserDTO">
-	    SELECT * FROM users WHERE user_id = #{userId} AND password = #{password}
+	    SELECT * FROM users WHERE user_id = #{userId} 
+	    <if test="password != null and password != ''">
+	       	    AND password = #{password}
+	    </if>
 	</select>
 
 	<select id="getRemainingTime" resultType="int">

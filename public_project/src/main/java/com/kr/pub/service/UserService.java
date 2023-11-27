@@ -101,21 +101,21 @@ public class UserService {
                 rs.setLoginTime(loginTime);
                 
                 // 사용자 ip 받아와서 좌석번호 가져오는 로직
-                String ip = GetIpAddress.getLocation(request);
-                int seatNo = seatDAO.getSeatNo(ip);
-                rs.setSeatNo(seatNo);
+//                String ip = GetIpAddress.getLocation(request);
+//                int seatNo = seatDAO.getSeatNo(ip);
+//                rs.setSeatNo(seatNo);
                 
+                // 랜덤 숫자로 자리 세팅
+				
+				 Random random = new Random(); // 1부터 50 사이의 랜덤 숫자 생성 
+				 int randomNumber = random.nextInt(50) + 1; rs.setSeatNo(randomNumber);//테스트를 위해
+				 // rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
+				 
                 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
                 // PrincipalDetails의 정보 업데이트
-                principalDetails.getUser().setSeatNo(seatNo);
+                principalDetails.getUser().setSeatNo(randomNumber);
                 // SecurityContextHolder에서 Authentication 객체 업데이트
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
-				/*
-				 * Random random = new Random(); // 1부터 50 사이의 랜덤 숫자 생성 int randomNumber = int
-				 * randomNumber = random.nextInt(50) + 1; rs.setSeatNo(randomNumber);//테스트를 위해
-				 * 랜덤 숫자 생성 rs.setSeatNo(randomNumber);//테스트를 위해 랜덤 숫자 생성
-				 */
                 
                 updateLoginTime(rs);
                 userDAO.insertUserHistory(rs);
@@ -241,7 +241,9 @@ public class UserService {
 	}
 	
 	public int rechargeTime(UserDTO user) {
+		System.out.println(">>> " +user);
 	    int remainingTime = userDAO.getRemainingTime(user); 
+	    System.out.println(">>> " + remainingTime);
 	    int rechargeTime = user.getRemainingTime(); 
 	    
 	    remainingTime += rechargeTime; 

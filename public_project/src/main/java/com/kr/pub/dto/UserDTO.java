@@ -39,9 +39,10 @@ public class UserDTO {
 	// ENUM으로 안하고 ,로 해서 구분해서 ROLE을 입력 -> 그걸 파싱!!
 	// 예제 ROLL 값 : "ROLE_USER","ROLE_MANAGER","ROLE_ADMIN"  
 	public List<String> getRoleList() {
-	    if (this.roleId.length() > 0) {
-	        return Arrays.asList(this.roleId.split(","));
-	    }
-	    return new ArrayList<>();
+//	    if (this.roleId.length() > 0) {
+//	        return Arrays.asList(this.roleId.split(","));
+//	    }
+//	    return new ArrayList<>();
+		return Arrays.asList(this.roleId.split(","));
 	}
 }

@@ -3,7 +3,9 @@ package com.kr.pub.controller;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,11 +28,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kr.pub.config.MqttConfig.OutboundGateway;
+import com.kr.pub.config.auth.AuthSucessHandler;
 import com.kr.pub.config.auth.PrincipalDetails;
 import com.kr.pub.dto.KakaoProfile;
 import com.kr.pub.dto.OAuthToken;
@@ -40,6 +44,8 @@ import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
 
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class LoginController {
@@ -93,8 +99,8 @@ public class LoginController {
     }
 	
 	@GetMapping("/auth/kakao/callback")
-	public String kakaoCallback(String code) { // Data를 리턴해주는 컨트롤러 함수
-		
+	public String kakaoCallback(String code,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, RedirectAttributes attributes) throws Exception { // Data를 리턴해주는 컨트롤러 함수
+		System.out.println("전: SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
 		System.out.println("code = " + code);
 		String returnPath = "redirect:/";
 		// POST방식으로 key=value 데이터를 요청 (카카오쪽으로)
@@ -184,7 +190,7 @@ public class LoginController {
 				.roleId("RT001")
 				.oauth("kakao")
 				.build();
-		UserDTO userDTO = new UserDTO();
+		UserDTO userDTO = kakaoMember;
 		
 		// 가입자 혹은 비가입자 체크 해서 처리
 		try {
@@ -208,10 +214,7 @@ public class LoginController {
 			System.out.println("기존에 회원 가입된 경우 다음으로 진행함");
 			ExistMemberException ex = (ExistMemberException)e;
 			userDTO = ex.getUserDTO();
-			
 			System.out.println("userDTO >>>>"  +userDTO);
-			returnPath = userDTO.getRemainingTime() > 0 ? returnPath + "user/main" : returnPath + "recharge";
-			System.out.println(">>> " +returnPath);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -229,22 +232,49 @@ public class LoginController {
 		System.out.println("principalDetails." + principalDetails);
 		System.out.println("authentication." + authentication);
 		
+		if(userDTO.getRemainingTime() > 0) {
+			returnPath = returnPath + "user/main";
+	        UserDTO rs = userService.login(userDTO, httpServletRequest, authentication);
+	        System.out.println("rs 결과출력2 >>> " + rs);
+	        if (rs.getRemainingTime() > 0) {
+	            attributes.addAttribute("message", "로그인 성공했습니다.");
+	            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
+	            userService.loginSeat(rs);//random번 사용중으로 변경
+	            System.out.println("사용중 변경 완료");
+	            	JSONObject jsonObject = new JSONObject(Map.of(
+	            		    "type", "LOGIN",
+	            		    "receiver", "admin"
+	            		));
+	            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
+	        }  else if(rs.getRemainingTime() == 0) {
+	        	attributes.addAttribute("message", "잔여시간이 없습니다.");
+	        	attributes.addAttribute("rs", 0);
+		    } else {
+		    	attributes.addAttribute("message", "로그인 실패했습니다.");
+	        }
+			
+		} else {
+			returnPath = returnPath + "recharge";
+		}
+		
+		System.out.println(">>> " +returnPath);
+		
+		
 		// 강제로 시큐리티의 세션에 접근하여 값 저장
 		System.out.println("SecurityContextHolder.getContext()  >>>>>" + SecurityContextHolder.getContext());
 		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
-		//SecurityContextHolder.getContext().setAuthentication(authentication);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
-		
 
 		return returnPath;
 	}
 	
 	// 시간 충전
-    @PostMapping("/rechargeTime")
+    @PostMapping("/user/rechargeTime")
     @ResponseBody
     public Map<String, String> rechargeTime(@RequestBody UserDTO user) {
         Map<String, String> map = new HashMap<>();
-        
+        System.out.println("user >>> " +user);
         int rechargeResult = userService.rechargeTime(user);
         if (rechargeResult == 1) { 
             map.put("rs", "success");

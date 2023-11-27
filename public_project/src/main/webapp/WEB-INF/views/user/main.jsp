@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="/css/clientChat.css">
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
 <body>
-<input type="hidden" id="userInfo" value="${map.rs}">
+<%-- <input type="hidden" id="userInfo" value="${map.rs}"> --%>
    <div class="body-wrap">
       <div class="cont-top-wrap">
          <div class="cont-header">

@@ -89,8 +89,10 @@ function updateCountdown(remainingTime) {
 function updateRemainingTime(userIdValue) {
    const data = {userId : userIdValue}; //JWT 토큰 구현 이후 userID가져와야함
    ajaxResponse('POST', '/user/getUser', data)
-      .then(function(response) {         
+      .then(function(response) {     
          var userInfo = response.result;
+		  console.log("userId " + userInfo.userId);    
+		  console.log("seatNo " + userInfo.seatNo);    
          localStorage.setItem("userId", userInfo.userId);//테스트용 userId저장
          localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
          var remainingTime = userInfo.remainingTime;
@@ -111,9 +113,9 @@ function updateRemainingTime(userIdValue) {
 }
 
 window.onload = function() {
-   const userInfoData = $('#userInfo').val();
+   //const userInfoData = $('#userInfo').val();
 
-   // 쿠키에서 모든 쿠키를 가져옵니다.
+   /*// 쿠키에서 모든 쿠키를 가져옵니다.
    var allCookies = document.cookie;
 
    // 각 쿠키를 분리합니다.
@@ -125,7 +127,8 @@ window.onload = function() {
    });
 
    // userId 쿠키에서 값만 추출합니다.
-   var userIdValue = userIdCookie ? userIdCookie.split('=')[1] : null;
+   var userIdValue = userIdCookie ? userIdCookie.split('=')[1] : null;*/
+   var userIdValue = $('#userId').text();
 
    // userId 값을 출력합니다.
    console.log('userId 값:', userIdValue);
@@ -137,7 +140,7 @@ window.onload = function() {
 	var loggedInUserId = userIdValue;
 	userIdElement.textContent = loggedInUserId;
 	
-    updateRemainingTime(userIdValue);
+    //updateRemainingTime(userIdValue);
     
     var userIdElement = document.getElementById("userId");
     //var loggedInUserId = localStorage.getItem("userId"); 

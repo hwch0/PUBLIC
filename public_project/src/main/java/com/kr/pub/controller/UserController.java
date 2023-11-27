@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +54,12 @@ public class UserController {
 	@Autowired
 	private PaymentService paymentService;
 	
+	@Autowired
+	private ServletContext servletContext;
+	
+	@Value("${file.upload.directroy}")
+	private String filePath;
+	
 	/*
 	 * 순서:
 	 * 1.사용자가 주문 버튼 누름
@@ -70,6 +77,9 @@ public class UserController {
 	
 	@GetMapping("")
     public String login() {
+		// 어플리케이션 영역에 경로 저장
+		servletContext.setAttribute("newPath", filePath);
+		System.out.println(filePath);
 		return "/user/login";
     }
 	@GetMapping("/test")
@@ -104,7 +114,6 @@ public class UserController {
 	@PostMapping("/getUser")
 	@ResponseBody
 	public Map<String, UserDTO> getUser(@RequestBody UserDTO userDTO){
-		System.out.println("getUser 호출");
 		System.out.println(userDTO);
 		Map<String, UserDTO> result = new HashMap<>();
 		result.put("result", userService.getUser(userDTO));

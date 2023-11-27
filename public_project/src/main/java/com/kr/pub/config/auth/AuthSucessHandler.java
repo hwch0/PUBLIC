@@ -55,7 +55,7 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		     } else if (role.getAuthority().contains("RT001")) {
 			    if(userInfo.getRemainingTime() > 0) {	
 		    	 	try {
-						userService.login2(userInfo, request, response);
+						userService.login2(userInfo, request, response, authentication);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %><!-- 태크라이브러리 -->
+
+<sec:authorize access="isAuthenticated()">
+<sec:authentication property="principal" var="principal"/>
+</sec:authorize>
 <!DOCTYPE html>
 <html>
 <head>
@@ -179,7 +184,7 @@
         <div class="payment_form">
             <ul>
                 <li>
-                    <p><span id="userId" class="getUserId"></span>님!</p>
+                    <p><span id="userId" class="getUserId">${principal.user.userId }</span>님!</p>
                 </li>
                 <li>
                     <p>충전 시간</p>
@@ -221,8 +226,8 @@
 // 잔여시간 없음
 window.addEventListener('DOMContentLoaded', (event) => {
     const showPaymentContent = ${showPaymentContent};
-    const userId = "${userId}";
-    $('.getUserId').text(userId);
+//     const userId = "${userId}";
+//     $('.getUserId').text(userId);
     
     if (!showPaymentContent) {
         document.querySelector('.login_content').style.display ="none";
@@ -241,8 +246,8 @@ $('.li_paymethod li').on('click', function(e) {
         remainingTime: chargeTime * 3600,
         paymentMethodCode: paymentMethodCode
     };
-
-    fetch('/rechargeTime', {
+	console.log(">>>> " + userId +" "+ chargeTime * 3600+ " "+paymentMethodCode);
+    fetch('/user/rechargeTime', {
         method: "POST",
         headers: {
             "Content-Type": "application/json; charset=UTF-8",

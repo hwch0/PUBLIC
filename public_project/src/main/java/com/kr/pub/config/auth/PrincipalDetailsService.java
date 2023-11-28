@@ -1,5 +1,6 @@
 package com.kr.pub.config.auth;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,8 +20,10 @@ public class PrincipalDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		System.out.println("PrincipalDetailsService : 진입");
 		
-		UserDTO member = userDAO.findByUserId(username);
-		
+		UserDTO member = null;
+		 if(userDAO.loginCheck(username) == null) {
+			member = userDAO.findByUserId(username);
+		} 
 		System.out.println("PrincipalDetailsService : member -> " + member);
 
 		return new PrincipalDetails(member);

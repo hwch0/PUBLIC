@@ -160,7 +160,7 @@ public class UserService {
         		    } else {
         	            map.put("message", "로그인 실패했습니다.");
         	        }
-        	}else {
+        	} else {
         		map.put("message", "이미 로그인된 좌석입니다.");
         	}
         return map;

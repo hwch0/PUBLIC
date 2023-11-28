@@ -2,6 +2,7 @@ package com.kr.pub.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,8 @@ public class MqttService {
 	MqttConfig.OutboundGateway outboundGateway;
 	@Autowired
 	ChatService chatService;
+	@Autowired
+	CacheManager cacheManager;
 
 	public void publishMessage(String message, String topic) throws Exception {
 		outboundGateway.sendToMqtt(message, topic);
@@ -30,6 +33,9 @@ public class MqttService {
 			System.out.println("MQTTSERVICE=>" + chat);
 			System.out.println("CHATINSERT!!!!");
 			chatService.insert(chat);
+		}else if(cmdParams.length >= 2 && cmdParams[1].equals("charge")) {
+		 	cacheManager.getCache("loggedInUserList").evict("'allUsers'");
+		 	System.out.println("loggedInUserList 캐시 초기화!!!");
 		}
 	}
 }

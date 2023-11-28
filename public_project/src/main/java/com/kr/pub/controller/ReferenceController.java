@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.UserDTO;
+import com.kr.pub.util.DummyData;
 
 import jakarta.servlet.ServletContext;
 
@@ -15,6 +17,9 @@ import jakarta.servlet.ServletContext;
 public class ReferenceController {
 	@Autowired
 	private ServletContext app;
+	
+	@Autowired
+	private UserDAO userDAO;
 	
 	@GetMapping("/pos")
 	@SuppressWarnings("unchecked")
@@ -25,6 +30,18 @@ public class ReferenceController {
 		model.addAttribute("loggedInUserList", loggedInUserList);
 		System.out.println(loggedInUserList);
 		return "/reference/pos";
+	}
+	
+	@GetMapping("/makeDummyData")
+	public void makeDummyData() {
+		System.out.println("/makeDummyData");
+		List<UserDTO> userList = DummyData.insertUsers();
+		
+		for(UserDTO user : userList) {
+			userDAO.insertMember2(user);
+		}
+		
+		System.out.println("userList.size() --> " + userList.size());
 	}
 
 }

@@ -61,7 +61,6 @@ public class UserController {
 	
 	@GetMapping("")
     public String login() {
-		
 		return "/user/login";
     }
 	@GetMapping("/test")

@@ -33,7 +33,7 @@ public class UserDTO {
 	private int loginFailure;
 	private Timestamp loginTime;
 	private Timestamp logoutTime;
-	private Date regDate;
+	private String regDate;
 	private int remainingTime;
 	private String roleId;
 	private String oauth;

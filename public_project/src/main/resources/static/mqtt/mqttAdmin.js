@@ -238,6 +238,7 @@ const recvOrder = () => {
 										</div>
 									</div>
 								</div>`
+
 							);
 						priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
 					});
@@ -335,6 +336,8 @@ mqttClient.on("message", function (topic, message) {
     recvLogout();
   } else if(data.receiver === "admin" && data.type === "ORDER"){
     recvOrder(data);
+  } else if(data.receiver === "admin" && data.type === "CHARGE"){
+	 recvLogout();
   }//충전시 잔여시간 변경 기능 추가
 });
 

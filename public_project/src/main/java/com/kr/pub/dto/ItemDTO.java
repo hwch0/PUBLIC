@@ -20,5 +20,6 @@ public class ItemDTO {
 	private Date regDate;
 	
 	private int price;
+	private String remarks;
 	
 }

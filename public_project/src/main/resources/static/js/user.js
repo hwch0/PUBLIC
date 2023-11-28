@@ -75,19 +75,24 @@ function formatTime(seconds) {
     return hours + " : " + minutes + " : " + remainingSeconds ;
 }
 
+let countdownInterval;
 
 function updateCountdown(remainingTime) {
     remainingTimeElement.textContent = formatTime(remainingTime);
     if (remainingTime > 0) {
-        remainingTime--;
-        setTimeout(function () {
+        countdownInterval = setInterval(function () {
+            remainingTime--;
             updateCountdown(remainingTime);
         }, 1000);
     } else if (remainingTime <= 300 && remainingTime > 0) {
         remainingTimeElement.style.color = "red";
-   }else {
-        location.href = "/user/logout/"+localStorage.getItem("userId");
+    } else {
+        location.href = "/user/logout/" + localStorage.getItem("userId");
     }
+}
+
+function stopCountdown() {
+    clearInterval(countdownInterval);
 }
 
 function updateRemainingTime(userIdValue) {
@@ -478,50 +483,52 @@ function recharge() {
 
 // 시간 충전
 function recharge() {
-   const userId = $("#userId").text();
-   const chargeItems = [];
-   const chargeTime = parseInt($('#chargeTime').text());
-   const paymentMethodCodeValue = paymentMethodCode;
+    const userId = $("#userId").text();
+    const chargeItems = [];
+    const chargeTime = parseInt($('#chargeTime').text());
+    const paymentMethodCodeValue = paymentMethodCode;
 
     const quantity = chargeTime;
     const itemTotalPrice = chargeTime * 1000;
 
     chargeItems.push({ itemId: 'ITEM000001', quantity: quantity, price: itemTotalPrice });
 
-	console.log(chargeItems);
-    const param = { userId: userId, remainingTime: chargeTime * 3600, items: chargeItems , paymentMethodCode : paymentMethodCodeValue};
-  	
-    
+    console.log(chargeItems);
+    const param = { userId: userId, remainingTime: chargeTime * 3600, items: chargeItems, paymentMethodCode: paymentMethodCodeValue };
+
     console.log(param);
-  
+
+    // Stop the countdown timer before making the recharge request
+    stopCountdown();
+
     $.ajax({
         url: '/user/recharge',
         type: 'POST',
         contentType: 'application/json; charset=UTF-8',
         data: JSON.stringify(param),
-        success: function(response) {
+        success: function (response) {
             if (response.rs == 'true') {
                 alert('주문이 정상적으로 이루어졌습니다.');
                 updateRemainingTime(userId);
-                $(".modal-payment").hide();
-				$(".modal-order").hide();
-				$(".modal-paymentList").hide();
-				$(".modal-order #total-price").empty();
-                mqttClient.publish(mqtt_topic + "charge", JSON.stringify({
-                    type: "CHARGE",
-                    receiver: "admin"
-                }));
+                const remainingTime = updateRemainingTime(userId);
+                updateCountdown(remainingTime);
+                // ... (other code)
             } else {
-                alert('주문이 정상적으로 이루어지지 않았습니다. ');
+                alert('주문이 정상적으로 이루어지지 않았습니다.');
+                updateRemainingTime(userId);
             }
         },
-        error: function(error) {
+        error: function (error) {
             console.error('주문 에러:', error);
+            // Restart the countdown timer on failure
+            const remainingTime = updateRemainingTime(userId);
+            updateCountdown(remainingTime);
         }
     });
-	 updateTotalPrice();
-	 $('.order-btn-list .menu-order').show();
-	 $('.order-btn-list .recharge-order').show();
+
+    updateTotalPrice();
+    $('.order-btn-list .menu-order').show();
+    $('.order-btn-list .recharge-order').show();
 }
 
 // 충전시간 조절

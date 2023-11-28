@@ -54,4 +54,6 @@ public interface UserDAO {
 	
 	public void insertMember2(UserDTO user);
 
+	public UserDTO loginCheck(UserDTO user);
+
 }

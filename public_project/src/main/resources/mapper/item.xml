@@ -184,7 +184,7 @@
 			    stock,
 			    price
 	        FROM (
-	            S ELECT
+	            SELECT
 	                i.ITEM_ID,
 	                i.ITEM_NAME,	                
 	                TO_CHAR(s.STORE_DATE, 'YYYY-MM-DD') AS statusDate,	                

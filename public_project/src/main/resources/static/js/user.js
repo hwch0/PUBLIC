@@ -206,7 +206,6 @@ function addCart(element) {
     const itemId = $(element).data('menu-id');
     const itemName = $(thisNavLi).find(".food-name").text();
     const sellingPrice = $(thisNavLi).find(".food-price").text();
-
     // 이미 장바구니에 존재하는지 확인
     const existingCartItem = $('.addCart ul li').filter(function() {
         return $(this).find('.itemId').text() === itemId;
@@ -223,13 +222,13 @@ function addCart(element) {
         var cartItem = '<li>' +
             '<p class="itemId">' + itemId + '</p>' +
             '<p class="food-name">' + itemName + '</p>' +
-            '<p class="food-price" style="display:none;">' + sellingPrice + '</p>' +
+            '<p class="food-price">' + sellingPrice + '</p>' +
             '<div class="food-option">' +
                 '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
                 '<p><em class="optionNum" data-option-num="1">1</em></p>' +
                 '<span class="btn_option plus" onClick="updateOptionNum(this)">+</span>' +
             '</div>' +
-            '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">취소</a>' +
+            '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">X</a>' +
             '</li>';
 
         $('.addCart ul').append(cartItem);
@@ -434,8 +433,8 @@ function displayMenuList(menuList) {
                 '<img alt="상품이미지" src="/image/download/' + menu.IMGID + '"/>' +
                 '</div>' +
                 '<div class="food-info-wrap">' +
-                '<p class="food-name" style="margin-top: 15px; text-align:center; font-size: 22px; font-weight: bold; line-height: 30px;">' + menu.ITEMNAME + '</p>' +
-                '<p class="food-price-wrap" style="margin-top:15px; text-align: center; line-height:22px; font-size: 18px;">' + '<span class="food-price">' + menu.SELLINGPRICE + '</span>' + '원 </p>' +
+                '<p class="food-name">' + menu.ITEMNAME + '</p>' +
+                '<p class="food-price-wrap">' + '<span class="food-price">' + menu.SELLINGPRICE + '</span>' + '원 </p>' +
                 '</div>' +
                 '</li>';
             $('.food-list').append(row);

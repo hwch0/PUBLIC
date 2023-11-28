@@ -222,13 +222,22 @@ const recvOrder = () => {
 					console.log(seatNo)
 					$("#orderList").prepend(
 						`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
-		 				<div class="panel"></div>`);
+		 				<div class="panel"><p class="alert_date">주문 일시  ${getNow()}</p></div>`);
 					$.each(order, function(index, detailOrder) {
 						$("#orderList").children().next().first()
 							.append(
-								  `<p>상품 이름 : ${detailOrder.itemName}</p>
-									<p>상품 가격 : ${detailOrder.sellingPrice}</p>
-							     	<p>수량 : ${detailOrder.quantity}</p>`
+								`<div class="alert_item">
+									<div class="alert_lft">
+										<img src="/image/download/${detailOrder.imgId}"/>
+									</div>
+									<div class="alert_rgt">
+										<p class="item_txt">${detailOrder.itemName}</p>
+										<div class="price_info">
+											<p class="item_quantity">${detailOrder.quantity}개</p>
+											<p class="item_price">${detailOrder.sellingPrice * detailOrder.quantity}원</p>
+										</div>
+									</div>
+								</div>`
 							);
 						priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
 					});
@@ -237,9 +246,10 @@ const recvOrder = () => {
 					})
 					$("#orderList").children().next().first()
 						.append(`
-						<p>주문 일시 : ${getNow()}</p>
-						<p>총 금액 : ${sum}</p>
+						<div class="alert_bot">
+						<p>Total <em>${sum}</em>원</p>
 						<button class="served">주문 확인</button>
+						</div>
 						`);
 				}
 

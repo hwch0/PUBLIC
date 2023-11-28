@@ -148,18 +148,20 @@ $(document).ready(function() {
 				var seatNo = order[0].seatNo;
 				$("#orderList").prepend(
 					`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
-		 				<div class="panel"></div>`);
+		 				<div class="panel"><p class="alert_date">주문 일시  ${getNow()}</p></div>`);
 				$.each(order, function(index, detailOrder) {
 					$("#orderList").children().next().first()
 						.append(
-							`<div>
-								<div>
+							`<div class="alert_item">
+								<div class="alert_lft">
 									<img src="/image/download/${detailOrder.imgId}"/>
 								</div>
-								<div>
-									<p>${detailOrder.itemName}</p>
-									<p>${detailOrder.sellingPrice}</p>
-									<p>${detailOrder.quantity}</p>
+								<div class="alert_rgt">
+									<p class="item_txt">${detailOrder.itemName}</p>
+									<div class="price_info">
+										<p class="item_quantity">${detailOrder.quantity}개</p>
+										<p class="item_price">${detailOrder.sellingPrice * detailOrder.quantity}원</p>
+									</div>
 								</div>
 							</div>`
 						);
@@ -170,9 +172,10 @@ $(document).ready(function() {
 				})
 				$("#orderList").children().next().first()
 					.append(`
-						<p>주문 일시 : ${getNow()}</p>
-						<p>총 금액 : ${sum}</p>
+						<div class="alert_bot">
+						<p>Total <em>${sum}</em>원</p>
 						<button class="served">주문 확인</button>
+						</div>
 						`);
 			});
 		});
@@ -180,16 +183,17 @@ $(document).ready(function() {
 });
 
 $('#orderList').on('click', '.served', function(e) {
-	const orderId = $(e.currentTarget).parent().prev().data('orderid');
+	const orderId = $(e.currentTarget).parent().parent().prev().data('orderid');
 	const params = {
 		orderId : orderId,
 	}
+	console.log(params)
 	ajaxResponse("POST", "/order/served", params)
 		.then(function(response) {
 			if(response.result){
 				alert("정상적으로 처리되었습니다.")
-				$(e.currentTarget).parent().prev().remove();
-				$(e.currentTarget).parent().remove();
+				$(e.currentTarget).parent().parent().prev().remove();
+				$(e.currentTarget).parent().parent().remove();
 			}
 		});
 });//DB에 Orders 테이블 served를 Y로 바꾸는 로직

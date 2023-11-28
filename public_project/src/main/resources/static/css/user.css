@@ -537,6 +537,9 @@ label {
 	height: 100%;
 	overflow-y: scroll;
 }
+.addCart::-webkit-scrollbar {
+  display: none;
+}
 .addCart ul {
 	padding:0 10px;
 	box-sizing: border-box;

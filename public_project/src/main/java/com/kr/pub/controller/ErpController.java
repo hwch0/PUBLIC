@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.dto.ItemDTO;
@@ -172,6 +175,19 @@ public class ErpController {
 		return "/reference/stockLayout";
 	}
 	
+	//엑셀 업로드
+	@PostMapping("/upload")
+	public ResponseEntity<Map<String, String>> ExcelUpload(MultipartHttpServletRequest req){
+		try {
+			 excelService.uploadExcel(req);
+			  return new ResponseEntity<>(Map.of("status", "success", "message", "엑셀 업로드 저장이 성공적으로 수행되었습니다."), HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        // 실패 시 에러 메시지 반환
+	        return new ResponseEntity<>(Map.of("status", "error", "message", "엑셀 업로드 저장 중 오류가 발생했습니다."), HttpStatus.BAD_REQUEST);
+	    }
+	}
+	
 	//매출목록 다운로드
 	@PostMapping("/salesExcel")
 	public void salceExcelDownload(HttpServletResponse res, ErpDTO erpDTO, HttpSession session) throws Exception {
@@ -191,8 +207,8 @@ public class ErpController {
 	// 입출고 목록 업로드용 엑셀 다운로드
 	@GetMapping("/excelDownload")
 	public void excelDownload(HttpServletResponse res) throws Exception {
-		List<String> headerNames = Arrays.asList("품목명", "일자", "상세", "수량", "단가");
-		String fileName = "excel_download";
+		List<String> headerNames = Arrays.asList("품목코드", "품목명", "일자", "수량", "단가", "품목유형", "상세");
+		String fileName = "excel_uploadFile";
 			
 		excelService.excelDownloads(res, headerNames, fileName);
 	}

@@ -190,7 +190,7 @@ function orderSearch(){
 		            '<td onclick="orderDetail(\'' + order['orderId'] + '\')" class="clickable-cell">' + order['orderId'] + '</td>' +
 		            '<td>' + order['orderDate'] + '</td>' +
 		            '<td>' + order['type'] + '</td>' +
-		            '<td class="order-data" data-order="' + order['quantity'] + ' EA">' + order['quantity'] + '</td>' +
+		            '<td class="order-data" data-order="' + order['quantity'] + ' EA">' + order['quantity'] + ' EA</td>' +
 		            '<td>₩' + new Intl.NumberFormat().format(order['price']) + '</td>' +
 		            '<td>' + order['paymentMethod'] + '</td>' +
 		            '<td style="color: ' + (order['paymentStatus'] === '판매' ? 'blue' : order['paymentStatus'] === '주문취소' ? 'red' : 'black')
@@ -405,17 +405,20 @@ $('#searchSalesBnt').on('click', () => {
 	const salesList = $('#tbody');
 	const salesItem = $('#sales-item');
 	const formData = new FormData($('#searchSalesForm')[0]);
-	const getSalesListUrl = '/erp/getSalesList';
+	const getSalesListUrl = '/erp/salesSearch';
 	
 	fetch(getSalesListUrl, {
 		method:'POST',
-		body: formData
+		 headers: {
+    'Content-Type': 'application/json',
+  },
+		body: JSON.stringify(formData),
 	})
 	.then((response) => response.json())
 	.then((data) => {
-		if(data.status) {
+		if(data) {
 			salesList.empty();
-			const salesListData = data.data;
+			const salesListData = data.salesSearch;
 			let rownum = 1;
 			salesListData.forEach((sales) => {
 				salesItemClone = salesItem.clone();

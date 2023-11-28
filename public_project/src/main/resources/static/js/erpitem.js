@@ -1,3 +1,28 @@
+//엑셀 업로드
+function upload(){
+	if(confirm("업로드 여부")){
+		const formData = new FormData(document.getElementById("excelUploadForm"));
+		
+		$.ajax({
+			url: "/erp/upload",
+			type: "POST",
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function(result){
+				console.log("result 확인1: " , result)
+					alert(result.message);
+					location.reload(true);
+			},
+			error: function (request, status, error) {
+                console.log("error");
+                alert("code: " + request.status + "\n" + "message : " + request.responseText + "\n" + "error: " + error);
+            }
+        });
+    }
+}
+
+//품목 코드 리스트 가져오기
 function statusCodeList() {
     $.ajax({
         url: '/erp/statusCode',
@@ -68,10 +93,20 @@ function statusTotals(){
         const priceString = priceElement ? priceElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
         const price = priceString !== "-" ? parseFloat(priceString) : 0;
 		
+		//INCDEC 상태
+		const incdecElement = row.querySelector("td:nth-child(5)");
+		const incdec = incdecElement ? incdecElement.innerText.trim() : '';
+		
+		if(incdec === '입고'){
+			totalPrice -= isNaN(price) ? 0 : price;
+			totalPrices -= isNaN(stock) || isNaN(price) ? 0 : stock * price;
+		}else if (incdec === '출고'){
+			totalPrice += isNaN(price) ? 0 : price;
+			totalPrices += isNaN(stock) || isNaN(price) ? 0 : stock * price;
+		}
+		
 		//총계 누적
 		totalStock += isNaN(stock) ? 0 : stock;
-		totalPrice += isNaN(price) ? 0 : price;
-		totalPrices += isNaN(stock) || isNaN(price) ? 0 : stock * price;
 
 	});
 	  const totalStockElement = document.getElementById("statusTotalStock");
@@ -81,12 +116,12 @@ function statusTotals(){
 	  
 	   const formStatusTotalPrice = document.getElementById("form-status-TotalPrice");
 	   if(formStatusTotalPrice){
-	   	formStatusTotalPrice.innerText = totalPrice.toLocaleString();
+	   	formStatusTotalPrice.innerText = totalPrice.toLocaleString() + ' 원';
 	   }
 	   
 	   const formStatusTotalPrices = document.getElementById("form-status-TotalPrices");
 	   if(formStatusTotalPrices){
-	   	formStatusTotalPrices.innerText = totalPrices.toLocaleString();
+	   	formStatusTotalPrices.innerText = totalPrices.toLocaleString() + ' 원';
 	   }
 }
 
@@ -183,17 +218,6 @@ $(document).ready(function() {
     });
 });
 
-//엑셀 업로드 alert창
-$(document).ready(function() {
-
-    $("#uploadBtn").on("click", function() {
-
-        alert("엑셀 업로드 되었습니다.");
-
-        $(".modal").removeClass("on");
-    });
-});
-
 //입출고 등록 모달창
 const statusModel = $("#statusModel");
 
@@ -215,11 +239,14 @@ $(document).ready(function() {
 
 function statusInsert(){
 	
+	const remarksValue = remarks.value || "X";
+	
 	const param = {
 		itemId: statusCode.value,
     	stock: statusQuantity.value,
     	price: statusPrices.value,
-    	itemTypeCode: statusType.value
+    	itemTypeCode: statusType.value,
+    	remarks: remarksValue
 	};
 	
 	$.ajax({
@@ -378,7 +405,7 @@ function statusSearch() {
         '<td style="color: ' + 
             (status['INCDEC'] === '입고' ? 'blue' : (status['INCDEC'] === '출고' ? 'red' : 'black')) + '">' +
             status['INCDEC'] + '</td>' +
-        '<td class="status-stock" data-status="' + status['STOCK'] + ' EA">' + status['STOCK'] + '</td>' +
+        '<td class="status-stock" data-status="' + status['STOCK'] + ' EA">' + status['STOCK'] + ' EA</td>' +
         '<td>₩' + new Intl.NumberFormat().format(status['PRICE']) + '</td>' +
         '<td>₩' + new Intl.NumberFormat().format(status['STOCK'] * status['PRICE']) + '</td>' +
         '</tr>';

@@ -28,14 +28,17 @@ public class MqttService {
 	public void execute(String topic, String payload) throws Exception {// MQTT 메세지 수신시 실행
 		System.out.println(topic);
 		String[] cmdParams = StringUtils.split(topic, "/");
-		if (cmdParams.length >= 2 && cmdParams[1].equals("chat")) {
-			ChatDTO chat = new ObjectMapper().readValue(payload, ChatDTO.class);
-			System.out.println("MQTTSERVICE=>" + chat);
-			System.out.println("CHATINSERT!!!!");
-			chatService.insert(chat);
-		}else if(cmdParams.length >= 2 && cmdParams[1].equals("charge")) {
-		 	cacheManager.getCache("loggedInUserList").evict("'allUsers'");
-		 	System.out.println("loggedInUserList 캐시 초기화!!!");
+		if(cmdParams.length >= 2) {
+			final String command = cmdParams[1];
+			if (command.equals("chat")) {
+				ChatDTO chat = new ObjectMapper().readValue(payload, ChatDTO.class);
+				System.out.println("MQTTSERVICE=>" + chat);
+				System.out.println("CHATINSERT!!!!");
+				chatService.insert(chat);
+			}else if(command.equals("charge") || command.equals("login") || command.equals("logout")) {
+			 	cacheManager.getCache("loggedInUserList").evict("'allUsers'");
+			 	System.out.println("loggedInUserList 캐시 초기화!!!");
+			}
 		}
 	}
 }

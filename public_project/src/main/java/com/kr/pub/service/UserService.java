@@ -221,7 +221,7 @@ public class UserService {
 	                    "type", "LOGOUT",
 	                    "receiver", "admin"
 	            ));
-	            mqttService.publishMessage(jsonObject.toString(), "/public/login"); // 로그아웃한 알림 관리자에게
+	            mqttService.publishMessage(jsonObject.toString(), "/public/logout"); // 로그아웃한 알림 관리자에게
 	        } else {
 	            // 해당 사용자 정보를 찾을 수 없는 경우에 대한 처리
 	            System.out.println("User not found in loggedInUserList");

@@ -1,5 +1,6 @@
 package com.kr.pub.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,10 @@ public class OrderDTO {
 	private String remarks;
 	private String served;
 	
+	private int remainingTime;
+	
+	
 	private List<OrderHistoryDTO> items;
 	private PaymentDTO paymentMethodCode;
+	
 }

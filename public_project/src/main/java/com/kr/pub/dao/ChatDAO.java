@@ -12,4 +12,5 @@ public interface ChatDAO {
 
 	List<ChatDTO> getChatList();
 	List<ChatDTO> getChatListById(ChatDTO chatDTO);
+
 }

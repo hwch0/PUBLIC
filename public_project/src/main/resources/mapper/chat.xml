@@ -8,16 +8,20 @@
 	    INSERT INTO chat(type, sender, receiver, message, seatNo)
 		VALUES (#{type}, #{sender},#{receiver}, #{message},#{seatNo})
 	</insert>
+	<insert id="test">
+	    INSERT INTO TEST(name, age)
+		VALUES (#{name}, #{age})
+	</insert>
 	
 	<select id="getChatList" resultType="com.kr.pub.dto.ChatDTO">
-		SELECT type, sender, receiver, message, seatNo,
+		SELECT distinct type, sender, receiver, message, seatNo,
 		TO_CHAR(time, 'YYYY-MM-DD HH24:MI:SS') as time
 	    FROM chat
 		WHERE TRUNC(time) = TRUNC(SYSDATE)
 		ORDER BY time ASC
 	</select>
 	<select id="getChatListById" resultType="com.kr.pub.dto.ChatDTO">
-    SELECT
+    SELECT distinct
         type,
         sender,
         receiver,

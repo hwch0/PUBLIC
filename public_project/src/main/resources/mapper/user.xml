@@ -22,6 +22,7 @@
 		select u.*, s.seat_no from users u
 		inner join seat s on u.user_id = s.user_id
 		where s.used ='Y' and u.user_id = #{userId}
+		fetch first 1 rows only
 	</select>
 	<select id="findByUserId" resultType="com.kr.pub.dto.UserDTO">
 		select 
@@ -76,6 +77,20 @@
 			,#{oauth}
 		) 
 	</insert>
+	
+	<insert id="insertMember2" >
+		insert into users (user_id, uname, password, birthdate, phone_number, email, reg_date)
+		 values (
+			 #{userId}
+			,#{uname}
+			,#{password}
+			,to_date(#{birthdate}, 'YYYY/MM/DD HH24:MI:SS')
+			,#{phonenumber}
+			,#{email}
+			,to_date(#{regDate}, 'YYYY/MM/DD HH24:MI:SS')
+		) 
+	</insert>
+	
 	<insert id="insertUserHistory">
 	insert into user_history (seat_no, user_id, login_time, logout_time) 
 	values(#{seatNo}, #{userId}, #{loginTime}, #{logoutTime} )
@@ -94,5 +109,9 @@
 	    SET remaining_time = #{remainingTime}
 	    WHERE user_id = #{userId}
 	</update>
+	
+	<select id="loginCheck">
+	select * from seat where user_id =#{userId}
+	</select>
 	
 </mapper>

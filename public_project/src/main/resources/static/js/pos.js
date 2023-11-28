@@ -61,11 +61,20 @@ $('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
 	infoModal.css('display', 'block');
 });//좌석 클릭시 사용자정보 띄우기
 
-const closeInfoModal = () => {
+/*const closeInfoModal = () => {
 	$.each($(".close"), function(index, close) {
 		$(close).on('click', () => infoModal.css('display', 'none'));
+		$('#tab2 tbody').empty();
 	});
-}
+}*/
+
+$('.close').on('click', function(){
+	infoModal.css('display', 'none');
+	$('#tab1').addClass('active');
+	$('.tab__item').first().addClass('active');
+	$('.tab__item').last().removeClass('active');
+	$('#tab2 tbody').empty();
+});
 
 
 $(document).ready(function() {
@@ -92,7 +101,7 @@ $(document).ready(function() {
 			}
 			addOption();
 			countSeat();
-			closeInfoModal();
+			//closeInfoModal();
 		});//로그인 유저 가져와서 좌석 띄우기, 모달창
 
 
@@ -127,21 +136,34 @@ $(document).ready(function() {
 		});//채팅 데이터 불러오기		
 	ajaxResponse("GET", "/admin/getOrderList")
 		.then(function(response) {
+			console.log(response.result)
+			if (Object.keys(response.result).length > 0) {
+					if (!$('#alertIcon').hasClass('on')) {
+						$('#alertIcon').addClass('on');
+					}
+				}
 			$.each(response.result, function(key, order) {
 				var priceList = [];
 				var sum = 0;
 				var seatNo = order[0].seatNo;
-				//$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
-				console.log(seatNo)
 				$("#orderList").prepend(
 					`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
-		 				<div class="panel"></div>`);
+		 				<div class="panel"><p class="alert_date">주문 일시  ${getNow()}</p></div>`);
 				$.each(order, function(index, detailOrder) {
 					$("#orderList").children().next().first()
 						.append(
-							`<p>상품 이름 : ${detailOrder.itemName}</p>
-									<p>상품 가격 : ${detailOrder.sellingPrice}</p>
-							     	<p>수량 : ${detailOrder.quantity}</p>`
+							`<div class="alert_item">
+								<div class="alert_lft">
+									<img src="/image/download/${detailOrder.imgId}"/>
+								</div>
+								<div class="alert_rgt">
+									<p class="item_txt">${detailOrder.itemName}</p>
+									<div class="price_info">
+										<p class="item_quantity">${detailOrder.quantity}개</p>
+										<p class="item_price">${detailOrder.sellingPrice * detailOrder.quantity}원</p>
+									</div>
+								</div>
+							</div>`
 						);
 					priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
 				});
@@ -150,9 +172,10 @@ $(document).ready(function() {
 				})
 				$("#orderList").children().next().first()
 					.append(`
-						<p>주문 일시 : ${getNow()}</p>
-						<p>총 금액 : ${sum}</p>
+						<div class="alert_bot">
+						<p>Total <em>${sum}</em>원</p>
 						<button class="served">주문 확인</button>
+						</div>
 						`);
 			});
 		});
@@ -160,16 +183,25 @@ $(document).ready(function() {
 });
 
 $('#orderList').on('click', '.served', function(e) {
-	const orderId = $(e.currentTarget).parent().prev().data('orderid');
+	const orderId = $(e.currentTarget).parent().parent().prev().data('orderid');
 	const params = {
 		orderId : orderId,
 	}
+	console.log(params)
 	ajaxResponse("POST", "/order/served", params)
 		.then(function(response) {
 			if(response.result){
 				alert("정상적으로 처리되었습니다.")
-				$(e.currentTarget).parent().prev().remove();
-				$(e.currentTarget).parent().remove();
+				$(e.currentTarget).parent().parent().prev().remove();
+				$(e.currentTarget).parent().parent().remove();
 			}
 		});
 });//DB에 Orders 테이블 served를 Y로 바꾸는 로직
+
+
+$('#chatIcon').on('click', function(){
+	$('#chatIcon').removeClass('on');
+});
+$('#alertIcon').on('click', function(){
+	$('#alertIcon').removeClass('on');
+});

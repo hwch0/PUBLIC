@@ -5,13 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin</title>
-
 </head>
 <jsp:include page="/WEB-INF/views/common/commonCSS.jsp"></jsp:include>
-
 <!-- 관리자 좌석현황 영역 CSS -->
 <link rel="stylesheet" href="css/reference02.css"> 
-
 <body>
 
 	<div class="wrap">
@@ -41,8 +38,8 @@
             <div class="hd hd_rgt">
                 <div class="btn_grp">
                     <ul>
-                        <li class="on"><a href="javascript:void(0);" onClick="showAlert()">알림</a></li>
-						<li><a href="javascript:void(0);" onClick="showChat()">채팅</a></li>
+                        <li id="alertIcon"><a href="javascript:void(0);" onClick="showAlert()">알림</a></li>
+						<li id="chatIcon"><a href="javascript:void(0);" onClick="showChat()">채팅</a></li>
                         <li><a href="javascript:void(0);" onclick="changeAdminPage();">좌석</a></li>
                         <li><a href="javascript:void(0);" onclick="changeAdminPage();">대시보드</a></li>
                         <li><a href="javascript:void(0);" onclick="addFoodPage();">설정</a></li>

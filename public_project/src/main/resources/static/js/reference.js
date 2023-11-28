@@ -86,6 +86,7 @@ function showChat(){
 	}else{
 		$('.wrap_cont').toggleClass("lft");
 		$('.py-5').toggleClass('lft');
+		$('.menu-category').toggleClass('lft');
 		$(".wrap_chat").toggleClass("on");
 		$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
 	}

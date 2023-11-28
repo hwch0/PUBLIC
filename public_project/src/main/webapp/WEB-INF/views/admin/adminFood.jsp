@@ -3,7 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <style>
-
+.p-4 {
+	padding: 0.5rem!important;
+}
 .card-img-top {
 	height: 60%;
 }
@@ -68,18 +70,54 @@
   background-color: #fff; /* 배경색 설정 */
 }
 
+.menu-category {
+   position: absolute;
+   width: 60%;
+   height: 40px;
+   top: 130px;
+   margin-right: 20%;
+   margin-left: 20%;
+   border-radius: 20px;
+   background-color: #fff;
+}
+
+.menu-category ul {
+   margin: 0 auto;
+   width: 100%;
+   height: 100%;
+}
+
+.menu-category li {
+   float: left;
+   width: 20%;
+   height: 100%;
+   text-align: center;
+}
+
+.menu-category li a {
+   display: block;
+   line-height: 40px;
+   font-size: 18px;
+   color: #666;
+}
+.menu-category li.on a {
+   color:  #440977;
+   font-weight: bold;
+}
+
+.menu-category.lft {
+	 margin-left: 9%;
+}
 
 
 </style>
 
  <div class="admin_food">
- 
-           
+
   <!-- 모달 창 영역 -->
 	<div id="menuModal" class="modal">
 	    <div class="modal-content">
 	    	<span class="close" id="closeModalBtn">&times;</span>
-	    	
 	    	
 	    	<form name="menuForm" id="menuForm" method="multipart/form-data" style="width:100%; height:100%;">
 	    		<input name="selectedItem" id="selectedItem" style="display:none;">
@@ -132,9 +170,22 @@
   
   <!-- Section-->
     <section class="py-5">
+    
+     
+    <div class="menu-category">
+      <ul>
+         <li id="menu01" class="on"><a href="javascript:void(0);" onclick="showCategory(1);">All</a></li>
+         <li id="menu02"><a href="javascript:void(0);" onclick="showCategory(2);">밥</a></li>
+         <li id="menu03"><a href="javascript:void(0);"  onclick="showCategory(3);">라면</a></li>
+         <li id="menu04"><a href="javascript:void(0);"  onclick="showCategory(4);">음료</a></li>
+         <li id="menu05"><a href="javascript:void(0);"  onclick="showCategory(5);">스낵</a></li>
+      </ul>
+   </div>
+    
+    
       <div class="container px-4 px-lg-5 mt-5">
         <div
-          class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center menuList"
+          class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-5 justify-content-center menuList"
         >
         
           <!-- 메뉴 추가  -->        
@@ -144,33 +195,7 @@
 	          	<img src="images/plusBnt.png" style="width:20%; margin:auto;"/>
 	          </div>
           </div>
-          
-          <c:forEach var="menu" items="${menuList}">
-             <div class="col mb-5">
-	          <div class="card h-100" >
-	          	<img 
-	          		class="card-img-top" 
-	          		src="/image/download/${menu.IMG_ID}"
-	          		/>
-	          	<div class="card-body p-4">
-	          		<div class="text-center">
-	          			<h5 class="fw-bolder menuName">${menu.ITEM_NAME }</h5>
-	          			<h6 class="fw-bolder menuPrice">${menu.SELLING_PRICE }</h6>
-	          		</div>
-	          	</div>
-    	        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto"  href="javascript:void(0);" onclick="deleteMenu(this);" menuId="${menu.ITEM_ID}" id="deleteMenuBnt"
-                    >삭제</a
-                  >
-                </div>
-              </div>
-	          	
-	          </div>
-          </div>
-          
-          
-            <div class="col mb-5" id="cardItem" style="display:none;">
+            <div class="col mb-5" id="cardItem" style="display:none;" menuCategory="">
 	          <div class="card h-100" >
 	          	<img 
 	          		class="card-img-top" 
@@ -178,13 +203,13 @@
 	          		/>
 	          	<div class="card-body p-4">
 	          		<div class="text-center">
-	          			<h5 class="fw-bolder menuName"></h5>
+	          			<h6 class="fw-bolder menuName"></h6>
 	          			<h6 class="fw-bolder menuPrice"></h6>
 	          		</div>
 	          	</div>
     	        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                 <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto" href="javascript:void(0);" onclick="deleteMenu(this);" menuId="" id="deleteMenuBnt"
+                  <a class="btn btn-outline-dark mt-auto" href="javascript:void(0);" onclick="deleteMenu(this);" menuId="" imgId="" id="deleteMenuBnt"
                     >삭제</a
                   >
                 </div>
@@ -192,8 +217,6 @@
 	          	
 	          </div>
           </div>
-          	
-          </c:forEach>
           
         </div>
       </div>
@@ -202,3 +225,12 @@
     <!-- Bootstrap core JS-->
 <!--     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
   </div>
+  
+  <script>
+  $(document).ready(function() {
+      var $listLI = $("h6");
+      $listLI.each(function(){
+          $(this).text(parseInt($(this).attr('value')).toLocaleString() + '원');
+      })
+  });
+  </script>

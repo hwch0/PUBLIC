@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +33,7 @@ public class UserDTO {
 	private int loginFailure;
 	private Timestamp loginTime;
 	private Timestamp logoutTime;
-	private Date regDate;
+	private String regDate;
 	private int remainingTime;
 	private String roleId;
 	private String oauth;
@@ -46,4 +50,8 @@ public class UserDTO {
 		System.out.println("getRoleList()->" + Arrays.toString(this.roleId.split(",")));
 		return Arrays.asList(this.roleId.split(","));
 	}
+	public UserDTO(int remainingTime) {
+        this.remainingTime = remainingTime;
+    }
+	
 }

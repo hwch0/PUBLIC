@@ -1,10 +1,13 @@
 package com.kr.pub.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kr.pub.config.auth.PrincipalDetails;
 import com.kr.pub.dto.OrderDTO;
 import com.kr.pub.dto.OrderHistoryDTO;
 import com.kr.pub.dto.PaymentDTO;
@@ -57,9 +61,6 @@ public class UserController {
 	
 	@GetMapping("")
     public String login() {
-		// 어플리케이션 영역에 경로 저장
-		servletContext.setAttribute("newPath", filePath);
-		System.out.println(filePath);
 		return "/user/login";
     }
 	@GetMapping("/test")
@@ -69,6 +70,9 @@ public class UserController {
 	
     @GetMapping("/main")
   	public String Main() {
+    	// 어플리케이션 영역에 경로 저장
+		servletContext.setAttribute("newPath", filePath);
+		System.out.println(filePath);
   		return "/user/main";
   	}
     @GetMapping("/userTest")
@@ -120,7 +124,6 @@ public class UserController {
 	@PostMapping("/order")
 	@ResponseBody
 	public Map<String, String> order(@RequestBody OrderDTO order) {
-		System.out.println("결제페이지");
 	    String userId = order.getUserId();
 	    order.setUserId(userId);
 	    System.out.println("사용자 아이디 : " + userId);
@@ -156,5 +159,47 @@ public class UserController {
 	     }
 	    return map;
 	}
+	
+	//시간충전
+	@PostMapping("/recharge")
+	@ResponseBody
+	public Map<String, String> recharge(@RequestBody Map<String, Object> requestData, OrderDTO order) {
+	    System.out.println("시간충전");
+	    String userId = (String) requestData.get("userId");
+	    int remainingTime = ((Number) requestData.get("remainingTime")).intValue();
+	    List<OrderHistoryDTO> cartItems = (List<OrderHistoryDTO>) requestData.get("items");
+	    String paymentMethodCode = (String) requestData.get("paymentMethodCode");
+	    
+	    order.setRemainingTime(remainingTime);
+	    order.setUserId(userId);
+	    order.setItems(cartItems);
+
+
+	    Map<String, String> map = new HashMap<>();
+
+	    try {
+	        String orderId = userService.insertOrder(order);
+	        order.setOrderId(orderId);
+	        System.out.println(order);
+	        userService.chargeTime(order);
+	        
+	        userService.insertChargeOrderHistory(order, requestData);
+
+	        PaymentDTO paymentDTO = PaymentDTO.builder()
+	                .paymentTypeCode("PT001")
+	                .paymentMethodCode(paymentMethodCode)
+	                .orderId(orderId)
+	                .build();
+	        System.out.println(paymentDTO);
+	        paymentService.insertPayment(paymentDTO);
+
+	        map.put("rs", "true");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        map.put("rs", "false");
+	    }
+	    return map;
+	}
+
 
 }

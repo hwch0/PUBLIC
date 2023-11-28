@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.kr.pub.dto.OrderDTO;
 import com.kr.pub.dto.UserDTO;
 
 
@@ -22,6 +23,8 @@ public interface UserDAO {
 	public UserDTO login(UserDTO user);
 	
 	public void updateLoginTime(UserDTO user);
+	
+	public int getRemainingTime(String string);
 	
 	public int getRemainingTime(UserDTO user);
 	
@@ -41,8 +44,18 @@ public interface UserDAO {
 	
 	public void insertUserHistory(UserDTO user);
 	
+	public void insertUserHistory(OrderDTO order);
+	
 	public void updateUserHistory(UserDTO user);
 	
+	public void updateRemainingTime(OrderDTO order);
+	
 	public void updateRemainingTime(UserDTO user);
+	
+	public void insertMember2(UserDTO user);
+
+	public UserDTO loginCheck(UserDTO user);
+	public UserDTO loginCheck(String username);
+
 
 }

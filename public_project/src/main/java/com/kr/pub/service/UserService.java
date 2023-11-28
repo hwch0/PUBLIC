@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,11 +51,7 @@ public class UserService {
 	@Autowired
 	private ItemDAO itemDAO;
 	@Autowired
-	private PaymentDAO paymentDAO;
-	@Autowired
 	private MqttService mqttService;
-	@Autowired
-	private SeatDAO seatDAO;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -75,7 +72,7 @@ public class UserService {
 		return userDAO.getUser(userId);
 	}
 	
-	public UserDTO login(UserDTO user, HttpServletRequest request, Authentication authentication) {
+	public UserDTO login(UserDTO user,HttpServletRequest httpServletRequest, Authentication authentication) {
         // 로그인 로직 구현
         UserDTO rs = userDAO.login(user);
 
@@ -140,29 +137,32 @@ public class UserService {
 		}
 	}
 	
-	//@Transactional
 	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
-	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws Exception {
+	public Map<String, Object> login2(@RequestBody UserDTO user,HttpServletRequest request,HttpServletResponse response,Authentication authentication) throws Exception {
 		Map<String, Object> map = new HashMap<>();
         UserDTO rs = login(user, request, authentication);
         System.out.println(rs);
-        if (rs.getRemainingTime() > 0) {
-            map.put("rs", rs);
-            map.put("message", "로그인 성공했습니다.");
-            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
-            	loginSeat(rs);//random번 사용중으로 변경
-            	JSONObject jsonObject = new JSONObject(Map.of(
-            		    "type", "LOGIN",
-            		    "receiver", "admin"
-            		));
-            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
-        }  else if(rs.getRemainingTime() == 0) {
-	    	map.put("message", "잔여시간이 없습니다.");
-            map.put("rs", 0);
-	    } else {
-            map.put("message", "로그인 실패했습니다.");
-        }
-        
+        	
+        	if(userDAO.loginCheck(rs) == null) {
+        		 if (rs.getRemainingTime() > 0) {
+        	            map.put("rs", rs);
+        	            map.put("message", "로그인 성공했습니다.");
+        	            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
+        	            	loginSeat(rs);//random번 사용중으로 변경
+        	            	JSONObject jsonObject = new JSONObject(Map.of(
+        	            		    "type", "LOGIN",
+        	            		    "receiver", "admin"
+        	            		));
+        	            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
+        	        }  else if(rs.getRemainingTime() == 0) {
+        		    	map.put("message", "잔여시간이 없습니다.");
+        	            map.put("rs", 0);
+        		    } else {
+        	            map.put("message", "로그인 실패했습니다.");
+        	        }
+        	} else {
+        		map.put("message", "이미 로그인된 좌석입니다.");
+        	}
         return map;
 	}
     
@@ -220,7 +220,7 @@ public class UserService {
 	                    "type", "LOGOUT",
 	                    "receiver", "admin"
 	            ));
-	            mqttService.publishMessage(jsonObject.toString(), "/public/login"); // 로그아웃한 알림 관리자에게
+	            mqttService.publishMessage(jsonObject.toString(), "/public/logout"); // 로그아웃한 알림 관리자에게
 	        } else {
 	            // 해당 사용자 정보를 찾을 수 없는 경우에 대한 처리
 	            System.out.println("User not found in loggedInUserList");
@@ -245,6 +245,22 @@ public class UserService {
 	    }
 	}
 
+	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
+	public void chargeTime(OrderDTO order) {
+		int remainingTime = userDAO.getRemainingTime(order.getUserId()); 
+		System.out.println(remainingTime);
+
+	    remainingTime += order.getRemainingTime();
+	    UserDTO user = new UserDTO();
+	    order.setUserId(order.getUserId());
+	    order.setRemainingTime(remainingTime);
+	    
+	    System.out.println("시간" + remainingTime);
+	    System.out.println("아이디" + order.getUserId());
+	    userDAO.updateRemainingTime(order);
+	}
+
+	
 	public List<Map<String, Object>> getMenuList() {
 		return menuDAO.getMenuList();
 	}
@@ -258,7 +274,11 @@ public class UserService {
     }
 
 	public void insertOrderHistory(String orderId, List<OrderHistoryDTO> cartItems) {
-	    for (OrderHistoryDTO item : cartItems) {
+	    
+		System.out.println(orderId);
+		System.out.println(cartItems);
+		
+		for (OrderHistoryDTO item : cartItems) {
 	        OrderHistoryDTO orderHistory = OrderHistoryDTO.builder()
 	            .orderId(orderId)
 	            .itemId(item.getItemId())
@@ -268,10 +288,30 @@ public class UserService {
 
 	        orderDAO.insertOrderHistory(orderHistory);
 	    }
-	    
-	   
 	}
 
+	
+	public void insertChargeOrderHistory(OrderDTO order,Map<String, Object> requestData) {
+	    String orderId = order.getOrderId();
+	    List<Map<String, Object>> cartItemsMapList = (List<Map<String, Object>>) requestData.get("items");
+	    System.out.println(cartItemsMapList);
+	    List<OrderHistoryDTO> cartItems = new ArrayList<>();
+	    
+	    
+	    for (Map<String, Object> itemMap : cartItemsMapList) {
+	        OrderHistoryDTO orderHistoryDTO = new OrderHistoryDTO();
+	        orderHistoryDTO.setOrderId(orderId);
+	        orderHistoryDTO.setItemId((String) itemMap.get("itemId"));
+	        orderHistoryDTO.setItemId((String) itemMap.get("itemId"));
+	        orderHistoryDTO.setQuantity((int) itemMap.get("quantity"));
+	        orderHistoryDTO.setPrice((int) itemMap.get("price"));
+
+	        cartItems.add(orderHistoryDTO);
+	        System.out.println(cartItems);
+	    }
+	    orderDAO.insertChargeOrderHistory(cartItems);
+	}
+	
 	public void updateItemStock(List<OrderHistoryDTO> cartItems) {
 		
 		for (OrderHistoryDTO item : cartItems) {

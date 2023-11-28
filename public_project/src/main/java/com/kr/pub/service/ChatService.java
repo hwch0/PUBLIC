@@ -21,5 +21,5 @@ public class ChatService {
 		return chatDAO.getChatList();
 	}
 	public List<ChatDTO> getChatListById(ChatDTO chatDTO) {return chatDAO.getChatListById(chatDTO);}
-	
+
 }

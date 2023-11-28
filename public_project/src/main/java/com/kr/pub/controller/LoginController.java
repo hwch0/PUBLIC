@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.catalina.Session;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
@@ -36,6 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kr.pub.config.MqttConfig.OutboundGateway;
 import com.kr.pub.config.auth.AuthSucessHandler;
 import com.kr.pub.config.auth.PrincipalDetails;
+import com.kr.pub.config.auth.PrincipalDetailsService;
 import com.kr.pub.dto.KakaoProfile;
 import com.kr.pub.dto.OAuthToken;
 import com.kr.pub.dto.UserDTO;
@@ -44,6 +47,7 @@ import com.kr.pub.service.MqttService;
 import com.kr.pub.service.UserService;
 
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -103,7 +107,7 @@ public class LoginController {
     }
 	
 	@GetMapping("/auth/kakao/callback")
-	public String kakaoCallback(String code,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, RedirectAttributes attributes) throws Exception { // Data를 리턴해주는 컨트롤러 함수
+	public String kakaoCallback(String code,HttpSession session,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse , RedirectAttributes attributes) throws Exception { // Data를 리턴해주는 컨트롤러 함수
 		System.out.println("전: SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
 		System.out.println("code = " + code);
 		String returnPath = "redirect:/";
@@ -154,6 +158,8 @@ public class LoginController {
 		
 		System.out.println("카카오 엑세스 토큰 : "+oauthToken.getAccess_token()); //<<토큰을 얻어온거 확인하기
 		
+		session.setAttribute("kakaoAccessToken", oauthToken.getAccess_token());
+
 		//사용자 정보 가져오기(인가 데이터 가져오기)
 		RestTemplate rt2 = new RestTemplate();
 		
@@ -226,13 +232,15 @@ public class LoginController {
 		
 		System.out.println("자동 로그인을 진행합니다.");
 	
+		
+		
 		// 로그인 처리 
 		PrincipalDetails principalDetails = new PrincipalDetails(userDTO);
 		Authentication authentication = new UsernamePasswordAuthenticationToken(
 				principalDetails, // 나중에 컨트롤러에서 DI해서 쓸 때 사용하기 편함.
 				null, // 토큰 인증시 패스워드는 알수 없어 null 값을 전달하는 것임  
 				principalDetails.getAuthorities()); //사용자가 소유한 역할 권한을 전달한다 
-
+        
 		System.out.println("principalDetails." + principalDetails);
 		System.out.println("authentication." + authentication);
 		
@@ -242,13 +250,17 @@ public class LoginController {
 	        System.out.println("rs 결과출력2 >>> " + rs);
 	        if (rs.getRemainingTime() > 0) {
 	            attributes.addAttribute("message", "로그인 성공했습니다.");
-	            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
+	            //좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
 	            userService.loginSeat(rs);//random번 사용중으로 변경
 	            System.out.println("사용중 변경 완료");
 	            	JSONObject jsonObject = new JSONObject(Map.of(
 	            		    "type", "LOGIN",
 	            		    "receiver", "admin"
 	            		));
+            	 Cookie cookie = new Cookie("userId", userDTO.getUserId());
+                 cookie.setMaxAge(24 * 60 * 60);
+                 cookie.setPath("/");
+                 httpServletResponse.addCookie(cookie);
 	            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
 	        }  else if(rs.getRemainingTime() == 0) {
 	        	attributes.addAttribute("message", "잔여시간이 없습니다.");
@@ -267,10 +279,10 @@ public class LoginController {
 		// 강제로 시큐리티의 세션에 접근하여 값 저장
 		System.out.println("SecurityContextHolder.getContext()  >>>>>" + SecurityContextHolder.getContext());
 		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 		System.out.println("SecurityContextHolder.getContext().getAuthentication  >>>>>" + SecurityContextHolder.getContext().getAuthentication());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		System.out.println("SessionId >>>>>" + httpServletRequest.getSession().getId());
-
+		
 		return returnPath;
 	}
 	

@@ -2,6 +2,7 @@ package com.kr.pub.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +28,7 @@ import jakarta.servlet.ServletContext;
 @Service
 public class ImageService {
 	
-	private static String CURR_IMAGE_REPO_PATH = "C:\\file_repo";
+	private static String CURR_IMAGE_REPO_PATH = "C:\\file_repo" ;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -107,8 +108,14 @@ public class ImageService {
 	public ImageDTO getImage(String imgId) {
 		return imageDAO.getImage(imgId);
 	}
-
-
-
+	
+    public boolean removeFile(String imgId){
+    	String savePath  = (String) servletContext.getAttribute("newPath");
+        String srcFileName = imageDAO.getImage(imgId).getImgNameReal();
+        System.out.println("savePath >> " + savePath + srcFileName);
+            File file = new File(savePath + srcFileName);
+            boolean result = file.delete();
+            return result;
+    }
 
 }

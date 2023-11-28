@@ -13,7 +13,7 @@
 </head>
 <link rel="stylesheet" href="/css/user.css">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script src="/plugins/jquery/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 .payment_content {
    display: none;

@@ -172,6 +172,11 @@ const sendMessage = () => {
 };
 //메세지 수신한 데이터를 삽입
 const recvMessage = (recv) => {
+	if (Object.keys(recv).length > 0) {
+		if (!$('#chatIcon').hasClass('on')) {
+			$('#chatIcon').addClass('on');
+		}
+	}
   if (!$(".wrap_chat.on").length > 0) {
     $(document).Toasts("create", {
       title: recv.seatNo + "번 좌석 채팅이 도착했습니다.",
@@ -201,14 +206,16 @@ const recvOrder = () => {
   ajaxResponse("GET", "/admin/getOrderList").then(function (response) {
     var priceList = [];
     var sum = 0;
+	  if (Object.keys(response.result).length > 0) {
+		  if (!$('#alertIcon').hasClass('on')) {
+			  $('#alertIcon').addClass('on');
+		  }
+	  }
     $.each(response.result, function (key, order) {
       if (!orderIds.includes(key)) {
         orderIds.push(key);
         console.log(orderIds);
         var seatNo = order[0].seatNo;
-         if(!$('#alertIcon').hasClass('on')){
-				  $('#alertIcon').addClass('on');
-			  }
         if (!$(".wrap_alert.on").length > 0) {//주문 사이드바가 안열려있을때
           $(document).Toasts("create", {
             title: seatNo + "번 좌석 주문이 도착했습니다.",

@@ -137,12 +137,15 @@ $(document).ready(function() {
 	ajaxResponse("GET", "/admin/getOrderList")
 		.then(function(response) {
 			console.log(response.result)
+			if (Object.keys(response.result).length > 0) {
+					if (!$('#alertIcon').hasClass('on')) {
+						$('#alertIcon').addClass('on');
+					}
+				}
 			$.each(response.result, function(key, order) {
 				var priceList = [];
 				var sum = 0;
 				var seatNo = order[0].seatNo;
-				//$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
-				console.log(seatNo)
 				$("#orderList").prepend(
 					`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
 		 				<div class="panel"></div>`);
@@ -190,3 +193,11 @@ $('#orderList').on('click', '.served', function(e) {
 			}
 		});
 });//DB에 Orders 테이블 served를 Y로 바꾸는 로직
+
+
+$('#chatIcon').on('click', function(){
+	$('#chatIcon').removeClass('on');
+});
+$('#alertIcon').on('click', function(){
+	$('#alertIcon').removeClass('on');
+});

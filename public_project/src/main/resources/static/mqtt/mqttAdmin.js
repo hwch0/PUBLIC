@@ -2,18 +2,18 @@ function formatTime(seconds) {
   var hours = Math.floor(seconds / 3600);
   var minutes = Math.floor((seconds % 3600) / 60);
   var remainingSeconds = seconds % 60;
-  if(hours === 0){
-	  return minutes + " 분 " + remainingSeconds + " 초";
-  }else{
-	  return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
+  if (hours === 0) {
+    return minutes + " 분 " + remainingSeconds + " 초";
+  } else {
+    return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
   }
 }
 function getNow() {
-	var today = new Date();
-	var hours = ('0' + today.getHours()).slice(-2);
-	var minutes = ('0' + today.getMinutes()).slice(-2);
-	var seconds = ('0' + today.getSeconds()).slice(-2);
-	return hours + ':' + minutes + ':' + seconds;
+  var today = new Date();
+  var hours = ("0" + today.getHours()).slice(-2);
+  var minutes = ("0" + today.getMinutes()).slice(-2);
+  var seconds = ("0" + today.getSeconds()).slice(-2);
+  return hours + ":" + minutes + ":" + seconds;
 }
 let timers = {}; // 타이머 ID를 저장할 객체
 
@@ -28,9 +28,9 @@ function updateCountdown(time, remainingTime, seatNo) {
 
       if (remainingTime <= 0) {
         clearInterval(timerID); // 타이머 중지
-        time.closest('li').removeClass("on");
-        time.closest('li').find("p").first().text("");
-        time.closest('li').find("p").last().text("");
+        time.closest("li").removeClass("on");
+        time.closest("li").find("p").first().text("");
+        time.closest("li").find("p").last().text("");
         $(`option[value=${seatNo}]`).remove();
         delete timers[seatNo]; // 타이머 ID를 객체에서 제거
       }
@@ -38,11 +38,9 @@ function updateCountdown(time, remainingTime, seatNo) {
 
     // 타이머 ID를 저장
     timers[seatNo] = timerID;
-    console.log(timers)
+    console.log(timers);
   }
 }
-
-
 
 function ajaxResponse(method, url, params) {
   return new Promise(function (resolve, reject) {
@@ -77,21 +75,23 @@ function sortOptions() {
 }
 
 const addOption = () => {
-	const existingOptions = $("#seatSelector option").map(function() { 
-		return $(this).val(); 
-		}).get(); //현재 로그인한 좌석 번호
-	console.log(existingOptions);
-	$.each($("[data-seatNo].on em"), function(index,seat) {
-		const seatNumber = $(seat).text();
-		console.log(seatNumber);
-		if (!existingOptions.includes(seatNumber)) {
-			$("#seatSelector").append(
-				"<option value=" + seatNumber + ">" + seatNumber + "</option>"
-			);
-		}
-	});
-	sortOptions();
-}
+  const existingOptions = $("#seatSelector option")
+    .map(function () {
+      return $(this).val();
+    })
+    .get(); //현재 로그인한 좌석 번호
+  console.log(existingOptions);
+  $.each($("[data-seatNo].on em"), function (index, seat) {
+    const seatNumber = $(seat).text();
+    console.log(seatNumber);
+    if (!existingOptions.includes(seatNumber)) {
+      $("#seatSelector").append(
+        "<option value=" + seatNumber + ">" + seatNumber + "</option>"
+      );
+    }
+  });
+  sortOptions();
+};
 
 const mqtt_host = "www.chocomungco.store";
 const mqtt_port = 9001; //websocket port : mosquitt.conf 파일에 설정됨
@@ -138,118 +138,116 @@ const unsubscribe = () => {
 };
 //서버에 메시지를 전송한다
 const sendMessage = () => {
-	if (!isNaN($("#seatSelector option:selected").val())) {
-		const seatNo = $("#seatSelector option:selected").val();
-		const message = $("#chatInputBox").val();
-		var receiver = "";
-		$.each($("[data-seatNo].on em"), function(index, seat){
-	    		if($(seat).text() == seatNo){
-					receiver = $(seat).siblings('.uid').text();
-				}
-		});
-		const param = {
-			type: "CHAT",
-			sender: "admin",
-			receiver: receiver,
-			message: message,
-		};
-		mqttClient.publish(mqtt_topic + "chat", JSON.stringify(param));
-		$("#chatInputBox").val("");
-		$("#chatList").append(
-			`<li class="me">
-					<div class="entete">
-						<p>${getNow()}</p>
-						<h2>좌석 ${seatNo}님에게 보냄</h2>
-					</div>
-					<div class="triangle"></div>
-					<div class="message">${param.message}</div>
-				</li>`
-		);
-		$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
-	} else {
-		alert("좌석을 선택해주세요");
-	}
+  if (!isNaN($("#seatSelector option:selected").val())) {
+    const seatNo = $("#seatSelector option:selected").val();
+    const message = $("#chatInputBox").val();
+    var receiver = "";
+    $.each($("[data-seatNo].on em"), function (index, seat) {
+      if ($(seat).text() == seatNo) {
+        receiver = $(seat).siblings(".uid").text();
+      }
+    });
+    const param = {
+      type: "CHAT",
+      sender: "admin",
+      receiver: receiver,
+      message: message,
+    };
+    mqttClient.publish(mqtt_topic + "chat", JSON.stringify(param));
+    $("#chatInputBox").val("");
+    $("#chatList").append(
+      `<li class="me">
+                      <div class="entete">
+                          <p>${getNow()}</p>
+                          <h2>좌석 ${seatNo}님에게 보냄</h2>
+                      </div>
+                      <div class="triangle"></div>
+                      <div class="message">${param.message}</div>
+                  </li>`
+    );
+    $("#chatList").scrollTop($("#chatList")[0].scrollHeight);
+  } else {
+    alert("좌석을 선택해주세요");
+  }
 };
 //메세지 수신한 데이터를 삽입
 const recvMessage = (recv) => {
-	if(!$('.wrap_chat.on').length > 0){
-		$(document).Toasts('create', {
-			title: recv.seatNo+'번 좌석 채팅이 도착했습니다.',
-			autohide: true,
-			delay: 5000,
-			body: recv.message
-		});
-	}
-	console.log(recv);
-	$("#chatList").append(
-		`<li class="you">
-		<div class="entete">
-			<p>${getNow()}</p>
-			<h2>${recv.seatNo}번 좌석(${recv.sender})</h2>
-			</div>
-			<div class="triangle"></div>
-			<div class="message">${recv.message}</div>
-	</li>`
-	);
-	$("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
+  if (!$(".wrap_chat.on").length > 0) {
+    $(document).Toasts("create", {
+      title: recv.seatNo + "번 좌석 채팅이 도착했습니다.",
+      autohide: true,
+      delay: 5000,
+      body: recv.message,
+    });
+  }
+  console.log(recv);
+  $("#chatList").append(
+    `<li class="you">
+          <div class="entete">
+              <p>${getNow()}</p>
+              <h2>${recv.seatNo}번 좌석(${recv.sender})</h2>
+              </div>
+              <div class="triangle"></div>
+              <div class="message">${recv.message}</div>
+      </li>`
+  );
+  $("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
 };
 const recvOrder = () => {
-	var orderIds = [];
-	$.each($('[data-orderId]'), function(index, orderId) {
-				orderIds.push($(orderId).attr('data-orderId'));
-			});
-			/*$('[data-orderId]').map(function() {
-						return $(this).data('orderId');
-					}).get();*/
-	ajaxResponse("GET", "/admin/getOrderList")
-		.then(function(response) {
-			var priceList = [];
-			var sum = 0;
-			$.each(response.result, function(key, order) {
-				if (!orderIds.includes(key)) {
-					orderIds.push(key);
-					console.log(orderIds)
-					var seatNo = order[0].seatNo;
-					if (!$('.wrap_alert.on').length > 0) {
-						$(document).Toasts('create', {
-							title: seatNo + '번 좌석 주문이 도착했습니다.',
-							autohide: true,
-							delay: 5000,
-							body: order.length + "건의 주문"
-						});
-					}
-					//$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
-					console.log(seatNo)
-					$("#orderList").prepend(
-						`<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
-		 				<div class="panel"></div>`);
-					$.each(order, function(index, detailOrder) {
-						$("#orderList").children().next().first()
-							.append(
-								  `<img src="/image/download/${detailOrder.imgId}"/>
-								    <p>상품 이름 : ${detailOrder.itemName}</p>
-									<p>상품 가격 : ${detailOrder.sellingPrice}</p>
-							     	<p>수량 : ${detailOrder.quantity}</p>`
-							);
-						priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
-					});
-					$.each(priceList, function(index, price) {
-						sum = sum + price
-					})
-					$("#orderList").children().next().first()
-						.append(`
-						<p>주문 일시 : ${getNow()}</p>
-						<p>총 금액 : ${sum}</p>
-						<button class="served">주문 확인</button>
-						`);
-				}
-
-			});
-		});
+  var orderIds = [];
+  $.each($("[data-orderId]"), function (index, orderId) {
+    orderIds.push($(orderId).attr("data-orderId"));
+  });
+  /*$('[data-orderId]').map(function() {
+                          return $(this).data('orderId');
+                      }).get();*/
+  ajaxResponse("GET", "/admin/getOrderList").then(function (response) {
+    var priceList = [];
+    var sum = 0;
+    $.each(response.result, function (key, order) {
+      if (!orderIds.includes(key)) {
+        orderIds.push(key);
+        console.log(orderIds);
+        var seatNo = order[0].seatNo;
+        if (!$(".wrap_alert.on").length > 0) {
+          $(document).Toasts("create", {
+            title: seatNo + "번 좌석 주문이 도착했습니다.",
+            autohide: true,
+            delay: 5000,
+            body: order.length + "건의 주문",
+          });
+        }
+        //$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
+        console.log(seatNo);
+        $("#orderList").prepend(
+          `<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>
+                           <div class="panel"></div>`
+        );
+        $.each(order, function (index, detailOrder) {
+          $("#orderList")
+            .children()
+            .next()
+            .first()
+            .append(
+              `<img src="/image/download/${detailOrder.imgId}"/>
+                                      <p>상품 이름 : ${detailOrder.itemName}</p>
+                                      <p>상품 가격 : ${detailOrder.sellingPrice}</p>
+                                       <p>수량 : ${detailOrder.quantity}</p>`
+            );
+          priceList.push(detailOrder.sellingPrice * detailOrder.quantity);
+        });
+        $.each(priceList, function (index, price) {
+          sum = sum + price;
+        });
+        $("#orderList").children().next().first().append(`
+                          <p>주문 일시 : ${getNow()}</p>
+                          <p>총 금액 : ${sum}</p>
+                          <button class="served">주문 확인</button>
+                          `);
+      }
+    });
+  });
 }; //주문리스트 받기
-
-
-
 
 const recvLogin = () => {
   ajaxResponse("GET", "/admin/loggedInUserList")
@@ -257,11 +255,15 @@ const recvLogin = () => {
       console.log(response.result);
       $.each(response.result, function (index, user) {
         var seat = $(`li[data-seatNo=${user.seatNo}]`);
-        	if(!seat.hasClass('on')){
-				seat.addClass("on");
-		        seat.find("p").first().text(user.userId);
-		        updateCountdown(seat.find("p").last(), user.remainingTime, user.seatNo);
-			}
+        if (!seat.hasClass("on")) {
+          seat.addClass("on");
+          seat.find("p").first().text(user.userId);
+          updateCountdown(
+            seat.find("p").last(),
+            user.remainingTime,
+            user.seatNo
+          );
+        }
       });
       countSeat();
       addOption();
@@ -272,28 +274,32 @@ const recvLogin = () => {
 }; //사용자 로그인시 관리자 좌석 동적으로 변경
 
 const recvLogout = () => {
- $.each($('[data-seatNo].on'), function (index, seat) {
-        var seat = $(seat);
-        var seatNo = seat.find('em').text();
-        console.log("seatNo+>" + seatNo)
-        if (seat.hasClass("on")) {
-          seat.removeClass("on");
-          seat.find("p").first().text("");
-          clearInterval(timers[seatNo]);
-          delete timers[seatNo]
-          seat.find("p").last().text("");
-          $(`option[value=${seatNo}]`).remove();
-        }
-      });
+  $.each($("[data-seatNo].on"), function (index, seat) {
+    var seat = $(seat);
+    var seatNo = seat.find("em").text();
+    console.log("seatNo+>" + seatNo);
+    if (seat.hasClass("on")) {
+      seat.removeClass("on");
+      seat.find("p").first().text("");
+      clearInterval(timers[seatNo]);
+      delete timers[seatNo];
+      seat.find("p").last().text("");
+      $(`option[value=${seatNo}]`).remove();
+    }
+  });
   ajaxResponse("GET", "/admin/loggedInUserList")
     .then(function (response) {
-       $.each(response.result, function (index, user) {
+      $.each(response.result, function (index, user) {
         var seat = $(`li[data-seatNo=${user.seatNo}]`);
-        	if(!seat.hasClass('on')){
-				seat.addClass("on");
-		        seat.find("p").first().text(user.userId);
-		        updateCountdown(seat.find("p").last(), user.remainingTime, user.seatNo);
-			}
+        if (!seat.hasClass("on")) {
+          seat.addClass("on");
+          seat.find("p").first().text(user.userId);
+          updateCountdown(
+            seat.find("p").last(),
+            user.remainingTime,
+            user.seatNo
+          );
+        }
       });
       countSeat();
       addOption();
@@ -324,34 +330,34 @@ mqttClient.on("message", function (topic, message) {
     incUsersNumber(data);
   } else if (data.receiver === "admin" && data.type === "LOGOUT") {
     recvLogout();
-  } else if(data.receiver === "admin" && data.type === "ORDER"){
+  } else if (data.receiver === "admin" && data.type === "ORDER") {
     recvOrder(data);
-  } else if(data.receiver === "admin" && data.type === "CHARGE"){
-	 recvLogout();
-  }//충전시 잔여시간 변경 기능 추가
+  } else if (data.receiver === "admin" && data.type === "CHARGE") {
+    recvLogout();
+  } //충전시 잔여시간 변경 기능 추가
 });
 
- $("#chatInputBox").on("keydown", e => {
-    	  if (e.keyCode == 13) {
-			  e.preventDefault();
-			  if($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " "){
-				  sendMessage();
-			  }else{
-				  alert("메세지를 입력해 주세요")
-			  }
-        }
-    });
-    $("#send_chat_button").on("click", e => {
-        if($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " "){
-				  sendMessage();
-			  }else{
-				  alert("메세지를 입력해 주세요")
-			  }
-    });
+$("#chatInputBox").on("keydown", (e) => {
+  if (e.keyCode == 13) {
+    e.preventDefault();
+    if ($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " ") {
+      sendMessage();
+    } else {
+      alert("메세지를 입력해 주세요");
+    }
+  }
+});
+$("#send_chat_button").on("click", (e) => {
+  if ($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " ") {
+    sendMessage();
+  } else {
+    alert("메세지를 입력해 주세요");
+  }
+});
 
 // 로그인 시 금일 이용자수 1씩 증가
 function incUsersNumber() {
-	const todayUsers = $('.todayUsers');
-	todayUsers.text(Number(todayUsers.text()) + 1);
-	console.log("증가 후 : "+ todayUsers.text());
+  const todayUsers = $(".todayUsers");
+  todayUsers.text(Number(todayUsers.text()) + 1);
+  console.log("증가 후 : " + todayUsers.text());
 }

@@ -198,9 +198,6 @@ const recvOrder = () => {
   $.each($("[data-orderId]"), function (index, orderId) {
     orderIds.push($(orderId).attr("data-orderId"));
   });
-  /*$('[data-orderId]').map(function() {
-                          return $(this).data('orderId');
-                      }).get();*/
   ajaxResponse("GET", "/admin/getOrderList").then(function (response) {
     var priceList = [];
     var sum = 0;
@@ -209,7 +206,10 @@ const recvOrder = () => {
         orderIds.push(key);
         console.log(orderIds);
         var seatNo = order[0].seatNo;
-        if (!$(".wrap_alert.on").length > 0) {
+         if(!$('#alertIcon').hasClass('on')){
+				  $('#alertIcon').addClass('on');
+			  }
+        if (!$(".wrap_alert.on").length > 0) {//주문 사이드바가 안열려있을때
           $(document).Toasts("create", {
             title: seatNo + "번 좌석 주문이 도착했습니다.",
             autohide: true,
@@ -217,7 +217,6 @@ const recvOrder = () => {
             body: order.length + "건의 주문",
           });
         }
-        //$(`li.on .uid:contains('${order[0].userId}')`).parent().find('em').text();
         console.log(seatNo);
         $("#orderList").prepend(
           `<button class="accordion" data-orderId='${key}'>${seatNo}번 좌석 주문</button>

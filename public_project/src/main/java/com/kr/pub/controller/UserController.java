@@ -70,7 +70,7 @@ public class UserController {
     }
 	
     @GetMapping("/main")
-  	public String Main() {
+  	public String Main(HttpSession session) {
     	// 어플리케이션 영역에 경로 저장
 		servletContext.setAttribute("newPath", filePath);
 		System.out.println("filePath >>> " +filePath);

@@ -39,7 +39,7 @@
 		    SYSDATE,
 		    'admin',
 		    'CT001',
-		    'X'
+		    #{remarks}
 		  );
 		
 		  INSERT INTO store_history (
@@ -292,6 +292,7 @@
 			<if test="stockItem == 3">
 			    AND i.STOCK = 0
 			</if>
+				AND i.ITEM_ID != 'ITEM000001'
 			 ORDER BY storeDate desc
 	</select>
 	

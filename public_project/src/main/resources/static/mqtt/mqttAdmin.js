@@ -226,7 +226,8 @@ const recvOrder = () => {
 					$.each(order, function(index, detailOrder) {
 						$("#orderList").children().next().first()
 							.append(
-								  `<p>상품 이름 : ${detailOrder.itemName}</p>
+								  `<img src="/image/download/${detailOrder.imgId}"/>
+								    <p>상품 이름 : ${detailOrder.itemName}</p>
 									<p>상품 가격 : ${detailOrder.sellingPrice}</p>
 							     	<p>수량 : ${detailOrder.quantity}</p>`
 							);
@@ -325,6 +326,8 @@ mqttClient.on("message", function (topic, message) {
     recvLogout();
   } else if(data.receiver === "admin" && data.type === "ORDER"){
     recvOrder(data);
+  } else if(data.receiver === "admin" && data.type === "CHARGE"){
+	 recvLogout();
   }//충전시 잔여시간 변경 기능 추가
 });
 

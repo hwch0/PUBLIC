@@ -508,8 +508,8 @@ function recharge() {
 				$(".modal-order").hide();
 				$(".modal-paymentList").hide();
 				$(".modal-order #total-price").empty();
-                mqttClient.publish(mqtt_topic + "order", JSON.stringify({
-                    type: "ORDER",
+                mqttClient.publish(mqtt_topic + "charge", JSON.stringify({
+                    type: "CHARGE",
                     receiver: "admin"
                 }));
             } else {

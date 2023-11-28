@@ -110,4 +110,8 @@
 	    WHERE user_id = #{userId}
 	</update>
 	
+	<select id="loginCheck">
+	select * from seat where user_id =#{userId}
+	</select>
+	
 </mapper>

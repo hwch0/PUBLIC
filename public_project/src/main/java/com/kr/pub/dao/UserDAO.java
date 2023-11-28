@@ -51,5 +51,7 @@ public interface UserDAO {
 	public void updateRemainingTime(OrderDTO order);
 	
 	public void updateRemainingTime(UserDTO user);
+	
+	public void insertMember2(UserDTO user);
 
 }

@@ -118,10 +118,10 @@
 			            <td style="width: 604px; font-weight: bold; text-align: center;">합계</td>
 			            <td style="width: 73px; text-align: center;" id="statusTotalStock"></td>
 			            <td style="width: 107px; text-align: center;" id="statusTotalPrice">
-			                ₩<span id="form-status-TotalPrice"></span>
+			                <span id="form-status-TotalPrice"></span>
 			            </td>
 			            <td style="width: 121px; text-align: center;" id="statusTotalPrices">
-			                ₩<span id="form-status-TotalPrices"></span>
+			                <span id="form-status-TotalPrices"></span>
 			            </td>
        				 </tr>
 				</tbody>
@@ -166,6 +166,13 @@
 	                    <option value="IT004">소모품</option>
 	                </select>
 	            </div>
+	            
+	            <!-- 비고란 -->
+	            <div class="status-form-group">
+	                <label for="remarks">비고란</label>
+	                <input type="text" class="form-control" id="remarks" required>	            
+	            </div>
+	            
     			<button class="btn btn-outline-dark mt-auto" id="statusInsertBnt" type="button" onclick="statusInsert()">등록</button>
     			<button class="btn btn-outline-dark mt-auto" id="excelUploadBnt" type="button">
     				<img src="/images/xlsx.png" alt="Excel Icon" style="vertical-align: middle; width:20px">
@@ -179,9 +186,9 @@
    			 <div class="excel-modal-content">
 		        <span class="close" id="closeExcelUploadModelBtn">&times;</span>
 		        <h2>파일 업로드</h2>
-		        <form id="excelUploadForm" action="/upload" method="post" enctype="multipart/form-data">
-					<div id="uploadFile">
-		           		<input type="file" id="excelFile"/>
+		        <form id="excelUploadForm" name="excelUploadForm" method="post" enctype="multipart/form-data">
+					<div id="upload_file">
+		           		<input type="file" id="excelFile" name="excelFile"/>
 		            </div>
 		            
 		            <div id="uploadBtn">

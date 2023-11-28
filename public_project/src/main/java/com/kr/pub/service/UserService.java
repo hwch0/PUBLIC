@@ -51,11 +51,7 @@ public class UserService {
 	@Autowired
 	private ItemDAO itemDAO;
 	@Autowired
-	private PaymentDAO paymentDAO;
-	@Autowired
 	private MqttService mqttService;
-	@Autowired
-	private SeatDAO seatDAO;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -76,7 +72,7 @@ public class UserService {
 		return userDAO.getUser(userId);
 	}
 	
-	public UserDTO login(UserDTO user, HttpServletRequest request, Authentication authentication) {
+	public UserDTO login(UserDTO user,HttpServletRequest httpServletRequest, Authentication authentication) {
         // 로그인 로직 구현
         UserDTO rs = userDAO.login(user);
 
@@ -141,29 +137,32 @@ public class UserService {
 		}
 	}
 	
-	//@Transactional
 	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
-	public Map<String, Object> login2(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws Exception {
+	public Map<String, Object> login2(@RequestBody UserDTO user,HttpServletRequest request,HttpServletResponse response,Authentication authentication) throws Exception {
 		Map<String, Object> map = new HashMap<>();
         UserDTO rs = login(user, request, authentication);
         System.out.println(rs);
-        if (rs.getRemainingTime() > 0) {
-            map.put("rs", rs);
-            map.put("message", "로그인 성공했습니다.");
-            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
-            	loginSeat(rs);//random번 사용중으로 변경
-            	JSONObject jsonObject = new JSONObject(Map.of(
-            		    "type", "LOGIN",
-            		    "receiver", "admin"
-            		));
-            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
-        }  else if(rs.getRemainingTime() == 0) {
-	    	map.put("message", "잔여시간이 없습니다.");
-            map.put("rs", 0);
-	    } else {
-            map.put("message", "로그인 실패했습니다.");
-        }
-        
+        	
+        	if(userDAO.loginCheck(rs) == null) {
+        		 if (rs.getRemainingTime() > 0) {
+        	            map.put("rs", rs);
+        	            map.put("message", "로그인 성공했습니다.");
+        	            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
+        	            	loginSeat(rs);//random번 사용중으로 변경
+        	            	JSONObject jsonObject = new JSONObject(Map.of(
+        	            		    "type", "LOGIN",
+        	            		    "receiver", "admin"
+        	            		));
+        	            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
+        	        }  else if(rs.getRemainingTime() == 0) {
+        		    	map.put("message", "잔여시간이 없습니다.");
+        	            map.put("rs", 0);
+        		    } else {
+        	            map.put("message", "로그인 실패했습니다.");
+        	        }
+        	} else {
+        		map.put("message", "이미 로그인된 좌석입니다.");
+        	}
         return map;
 	}
     
@@ -221,7 +220,7 @@ public class UserService {
 	                    "type", "LOGOUT",
 	                    "receiver", "admin"
 	            ));
-	            mqttService.publishMessage(jsonObject.toString(), "/public/login"); // 로그아웃한 알림 관리자에게
+	            mqttService.publishMessage(jsonObject.toString(), "/public/logout"); // 로그아웃한 알림 관리자에게
 	        } else {
 	            // 해당 사용자 정보를 찾을 수 없는 경우에 대한 처리
 	            System.out.println("User not found in loggedInUserList");

@@ -45,6 +45,7 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 		UserDTO userInfo = ((PrincipalDetails) principal).getUser();
 		Cookie cookie = new Cookie("userId", userInfo.getUserId());
+		System.out.println(cookie);
         response.addCookie(cookie);
 		
 			

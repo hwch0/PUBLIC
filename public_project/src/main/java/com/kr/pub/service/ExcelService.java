@@ -3,11 +3,12 @@ package com.kr.pub.service;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.compress.utils.FileNameUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -77,7 +78,11 @@ public class ExcelService {
 										}else {
 											//숫자 형식 소수점 이하 정수 변환
 											double numericValue = cell.getNumericCellValue();
-											map.put(columnHeader, String.valueOf((numericValue == (int) numericValue) ? (int) numericValue : numericValue));
+											if (numericValue == (int) numericValue) {
+											    map.put(columnHeader, String.valueOf((int) numericValue));
+											} else {
+											    map.put(columnHeader, String.valueOf(numericValue));
+											}
 										}
 										break;
 									case STRING:
@@ -132,26 +137,33 @@ public class ExcelService {
 				result.put("code", "2");
 				result.put("msg", "파일이 없습니다.");
 			} else {
-				String originalFileName = excelFile.getOriginalFilename().replaceAll("[^a-zA-Z0-9.-]", "");
-				
-				String fileExt = FileNameUtils.getExtension(originalFileName);
-				
-				if(fileExt == null || fileExt.equals("")) {
-					result.put("code", "1");
-					result.put("msg", "허용되지 않는 확장자명 입니다.");
-				} else {
-					File uploadDir = new File("C:\\upload\\Excel");
-					uploadDir.mkdirs();
-					
-					File destFile = new File(uploadDir, originalFileName.substring(0, originalFileName.lastIndexOf('.')) + "." + fileExt);
-					excelFile.transferTo(destFile);
-					
-					result.put("code", "3");
-					result.put("msg", "업로드 성공");
-					
-					readExcel(destFile);
-				}
-			}
+                // 파일명에서 특수 문자 제거
+                String originalFileNm = excelFile.getOriginalFilename().replaceAll("[^a-zA-Z0-9.-]", "");
+                // 확장자 추출
+                String fileExt = FilenameUtils.getExtension(originalFileNm);
+
+                if (fileExt == null || fileExt.equals("")) {
+                    result.put("code", "1");
+                    result.put("msg", "허용되지 않는 확장자명");
+                } else {
+                    // 디렉토리 생성 및 특수 문자 제거
+                	File uploadDir = new File("C:\\upload\\Excel");
+                	if (!uploadDir.exists()) {
+                	    uploadDir.mkdirs(); // 디렉토리 생성
+                	}
+
+                    // 파일명을 생성하여 업로드할 파일 경로 설정
+                    File destFile = new File(uploadDir, originalFileNm.substring(0,originalFileNm.lastIndexOf('.')) + "." + fileExt);
+                    excelFile.transferTo(destFile);
+
+                    // 서비스에 업로드 처리 위임
+                    result.put("code", "3");
+                    result.put("msg", "업로드 성공");
+
+                    // Excel 파일 읽기
+                    readExcel(destFile);
+                }
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", "4");
@@ -164,7 +176,7 @@ public class ExcelService {
 	public void readExcel(File file)  throws Exception {
 		ExcelReadDTO excelReadOption = new ExcelReadDTO();
 		excelReadOption.setFilePath(file.getAbsolutePath());
-		excelReadOption.setOutputColumns("A", "B", "C", "D", "E", "F", "G", "H","I");
+		excelReadOption.setOutputColumns("A", "B", "C", "D", "E", "F", "G");
 		excelReadOption.setStartRow(2);
 		
 		List<Map<String, String>> excelData =read(excelReadOption);
@@ -183,11 +195,36 @@ public class ExcelService {
 			System.out.println("value of A: " +dataMap.get("A"));
 			
 			itemDTO.setItemId(dataMap.get("A"));
+			try {
+				Date regDate = dateFormat.parse(dataMap.get("C"));
+				itemDTO.setRegDate(regDate);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			itemDTO.setStock(Integer.parseInt(dataMap.get("D")));
+			itemDTO.setPrice(Integer.parseInt(dataMap.get("E")));
+			itemDTO.setItemTypeCode(itemTypeCode(dataMap.get("F")));
+			itemDTO.setRemarks(dataMap.get("G") != null && !dataMap.get("G").isEmpty() ? dataMap.get("G") : "X");
 			
+			itemDAO.insertStoreData(itemDTO);
 		}
 	}
 	
-	//업로드용 excel
+	public String itemTypeCode(String itemType) {
+		String itemTypeCode = "";
+		
+		if("상품".equals(itemType)) {
+			itemTypeCode = "IT001";
+		}else if ("비품".equals(itemTypeCode)) {
+			itemTypeCode = "IT003";
+		}else if ("소모품".equals(itemTypeCode)) {
+			itemTypeCode = "IT004";
+		}
+		return itemTypeCode;
+	}
+	
+	//업로드용 excel 시트
 	public void excelDownloads(HttpServletResponse res, List<String>headerNames, String fileName) throws Exception{
 		// excel sheet 생성
 		Workbook workbook = new XSSFWorkbook();

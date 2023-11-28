@@ -1125,8 +1125,8 @@ span.orderDetail {
     left: 50%;
     margin: -250px 0 0 -200px;
     padding: 20px;
-    width: 430px;
-    height: 520px;
+    width: 440px;
+    height: 578px;
     text-align: center;
     border-radius: 5px;
     box-sizing: border-box;
@@ -1180,6 +1180,7 @@ span.orderDetail {
     box-sizing: border-box;
 }
 
+
 /* 파일 업로드 모달 내 컨텐츠 스타일 */
 #excelFile {
     width: 210px;
@@ -1222,10 +1223,35 @@ span.orderDetail {
 }
 
 /*휴먼계정*/
-    .dormant {
-        color: red;
-    }
+.dormant {
+    color: red;
+}
 
-    .active {
-        color: blue;
-    }
+.active {
+    color: blue;
+}
+
+/*글자 생략 하기*/
+.itemTbody td:nth-child(3){
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 236px; 
+}
+
+.itemTbody td:nth-child(3):hover {
+    white-space: normal;
+    max-width: none;
+}
+
+.statusTbody td:nth-child(3) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 236px; 
+}
+
+.statusTbody td:nth-child(3):hover {
+    white-space: normal;
+    max-width: none;
+}

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.UserDTO;
-import com.kr.pub.util.DummyData;
+/*import com.kr.pub.util.DummyData;*/
 
 import jakarta.servlet.ServletContext;
 
@@ -32,16 +32,5 @@ public class ReferenceController {
 		return "/reference/pos";
 	}
 	
-//	@GetMapping("/makeDummyData")
-//	public void makeDummyData() {
-//		System.out.println("/makeDummyData");
-//		List<UserDTO> userList = DummyData.insertUsers();
-//		
-//		for(UserDTO user : userList) {
-//			userDAO.insertMember2(user);
-//		}
-//		
-//		System.out.println("userList.size() --> " + userList.size());
-//	}
 
 }

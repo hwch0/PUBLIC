@@ -31,7 +31,7 @@ function navBtn(element) {
             $('#orderBtn22').addClass('on');
             getMenuList(); 
         } else if (thisNavLi.attr('id') === 'rechargeBtn') {
-			$(".cont-modal-wrap, .cont-bot-wrap, .wrap_recharge").css('display', 'block');
+         $(".cont-modal-wrap, .cont-bot-wrap, .wrap_recharge").css('display', 'block');
             $('#rechargeBtn').addClass('on');
             $("#chattingBtn").removeClass('on');
             $("#orderBtn22").removeClass('on');
@@ -95,8 +95,8 @@ function updateRemainingTime(userIdValue) {
    ajaxResponse('POST', '/user/getUser', data)
       .then(function(response) {     
          var userInfo = response.result;
-		  console.log("userId " + userInfo.userId);    
-		  console.log("seatNo " + userInfo.seatNo);    
+        console.log("userId " + userInfo.userId);    
+        console.log("seatNo " + userInfo.seatNo);    
          localStorage.setItem("userId", userInfo.userId);//테스트용 userId저장
          localStorage.setItem("seatNo", userInfo.seatNo);//테스트용 userId저장
          var remainingTime = userInfo.remainingTime;
@@ -138,12 +138,12 @@ window.onload = function() {
    console.log('userId 값:', userIdValue);
    updateRemainingTime(userIdValue);
 
-	var userIdElement = document.getElementById("userId");
-	//var loggedInUserId = localStorage.getItem("userId"); 
+   var userIdElement = document.getElementById("userId");
+   //var loggedInUserId = localStorage.getItem("userId"); 
 
-	var loggedInUserId = userIdValue;
-	userIdElement.textContent = loggedInUserId;
-	
+   var loggedInUserId = userIdValue;
+   userIdElement.textContent = loggedInUserId;
+   
     //updateRemainingTime(userIdValue);
     
     var userIdElement = document.getElementById("userId");
@@ -154,48 +154,48 @@ window.onload = function() {
     
     
     mqttClient.publish(mqtt_topic, JSON.stringify(
-		 {type: "LOGIN",
-		  receiver: "admin"}
-	));
-	
-	//채팅 가져오기
+       {type: "LOGIN",
+        receiver: "admin"}
+   ));
+   
+   //채팅 가져오기
 
-	const data = {
-		receiver: userIdValue,
-	}; //JWT 토큰 구현 이후 userID가져와야함
-	console.log(data);
-	ajaxResponse('POST', '/chat/getListById', data)
-		.then(function(response) {
-		var chatList = response.result;
-		if (chatList != null) {
-			console.log(chatList);
-			$.each(response.result, function(index, chat) {
-				if (chat.sender === 'admin') {
-					$("#chatList").append(
-						`<li class="you">
-					<div class="entete">
-						<p>${chat.time}</p>
-						<h2>${chat.sender}</h2>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">${chat.message}</div>
-				</li>`
-					);
-				} else {
-					$("#chatList").append(
-						`<li class="me">
-								<div class="entete">
-									<p>${chat.time}</p>
-									<h2>${chat.sender}</h2>
-								</div>
-								<div class="triangle"></div>
-								<div class="message">${chat.message}</div>
-							</li>`
-					);
-				}
-			});
-		}
-	});
+   const data = {
+      receiver: userIdValue,
+   }; //JWT 토큰 구현 이후 userID가져와야함
+   console.log(data);
+   ajaxResponse('POST', '/chat/getListById', data)
+      .then(function(response) {
+      var chatList = response.result;
+      if (chatList != null) {
+         console.log(chatList);
+         $.each(response.result, function(index, chat) {
+            if (chat.sender === 'admin') {
+               $("#chatList").append(
+                  `<li class="you">
+               <div class="entete">
+                  <p>${chat.time}</p>
+                  <h2>${chat.sender}</h2>
+                  </div>
+                  <div class="triangle"></div>
+                  <div class="message">${chat.message}</div>
+            </li>`
+               );
+            } else {
+               $("#chatList").append(
+                  `<li class="me">
+                        <div class="entete">
+                           <p>${chat.time}</p>
+                           <h2>${chat.sender}</h2>
+                        </div>
+                        <div class="triangle"></div>
+                        <div class="message">${chat.message}</div>
+                     </li>`
+               );
+            }
+         });
+      }
+   });
 }      
 
 var totalPrice = 0;
@@ -206,7 +206,6 @@ function addCart(element) {
     const itemId = $(element).data('menu-id');
     const itemName = $(thisNavLi).find(".food-name").text();
     const sellingPrice = $(thisNavLi).find(".food-price").text();
-
     // 이미 장바구니에 존재하는지 확인
     const existingCartItem = $('.addCart ul li').filter(function() {
         return $(this).find('.itemId').text() === itemId;
@@ -223,13 +222,13 @@ function addCart(element) {
         var cartItem = '<li>' +
             '<p class="itemId">' + itemId + '</p>' +
             '<p class="food-name">' + itemName + '</p>' +
-            '<p class="food-price" style="display:none;">' + sellingPrice + '</p>' +
+            '<p class="food-price">' + sellingPrice + '</p>' +
             '<div class="food-option">' +
                 '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
                 '<p><em class="optionNum" data-option-num="1">1</em></p>' +
                 '<span class="btn_option plus" onClick="updateOptionNum(this)">+</span>' +
             '</div>' +
-            '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">취소</a>' +
+            '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">X</a>' +
             '</li>';
 
         $('.addCart ul').append(cartItem);
@@ -316,8 +315,8 @@ function showCategory(no) {
 }
 
 function orderBtn(){
-	$('.order-btn-list .recharge-order').hide();
-	if ($('.addCart ul li').length > 0) {
+   $('.order-btn-list .recharge-order').hide();
+   if ($('.addCart ul li').length > 0) {
         updateTotalPrice(); 
         $(".modal-payment").show();
         $(".modal-paymentList").show();
@@ -327,8 +326,8 @@ function orderBtn(){
 }
 
 function rechargeBtn(){
-	$('.order-btn-list .menu-order').hide();
-	$('.modal-food').hide();
+   $('.order-btn-list .menu-order').hide();
+   $('.modal-food').hide();
     $(".modal-payment").show();
     $(".modal-paymentList").show();
     updateTotalPrice();
@@ -338,9 +337,9 @@ function rechargeBtn(){
 var paymentMethodCode;
 
 function payment(no){
-	paymentMethodCode = "PM00" + no;
-	$(".modal-paymentList").hide();
-	$(".modal-order").show();
+   paymentMethodCode = "PM00" + no;
+   $(".modal-paymentList").hide();
+   $(".modal-order").show();
 }
 
 // 결제하기
@@ -356,12 +355,12 @@ function order() {
         const itemTotalPrice = itemPrice * quantity;
 
         cartItems.push({ itemId: itemId, quantity: quantity, price: itemTotalPrice });
-    	
+       
     });
     
   
     const param = { userId: userId, items: cartItems , paymentMethodCode : paymentMethodCodeValue};
-  	
+     
     console.log(param);
   
     $.ajax({
@@ -374,9 +373,9 @@ function order() {
                 alert('주문이 정상적으로 이루어졌습니다.');
                 $('.addCart ul').empty();
                 $(".modal-payment").hide();
-				$(".modal-order").hide();
-				$(".modal-paymentList").hide();
-				$(".modal-order #total-price").empty();
+            $(".modal-order").hide();
+            $(".modal-paymentList").hide();
+            $(".modal-order #total-price").empty();
                 mqttClient.publish(mqtt_topic + "order", JSON.stringify({
                     type: "ORDER",
                     receiver: "admin"
@@ -389,17 +388,17 @@ function order() {
             console.error('주문 에러:', error);
         }
     });
-	 updateTotalPrice();
-	 $('.order-btn-list .menu-order').show();
-	 $('.order-btn-list .recharge-order').show();
+    updateTotalPrice();
+    $('.order-btn-list .menu-order').show();
+    $('.order-btn-list .recharge-order').show();
 }
 
 function cancle(){
-	$(".modal-payment").hide();
-	$(".modal-order").hide(); 
-	$('.order-btn-list .menu-order').show();
-	$('.order-btn-list .recharge-order').show();
-	$(".modal-order #total-price").empty();
+   $(".modal-payment").hide();
+   $(".modal-order").hide(); 
+   $('.order-btn-list .menu-order').show();
+   $('.order-btn-list .recharge-order').show();
+   $(".modal-order #total-price").empty();
 }
 
 // 메뉴리스트 호출
@@ -434,8 +433,8 @@ function displayMenuList(menuList) {
                 '<img alt="상품이미지" src="/image/download/' + menu.IMGID + '"/>' +
                 '</div>' +
                 '<div class="food-info-wrap">' +
-                '<p class="food-name" style="margin-top: 15px; text-align:center; font-size: 22px; font-weight: bold; line-height: 30px;">' + menu.ITEMNAME + '</p>' +
-                '<p class="food-price-wrap" style="margin-top:15px; text-align: center; line-height:22px; font-size: 18px;">' + '<span class="food-price">' + menu.SELLINGPRICE + '</span>' + '원 </p>' +
+                '<p class="food-name">' + menu.ITEMNAME + '</p>' +
+                '<p class="food-price-wrap">' + '<span class="food-price">' + menu.SELLINGPRICE + '</span>' + '원 </p>' +
                 '</div>' +
                 '</li>';
             $('.food-list').append(row);
@@ -489,9 +488,9 @@ function recharge() {
 
     chargeItems.push({ itemId: 'ITEM000001', quantity: quantity, price: itemTotalPrice });
 
-	console.log(chargeItems);
+   console.log(chargeItems);
     const param = { userId: userId, remainingTime: chargeTime * 3600, items: chargeItems , paymentMethodCode : paymentMethodCodeValue};
-  	
+     
     
     console.log(param);
   
@@ -503,15 +502,15 @@ function recharge() {
         success: function(response) {
             if (response.rs == 'true') {
                 alert('주문이 정상적으로 이루어졌습니다.');
-                updateRemainingTime(userId);
                 $(".modal-payment").hide();
-				$(".modal-order").hide();
-				$(".modal-paymentList").hide();
-				$(".modal-order #total-price").empty();
-                mqttClient.publish(mqtt_topic + "charge", JSON.stringify({
+	            $(".modal-order").hide();
+	            $(".modal-paymentList").hide();
+	            $(".modal-order #total-price").empty();
+	                mqttClient.publish(mqtt_topic + "charge", JSON.stringify({
                     type: "CHARGE",
                     receiver: "admin"
                 }));
+                 window.location.reload();
             } else {
                 alert('주문이 정상적으로 이루어지지 않았습니다. ');
             }
@@ -520,9 +519,9 @@ function recharge() {
             console.error('주문 에러:', error);
         }
     });
-	 updateTotalPrice();
-	 $('.order-btn-list .menu-order').show();
-	 $('.order-btn-list .recharge-order').show();
+    updateTotalPrice();
+    $('.order-btn-list .menu-order').show();
+    $('.order-btn-list .recharge-order').show();
 }
 
 // 충전시간 조절

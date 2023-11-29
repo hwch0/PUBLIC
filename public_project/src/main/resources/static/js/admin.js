@@ -163,6 +163,8 @@ $('#closeModalBtn').on('click', () => {
 	 menuModal.removeClass('on');  
 });
 
+
+
 /* 메뉴 등록 (menu_checked : N => Y) */
 $("#addMenuBnt").on("click", () => {
 	// 체크된 tr의 menuId 클래스명을 가진 요소의 텍스트 값을 저장할 배열을 만듭니다.
@@ -177,9 +179,9 @@ $("#addMenuBnt").on("click", () => {
 	
 	
 	if(checkedMenuIds.length == 0) {
-		alert("등록하실 메뉴를 선택해주세요.")
+		swal("등록하실 메뉴를 선택해주세요.")
 	} else if(checkedMenuIds.length > 1) {
-		alert("메뉴는 한 개만 선택해주세요.")
+		swal("메뉴는 한 개만 선택해주세요.")
 	} else {
 		
 	// 체크된 항목의 menuId 값을 확인합니다.
@@ -196,7 +198,7 @@ $("#addMenuBnt").on("click", () => {
 		.then((response) => response.json())
 		.then((data) => {
 			if(data.status) {
-				alert(data.message); 
+				swal(data.message); 
 				console.log(data.menu);
 				displayMenuList([data.menu]);
 
@@ -207,21 +209,32 @@ $("#addMenuBnt").on("click", () => {
 
 /* 메뉴 삭제 (menu_checked : Y => N) */
 function deleteMenu(element) {
-	if(confirm("메뉴를 삭제하시겠습니까?")){
+	
+	swal({
+	  title: "메뉴를 삭제하시겠습니까?",
+	  icon: "warning",
+	  buttons: true,
+	  dangerMode: true,
+	})
+	.then((willDelete) => {
+	  if (willDelete) {
 		let menuId = element.getAttribute('menuId');
 		let imgId = element.getAttribute('imgId');
-    
     	let url = "/admin/deleteMenu/" + menuId +'/'+imgId; // menuId = item테이블의 item_id
-    
 		myFetch(url, {mothod: "GET"}, data => {
 			if(data.status) {
-				alert(data.message);
-				
+			    swal(data.message, {
+			      icon: "success",
+			    });
 				// 메뉴판에서 해당 메뉴 삭제하는 코드 추가
 			    element.closest('.col.mb-5').remove();
 			}
 		})
-	}
+	  } 
+	  /*else {
+	    swal("Your imaginary file is safe!");
+	  }*/
+	});
 }
 
 /* 첨부파일 이벤트 핸들러 */
@@ -237,7 +250,7 @@ $(document).on("change", ".form-control", function(){
         }
         reader.readAsDataURL(selectedFile);
     } else {
-        alert("이미지 파일을 선택하세요");
+        swal("이미지 파일을 선택하세요");
         $(this).val(""); // 파일 입력 내용 지우기
         preView.src = ""; // 미리보기 이미지 제거
     }
@@ -347,7 +360,6 @@ const pieChartUrl = "/admin/chartPieData";
 
 myFetch(pieChartUrl, {method: "GET"}, response => {
 	const pieChartData = response.data;
-	console.log("pieCartData" + pieChartData);
 	createPieChart($("#pieChart1"),pieChartData.year.top6Menu, pieChartData.year.top6Sales); // 연
 	createPieChart($("#pieChart2"),pieChartData.month.top6Menu, pieChartData.month.top6Sales); // 월
 	createPieChart($("#pieChart3"),pieChartData.day.top6Menu, pieChartData.day.top6Sales); // 일
@@ -387,7 +399,20 @@ function createPieChart(chart, labels, data) {
     var donutOptions = {
       maintainAspectRatio: false,
       responsive: true,
+	    plugins: {
+	        datalabels: { // datalables 플러그인 세팅
+	          formatter: function (value, context) {
+	            var idx = context.dataIndex; // 각 데이터 인덱스
+	
+	            // 출력 텍스트
+	            return context.chart.data.labels[idx] + value + '%';
+	          },
+	          align: 'top', // 도넛 차트에서 툴팁이 잘리는 경우 사용
+	        },
+	      },
+      
     };
+    
 
     var pieChartCanvas = chart.get(0).getContext("2d");
     var pieData = donutData;
@@ -402,7 +427,7 @@ function createPieChart(chart, labels, data) {
     new Chart(pieChartCanvas, {
       type: "pie",
       data: pieData,
-      options: pieOptions,
+      options: donutOptions,
     });
 	}
 }
@@ -489,17 +514,26 @@ myFetch(url, {method: "GET"}, response =>{
     var stackedBarChartOptions = {
       responsive: true,
       maintainAspectRatio: false,
+      plugins: false,
+      
       scales: {
         xAxes: [
           {
             stacked: true,
           },
         ],
-        yAxes: [
-          {
-            stacked: true,
-          },
-        ],
+            yAxes: [{
+			    ticks: {
+			        beginAtZero: true,
+			        callback: function(value, index, values) {
+			        if(values[0].toString().length > 9 && value != 0) return (Math.floor(value / 100000000)).toLocaleString("ko-KR") + "억";
+			        else if(values[0].toString().length = 9 && value != 0) return (value / 100000000).toFixed(1) + "억";
+			        else if(values[0].toString().length > 6 && value != 0) return (Math.floor(value / 10000)).toLocaleString("ko-KR") + "만";
+			        else if(values[0].toString().length = 6 && value != 0) return (value / 10000).toFixed(1) + "만";
+			        else return value.toLocaleString("ko-KR");
+			        }
+			    }
+    }],
       },
     };
 

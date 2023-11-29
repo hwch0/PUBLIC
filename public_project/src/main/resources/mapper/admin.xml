@@ -64,24 +64,17 @@ from(
             from order_history h
             join orders o on o.order_id = h.order_id
 			 where h.item_id != 'ITEM000001'
-		    <choose>
-		        <when test="dateType == 'month'">
-		            <![CDATA[
-		            and to_char(o.order_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
-		            ]]>
-		        </when>
-		        <when test="dateType == 'day'">
-		            <![CDATA[
-		            and to_char(o.order_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
-		            ]]>
-		        </when>
-		        <otherwise>
-		            <![CDATA[
-		            and to_char(o.order_date, 'yyyy') = to_char(sysdate, 'yyyy')
-		            ]]>
-		        </otherwise>
-		    </choose>
-
+                <if test="dateType == 'month'">
+                    AND TO_CHAR(o.order_date, 'yyyy-mm') = TO_CHAR(SYSDATE, 'yyyy-mm')
+                </if>
+                <!-- Day condition -->
+                <if test="dateType == 'day'">
+                    AND TRUNC(o.order_date) = TRUNC(SYSDATE)
+                </if>
+                <!-- Otherwise condition -->
+                <if test="!(dateType == 'month' or dateType == 'day')">
+                    AND TO_CHAR(o.order_date, 'yyyy') = TO_CHAR(SYSDATE, 'yyyy')
+                </if>
 <![CDATA[        
         group by item_id) sub) merge
 join item i

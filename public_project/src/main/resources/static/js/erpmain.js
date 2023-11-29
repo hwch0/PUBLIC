@@ -1,19 +1,19 @@
-//날자 관련 코드
+//날짜 관련 코드
 $(document).ready(() => {
 
-	$.fn.datepicker.dates['kr'] = {
-		days: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"],
-		daysShort: ["일", "월", "화", "수", "목", "금", "토", "일"],
-		daysMin: ["일", "월", "화", "수", "목", "금", "토", "일"],
-		months: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
-		monthsShort: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
-	};
+    $.fn.datepicker.dates['kr'] = {
+        days: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"],
+        daysShort: ["일", "월", "화", "수", "목", "금", "토", "일"],
+        daysMin: ["일", "월", "화", "수", "목", "금", "토", "일"],
+        months: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+        monthsShort: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+    };
 
-	const startDate = $('#startDate');
+    const startDate = $('#startDate');
     const endDate = $('#endDate');
     const startDate2 = $('#startDate2')
     const endDate2 = $('#endDate2')
-	        
+
     const datepickerReset = () => {
         $('.input-group.date').datepicker({
             calendarWeeks: false,
@@ -26,31 +26,54 @@ $(document).ready(() => {
 
     datepickerReset();
     
-	$('[id^=startDate], [id^=endDate]').on('change', function() {
-	    const id = this.id;
-	    const startDateVal = $('#' + id).val();
-	    const endDateID = id.includes('startDate') ? id.replace('startDate', 'endDate') : id.replace('endDate', 'startDate');
-	    const endDateVal = $('#' + endDateID).val();
-	    
-	    const selectedStartDate = new Date(startDateVal);
-	    const selectedEndDate = new Date(endDateVal);
-	
-	    const diffInMilliseconds = Math.abs(selectedEndDate - selectedStartDate);
-	    const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24));
-	
-	    if (diffInDays > 90) {
-	        alert("최대 3개월을 넘어서 검색을 할 수 없습니다.");
-	
-	        $('#' + id).val('');
-	        $('#' + endDateID).val('');
-	
-	        $('.input-group.date').datepicker('destroy');
-	
-	        datepickerReset();
-	    }
-	 });
+    const today = new Date();
+    const oneWeekAgo = new Date(today);
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    startDate.val(`${oneWeekAgo.getFullYear()}/${oneWeekAgo.getMonth() + 1}/${oneWeekAgo.getDate()}`);
+    endDate.val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
+
+    startDate2.val(`${oneWeekAgo.getFullYear()}/${oneWeekAgo.getMonth() + 1}/${oneWeekAgo.getDate()}`);
+    endDate2.val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
+
+    $('[id^=startDate], [id^=endDate]').on('change', function () {
+        const id = this.id;
+        const startDateVal = $('#' + id).val();
+        const endDateID = id.includes('startDate') ? id.replace('startDate', 'endDate') : id.replace('endDate', 'startDate');
+        const endDateVal = $('#' + endDateID).val();
+
+        const selectedStartDate = new Date(startDateVal);
+        const selectedEndDate = new Date(endDateVal);
+
+        const diffInMilliseconds = Math.abs(selectedEndDate - selectedStartDate);
+        const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24));
+
+        if (diffInDays > 90) {
+            alert("최대 3개월을 넘어서 검색을 할 수 없습니다.");
+
+            $('#' + id).val('');
+            $('#' + endDateID).val('');
+
+            $('.input-group.date').datepicker('destroy');
+
+            datepickerReset();
+        }
     });
+});
+
+// 날짜 입력 초기화 함수
+function resetDateInputs() {
+    const today = new Date();
+    const oneWeekAgo = new Date(today);
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    $('#startDate').val(`${oneWeekAgo.getFullYear()}/${oneWeekAgo.getMonth() + 1}/${oneWeekAgo.getDate()}`);
+    $('#endDate').val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
     
+    $('#startDate2').val(`${oneWeekAgo.getFullYear()}/${oneWeekAgo.getMonth() + 1}/${oneWeekAgo.getDate()}`);
+    $('#endDate2').val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
+}
+
 //재고관리 품목 & 입·출고 
 function changeItemPage() {
 		$('#item').css("display", "block");
@@ -81,10 +104,7 @@ function changeOrderPage() {
 //버튼 클릭 시 초기화
 function resetInputs(){
 	//등록일 입력 초기화
-	$('#startDate').val('');
-	$('#endDate').val('');
-	$('#startDate2').val('');
-	$('#endDate2').val('');
+	resetDateInputs();
 	
 	//품목명 입력 초기화
 	$('.itemName').val('');

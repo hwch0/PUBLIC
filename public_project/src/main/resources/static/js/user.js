@@ -344,6 +344,7 @@ function removeCart(element) {
 		$('.addCart').addClass('empty'); 
 		$('.menu-total-price').css('display','none');
 	}
+	updateTotalPrice();
 	menuScroll();
 }    
     
@@ -455,9 +456,11 @@ function order() {
             console.error('주문 에러:', error);
         }
     });
+    
     updateTotalPrice();
-    $('.order-btn-list .menu-order').show();
-    $('.order-btn-list .recharge-order').show();
+    $(".modal-payment").hide();
+    /*$('.order-btn-list .menu-order').show();
+    $('.order-btn-list .recharge-order').show();*/
     removeCartAll();
 }
 
@@ -598,8 +601,9 @@ function recharge() {
     totalChargePrice = itemTotalPrice;
     updateTotalPrice();
     updateTotalChargePrice();
+    $(".modal-payment").hide();/*
     $('.order-btn-list .menu-order').show();
-    $('.order-btn-list .recharge-order').show();
+    $('.order-btn-list .recharge-order').show();*/
     removeChargeAll();
     
 }

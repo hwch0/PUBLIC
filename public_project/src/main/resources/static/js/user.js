@@ -48,6 +48,9 @@ function navBtn(element) {
             $("#chattingBtn").removeClass('on');
             $("#orderBtn22").removeClass('on');
             $('.addCart ul li').remove();
+            $('.addCart').addClass('empty');
+            $('.menu-total-price').css('display', 'none');
+            $('.menu-total-price em').text('0');
         } else if (thisNavLi.attr('id') === 'chattingBtn') {
 			$('.cont-modal-wrap').hide();
             $(".cont-bot-wrap, .chat-wrap").css('display', 'block');
@@ -57,6 +60,9 @@ function navBtn(element) {
             $('#chattingBtn').toggleClass('on');
             $("#orderBtn22").removeClass('on');
             $('.addCart ul li').remove();
+            $('.addCart').addClass('empty');
+            $('.menu-total-price em').text('0');
+             $('.menu-total-price').css('display', 'none');
             removeTimeAll();
         }
 
@@ -193,7 +199,7 @@ window.onload = function() {
                $("#chatList").append(
                   `<li class="you">
                <div class="entete">
-                  <h2>${chat.sender}</h2>
+                  <h2>카운터</h2>
                   </div>
                   <div class="message-wrap">
                     <div class="triangle"></div>

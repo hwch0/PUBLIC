@@ -3,9 +3,9 @@ function formatTime(seconds) {
 	var minutes = Math.floor((seconds % 3600) / 60);
 	var remainingSeconds = seconds % 60;
 	if (hours === 0) {
-		return minutes + " 분 " + remainingSeconds + " 초";
+		return minutes + " : " + remainingSeconds ;
 	} else {
-		return hours + " 시간 " + minutes + " 분 " + remainingSeconds + " 초";
+		return hours + " : " + minutes + " : " + remainingSeconds ;
 	}
 }
 function getNow() {

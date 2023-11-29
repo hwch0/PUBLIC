@@ -373,6 +373,17 @@ function downloadFile(url) {
 
 //입출고 조회조건
 function statusSearch() {
+	
+	const startDateValue = $('#startDate2').val();
+	const endDateValue = $('#endDate2').val();
+	const codeValue = $('.statusCode').val();
+	const nameValue = $('.statusName').val();
+	
+	if(!startDateValue || !endDateValue || !codeValue || !selectedStatus || !nameValue){
+		alert("조회 조건을 입력 해주세요.");
+		return;
+	}
+	
     LoadingWithMask('/images/loading.gif');
     
     const selectedStatus = $('input[name="status"]:checked').val();
@@ -429,6 +440,18 @@ function statusSearch() {
 
 //품목관리 조회조건
 function searchData() {
+	
+	const startDateValue = $('#startDate').val();
+	const endDateValue = $('#endDate').val();
+	const nameValue = $('.itemName').val();
+	const selectValue = $('.itemSelect').val();
+	const stockValue = $('.itemSituation').val();
+	
+	if(!startDateValue || !endDateValue || !nameValue || !selectValue || !stockValue){
+		swal("Error","조회 조건을 입력 해주세요.",'warning');
+		return;
+	}
+	
     LoadingWithMask('/images/loading.gif');
     
 	const searchParams = {

@@ -16,7 +16,8 @@
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
 <script type="text/javascript" src="../../plugins/toastr/toastr.min.js"></script>
-<!-- sweetAlert -->
+
+<!-- sweetalert -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <!-- ********** 관리자 메뉴판 관리 ********** -->

@@ -134,6 +134,7 @@
 				</tbody>
             </table>
         </div>
+
     </div>
     
     <div id="stockModel" class="modal">

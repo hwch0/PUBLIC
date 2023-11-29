@@ -1,3 +1,8 @@
+//페이징
+function jsPageNo(pageNo){
+	document.querySelector("#pageForm > #pageNo").value = pageNo;
+	document.querySelector("#pageForm").submit();
+}
 //날짜 관련 코드
 $(document).ready(() => {
 

@@ -35,10 +35,11 @@ public class MqttService {
 				System.out.println("MQTTSERVICE=>" + chat);
 				System.out.println("CHATINSERT!!!!");
 				chatService.insert(chat);
-			}else if(command.equals("charge") || command.equals("login") || command.equals("logout")) {
-			 	cacheManager.getCache("loggedInUserList").evict("'allUsers'");
-			 	System.out.println("loggedInUserList 캐시 초기화!!!");
 			}
+//				else if(command.equals("charge") || command.equals("login") || command.equals("logout")) {
+//			 	cacheManager.getCache("loggedInUserList").evict("'allUsers'");
+//			 	System.out.println("loggedInUserList 캐시 초기화!!!");
+//			}
 		}
 	}
 }

@@ -126,3 +126,10 @@ $(document).ready(function() {
     $(".tab__content:eq(" + index + ")").addClass("active");
   });
 });
+$('.close').on('click', function(){
+	infoModal.css('display', 'none');
+	$(".tab__item:first").addClass("active");
+	$(".tab__item:last").removeClass("active");
+  	$(".tab__content:first").addClass("active");
+  	$('.tab__content:last').removeClass('active');
+});

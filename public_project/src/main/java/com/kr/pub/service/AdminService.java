@@ -175,10 +175,10 @@ public class AdminService {
 	}
 	
 	
-	@Transactional(readOnly = true)
-	@Cacheable(value = "loggedInUserList", key="'allUsers'")
+	//@Transactional(readOnly = true)
+	//@Cacheable(value = "loggedInUserList", key="'allUsers'")
 	public List<UserDTO> getLoggedInUserList() {
-		System.out.println("캐싱완료!!!");
+		//System.out.println("캐싱완료!!!");
 		return adminDAO.getLoggedInUserList();
 	}
 

@@ -16,6 +16,8 @@
 <script src="/plugins/jquery/jquery.min.js"></script>
 <link rel="stylesheet" href="/css/clientChat.css">
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <body>
 <%-- <input type="hidden" id="userInfo" value="${map.rs}"> --%>
    <div class="body-wrap">
@@ -56,24 +58,11 @@
          <!-- 장바구니 영역 -->
          <jsp:include page="userCart.jsp"></jsp:include>
          <!-- 시간충전 영역 -->
-         <div class="bot wrap_recharge">
-			<div class="div-recharge">
-				<p>충전 시간</p>
-                    
-               <div class="charge_time">
-               		<span class="btn_charge minus"><a href="javascript:void(0);">-</a></span>
-               		<p>
-                    	<em id="chargeTime">1</em>시간
-               		</p>
-                   <span class="btn_charge plus"><a href="javascript:void(0);">+</a></span>
-               </div>
-               <div class="order-recharge"><a href="javascript:void(0);" onclick="rechargeBtn();">충전하기</a></div>
-			</div>
-      </div>
-      <div class="cont-modal-wrap" style="display:none;">
-          <jsp:include page="userFood.jsp"></jsp:include>
-      </div>
-      <jsp:include page="userPayment.jsp"></jsp:include>
+         <jsp:include page="userCharge.jsp"></jsp:include>
+	     <div class="cont-modal-wrap" style="display:none;">
+	         <jsp:include page="userFood.jsp"></jsp:include>
+	     </div>
+      	 <jsp:include page="userPayment.jsp"></jsp:include>
    </div>
 </body>
 <script type="text/javascript" src="/mqtt/mqttClient.js"></script>

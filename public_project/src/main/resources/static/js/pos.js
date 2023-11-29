@@ -77,7 +77,7 @@ $(document).ready(function() {
 						if (!seat.hasClass('on')) {
 							seat.addClass("on");
 							seat.find("p").first().text(user.userId);
-							updateCountdown(seat.find("p").last(), remainingTime, user.seatNo);
+							updateCountdown(seat.find("p").last(), remainingTime, user.seatNo, user.loginTime);
 						}
 					}
 				});

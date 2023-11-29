@@ -134,8 +134,11 @@ public class AdminService {
 			};
 			dataList.put("top6Menu", top6Menu);
 			dataList.put("top6Sales", top6Sales);
+			
 			result.put(type, dataList);
 		}
+		
+		System.out.println("result >>> " + result);
 		return result; // year -> ITEM_NAME, TOTAL_COUNT / month -> ITEM_NAME, TOTAL_COUNT / day -> ITEM_NAME, TOTAL_COUNT
 	}
 	

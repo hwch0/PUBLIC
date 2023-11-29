@@ -13,8 +13,6 @@ import com.kr.pub.dao.PaymentDAO;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.ErpDTO;
 import com.kr.pub.dto.ItemDTO;
-import com.kr.pub.dto.UserDTO;
-
 
 @Service
 public class ErpService {
@@ -103,6 +101,7 @@ public class ErpService {
 		params.put("paymentId", search.getPaymentId());
 		params.put("orderId", search.getOrderId());
 		params.put("unme", search.getUnme());
+		params.put("code", search.getCode());
 		
 		List<Map<String, Object>> salesList = paymentDAO.salesSearch(params);
 		System.out.println("서비스 확인1: " + params);
@@ -114,8 +113,9 @@ public class ErpService {
 	//매출 내역
 	public List<Map<String, Object>> salesList() throws Exception{
 		
-		List<Map<String, Object>> paymentList = paymentDAO.salesList();
 		
+		List<Map<String, Object>> paymentList = paymentDAO.salesList();
+
 		indexList(paymentList);
 		
 		return paymentList;
@@ -169,12 +169,12 @@ public class ErpService {
 	
 	//재고 목록
 	public List<Map<String, Object>> itemList() throws Exception {	
-
+	
 		List<Map<String, Object>> itemList = itemDAO.itemList();
-
+		
         indexList(itemList);
 
-            return itemList;
+        return itemList;
     }
 	
 	//index 항목 추가하기

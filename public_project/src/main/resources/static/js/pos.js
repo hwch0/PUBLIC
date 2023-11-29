@@ -108,7 +108,7 @@ $(document).ready(function() {
 						`<li class="me">
 									<div class="entete">
 										<p>${getNow()}</p>
-										<h2>좌석 ${chat.receiver}님에게 보냄</h2>
+										<h2>${chat.receiver}님에게 보냄</h2>
 									</div>
 									<div class="triangle"></div>
 									<div class="message">${chat.message}</div>

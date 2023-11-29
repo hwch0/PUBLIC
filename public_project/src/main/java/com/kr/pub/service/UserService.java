@@ -137,32 +137,26 @@ public class UserService {
 		}
 	}
 	
-	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
+	//@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public Map<String, Object> login2(@RequestBody UserDTO user,HttpServletRequest request,HttpServletResponse response,Authentication authentication) throws Exception {
 		Map<String, Object> map = new HashMap<>();
         UserDTO rs = login(user, request, authentication);
         System.out.println(rs);
         	
-        	if(userDAO.loginCheck(rs) == null) {
-        		 if (rs.getRemainingTime() > 0) {
-        	            map.put("rs", rs);
-        	            map.put("message", "로그인 성공했습니다.");
-        	            	//좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
-        	            	loginSeat(rs);//random번 사용중으로 변경
-        	            	JSONObject jsonObject = new JSONObject(Map.of(
-        	            		    "type", "LOGIN",
-        	            		    "receiver", "admin"
-        	            		));
-        	            mqttService.publishMessage(jsonObject.toString() ,"/public/login");//로그인한 알림 관리자에게
-        	        }  else if(rs.getRemainingTime() == 0) {
-        		    	map.put("message", "잔여시간이 없습니다.");
-        	            map.put("rs", 0);
-        		    } else {
-        	            map.put("message", "로그인 실패했습니다.");
-        	        }
-        	} else {
-        		map.put("message", "이미 로그인된 좌석입니다.");
-        	}
+		if (rs.getRemainingTime() > 0) {
+			map.put("rs", rs);
+			map.put("message", "로그인 성공했습니다.");
+			// 좌석정보 가져오는 루틴 필요(밑의 함수 파라미터에 넣어주기)
+			loginSeat(rs);// random번 사용중으로 변경
+			JSONObject jsonObject = new JSONObject(Map.of("type", "LOGIN", "receiver", "admin"));
+			mqttService.publishMessage(jsonObject.toString(), "/public/login");// 로그인한 알림 관리자에게
+		} else if (rs.getRemainingTime() == 0) {
+			map.put("message", "잔여시간이 없습니다.");
+			map.put("rs", 0);
+		} else {
+			map.put("message", "로그인 실패했습니다.");
+		}
+
         return map;
 	}
     
@@ -191,7 +185,7 @@ public class UserService {
 	}
 
 	//@Transactional
-	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
+	//@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public void logout(UserDTO userInfo) throws Exception {
 		UserDTO logoutUser = getUser(userInfo);
 	        if (logoutUser != null) {
@@ -245,7 +239,7 @@ public class UserService {
 	    }
 	}
 
-	@CacheEvict(value = "loggedInUserList", key="'allUsers'")
+	//@CacheEvict(value = "loggedInUserList", key="'allUsers'")
 	public void chargeTime(OrderDTO order) {
 		int remainingTime = userDAO.getRemainingTime(order.getUserId()); 
 		System.out.println(remainingTime);

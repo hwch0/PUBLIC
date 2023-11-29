@@ -6,8 +6,8 @@
 	<ul id="chatList">
 	</ul>
 	<footer>
-		<textarea placeholder="Type your message"  id="chatInputBox"></textarea>
-		<select id="seatSelector">
+		<textarea placeholder="메세지를 입력해주세요."  id="chatInputBox"></textarea>
+		<select id="seatSelector" style="margin-top:20px;width: 100px;height: 40px;text-indent: 10px;">
 		  <option selected>좌석번호</option>
 		</select>
 		<a href="javascript:void(0);" id="send_chat_button">Send</a>

@@ -7,7 +7,7 @@
          <ul id="chatList">
          </ul>
          <footer>
-            <textarea placeholder="Type your message" id="chatInputBox"></textarea>
+            <textarea placeholder="메세지를 입력해주세요." id="chatInputBox"></textarea>
             <a href="javascript:void(0);" id="send_chat_button">Send</a>
          </footer>
       </div>

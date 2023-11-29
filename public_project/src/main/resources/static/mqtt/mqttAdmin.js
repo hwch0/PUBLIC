@@ -17,29 +17,42 @@ function getNow() {
 }
 let timers = {}; // 타이머 ID를 저장할 객체
 
-function updateCountdown(time, remainingTime, seatNo) {
-	time.text(formatTime(remainingTime));
+function updateCountdown(time, remainingTime, seatNo,loginTime) {
 	if (remainingTime > 0) {
+		time.text(formatTime(remainingTime));
 		remainingTime--;
-
 		const timerID = setInterval(function() {
 			time.text(formatTime(remainingTime));
 			remainingTime--;
-
-			if (remainingTime <= 0) {
-				clearInterval(timerID); // 타이머 중지
-				time.closest("li").removeClass("on");
-				time.closest("li").find("p").first().text("");
-				time.closest("li").find("p").last().text("");
-				$(`option[value=${seatNo}]`).remove();
-				delete timers[seatNo]; // 타이머 ID를 객체에서 제거
-			}
 		}, 1000);
 
 		// 타이머 ID를 저장
 		timers[seatNo] = timerID;
 		console.log(timers);
+	}else {
+				clearInterval(timers[seatNo]); // 타이머 중지
+				time.closest("li").removeClass("on");
+				time.closest("li").find("p").first().text("");
+				time.closest("li").find("p").last().text("");
+				$(`option[value=${seatNo}]`).remove();
+				delete timers[seatNo]; // 타이머 ID를 객체에서 제거
 	}
+}
+
+function clearSeat(){
+	$.each($("[data-seatNo].on"), function(index, seat) {
+		var seat = $(seat);
+		var seatNo = seat.find("em").text();
+		console.log("seatNo+>" + seatNo);
+		if (seat.hasClass("on")) {
+			seat.removeClass("on");
+			seat.find("p").first().text("");
+			clearInterval(timers[seatNo]);
+			delete timers[seatNo];
+			seat.find("p").last().text("");
+			$(`option[value=${seatNo}]`).remove();
+		}
+	});
 }
 
 function ajaxResponse(method, url, params) {
@@ -158,11 +171,13 @@ const sendMessage = () => {
 		$("#chatList").append(
 			`<li class="me">
                       <div class="entete">
-                          <p>${getNow()}</p>
                           <h2>좌석 ${seatNo}님에게 보냄</h2>
                       </div>
-                      <div class="triangle"></div>
-                      <div class="message">${param.message}</div>
+                      <div class="message-wrap">
+	                      <div class="triangle"></div>
+	                      <div class="message">${param.message}</div>
+	                       <p style="margin-top:3px;font-size: 14px;font-weight: 200;color: #999;padding-right: 5px;">${getNow()}</p>
+	                  </div>
                   </li>`
 		);
 		$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
@@ -189,11 +204,13 @@ const recvMessage = (recv) => {
 	$("#chatList").append(
 		`<li class="you">
           <div class="entete">
-              <p>${getNow()}</p>
               <h2>${recv.seatNo}번 좌석(${recv.sender})</h2>
               </div>
-              <div class="triangle"></div>
-              <div class="message">${recv.message}</div>
+              <div class="message-wrap">
+	              <div class="triangle"></div>
+	              <div class="message">${recv.message}</div>
+	              <p>${getNow()}</p>
+	          </div>
       </li>`
 	);
 	$("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게
@@ -278,7 +295,8 @@ const recvLogin = () => {
 					updateCountdown(
 						seat.find("p").last(),
 						user.remainingTime,
-						user.seatNo
+						user.seatNo,
+						user.loginTime
 					);
 				}
 			});
@@ -291,29 +309,24 @@ const recvLogin = () => {
 }; //사용자 로그인시 관리자 좌석 동적으로 변경
 
 const recvLogout = () => {
-	$.each($("[data-seatNo].on"), function(index, seat) {
-		var seat = $(seat);
-		var seatNo = seat.find("em").text();
-		console.log("seatNo+>" + seatNo);
-		if (seat.hasClass("on")) {
-			seat.removeClass("on");
-			seat.find("p").first().text("");
-			clearInterval(timers[seatNo]);
-			delete timers[seatNo];
-			seat.find("p").last().text("");
-			$(`option[value=${seatNo}]`).remove();
-		}
-	});
+	clearSeat();
 	ajaxResponse("GET", "/admin/loggedInUserList")
 		.then(function(response) {
 			$.each(response.result, function(index, user) {
 				var seat = $(`li[data-seatNo=${user.seatNo}]`);
+				var remainingTime = user.remainingTime;
+				if(remainingTime > 0){
+				  var now = new Date().getTime();
+	              var loginTime = new Date(user.loginTime).getTime();
+	              var durationTime = now - loginTime;
+	              remainingTime = remainingTime - Math.floor(durationTime / 1000);
+				}
 				if (!seat.hasClass("on")) {
 					seat.addClass("on");
 					seat.find("p").first().text(user.userId);
 					updateCountdown(
 						seat.find("p").last(),
-						user.remainingTime,
+						remainingTime,
 						user.seatNo
 					);
 				}

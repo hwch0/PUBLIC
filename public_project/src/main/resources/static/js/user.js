@@ -1,3 +1,4 @@
+
 // 로그아웃
 $('#logoutBtn').on('click', function(){
    mqttClient.publish(mqtt_topic, JSON.stringify(
@@ -125,7 +126,7 @@ function updateRemainingTime(userIdValue) {
               remainingTime = remainingTime - Math.floor(durationTime / 1000);
               updateCountdown(remainingTime);
           } else {
-             alert("잔여시간이 없습니다.")
+             swal("Error","잔여시간이 없습니다.",'success');
                  location.href = "/user";
           } 
       })
@@ -265,7 +266,7 @@ function addCart(element) {
 
 function updateTotalPrice() {
     let totalPrice = 0;
-
+	
     if ($('.orderMenu').is(':visible')) {
         $('.addCart ul li').each(function () {
             const itemPrice = $(this).find('.food-price.off').text();
@@ -280,6 +281,7 @@ function updateTotalPrice() {
     $('.menu-total-price em').text(parseInt(totalPrice).toLocaleString()); // Total 가격 업데이트
     updateOrderButtonState();
 }
+
 
 
 // 주문하기 버튼 활성화
@@ -382,7 +384,7 @@ function orderBtn(){
         $(".modal-payment").show();
         $(".modal-paymentList").show();
     } else {
-        alert("장바구니가 비어있습니다.");
+		swal("Error","장바구니가 비어있습니다.",'warning');
     }
 }
 
@@ -435,7 +437,7 @@ function order() {
         data: JSON.stringify(param),
         success: function(response) {
             if (response.rs == 'true') {
-                alert('주문이 정상적으로 이루어졌습니다.');
+                swal("Success!","주문이 정상적으로 처리되었습니다.",'success');
                 $('.addCart ul').empty();
                 $(".modal-payment").hide();
             $(".modal-order").hide();
@@ -446,7 +448,7 @@ function order() {
                     receiver: "admin"
                 }));
             } else {
-                alert('주문이 정상적으로 이루어지지 않았습니다. ');
+                swal("Error","주문이 정삭적으로 처리되지 않았습니다.",'warning');
             }
         },
         error: function(error) {
@@ -456,6 +458,7 @@ function order() {
     updateTotalPrice();
     $('.order-btn-list .menu-order').show();
     $('.order-btn-list .recharge-order').show();
+    removeCartAll();
 }
 
 function cancle(){
@@ -566,7 +569,6 @@ function recharge() {
         data: JSON.stringify(param),
         success: function(response) {
             if (response.rs == 'true') {
-                alert('주문이 정상적으로 이루어졌습니다.');
                 $(".modal-payment").hide();
 	            $(".modal-order").hide();
 	            $(".modal-paymentList").hide();
@@ -575,25 +577,39 @@ function recharge() {
                     type: "CHARGE",
                     receiver: "admin"
                 }));
-                 window.location.reload();
+                swal({
+				  title: "Success!",
+				  text: "주문이 정상적으로 처리되었습니다.",
+				  icon: "success",
+				}).then((value) => {
+				  if (value) {
+				    window.location.reload();
+				  }
+				});
+                 
             } else {
-                alert('주문이 정상적으로 이루어지지 않았습니다. ');
+                swal("Error","주문이 정상적으로 처리되었습니다.",'warring');
             }
         },
         error: function(error) {
             console.error('주문 에러:', error);
         }
     });
+    totalChargePrice = itemTotalPrice;
     updateTotalPrice();
+    updateTotalChargePrice();
     $('.order-btn-list .menu-order').show();
     $('.order-btn-list .recharge-order').show();
+    removeChargeAll();
+    
 }
 
 // 충전시간 조절
 let chargeTime = 1;
-let totalChargePrice;
+let totalChargePrice = 1000;
 const chargePrice = 1000;
 
+updateTotalChargePrice();
 
 $('.minus').on('click', function(e) {
     if (chargeTime > 1) {
@@ -612,6 +628,8 @@ $('.plus').on('click', function(e) {
 function updateChargeTime() {
     $('.charge_time em').text(chargeTime);
 }
+
+
 
 function updateTotalChargePrice() {
     totalChargePrice = chargeTime * chargePrice;

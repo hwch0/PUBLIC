@@ -32,14 +32,5 @@ public class ReferenceController {
 		return "/reference/pos";
 	}
 	
-	/*
-	 * @GetMapping("/makeDummyData") public void makeDummyData() {
-	 * System.out.println("/makeDummyData"); List<UserDTO> userList =
-	 * DummyData.insertUsers();
-	 * 
-	 * for(UserDTO user : userList) { userDAO.insertMember2(user); }
-	 * 
-	 * System.out.println("userList.size() --> " + userList.size()); }
-	 */
 
 }

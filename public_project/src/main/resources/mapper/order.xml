@@ -62,15 +62,6 @@
 	    INSERT INTO order_history (item_id, order_id, quantity, price)
 	    VALUES (#{itemId}, #{orderId}, #{quantity}, #{price})
 	</insert>
-	<insert id="insertOrder2" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
-	    insert into orders (user_id, code) 
-	    values (#{userId}, 'CT004')
-	</insert>
-	
-	<insert id="insertOrderHistory2"  parameterType="com.kr.pub.dto.OrderHistoryDTO">
-	    INSERT INTO order_history (item_id, order_id, quantity, price)
-	    VALUES (#{itemId}, #{orderId}, #{quantity}, #{price})
-	</insert>
 	
 	<insert id="insertChargeOrderHistory"  parameterType="com.kr.pub.dto.OrderHistoryDTO">
 	    INSERT INTO order_history (item_id, order_id, quantity, price)

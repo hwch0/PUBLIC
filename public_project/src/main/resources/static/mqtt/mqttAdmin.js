@@ -171,11 +171,13 @@ const sendMessage = () => {
 		$("#chatList").append(
 			`<li class="me">
                       <div class="entete">
-                          <p>${getNow()}</p>
                           <h2>좌석 ${seatNo}님에게 보냄</h2>
                       </div>
-                      <div class="triangle"></div>
-                      <div class="message">${param.message}</div>
+                      <div class="message-wrap">
+	                      <div class="triangle"></div>
+	                      <div class="message">${param.message}</div>
+	                       <p style="margin-top:3px;font-size: 14px;font-weight: 200;color: #999;padding-right: 5px;">${getNow()}</p>
+	                  </div>
                   </li>`
 		);
 		$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
@@ -202,11 +204,13 @@ const recvMessage = (recv) => {
 	$("#chatList").append(
 		`<li class="you">
           <div class="entete">
-              <p>${getNow()}</p>
               <h2>${recv.seatNo}번 좌석(${recv.sender})</h2>
               </div>
-              <div class="triangle"></div>
-              <div class="message">${recv.message}</div>
+              <div class="message-wrap">
+	              <div class="triangle"></div>
+	              <div class="message">${recv.message}</div>
+	              <p>${getNow()}</p>
+	          </div>
       </li>`
 	);
 	$("#chatList").scrollTop($("#chatList")[0].scrollHeight); //채팅이오면 스크롤 내려오게

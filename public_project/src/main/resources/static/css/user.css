@@ -369,12 +369,11 @@ label {
 
 .cart-btn-grp {
 	position: absolute;
-	bottom: 50px;
-	display: flex;
-	width: 100%;
+	bottom: 30px;
+	left: 50%;
+	margin:0 0 0 -160px;
 	height: 50px;
-   width: 100%;
-   height: 30px;
+   	width: 330px;
 }
 #orderBtn {
    width: 100px;
@@ -382,16 +381,35 @@ label {
 }
 
 .cart-btn-grp a {
-	margin: 0 10%;
-	width: 30%;
+	float: left;
+	width: 250px;
 	height: 50px;
 	line-height: 50px;
 	text-align: center;
-	font-size: 14px;
+	text-indent: -30px;
+	font-size: 18px;
 	color: #fff;
 	background-color: #440977;
+	background-image: url('/images/order.png');
+	background-size: 30px 30px;
+	background-position: 160px center;
+	background-repeat: no-repeat;
 }
-
+.cart-btn-grp a:first-child:hover {
+	color: #fff;
+	background-color: #999;
+}
+.cart-btn-grp a:last-child {
+	margin-left: 30px;
+	width: 50px;
+	text-indent: -999em;
+	overflow: hidden;
+	box-sizing: border-box;
+	border: 2px solid #888;
+	background-color: #fff;
+	background-image: url('/images/reset.png');
+	background-position: center;
+}
 .cont-modal-wrap {
    position: fixed;
    top:5%;
@@ -484,6 +502,10 @@ label {
    bottom: 0;
    text-align: left;
    background-color: rgba(0,0,0,0.5);
+   background-image: url('/images/cart.png');
+   background-size: 120px 120px;
+   background-position: center;
+   background-repeat: no-repeat;
 }
 
 .modal-food .cont-food .food li:hover a {
@@ -531,16 +553,75 @@ label {
    width: 100%;
    height: 100%;
 }
+
 .addCart {
     position: absolute;
     padding: 10px;
-    height: 80%;
+    height: 60%;
     margin: 10px 0 0 0;
     overflow-y: scroll;
     width: 100%;
     box-sizing: border-box;
 }
+.scroll {
+	position: absolute;
+	z-index: 3;
+	bottom:	155px;
+	left: 50%;
+	display: none;
+	margin-left: -15px;
+	width: 50px;
+	height: 50px;
+	background-size: 50px 50px;
+	background-image: url('/images/scroll.gif');
+}
+.menu-total-price {
+	display: none;
+	position: absolute;
+	bottom: 100px;
+	left: 50%;
+	padding-top: 12px;
+    border-top: 2px solid #ebebeb;
+    margin:-24px 0 0 -175px;
+    text-align: right;
+    /* margin-right: 50px; */
+    font-size: 20px;
+    /* padding: 0 50px; */
+    /* box-sizing: border-box; */
+    width: 350px;
+    color: #999;
+}
 
+.menu-total-price em {
+	font-style: normal;
+	font-size: 24px;
+	color: #440977;
+}
+.addCart.empty .empty_cart {
+	position: absolute;
+	top:50%;
+	left: 50%;
+	margin:-150px 0 0 -150px;
+	display: block;
+	width: 300px;
+	height: 300px;
+	background-image: url('/images/cart_gif.gif');
+	background-size: 50%;
+	background-position: 60px 60px;
+	background-repeat: no-repeat;
+}
+.addCart.empty .empty_cart::after {
+	content: "장바구니가 비어있습니다.";
+	position: absolute;
+	bottom: 25px;
+	left: 0;
+	width: 300px;
+	height: 50px;
+	font-size: 24px;
+	font-weight: 900;
+	color: #666;
+	text-align: center;
+}
 .addCart::-webkit-scrollbar {
   display: none;
 }
@@ -571,7 +652,7 @@ label {
     bottom: 25px;
     right: 10px;
     font-size: 20px;
-    color: blue;
+    color: #440977;
 }
 .addCart ul li .food-option {
 	position: relative;
@@ -613,6 +694,15 @@ label {
 	position: absolute;
 	top: 25px;
 	right: 10px;
+	width: 20px;
+	height: 20px;
+	text-indent: -999em;
+	overflow: hidden;
+	color: #000;
+	background-image: url('/images/cancle.png');
+	background-size: 20px 20px;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 .addCart ul .itemId { display: none; }
 
@@ -632,17 +722,276 @@ label {
 	left: 50%;
 	margin: -250px 0 0 -200px;
 	width: 400px;
-	height: 500px;
+	height: 400px;
 	background-color: #fff;
 }
+.modal-payment .modal-paymentList span {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	display: block;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	background: url('/images/cancle.png') no-repeat center;
+	background-size: 30px;
+}
+.modal-payment .modal-paymentList h3 {
+	padding: 30px 0;
+	text-align: center;
+	font-size: 28px;
+	font-weight: 900;
+	color: #333;
+}
 
-.modal-payment .modal-order{
+.modal-payment .modal-paymentList ul {
+	margin-top: 15px;
+}
+.modal-payment .modal-paymentList li {
+	margin: 0 auto;
+	width: 300px;
+	height: 60px;
+	background-color: #ebebeb;
+	background-image: url('/images/card.png');
+	background-size: 30px 30px;
+	background-position: 80px center;
+	background-repeat: no-repeat;
+}
+.modal-payment .modal-paymentList li:nth-child(2) {
+	background-image: url('/images/cash.png');
+}
+
+.modal-payment .modal-paymentList li:nth-child(3) {
+	background-image: url('/images/pay.png');
+}
+
+.modal-payment .modal-paymentList li + li {
+	margin-top: 30px;
+}
+
+.modal-payment .modal-paymentList li a {
+	display: block;
+	line-height: 60px;
+	font-size: 20px;
+	text-align: center;
+	text-indent: 10px;
+	color: #333;
+}
+.modal-payment .modal-paymentList li:hover {
+	background-color: #440977;
+}
+.modal-payment .modal-paymentList li:hover a {
+	color: #fff;
+}
+
+.modal-payment .modal-order {
 	display: none;
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	margin:-100px 0 0 -200px;
+	margin:-160px 0 0 -200px;
+	padding: 30px 0;
 	width: 400px;
-	height: 200px;
+	height: 260px;
 	background-color: #fff;
+}
+.modal-payment .modal-order p {
+	font-size: 22px;
+	text-align: center;
+}
+.modal-payment .modal-order ul {
+	margin-top: 20px;
+}
+.modal-payment .modal-order li {
+	margin: 0 auto;
+	width: 300px;
+	height: 60px;
+	background-color: #ebebeb;
+	background-image: url('/images/payOn.png');
+	background-size: 30px 30px;
+	background-position: 80px center;
+	background-repeat: no-repeat;
+}
+.modal-payment .modal-order li:nth-child(3) {
+	background-image: none;
+	background-color: #888;
+}
+.modal-payment .modal-order li:nth-child(3) a {
+	text-indent: 0;
+	color: #fff;
+}
+.modal-payment .modal-order li + li {
+	margin-top: 30px;
+}
+
+.modal-payment .modal-order li a {
+	display: block;
+	line-height: 60px;
+	font-size: 20px;
+	text-align: center;
+	text-indent: 20px;
+	color: #333;
+}
+
+.modal-payment .modal-order li:not(:nth-child(3)):hover {
+	background-color: #440977;
+}
+.modal-payment .modal-order li:hover a {
+	color: #fff;
+}
+#total-price {
+	font-style: normal;
+	font-size: 26px;
+	color: #440977;
+}
+
+.charge-btn-grp {
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	margin:0 0 0 -160px;
+	height: 50px;
+   	width: 330px;
+}
+.charge-btn-grp a {
+	float: left;
+	width: 250px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	text-indent: -30px;
+	font-size: 18px;
+	color: #fff;
+	background-color: #440977;
+	background-image: url('/images/order.png');
+	background-size: 30px 30px;
+	background-position: 160px center;
+	background-repeat: no-repeat;
+}
+.charge-btn-grp a:first-child:hover {
+	color: #fff;
+	background-color: #999;
+}
+.charge-btn-grp a:last-child {
+	margin-left: 30px;
+	width: 50px;
+	text-indent: -999em;
+	overflow: hidden;
+	box-sizing: border-box;
+	border: 2px solid #888;
+	background-color: #fff;
+	background-image: url('/images/reset.png');
+	background-position: center;
+}
+
+.charge-top {
+	margin: 20px auto 20px;
+	padding: 10px;
+	width: 350px;
+	height: 180px;
+	box-sizing: border-box;
+	background-color: #ebebeb;
+}
+.charge-top * {
+	color: #999;
+	text-align: left;
+}
+
+.charge-top h4 {
+	margin-bottom: 10px;
+	font-size: 22px;
+	color: #333;
+	text-align: center;
+}
+
+.charge-top p {
+	font-size: 16px;
+	line-height: 22px;
+}
+.check-box {
+	margin:20px auto 0;
+	display: flex;
+	width: 100px;
+	height: 20px;
+}
+.check-box input {
+	margin-right: 5px;
+	width: 20px;
+	height: 20px;
+}
+.check-box em {
+	font-style: normal;
+	font-size: 16px;
+	line-height: 20px;
+	color: #666;
+}
+
+
+.charge_time {
+	position: relative;
+	margin-top: 10px;
+	height: 50px;
+}
+
+.charge_time p {
+	height: 50px;
+	line-height: 60px;
+    text-align: center;
+    font-size: 14px;
+}
+.charge_time p em {
+	padding: 0 5px;
+	font-size: 26px;
+	font-weight: bold;
+	font-style: normal;
+}
+.btn_charge {
+    position: absolute;
+    display: block;
+    top: 50%;
+    margin-top: -15px;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.btn_charge.minus {
+	left: 50px;
+	background: url("/images/minus-button.png") no-repeat center;
+	background-size: 100%;
+}
+.btn_charge.plus {
+	right: 50px;
+	background: url("/images/plus-button.png") no-repeat center;
+	background-size: 100%;
+}
+
+.btn_charge a {
+    display: block;
+    line-height: 30px;
+    text-indent: -999em;
+}
+.charge_time {
+    text-align: center;
+}
+.charge-total-price {
+	padding-top: 12px;
+    margin: 0 auto;
+    border-top: 2px solid #ebebeb;
+    margin-top: 50px;
+    text-align: right;
+    /* margin-right: 50px; */
+    font-size: 20px;
+    /* padding: 0 50px; */
+    /* box-sizing: border-box; */
+    width: 300px;
+    color: #999;
+}
+
+.charge-total-price em {
+	font-style: normal;
+	font-size: 24px;
+	color: #440977;
 }

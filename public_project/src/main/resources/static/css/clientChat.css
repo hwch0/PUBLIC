@@ -15,7 +15,7 @@
 	border-top:2px solid #fff;
 }
 #chatList li{
-	padding:10px 30px;
+	padding:10px 20px;
 }
 #chatList h2,#chat h3{
 	display:inline-block;
@@ -27,9 +27,16 @@
 }
 #chatList .entete{
 	margin-bottom:5px;
+	
+}
+#chatList h2{
+	padding-right: 5px;
+	font-size: 16px;
+	font-weight: bold !important;
+	color: #333;
 }
 #chatList .message{
-	padding:10px;
+	padding:10px 20px;
 	max-width:90%;
 	display:inline-block;
 	text-align:left;
@@ -46,6 +53,10 @@
 	background-color:#ddd;
 	color: black;
 }
+.message-wrap {
+	position: relative;
+	margin-top: 15px;
+}
 #chatList .triangle{
 	width: 0;
 	height: 0;
@@ -53,12 +64,16 @@
 	border-width: 0 10px 10px 10px;
 }
 #chatList .you .triangle{
+		position: absolute;
+	    top: -10px;
+	    left: 10px;
 		border-color: transparent transparent #450877 transparent;
-		margin-left:4px;
 }
 #chatList .me .triangle{
+		position: absolute;
+	    top: -10px;
+	    right: 10px;
 		border-color: transparent transparent #ddd transparent;
-		margin-left:318px;
 }
 
 .wrap_chat_main footer{
@@ -87,4 +102,7 @@
     margin-left: 10px;
 	margin-top:5px;
 	float: left;
+}
+.wrap_chat_main footer textarea:focus {
+	outline: 0;
 }

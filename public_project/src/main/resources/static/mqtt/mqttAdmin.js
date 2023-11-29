@@ -182,7 +182,7 @@ const sendMessage = () => {
 		);
 		$("#chatList").scrollTop($("#chatList")[0].scrollHeight);
 	} else {
-		alert("좌석을 선택해주세요");
+		swal("","좌석을 선택해 주세요!", "warning");
 	}
 };
 //메세지 수신한 데이터를 삽입
@@ -381,7 +381,7 @@ $("#send_chat_button").on("click", (e) => {
 	if ($("#chatInputBox").val() != "" && $("#chatInputBox").val() != " ") {
 		sendMessage();
 	} else {
-		alert("메세지를 입력해 주세요");
+		swal("","메세지를 입력해 주세요!", "warning");
 	}
 });
 

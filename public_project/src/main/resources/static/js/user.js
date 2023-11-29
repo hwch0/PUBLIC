@@ -17,28 +17,46 @@ $("#chattingBtn").on('click', function(){
 //주문버튼
 function navBtn(element) {
     const thisNavLi = $(element).parent();
-
+	
     $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .chat-wrap").css('display', 'none');
     $(".wrap_cart").removeClass('on');
     $('#orderBtn22, #rechargeBtn, #chattingBtn').removeClass('on');
 
     if (thisNavLi.hasClass('on')) {
-        $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .chat-wrap").css('display', 'none');
+        $('.cont-modal-wrap').hide();
+        $(".wrap_cart").css('display', 'none');
+        $(".chat-wrap").css('display', 'none');
+        $(".wrap_recharge").css('display', 'none');
         thisNavLi.removeClass('on');
     } else {
         if (thisNavLi.attr('id') === 'orderBtn22') {
-            $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart").css('display', 'block');
+			getMenuList(); 
+			removeTimeAll();
+            $(".cont-modal-wrap, .cont-bot-wrap, .wrap_cart, .modal-food").css('display', 'block');
+            $(".chat-wrap").css('display', 'none');
+            $(".wrap_recharge").css('display', 'none');
             $('#orderBtn22').addClass('on');
-            getMenuList(); 
+            $('#rechargeBtn').removeClass('on');
+            $("#orderBtn22").removeClass('on');
         } else if (thisNavLi.attr('id') === 'rechargeBtn') {
          $(".cont-modal-wrap, .cont-bot-wrap, .wrap_recharge").css('display', 'block');
+         $(".wrap_cart").css('display', 'none');
+         $(".chat-wrap").css('display', 'none');
+         	$('.cont-modal-wrap').hide();
             $('#rechargeBtn').addClass('on');
             $("#chattingBtn").removeClass('on');
             $("#orderBtn22").removeClass('on');
+            $('.addCart ul li').remove();
         } else if (thisNavLi.attr('id') === 'chattingBtn') {
+			$('.cont-modal-wrap').hide();
             $(".cont-bot-wrap, .chat-wrap").css('display', 'block');
+            $(".wrap_cart").css('display', 'none');
+            $(".wrap_recharge").css('display', 'none');
             $(".wrap_cart").removeClass('on');
             $('#chattingBtn').toggleClass('on');
+            $("#orderBtn22").removeClass('on');
+            $('.addCart ul li').remove();
+            removeTimeAll();
         }
 
         thisNavLi.addClass('on');
@@ -205,51 +223,64 @@ function addCart(element) {
     const thisNavLi = $(element).parent();
     const itemId = $(element).data('menu-id');
     const itemName = $(thisNavLi).find(".food-name").text();
-    const sellingPrice = $(thisNavLi).find(".food-price").text();
+    const sellingPrice = parseFloat($(thisNavLi).find(".food-price").text().replace(",", ""));
     // 이미 장바구니에 존재하는지 확인
-    const existingCartItem = $('.addCart ul li').filter(function() {
+    const existingCartItem = $('.addCart ul li').filter(function () {
         return $(this).find('.itemId').text() === itemId;
     });
-
+    $(".addCart").removeClass("empty")
+	$('.menu-total-price').css('display','block');
     if (existingCartItem.length > 0) {
         // 이미 존재하면 수량만 증가
         const optionNumElement = existingCartItem.find('.optionNum');
         const optionNum = parseInt(optionNumElement.data('option-num'));
         optionNumElement.data('option-num', optionNum + 1);
         optionNumElement.text(optionNum + 1);
+        updateCartItemPrice(existingCartItem);
+        
     } else {
         // 존재하지 않으면 새로운 아이템 추가
         var cartItem = '<li>' +
             '<p class="itemId">' + itemId + '</p>' +
             '<p class="food-name">' + itemName + '</p>' +
-            '<p class="food-price">' + sellingPrice + '</p>' +
+            '<p class="food-price on">' + parseInt(sellingPrice).toLocaleString() + '</p>' +
+            '<p class="food-price off" style="display:none;">' + sellingPrice + '</p>' +
             '<div class="food-option">' +
-                '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
-                '<p><em class="optionNum" data-option-num="1">1</em></p>' +
-                '<span class="btn_option plus" onClick="updateOptionNum(this)">+</span>' +
+            '<span class="btn_option minus" onClick="updateOptionNum(this)">-</span>' +
+            '<p><em class="optionNum" data-option-num="1">1</em></p>' +
+            '<span class="btn_option plus" onClick="updateOptionNum(this)">+</span>' +
             '</div>' +
             '<a href="javascript:void(0);" class="remove-from-cart" onClick="removeCart(this)">X</a>' +
             '</li>';
 
         $('.addCart ul').append(cartItem);
+        updateCartItemPrice(existingCartItem);
     }
+/*
+    updateCartItemPrice(existingCartItem); // 가격 업데이트 호출*/
+   	menuScroll();
     updateTotalPrice();
     updateOrderButtonState();
 }
 
 function updateTotalPrice() {
-    totalPrice = 0;
+    let totalPrice = 0;
 
-    $('.addCart ul li').each(function () {
-        const itemPrice = $(this).find('.food-price').text();
-        const quantity = $(this).find('.food-option .optionNum').data('option-num');
-        totalPrice += itemPrice * quantity;
-    });
+    if ($('.orderMenu').is(':visible')) {
+        $('.addCart ul li').each(function () {
+            const itemPrice = $(this).find('.food-price.off').text();
+            const quantity = $(this).find('.food-option .optionNum').data('option-num');
+            totalPrice += itemPrice * quantity;
+        });
+    } else {
+        totalPrice = totalChargePrice;
+    }
 
-    // 업데이트된 총 금액을 표시
-    $("#total-price").text(totalPrice);
+    $("#total-price").text(parseInt(totalPrice).toLocaleString());
+    $('.menu-total-price em').text(parseInt(totalPrice).toLocaleString()); // Total 가격 업데이트
     updateOrderButtonState();
 }
+
 
 // 주문하기 버튼 활성화
 function updateOrderButtonState() {
@@ -263,6 +294,14 @@ function updateOrderButtonState() {
         orderButton.prop('disabled', true);
         rechargeButton.prop('disabled', false);
     }
+}
+
+function menuScroll(){
+	if ($('.addCart ul li').length < 3) {
+		$('.scroll').css('display','none');
+	} else {
+		$('.scroll').css('display','block');
+	}
 }
 
 // 메뉴옵션 수정
@@ -280,16 +319,38 @@ function updateOptionNum(element) {
 
     optionNumElement.data('option-num', optionNum);
     optionNumElement.text(optionNum);
+
+    // 옵션 업데이트 시 가격도 함께 업데이트
+    updateCartItemPrice($(element).closest('li'));
+}
+
+// 장바구니 아이템 가격 업데이트
+function updateCartItemPrice(cartItem) {
+    const optionNum = parseInt(cartItem.find('.optionNum').data('option-num'));
+    const sellingPrice = parseFloat(cartItem.find('.food-price.off').text().replace(",", ""));
+    const newPrice = optionNum * sellingPrice;
+    const formattedPrice = parseInt(newPrice).toLocaleString();
+
+    cartItem.find('.food-price.on').text(formattedPrice);
+    $('.menu-total-price em').text(formattedPrice); 
 }
 
 //해당 메뉴 삭제
 function removeCart(element) {
     $(element).closest('li').remove();
+    if($('.addCart ul li').length == 0){
+		$('.addCart').addClass('empty'); 
+		$('.menu-total-price').css('display','none');
+	}
+	menuScroll();
 }    
     
 // 장바구니 비우기
 function removeCartAll() {
     $('.addCart ul li').remove();
+    $('.addCart').addClass('empty'); 
+    $('.menu-total-price').css('display','none');
+    menuScroll();
     totalPrice = 0;
     updateTotalPrice();
 }    
@@ -325,6 +386,10 @@ function orderBtn(){
     }
 }
 
+function closePayment() {
+	 $(".modal-payment").hide();
+     $(".modal-paymentList").hide();
+}
 function rechargeBtn(){
    $('.order-btn-list .menu-order').hide();
    $('.modal-food').hide();
@@ -434,7 +499,7 @@ function displayMenuList(menuList) {
                 '</div>' +
                 '<div class="food-info-wrap">' +
                 '<p class="food-name">' + menu.ITEMNAME + '</p>' +
-                '<p class="food-price-wrap">' + '<span class="food-price">' + menu.SELLINGPRICE + '</span>' + '원 </p>' +
+                '<p class="food-price-wrap">' +'<span>'+ parseInt(menu.SELLINGPRICE).toLocaleString() +'</span>' +  '<span class="food-price" style="display:none;">' + menu.SELLINGPRICE + '</span>' + '원 </p>' +
                 '</div>' +
                 '</li>';
             $('.food-list').append(row);
@@ -526,18 +591,34 @@ function recharge() {
 
 // 충전시간 조절
 let chargeTime = 1;
+let totalChargePrice;
+const chargePrice = 1000;
+
 
 $('.minus').on('click', function(e) {
     if (chargeTime > 1) {
         chargeTime--; 
         updateChargeTime();
+        updateTotalChargePrice();
     }
 });
 
 $('.plus').on('click', function(e) {
     chargeTime++; 
     updateChargeTime();
+    updateTotalChargePrice();
 });
+
+function updateChargeTime() {
+    $('.charge_time em').text(chargeTime);
+}
+
+function updateTotalChargePrice() {
+    totalChargePrice = chargeTime * chargePrice;
+    const totalChargePrices = parseInt(totalChargePrice).toLocaleString();
+    $('.charge-total-price em').text(totalChargePrices);
+    
+}
 
 
 function updateChargeTime() {
@@ -545,8 +626,10 @@ function updateChargeTime() {
 }
 
 
-
-
+function removeTimeAll(){
+	 $('.charge_time em').text('1');
+	 $('.charge-total-price em').text('1,000');
+}
 /*function fetchMenuList() {
     $.ajax({
         url: "/user/getMenuList",

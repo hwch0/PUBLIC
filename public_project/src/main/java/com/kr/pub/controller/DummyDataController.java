@@ -2,11 +2,14 @@ package com.kr.pub.controller;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -14,9 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.kr.pub.dao.DummyDAO;
 import com.kr.pub.dao.OrderDAO;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.OrderDTO;
+import com.kr.pub.dto.OrderHistoryDTO;
+import com.kr.pub.dto.PaymentDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.dto.UserHistoryDTO;
 import com.kr.pub.util.DummyData;
@@ -29,6 +35,9 @@ public class DummyDataController {
 	
 	@Autowired
 	private OrderDAO orderDAO;
+	
+	@Autowired
+	private DummyDAO dummyDAO;
 	
 	
 	@GetMapping("/makeDummyData")
@@ -43,16 +52,37 @@ public class DummyDataController {
 		System.out.println("userList.size() --> " + userList.size());
 	}
 	
-
+	@GetMapping("/insertDummy")
+	public void insertDummy() {
+		System.out.println("/insertDummy");
+		List<String> userIdList = dummyDAO.getUserIdList();
+		insertUserHistory(userIdList);
+	}
+	
+    public List<Timestamp> getTimeList() {
+   	 List<Timestamp> timeList = new ArrayList<>();
+   	 
+   	 for(int i = 0; i < 100000 ; i++) {
+   		 timeList.add(nTimestamp());
+   	 }
+   	 Collections.sort(timeList);
+   	 return timeList;
+    }
+    
 	 
 	 public List<UserHistoryDTO> insertUserHistory(List<String> userList) {
  	 List<UserHistoryDTO> result = new ArrayList<>();
  	 List<Integer> numList = Arrays.asList(1,2,3);
-      for (int i = 0; i < 100; i++) {
+ 	 List<Timestamp> timeList = getTimeList();
+ 	 List<String> paymentMethod = Arrays.asList("PM001","PM002","PM003");
+ 	 List<Map<String, Object>> itemList = dummyDAO.getItemListData();
+ 	 
+      for (int i = 0; i < 100000; i++) {
  		 Collections.shuffle(numList);
      	 Collections.shuffle(userList);
-     	 Timestamp loginTime = nTimestamp();
+     	 Timestamp loginTime = timeList.get(i);
      	 String userId = userList.get(0);
+     	 
      	 int addHour = numList.get(0);
      	 UserHistoryDTO userHis = UserHistoryDTO.builder()
      			 		.userId(userId)
@@ -61,6 +91,7 @@ public class DummyDataController {
      			 		.logoutTime(addHours(loginTime, addHour))
      			 		.build();
      	 result.add(userHis);
+     	 dummyDAO.insertUserHistoryData(userHis);
      	 
 	     // 주문과 동시에 결제 로직
 		 // insert into orders(order_date) values(timestamp.getTime()))
@@ -69,15 +100,78 @@ public class DummyDataController {
      			 			.code("CT004")
      			 			.userId(userId)
      			 			.build();
-     	orderDAO.insertOrder(order);
+     	dummyDAO.insertOrderData(order);
+     
      			 			
 		 // insert into order_history
+     	OrderHistoryDTO orderHistory = OrderHistoryDTO.builder()
+     									.orderId(order.getOrderId())
+     									.itemId("ITEM000001")
+     									.quantity(addHour)
+     									.price((1000 * addHour))
+     									.build();
+     	orderDAO.insertOrderHistory(orderHistory);
+     	
+     	Collections.shuffle(paymentMethod);
 		 // insert into payment(payment_date, order_id) values()
+     	PaymentDTO payment = PaymentDTO.builder()
+     							.orderId(order.getOrderId())
+     							.paymentDate(loginTime)
+     							.paymentMethodCode(paymentMethod.get(0))
+     							.paymentTypeCode("PT001")
+     							.build();
+     	 dummyDAO.insertPayment(payment);
      	 
+     	 // 메뉴 주문(order)
+     	OrderDTO orderFood = OrderDTO.builder()
+		 			.orderDate(addMinutes(loginTime, 30))
+		 			.code("CT004")
+		 			.userId(userId)
+		 			.build();
+     	dummyDAO.insertOrderData(orderFood);
+     			 				
+     	 
+     	 // 메뉴 주문(order_history)
+    	 //item, 수량 선택
+    	 Collections.shuffle(itemList);
+    	 Collections.shuffle(numList);
+    	 Map<String, Object> item1 = itemList.get(0);
+    	 Map<String, Object> item2 = itemList.get(1);
+    	 int q1 = numList.get(0);
+    	 int q2 = numList.get(1);
+     	
+     	OrderHistoryDTO orderHistoryFood = OrderHistoryDTO.builder()
+					.orderId(orderFood.getOrderId())
+					.itemId(item1.get("ITEM_ID").toString())
+					.quantity(q1)
+					.price(Integer.parseInt(item1.get("SELLING_PRICE").toString()) * q1)
+					.build();
+     	orderDAO.insertOrderHistory(orderHistoryFood);
+     	OrderHistoryDTO orderHistoryFood2 = OrderHistoryDTO.builder()
+     			.orderId(orderFood.getOrderId())
+     			.itemId(item2.get("ITEM_ID").toString())
+     			.quantity(q2)
+     			.price(Integer.parseInt(item2.get("SELLING_PRICE").toString()) * q2)
+     			.build();
+     	orderDAO.insertOrderHistory(orderHistoryFood2);
+     	 
+//     	 System.out.println("메뉴선택1 >> " + orderHistoryFood);
+//     	 System.out.println("메뉴선택2 >> " + orderHistoryFood2);
+     	 // 메뉴 결제(order_payment)Collections.shuffle(paymentMethod);
+		 // insert into payment(payment_date, order_id) values()
+     	Collections.shuffle(paymentMethod);
+     	PaymentDTO paymentFood = PaymentDTO.builder()
+     							.orderId(orderFood.getOrderId())
+     							.paymentDate(orderFood.getOrderDate())
+     							.paymentMethodCode(paymentMethod.get(0))
+     							.paymentTypeCode("PT002")
+     							.build();
+     	 dummyDAO.insertPayment(paymentFood);
       }
       
       return result;
 	 }
+	 
 	
 	
 	 public static String nName() {
@@ -155,7 +249,9 @@ public class DummyDataController {
 	         Date currentDate = new Date();
 
 	         // 랜덤한 날짜를 생성하기 위해 시작 날짜를 설정 (2023년 1월 1일)
-	         long startMillis = new Date(123, 0, 1).getTime();
+	         //long startMillis = new Date(123, 0, 1).getTime();
+	         LocalDate date = LocalDate.of(2023, Month.JANUARY, 18);
+	         long startMillis = java.sql.Date.valueOf(date).getTime();
 
 	         // 현재 시간에서 2023년 1월 1일까지의 랜덤한 시간을 생성
 	         long randomMillis = ThreadLocalRandom.current().nextLong(startMillis, currentDate.getTime());
@@ -173,7 +269,9 @@ public class DummyDataController {
 	         Date currentDate = new Date();
 
 	         // 랜덤한 날짜를 생성하기 위해 시작 날짜를 설정 (2023년 1월 1일)
-	         long startMillis = new Date(123, 0, 1).getTime();
+	         //long startMillis = new Date(123, 0, 1).getTime();
+	         LocalDate date = LocalDate.of(2023, Month.JANUARY, 18);
+	         long startMillis = java.sql.Date.valueOf(date).getTime();
 
 	         // 현재 시간에서 2023년 1월 1일까지의 랜덤한 시간을 생성
 	         long randomMillis = ThreadLocalRandom.current().nextLong(startMillis, currentDate.getTime());
@@ -184,6 +282,7 @@ public class DummyDataController {
 	         return randomTimestamp;
 	     }
 	     
+
 	     public static String getBirthDate() {
 	         // 현재 날짜와 시간을 가져오기
 	         Date currentDate = new Date();
@@ -220,6 +319,11 @@ public class DummyDataController {
        // 새로운 Timestamp 객체를 생성하여 설정된 시간을 반환
        return new Timestamp(newTimeMillis);
 	 }
+	 
+	    public static Timestamp addMinutes(Timestamp timestamp, int minutes) {
+	        long newTimeMillis = timestamp.getTime() + (minutes * 60 * 1000);
+	        return new Timestamp(newTimeMillis);
+	    }
 
 	 
 	 

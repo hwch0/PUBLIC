@@ -167,15 +167,14 @@ function orderSearch(){
 	const endDateValue = $('#endDate2').val();
 	const orderIdValue = $('.orderCode').val();
 	const select = $('.orderSelect').val();
+	const selectOrder = $('input[name="orderOption"]:checked').val();
 	
-	if(!startDateValue || !endDateValue || !orderIdValue || !select || !selectOrder){
-		alert("조회 조건을 입력 해주세요.");
+	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ==='all'){
+		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
 		return;
 	}
 	
 	LoadingWithMask('/images/loading.gif');
-
-	const selectOrder = $('input[name="orderOption"]:checked').val();
 
 	const orderParam = {
 		startDate: $('#startDate2').val().replace(/\//g, '-'),
@@ -233,8 +232,8 @@ function salesSearch(){
 	const orderIdValue = $('.orderCode').val();
 	const unmeValue = $('.userName').val();
 	
-	if(!startDateValue || !endDateValue || !paymentidValue || !orderIdValue || !unmeValue){
-		alert("조회 조건을 입력 해주세요.");
+	if(!startDateValue && !endDateValue && paymentidValue === '' && orderIdValue === '' && unmeValue === ''){
+		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
 		return;
 	}
 	
@@ -427,7 +426,16 @@ $('#closeModalBtn').on('click', () => {
 $('#searchSalesBnt').on('click', () => {
 	const salesList = $('#tbody');
 	const salesItem = $('#sales-item');
-	const formData = new FormData($('#searchSalesForm')[0]);
+	
+	const formData = {
+		startDate: $('#startDate').val().replace(/\//g, '-'),
+		endDate: $('#endDate').val().replace(/\//g, '-'),
+		code: $('.salesType').val(),
+		paymentId: $('.paymName').val(),
+		orderId: $('.orderCode').val(),
+		uname:$('.userName').val()		
+	};
+	
 	const getSalesListUrl = '/erp/salesSearch';
 	
 	fetch(getSalesListUrl, {
@@ -443,6 +451,7 @@ $('#searchSalesBnt').on('click', () => {
 			salesList.empty();
 			const salesListData = data.salesSearch;
 			let rownum = 1;
+			console.log('판매 목록 데이터:', salesListData);
 			salesListData.forEach((sales) => {
 				salesItemClone = salesItem.clone();
 				salesItemClone.find('.rownum').text(rownum);
@@ -457,7 +466,7 @@ $('#searchSalesBnt').on('click', () => {
 				rownum++;
 			})
 		} else {
-			alert(data.data)
+			alert(data.salesSearch)
 		}
 	})
 })

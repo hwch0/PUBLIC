@@ -42,7 +42,6 @@ public class ErpController {
 		List<Map<String, Object>> userList = erpService.userList();
 		
 		model.addAttribute("userList", userList);
-		System.out.println(" userList확인용: " + userList);
 		
 		return "/reference/userList";
 	}
@@ -86,7 +85,7 @@ public class ErpController {
 		List<Map<String, Object>> orderResult = erpService.orderView(orderId);
 		
 		orderView.put("orderView", orderResult);
-		System.out.println("data확인: " + orderResult);
+
 		return orderView;
 	}
 	
@@ -99,7 +98,7 @@ public class ErpController {
 		List<Map<String, Object>> orderResult = erpService.orderSearch(search);
 		
 		orderSearch.put("orderSearch", orderResult);
-		System.out.println("조건 Data확인: " + orderResult);
+
 		return orderSearch; 
 	}
 	
@@ -114,7 +113,7 @@ public class ErpController {
 		session.setAttribute("setErpDTO", salesResult);
 		
 		salesSearch.put("salesSearch", salesResult);
-		System.out.println("조회 조건 Data확인: " + salesResult);
+		
 		return salesSearch;
 	}
 	
@@ -127,9 +126,7 @@ public class ErpController {
 		
 		model.addAttribute("sales", paymentList);
 		model.addAttribute("order", orderList);
-		
-//		System.out.println("data확인: " + paymentList);
-//		System.out.println("data확인: " + orderList);
+
 		return "/reference/salesLayout";
 	}
 	
@@ -155,8 +152,7 @@ public class ErpController {
 		List<Map<String, Object>> searchResults = erpService.itemSearch(search);
 		
 		itemSearch.put("itemsearch", searchResults);
-//		System.out.println("조회 조건 DATA확인: " + searchResults);
-		
+	
 		return itemSearch;
 	}
 	
@@ -170,8 +166,6 @@ public class ErpController {
 		model.addAttribute("stock", itemList);
 		model.addAttribute("status", statusList);
 		
-	    System.out.println("dateCheck: " + itemList);
-	    System.out.println("입 출고dateCheck: " + statusList);
 		return "/reference/stockLayout";
 	}
 	
@@ -223,8 +217,6 @@ public class ErpController {
 		String sheetName = "입고출고내역";
 		String fileName = "status_excel_download";
 		
-		System.out.println("데이터 확인: " + dataList);
-		
 		excelService.excelDownload(res, sheetName, headerNames, headerLabels, dataList, fileName);
 		Map<String, Object> result = new HashMap<>();
 		result.put("message", "성공했습니다");
@@ -240,8 +232,6 @@ public class ErpController {
 		List<String> headerLabels = Arrays.asList("순번","품목코드", "품목명", "품목유형", "입고일", "현재재고", "입고단가");
 		String sheetName = "재고목록";
 		String fileName = "stock_excel_download";		
-	
-		System.out.println("데이터 확인: " + dataList);
 		
 		excelService.excelDownload(res, sheetName, headerNames, headerLabels, dataList, fileName);		
 	}

@@ -378,15 +378,15 @@ function statusSearch() {
 	const endDateValue = $('#endDate2').val();
 	const codeValue = $('.statusCode').val();
 	const nameValue = $('.statusName').val();
+	const selectedStatus = $('input[name="status"]:checked').val();
 	
-	if(!startDateValue || !endDateValue || !codeValue || !selectedStatus || !nameValue){
-		alert("조회 조건을 입력 해주세요.");
+	if(!startDateValue && !endDateValue && codeValue === '' && selectedStatus === 'all' && nameValue === ''){
+		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
 		return;
 	}
-	
+		
     LoadingWithMask('/images/loading.gif');
-    
-    const selectedStatus = $('input[name="status"]:checked').val();
+       
     
 	const searchParam = {
 	    startDate: $('#startDate2').val().replace(/\//g, '-'),
@@ -395,6 +395,7 @@ function statusSearch() {
 	    status: selectedStatus,
 	    name: $('.statusName').val() || null
 	};
+
         
     $.ajax({
         url: '/erp/statusStatus',
@@ -447,9 +448,9 @@ function searchData() {
 	const selectValue = $('.itemSelect').val();
 	const stockValue = $('.itemSituation').val();
 	
-	if(!startDateValue || !endDateValue || !nameValue || !selectValue || !stockValue){
-		swal("Error","조회 조건을 입력 해주세요.",'warning');
-		return;
+	if (!startDateValue && !endDateValue && nameValue === '' && selectValue === '' && stockValue === '') {
+	    swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+	    return;
 	}
 	
     LoadingWithMask('/images/loading.gif');

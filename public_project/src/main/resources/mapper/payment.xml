@@ -9,6 +9,15 @@
     	values (#{orderId}, 'PM001' , 'PT002')
 	</insert> -->
 
+	<select id="paymentTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM payment p
+		JOIN orders o ON p.ORDER_ID = o.ORDER_ID
+		JOIN users u ON o.USER_ID = u.USER_ID
+		JOIN order_history oh ON o.ORDER_ID = oh.ORDER_ID
+		JOIN common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
+	</select>
+
 	<insert id="insert">
 	insert into payment(
 	ORDER_ID,
@@ -59,6 +68,19 @@
 	   	 <if test="unme != null and unme != '' ">
 	   	 	AND u.UNAME LIKE '%' || #{unme} || '%'
 	   	 </if>	   	 
+	   	 <!-- code -->
+		<if test="code == 'PT001'">
+		    AND cc.CODE = 'PT001'
+		</if>
+		<if test="code == 'PT002'">
+		    AND cc.CODE = 'PT002'
+		</if>
+		<if test="code == 'PT003'">
+		    AND cc.CODE = 'PT003'
+		</if>
+		<if test="code == 'PT004'">
+		    AND cc.CODE = 'PT004'
+		</if>
 	ORDER BY
 	    p.PAYMENT_DATE DESC, p.PAYMENT_ID DESC
 	</select>

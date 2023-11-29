@@ -3,7 +3,22 @@
 <link rel="stylesheet" href="/plugins/chart.js/Chart.css"/>
 <script src="/plugins/chart.js/Chart.min.js"></script>
  <script src="/plugins/jquery/jquery.min.js"></script>
-  
+ 
+<!--   <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+<!-- <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script> -->
+
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script> -->
+  <!-- 버전 2 (최신) -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
 <style>
 .chartjs-render-monitor {
 	max-height: 300px!important;
@@ -180,7 +195,7 @@
                       <a class="nav-link" href="#tap-pieChart2" data-toggle="tab">월</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#tap-nonData" data-toggle="tab">일</a>
+                      <a class="nav-link" href="#tap-pieChart3" data-toggle="tab">일</a>
                     </li>
                   </ul>
                 </div>
@@ -238,7 +253,7 @@
 	                        max-width: 100%;
 	                      "
                        >
-                       <div class="icon" style="font-size: 70px; opacity: 0.5;">
+                       <div class="icon" id="orderIcon" style="font-size: 70px; opacity: 0.5;">
 			              <div class="icon ion-sad-outline"></div>
 			           </div>
 			              <p>주문 내역이 없습니다.</p>

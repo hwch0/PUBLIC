@@ -13,6 +13,7 @@
 </head>
 <!-- <link rel="stylesheet" href="/css/user.css"> -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
@@ -664,6 +665,8 @@ label {
 </style>
 
 
+<script src="/plugins/jquery/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <style>
 .payment_content {
    display: none;
@@ -907,11 +910,25 @@ $('.li_paymethod li').on('click', function(e) {
     .then((rs) => rs.json())
     .then((json) =>{
         if (json.rs == "success") {
-            alert('충전이 완료되었습니다!');
-            location.href = "/";
+        	 swal({
+			  title: "Success!",
+			  text: "충전이 정상적으로 처리되었습니다.",
+			  icon: "success",
+			}).then((value) => {
+			  if (value) {
+				 location.href = "/";
+			  }
+			});
         } else {
-            alert('결제가 정상적으로 이루어지지 않았습니다. 다시 시도해주세요.');
-            location.href = "/";
+        	swal({
+  			  title: "Error",
+  			  text: "충전이 정삭적으로 처리되지 않았습니다.",
+  			  icon: "warning",
+  			}).then((value) => {
+  			  if (value) {
+  				 location.href = "/";
+  			  }
+  			});
         }
     });
 });

@@ -74,6 +74,7 @@ function showAlert(){
 	}else{
 		$('.wrap_cont').toggleClass('lft');
 		$('.py-5').toggleClass('lft');
+		$('.menu-category').toggleClass('lft');
 		$(".wrap_alert").toggleClass('on');
 	}
 }

@@ -77,7 +77,7 @@ $(document).ready(function() {
 						if (!seat.hasClass('on')) {
 							seat.addClass("on");
 							seat.find("p").first().text(user.userId);
-							updateCountdown(seat.find("p").last(), remainingTime, user.seatNo);
+							updateCountdown(seat.find("p").last(), remainingTime, user.seatNo, user.loginTime);
 						}
 					}
 				});
@@ -96,22 +96,27 @@ $(document).ready(function() {
 					$("#chatList").append(
 						`<li class="you">
 						<div class="entete">
-							<p>${getNow()}</p>
+							
 							<h2>${chat.seatNo}번 좌석(${chat.sender})</h2>
 							</div>
-							<div class="triangle"></div>
-							<div class="message">${chat.message}</div>
+							<div class="message-wrap">
+								<div class="triangle"></div>
+								<div class="message">${chat.message}</div>
+								<p style="margin-top:3px;font-size: 14px;font-weight: 200;color: #999;padding-left: 5px;">${getNow()}</p>
+							</div>
 					</li>`
 					);
 				} else {
 					$("#chatList").append(
 						`<li class="me">
 									<div class="entete">
-										<p>${getNow()}</p>
 										<h2>${chat.receiver}님에게 보냄</h2>
 									</div>
-									<div class="triangle"></div>
-									<div class="message">${chat.message}</div>
+									<div class="message-wrap">
+										<div class="triangle"></div>
+										<div class="message">${chat.message}</div>
+										<p style="margin-top:3px;font-size: 14px;font-weight: 200;color: #999;padding-right: 5px;">${getNow()}</p>
+									</div>
 								</li>`
 					);
 				}

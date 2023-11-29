@@ -162,6 +162,17 @@ function orderDetail(orderId) {
 
 //주문내역 조회 조건
 function orderSearch(){
+	
+	const startDateValue = $('#startDate2').val();
+	const endDateValue = $('#endDate2').val();
+	const orderIdValue = $('.orderCode').val();
+	const select = $('.orderSelect').val();
+	
+	if(!startDateValue || !endDateValue || !orderIdValue || !select || !selectOrder){
+		alert("조회 조건을 입력 해주세요.");
+		return;
+	}
+	
 	LoadingWithMask('/images/loading.gif');
 
 	const selectOrder = $('input[name="orderOption"]:checked').val();
@@ -215,6 +226,18 @@ function orderSearch(){
 
 //매출내역 조회 조건
 function salesSearch(){
+	
+	const startDateValue = $('#startDate').val();
+	const endDateValue = $('#endDate').val();
+	const paymentidValue = $('#salesCode').val();
+	const orderIdValue = $('.orderCode').val();
+	const unmeValue = $('.userName').val();
+	
+	if(!startDateValue || !endDateValue || !paymentidValue || !orderIdValue || !unmeValue){
+		alert("조회 조건을 입력 해주세요.");
+		return;
+	}
+	
 	LoadingWithMask('/images/loading.gif');
 
 	const salesParam = {

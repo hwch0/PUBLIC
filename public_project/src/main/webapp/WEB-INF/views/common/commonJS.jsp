@@ -17,6 +17,9 @@
 <script src="/dist/js/adminlte.min.js"></script>
 <script type="text/javascript" src="../../plugins/toastr/toastr.min.js"></script>
 
+<!-- sweetalert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <!-- ********** 관리자 메뉴판 관리 ********** -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
 

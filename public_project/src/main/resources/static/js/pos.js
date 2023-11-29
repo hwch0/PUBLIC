@@ -61,24 +61,7 @@ $('.wrap_cont').on('click', 'li[data-seatNo].on', function(e) {
 	infoModal.css('display', 'block');
 });//좌석 클릭시 사용자정보 띄우기
 
-/*const closeInfoModal = () => {
-	$.each($(".close"), function(index, close) {
-		$(close).on('click', () => infoModal.css('display', 'none'));
-		$('#tab2 tbody').empty();
-	});
-}*/
-
-$('.close').on('click', function(){
-	infoModal.css('display', 'none');
-	$('#tab1').addClass('active');
-	$('.tab__item').first().addClass('active');
-	$('.tab__item').last().removeClass('active');
-	$('#tab2 tbody').empty();
-});
-
-
 $(document).ready(function() {
-	//var loggedInUserList = [];
 	ajaxResponse("GET", "/admin/loggedInUserList")
 		.then(function(response) {
 			loggedInUserList = response.result;
@@ -191,7 +174,7 @@ $('#orderList').on('click', '.served', function(e) {
 	ajaxResponse("POST", "/order/served", params)
 		.then(function(response) {
 			if(response.result){
-				alert("정상적으로 처리되었습니다.")
+				swal("서빙 완료!", "정상적으로 처리되었습니다.", "success");
 				$(e.currentTarget).parent().parent().prev().remove();
 				$(e.currentTarget).parent().parent().remove();
 			}

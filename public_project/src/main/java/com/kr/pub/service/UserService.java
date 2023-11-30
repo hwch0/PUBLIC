@@ -317,5 +317,16 @@ public class UserService {
 	        itemDAO.updateItemStock(orderHistory);
 	    }
 	}
+	
+	public void failLogin(String username) {
+        userDAO.failLogin(username);
+    }
 
+    public void updateRole(String username) {
+    	int loginFailures = userDAO.getLoginFailures(username);
+
+        if (loginFailures >= 3) {
+            userDAO.updateRole(username);
+        }
+    }
 }

@@ -48,6 +48,10 @@ function navBtn(element) {
             $("#chattingBtn").removeClass('on');
             $("#orderBtn22").removeClass('on');
             $('.addCart ul li').remove();
+            $('.addCart').addClass('empty');
+            $('.menu-total-price').css('display', 'none');
+            $('.scroll').css('display', 'none');
+            $('.menu-total-price em').text('0');
         } else if (thisNavLi.attr('id') === 'chattingBtn') {
 			$('.cont-modal-wrap').hide();
             $(".cont-bot-wrap, .chat-wrap").css('display', 'block');
@@ -57,6 +61,10 @@ function navBtn(element) {
             $('#chattingBtn').toggleClass('on');
             $("#orderBtn22").removeClass('on');
             $('.addCart ul li').remove();
+            $('.addCart').addClass('empty');
+            $('.menu-total-price em').text('0');
+             $('.menu-total-price').css('display', 'none');
+             $('.scroll').css('display', 'none');
             removeTimeAll();
         }
 
@@ -193,22 +201,26 @@ window.onload = function() {
                $("#chatList").append(
                   `<li class="you">
                <div class="entete">
-                  <p>${chat.time}</p>
-                  <h2>${chat.sender}</h2>
+                  <h2>카운터</h2>
                   </div>
-                  <div class="triangle"></div>
-                  <div class="message">${chat.message}</div>
+                  <div class="message-wrap">
+                    <div class="triangle"></div>
+                    <div class="message">${chat.message}</div>
+                    <p style="margin-top:3px;font-size: 14px;font-weight: 200;color: #999;padding-left: 5px;">${chat.time}</p>
+                 </div>
             </li>`
                );
             } else {
                $("#chatList").append(
                   `<li class="me">
                         <div class="entete">
-                           <p>${chat.time}</p>
                            <h2>${chat.sender}</h2>
                         </div>
-                        <div class="triangle"></div>
-                        <div class="message">${chat.message}</div>
+                        <div class="message-wrap">
+	                        <div class="triangle"></div>
+	                        <div class="message">${chat.message}</div>
+	                        <p style="margin-top:3px;font-size: 14px;font-weight: 200;color: #999;padding-right: 5px;">${chat.time}</p>
+	                     </div>
                      </li>`
                );
             }
@@ -419,7 +431,7 @@ function order() {
     $('.addCart ul li').each(function () {
         const itemId = $(this).find('.itemId').text(); 
         const quantity = $(this).find('.food-option .optionNum').data('option-num');
-        const itemPrice = $(this).find('.food-price').text();
+        const itemPrice = $(this).find('.food-price.off').text();
         const itemTotalPrice = itemPrice * quantity;
 
         cartItems.push({ itemId: itemId, quantity: quantity, price: itemTotalPrice });

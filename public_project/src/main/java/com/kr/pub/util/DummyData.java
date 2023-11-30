@@ -203,18 +203,5 @@ public class DummyData {
          
          return result;
 	 }
-	     
-     public static void main(String[] args) {
-    	 
-    	 List<UserDTO> result = new ArrayList<>();
-    	 insertUsers();
-    	 
-     }
-	
-	// Order insert
-	
-	// OrderHistory Insert
-	
-	// payment insert
 
 }

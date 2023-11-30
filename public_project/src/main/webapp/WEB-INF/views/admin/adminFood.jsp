@@ -229,37 +229,6 @@
 }
 
 
-.selectedMenu.list ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.selectedMenu.list li {
-    margin-bottom: 10px; /* Adjust as needed to add spacing between li elements */
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #f0f0f0;
-}
-
-.selectedMenu.list input {
-    border: none;
-    background-color: transparent;
-    margin-right: 10px; /* Adjust as needed to add spacing between input elements */
-}
-
-.selectedMenu.list button {
-    border: none;
-    border-radius: 5px;
-    background-color: #a080c0;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.selectedMenu.list button:hover {
-    background-color: #804080;
-}
-
 </style>
 <!--     <link rel="stylesheet" href="path/to/tagify.css"> -->
 <!--     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.9/tagify.min.js"></script> -->
@@ -505,18 +474,23 @@
     $(document).ready(function() {
         $('.addMenuIntoList').on('click', function() {
             // "selectedName"과 "selectedPrice"에서 값을 가져오기
-            var nameValue = $('.selectedName').val();
-            var priceValue = $('.selectedPrice').val();
-
-            // 새로운 li 요소 생성 및 Tagify 초기화
-            var newLi = $('<li><input class="tag-input" value="' + nameValue + ' ' + priceValue + '원"></li>');
-
+			var nameValue = $('.selectedName').val();
+			var priceValue = $('.selectedPrice').val();
+			
+			// nameValue와 priceValue로 태그를 생성
+			var tag = $('<tag title="' + nameValue + ' ' + priceValue + '원" contenteditable="false" spellcheck="false" tabindex="-1" class="tagify__tag tagify--noAnim" value="' + nameValue + ' ' + priceValue + '원"><x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x><div><span class="tagify__tag-text">' + nameValue + ' ' + priceValue + '원</span></div></tag>');
+			
+			// 생성한 태그를 ".selectedMenu.list ul"에 추가
+			$('.selectedMenu.list ul').append($('<li>').append(tag));
+            
+            //var newLi = $('<li><input class="tag-input" value="' + nameValue + ' ' + priceValue + '원"></li>');
+            
             // "selectedMenu list"의 ul에 새로운 li 요소 추가
             $('.selectedMenu.list ul').append(newLi);
 
             // Tagify 초기화
-            var input = newLi.find('.tag-input')[0];
-            new Tagify(input);
+            /* var input = newLi.find('.tag-input')[0];
+            new Tagify(input); */
 
             // 선택적으로 입력값을 지우거나 새로운 요소를 추가한 후에 다른 작업 수행 가능
             $('.selectedName').val('');

@@ -139,8 +139,7 @@
 	   	 	AND  cc_type.TYPE =  #{orderOption}
 	   	 </if>
 
-		ORDER BY
-		    o.ORDER_DATE DESC, o.ORDER_ID DESC
+		ORDER BY o.ORDER_ID DESC
 	</select>
 	
 	<select id="erpOrderList" resultType="java.util.Map">
@@ -165,7 +164,7 @@
 		JOIN
 		    change_type ct ON o.CODE = ct.CODE
 		 WHERE
-	   		to_char(o.ORDER_DATE,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
+	   		o.ORDER_DATE BETWEEN TRUNC(sysdate) AND TRUNC(sysdate) + (1 - 1/24/60/60)
 		ORDER BY o.ORDER_ID DESC
 	</select>
 	

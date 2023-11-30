@@ -102,9 +102,9 @@ public class ErpService {
 		params.put("endDate", search.getEndDate());
 		params.put("paymentId", search.getPaymentId());
 		params.put("orderId", search.getOrderId());
-		params.put("unme", search.getUnme());
+		params.put("uname", search.getUname());
 		params.put("code", search.getCode());
-		
+		System.out.println("데이터 확인: " + params);
 		List<Map<String, Object>> salesList = paymentDAO.salesSearch(params);
 		
 		tick = System.nanoTime() - tick;

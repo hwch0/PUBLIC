@@ -169,7 +169,7 @@ function orderSearch(){
 	const select = $('.orderSelect').val();
 	const selectOrder = $('input[name="orderOption"]:checked').val();
 	
-	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ==='all'){
+	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ===''){
 		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
 		return;
 	}
@@ -466,7 +466,7 @@ $('#searchSalesBnt').on('click', () => {
 				rownum++;
 			})
 		} else {
-			alert(data.salesSearch)
+			swal("Error",data.salesSearch,"error");
 		}
 	})
 })
@@ -502,7 +502,8 @@ $(document).on('click', '#tbody tr', function () {
 
 $('#selectSalesCodeBnt').on('click', () => {
 	if($('#modalSalesCode').val() ==="" || $('#modalSalesCode').val() === null) {
-		alert("매출 전표를 선택해주세요");
+		//alert("매출 전표를 선택해주세요");
+		swal("경고!!", "매출 전표를 선택해주세요.","warning");
 	} else {
 		$('#salesCode').val($('#modalSalesCode').val());
 		resetModal();

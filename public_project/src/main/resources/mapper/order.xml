@@ -123,8 +123,8 @@
 	    1=1
 	    <!-- startDate, endDate -->
 	    <if test="startDate != null and startDate != ''">
-		     AND TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
-		  </if>
+		     AND o.ORDER_DATE BETWEEN TO_DATE(#{startDate} || ' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#{endDate} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+		</if>
 	    	<!-- orderCodes -->
 	   	<if test="orderId != null and orderId != '' ">
 	   		AND o.ORDER_ID = #{orderId}
@@ -135,12 +135,10 @@
 	   	</if>
 
 	   	<!-- orderOption -->
-	   	 <if test="orderOption == 'PC이용'">
-	   	 	AND  cc_type.TYPE = 'PC이용'
+   	 	<if test="orderOption != null and orderOption != ''">
+	   	 	AND  cc_type.TYPE =  #{orderOption}
 	   	 </if>
-	   	 <if test="orderOption == '메뉴주문'">
-	   	 	AND  cc_type.TYPE = '메뉴주문'
-	   	 </if>
+
 		ORDER BY
 		    o.ORDER_DATE DESC, o.ORDER_ID DESC
 	</select>

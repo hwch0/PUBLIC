@@ -73,7 +73,7 @@
 
                         <td class="tr_th">상태 구분</td>
                         <td  class="changePadding"style="padding: 0 30px;">
-						    <label style="font-size: 13px"><input type="radio" name="orderOption" value="all" checked> 모두 보기</label>
+						    <label style="font-size: 13px"><input type="radio" name="orderOption" value="" checked> 모두 보기</label>
                             <label style="font-size: 13px"><input type="radio" name="orderOption" value="PC이용"> PC이용</label>
 						    <label style="font-size: 13px"><input type="radio" name="orderOption" value="메뉴주문"> 메뉴주문</label>
                         </td>

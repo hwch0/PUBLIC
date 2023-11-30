@@ -962,8 +962,8 @@ span.orderDetail {
 }
 
 .refresh-button:hover {
-    background-color: #e0e0e0; 
-    cursor: pointer;
+    transform: rotate(360deg);
+    transition: transform 1s ease;
 }
 
 /* 조회 버튼 */

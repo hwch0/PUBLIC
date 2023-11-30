@@ -119,7 +119,16 @@
 						                </c:otherwise>
 						            </c:choose>
 						        </td>
-						        <td class="stockStatus" data-stock="${item['STOCK']}"></td>
+								<td id="stockStatus" style="
+								    <c:choose>
+								        <c:when test="${item['STOCKSTATUS'] == '양호'}">color: green;</c:when>
+								        <c:when test="${item['STOCKSTATUS'] == '부족'}">color: #e59c00; font-weight: bold;</c:when>
+								        <c:when test="${item['STOCKSTATUS'] == '품절'}">color: red;</c:when>
+								        <c:otherwise>color: black;</c:otherwise>
+								    </c:choose>">
+								    ${item['STOCKSTATUS']}
+								</td>
+<%-- 						        <td class="stockStatus" data-stock="${item['STOCK']}"></td> --%>
 						   </tr>     
                 	</c:forEach>
                 </tbody>

@@ -1,8 +1,3 @@
-//페이징
-function jsPageNo(pageNo){
-	document.querySelector("#pageForm > #pageNo").value = pageNo;
-	document.querySelector("#pageForm").submit();
-}
 //날짜 관련 코드
 $(document).ready(() => {
 
@@ -32,13 +27,12 @@ $(document).ready(() => {
     datepickerReset();
     
     const today = new Date();
-    const oneWeekAgo = new Date(today);
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-    startDate.val(`${oneWeekAgo.getFullYear()}/${oneWeekAgo.getMonth() + 1}/${oneWeekAgo.getDate()}`);
+
+    startDate.val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
     endDate.val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
 
-    startDate2.val(`${oneWeekAgo.getFullYear()}/${oneWeekAgo.getMonth() + 1}/${oneWeekAgo.getDate()}`);
+    startDate2.val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
     endDate2.val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
 
     $('[id^=startDate], [id^=endDate]').on('change', function () {
@@ -54,7 +48,7 @@ $(document).ready(() => {
         const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24));
 
         if (diffInDays > 90) {
-            alert("최대 3개월을 넘어서 검색을 할 수 없습니다.");
+			swal("Error","최대 3개월을 넘어서 검색을 할 수 없습니다.!!", "error");
 
             $('#' + id).val('');
             $('#' + endDateID).val('');
@@ -69,13 +63,11 @@ $(document).ready(() => {
 // 날짜 입력 초기화 함수
 function resetDateInputs() {
     const today = new Date();
-    const oneWeekAgo = new Date(today);
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-    $('#startDate').val(`${oneWeekAgo.getFullYear()}/${oneWeekAgo.getMonth() + 1}/${oneWeekAgo.getDate()}`);
+    $('#startDate').val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
     $('#endDate').val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
     
-    $('#startDate2').val(`${oneWeekAgo.getFullYear()}/${oneWeekAgo.getMonth() + 1}/${oneWeekAgo.getDate()}`);
+    $('#startDate2').val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
     $('#endDate2').val(`${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`);
 }
 

@@ -109,35 +109,16 @@
 						        <td>${item['TYPE']}</td>
 						        <td>${item['STOREDATE'] == null ? '-' : item['STOREDATE']}</td>
 						        <td class="stock-data" data-stock="${item['STOCK']}">${item['STOCK'] == null ? '-' : item['STOCK']} EA</td>
-						        <td>
-						            <c:choose>
-						                <c:when test="${item['PRICE'] != null}">
-						                    ₩<fmt:formatNumber value="${item['PRICE']}" />
-						                </c:when>
-						                <c:otherwise>
-						                    -
-						                </c:otherwise>
-						            </c:choose>
-						        </td>
-								<td id="stockStatus" style="
-								    <c:choose>
-								        <c:when test="${item['STOCKSTATUS'] == '양호'}">color: green;</c:when>
-								        <c:when test="${item['STOCKSTATUS'] == '부족'}">color: #e59c00; font-weight: bold;</c:when>
-								        <c:when test="${item['STOCKSTATUS'] == '품절'}">color: red;</c:when>
-								        <c:otherwise>color: black;</c:otherwise>
-								    </c:choose>">
-								    ${item['STOCKSTATUS']}
-								</td>
-<%-- 						        <td class="stockStatus" data-stock="${item['STOCK']}"></td> --%>
+						        <td>₩<fmt:formatNumber value="${item['PRICE']}" /></td>
+					<td class="itemStyle ${item['STOCKSTATUS']}" id="stockStatus">${item['STOCKSTATUS']}</td>
 						   </tr>     
                 	</c:forEach>
                 </tbody>
 				<tbody class="total-row" style="background-color: #FFDCDC;">
 				      <tr>
-			            <td style="width: 598px; font-weight: bold; text-align: center;">합계</td>
-			            <td style="width: 91px; text-align: center;" id="totalStock"></td>
-			            <td style="width: 216px; text-align: center;" id="totalPrice">
-			                ₩<span id="formattedTotalPrice"></span>
+			            <td style="width: 417px; font-weight: bold; text-align: center;">총 입고금액</td>
+			            <td style="width: 489px; text-align: center;" id="totalPrice">
+			                <span id="formattedTotalPrice"></span>
 			            </td>
        				 </tr>
 				</tbody>

@@ -3,12 +3,9 @@ package com.kr.pub.config.auth;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
-import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.UserDTO;
 
 import lombok.ToString;

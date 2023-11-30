@@ -23,6 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -40,6 +41,9 @@ public class ExcelService {
 
 	@Autowired
 	ItemDAO itemDAO;
+	
+	@Value("${file.upload.directory}")
+	private String filePath;
 	
 	//엑셀 업로드
 	public static List<Map<String, String>> read(ExcelReadDTO excelReadOption){
@@ -147,7 +151,7 @@ public class ExcelService {
                     result.put("msg", "허용되지 않는 확장자명");
                 } else {
                     // 디렉토리 생성 및 특수 문자 제거
-                	File uploadDir = new File("C:\\upload\\Excel");
+                	File uploadDir = new File(filePath+"excel/");
                 	if (!uploadDir.exists()) {
                 	    uploadDir.mkdirs(); // 디렉토리 생성
                 	}

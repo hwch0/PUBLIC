@@ -1,7 +1,6 @@
 package com.kr.pub.dto;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,25 +1,18 @@
 package com.kr.pub.controller;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
-import org.apache.catalina.Session;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -29,16 +22,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kr.pub.config.MqttConfig.OutboundGateway;
-import com.kr.pub.config.auth.AuthSucessHandler;
 import com.kr.pub.config.auth.PrincipalDetails;
-import com.kr.pub.config.auth.PrincipalDetailsService;
 import com.kr.pub.dto.KakaoProfile;
 import com.kr.pub.dto.OAuthToken;
 import com.kr.pub.dto.UserDTO;

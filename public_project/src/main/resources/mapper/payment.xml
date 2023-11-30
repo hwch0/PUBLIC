@@ -54,7 +54,7 @@
 	    1=1
 	    <!-- startDate, endDate -->
 	    <if test="startDate != null and startDate != ''">
-	       AND TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') BETWEEN #{startDate} AND #{endDate}
+	       AND p.PAYMENT_DATE BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
 	    </if>
 	   	<!-- paymName -->
 	   	<if test="paymentId != null and paymentId != '' ">

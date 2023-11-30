@@ -6,10 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.kr.pub.dto.OrderDTO;
-import com.kr.pub.dto.OrderHistoryDTO;
-import com.kr.pub.dto.OrderListDTO;
 import com.kr.pub.dto.PaymentDTO;
-import com.kr.pub.dto.UserDTO;
 import com.kr.pub.dto.UserHistoryDTO;
 
 @Mapper

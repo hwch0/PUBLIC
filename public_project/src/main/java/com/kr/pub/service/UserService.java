@@ -13,7 +13,6 @@ import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,8 +23,6 @@ import com.kr.pub.config.auth.PrincipalDetails;
 import com.kr.pub.dao.ItemDAO;
 import com.kr.pub.dao.MenuDAO;
 import com.kr.pub.dao.OrderDAO;
-import com.kr.pub.dao.PaymentDAO;
-import com.kr.pub.dao.SeatDAO;
 import com.kr.pub.dao.UserDAO;
 import com.kr.pub.dto.OrderDTO;
 import com.kr.pub.dto.OrderHistoryDTO;

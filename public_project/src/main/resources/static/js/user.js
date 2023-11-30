@@ -50,6 +50,7 @@ function navBtn(element) {
             $('.addCart ul li').remove();
             $('.addCart').addClass('empty');
             $('.menu-total-price').css('display', 'none');
+            $('.scroll').css('display', 'none');
             $('.menu-total-price em').text('0');
         } else if (thisNavLi.attr('id') === 'chattingBtn') {
 			$('.cont-modal-wrap').hide();
@@ -63,6 +64,7 @@ function navBtn(element) {
             $('.addCart').addClass('empty');
             $('.menu-total-price em').text('0');
              $('.menu-total-price').css('display', 'none');
+             $('.scroll').css('display', 'none');
             removeTimeAll();
         }
 
@@ -429,7 +431,7 @@ function order() {
     $('.addCart ul li').each(function () {
         const itemId = $(this).find('.itemId').text(); 
         const quantity = $(this).find('.food-option .optionNum').data('option-num');
-        const itemPrice = $(this).find('.food-price').text();
+        const itemPrice = $(this).find('.food-price.off').text();
         const itemTotalPrice = itemPrice * quantity;
 
         cartItems.push({ itemId: itemId, quantity: quantity, price: itemTotalPrice });

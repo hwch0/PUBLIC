@@ -15,6 +15,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="/plugins/jquery/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
 <style>
 .payment_content {
    display: none;
@@ -224,15 +226,36 @@
     </div>
 </body>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var exception = urlParams.get('exception');
+
+    if (exception === 'failLogin') {
+    	 swal("Error","비밀번호가 틀렸습니다.",'warning');
+    } else if (exception === 'loginLock'){
+    	swal("Error","잠긴 계정입니다.",'warning');
+    }
+});
+</script>
+
+<script>
+
+
 // 잔여시간 없음
 window.addEventListener('DOMContentLoaded', (event) => {
     const showPaymentContent = ${showPaymentContent};
+    var urlParams = new URLSearchParams(window.location.search);
+    var exception = urlParams.get('exception');
 //     const userId = "${userId}";
 //     $('.getUserId').text(userId);
     
     if (!showPaymentContent) {
         document.querySelector('.login_content').style.display ="none";
         document.querySelector('.payment_content').style.display = 'block';
+    }
+    
+    if (exception === 'failLogin') {
+        alert('로그인에 실패했습니다. 이유: ' + exception);
     }
 });
 
@@ -342,6 +365,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
         });
     });
 });
+
+function failLogin() {
+    swal("Error", "잔여시간이 없습니다.", 'success');
+}
 </script>
 
 </html>

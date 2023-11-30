@@ -21,7 +21,7 @@ public class ErpDTO {
 	
 	private String paymentId;
 	private String orderId;
-	private String unme;
+	private String uname;
 
 	//페이징
 	private int pageNo = 1;		   // 현재 페이지 번호

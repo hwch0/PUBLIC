@@ -176,7 +176,7 @@
                         <td class="tr_th">매출 유형</td>
                         <td style="padding: 0 30px;">
                             <select class="salesType" name="select" style="height:25px; margin-left:0px; width:200px;">
-                                <option selected>전체</option>
+                                <option value="">전체</option>
                                 <option value="PT001">PC이용</option>
                                 <option value="PT002">메뉴주문</option>
                                 <option value="PT003">기타</option>

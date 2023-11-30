@@ -63,7 +63,7 @@
                     <tr>
                       <td class="tr_th">구분 상세</td>
                         <td style="padding: 0 30px;">
-						    <label style="font-size: 13px"><input type="radio" name="status" value="all" checked> 모두 보기</label>
+						    <label style="font-size: 13px"><input type="radio" name="status" value="" checked> 모두 보기</label>
                             <label style="font-size: 13px"><input type="radio" name="status" value="입고"> 입고</label>
 						    <label style="font-size: 13px"><input type="radio" name="status" value="출고"> 출고</label>
                         </td>

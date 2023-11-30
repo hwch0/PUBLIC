@@ -1,26 +1,52 @@
-//엑셀 업로드
-function upload(){
-	if(confirm("업로드 여부")){
-		const formData = new FormData(document.getElementById("excelUploadForm"));
-		
-		$.ajax({
-			url: "/erp/upload",
-			type: "POST",
-			data: formData,
-			contentType: false,
-			processData: false,
-			success: function(result){
-				console.log("result 확인1: " , result)
-					alert(result.message);
-					location.reload(true);
-			},
-			error: function (request, status, error) {
-                console.log("error");
-                alert("code: " + request.status + "\n" + "message : " + request.responseText + "\n" + "error: " + error);
-            }
-        });
-    }
+// 엑셀 업로드
+function upload() {
+    // SweetAlert를 사용하여 업로드 여부 확인
+    swal({
+        title: "파일 업로드",
+        text: "파일을 업로드하시겠습니까?",
+        icon: "info",
+        buttons: {
+            cancel: "취소",
+            confirm: "확인",
+        },
+    }).then((willUpload) => {
+        // 사용자가 확인을 선택한 경우
+        if (willUpload) {
+            const formData = new FormData(document.getElementById("excelUploadForm"));
+
+            $.ajax({
+                url: "/erp/upload",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    console.log("result 확인1: ", result)
+                    // 성공 시 SweetAlert를 사용하여 알림 표시
+                    swal({
+                        title: "성공",
+                        text: result.message,
+                        icon: "success",
+                    }).then(function () {
+                        // 성공 시 페이지 새로고침
+                        location.reload(true);
+                    });
+                },
+                error: function (request, status, error) {
+                    console.log("error");
+                    // 에러 시 SweetAlert를 사용하여 에러 알림 표시
+                    swal({
+                        title: "에러",
+                        text: "code: " + request.status + "\n" + "message : " + request.responseText + "\n" + "error: " + error,
+                        icon: "error",
+                    });
+                }
+            });
+        }
+    });
 }
+
+
 
 //품목 코드 리스트 가져오기
 function statusCodeList() {
@@ -256,7 +282,7 @@ function statusInsert(){
 		data: JSON.stringify(param),
 		dataType: "json",
 		success: function(json){
-			alert(json.message);
+			swal(json.message,"", "success");
 			statusModel.dialog("close");
 		},
 	});
@@ -285,7 +311,7 @@ $(document).ready(function() {
 
     $("#insertBnt").on("click", function() {
 
-        alert("등록이 완료되었습니다.");
+        swal("등록이 완료 되었습니다.","","success");
 
         $(".modal").removeClass("on");
     });
@@ -380,7 +406,7 @@ function statusSearch() {
 	const nameValue = $('.statusName').val();
 	const selectedStatus = $('input[name="status"]:checked').val();
 	
-	if(!startDateValue && !endDateValue && codeValue === '' && selectedStatus === 'all' && nameValue === ''){
+	if(!startDateValue && !endDateValue && codeValue === '' && selectedStatus === '' && nameValue === ''){
 		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
 		return;
 	}

@@ -52,7 +52,6 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		for (GrantedAuthority role : authentication.getAuthorities()) {
 		     if (role.getAuthority().contains("RT004")) {
 		    	 url = "/admin";
-		    	 
 		     } else if (role.getAuthority().contains("RT001")) {
 			    if(userInfo.getRemainingTime() > 0) {	
 		    	 	try {
@@ -68,13 +67,16 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 			    	System.out.println("잔여시간 없음");
 			    	url ="/recharge";
 			    }
-		     } else {
+		     } else if(role.getAuthority().contains("RT003")){
 		    	 msg = "loginLock";
 		    	 url = "/loginForm?error=true&exception=" + msg;
+		     } else {
+		    	 url = "/";
 		     }
 		  }
-		
-		request.setAttribute("loginSuccess", true);
+			/*
+			 * request.setAttribute("loginSuccess", true);
+			 */
 		 
         setDefaultTargetUrl(url);
 

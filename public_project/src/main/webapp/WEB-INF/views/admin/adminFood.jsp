@@ -261,7 +261,13 @@
 }
 
 </style>
-
+<!--     <link rel="stylesheet" href="path/to/tagify.css"> -->
+<!--     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.9/tagify.min.js"></script> -->
+<!--     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.9/jQuery.tagify.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.3.0/dist/tagify.css">
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.3.0/dist/tagify.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
  <div class="admin_food">
 
   <!-- 모달 창 영역 -->
@@ -345,9 +351,9 @@
 				   
    				  <div class="selectedMenu list">
 				      <ul>
-				         <li class=""><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
+<!-- 				         <li class=""><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
 				         <li><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
-				         <li><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
+				         <li><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li> -->
 				      </ul>
 				   </div>
 				  
@@ -495,6 +501,28 @@
 	}
 
 	const dropFile = new DropFile("drop-file", "files");
+	
+    $(document).ready(function() {
+        $('.addMenuIntoList').on('click', function() {
+            // "selectedName"과 "selectedPrice"에서 값을 가져오기
+            var nameValue = $('.selectedName').val();
+            var priceValue = $('.selectedPrice').val();
+
+            // 새로운 li 요소 생성 및 Tagify 초기화
+            var newLi = $('<li><input class="tag-input" value="' + nameValue + ' ' + priceValue + '원"></li>');
+
+            // "selectedMenu list"의 ul에 새로운 li 요소 추가
+            $('.selectedMenu.list ul').append(newLi);
+
+            // Tagify 초기화
+            var input = newLi.find('.tag-input')[0];
+            new Tagify(input);
+
+            // 선택적으로 입력값을 지우거나 새로운 요소를 추가한 후에 다른 작업 수행 가능
+            $('.selectedName').val('');
+            $('.selectedPrice').val('');
+        });
+    });
 	
 
   </script>

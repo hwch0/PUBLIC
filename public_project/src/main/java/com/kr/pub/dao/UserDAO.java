@@ -55,7 +55,14 @@ public interface UserDAO {
 	public void insertMember2(UserDTO user);
 
 	public UserDTO loginCheck(UserDTO user);
+	
 	public UserDTO loginCheck(String username);
+
+	public void failLogin(String username);
+	
+	public void updateRole(String username);
+
+	public int getLoginFailures(String username);
 
 
 }

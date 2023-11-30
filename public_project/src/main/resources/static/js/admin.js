@@ -162,7 +162,54 @@ $('#closeModalBtn').on('click', () => {
 	 
 	 menuModal.removeClass('on');  
 });
+/* 메뉴 행 선택 이벤트 */
+var previousClickedRow = null;
+let selectedItem = $('.selectedItem');
+$(document).on('click', '#tbody tr', function () {
+	console.log(" >>> " + $(this).find('.menuId').text());
+     if (previousClickedRow !==null && 
+     (previousClickedRow.find('.menuId').text() == $(this).find('.menuId').text())) {
+		previousClickedRow.css('background-color', '');
+		 $(this).css('background-color', '');
+		 previousClickedRow = null;
+		 salesCode.val("");
+		 
+	} else {
+	    // 이전에 클릭한 행의 배경색을 원래대로 복원
+	    if (previousClickedRow !== null) {
+	        previousClickedRow.css('background-color', '');
+	    } 
+	    // 새로 클릭한 행의 배경색 변경
+	    $(this).css('background-color', '#e6e6fa');
+	
+	    // 현재 클릭한 행을 이전에 클릭한 행으로 저장
+	    previousClickedRow = $(this);
+	
+	    // 해당 행의 paymentId 값을 가져와서 콘솔에 출력
+	    var currentItemId = $(this).find('.menuId').text();
+	    console.log("currentItemId >> " + currentItemId);
+	    selectedItem.find('.selectedCode').val($(this).find('.menuId').text());
+	    selectedItem.find('.selectedName').val($(this).find('.menuName').text());
+	    selectedItem.find('.selectedPrice').val($(this).find('.menuPrice').text());
+		
+	}
 
+});
+
+
+$('.addMenuIntoList').on('click', () =>{
+	
+	let selectedMenuList = $('.selectedMenu ul');
+	
+	
+	 if (!$('.form-control')[0].files[0]) {
+        swal("이미지를 선택해주세요", "fail");
+    } else if( !$('.selectedItem.selectedCode').val()){
+        swal("등록할 상품을 선택해주세요", "fail");
+	} else {
+		
+	}
+})
 
 
 /* 메뉴 등록 (menu_checked : N => Y) */

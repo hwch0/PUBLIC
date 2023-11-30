@@ -36,7 +36,7 @@
 }
 
 .menuSelectList {
-   	height: 30%;
+   	height: 50%;
     width: 100%;
     margin: 20px 0 20px 0;
 
@@ -69,6 +69,23 @@
   top: 0;
   background-color: #fff; /* 배경색 설정 */
 }
+
+.selectedMenu ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+}
+
+.selectedMenu li {
+    margin-right: 10px; /* Adjust as needed to add spacing between li elements */
+    display: flex;
+    font-size: 10px;
+}
+.selectedMenu input {
+	width: 60%;
+}
+
+
 
 .menu-category {
    position: absolute;
@@ -108,7 +125,140 @@
 .menu-category.lft {
 	 margin-left: 9%;
 }
+.menu.modal-content {
+	top: 40%!important;
+	left: 44%!important;
+	width: 700px!important;
+	height: 600px!important;
+}
 
+#root {
+  width: 100%;
+  /* margin: 0 auto; */
+  height: 100%
+  max-width: 800px;
+}
+
+.title {
+  text-align: center;
+}
+
+.contents {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0px;
+}
+.contents .upload-box {
+  width: 100%;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contents .upload-box .drag-file {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 3px dashed #dbdbdb;
+}
+.contents .upload-box .drag-file.highlight {
+  border: 3px dashed red;
+}
+.contents .upload-box .drag-file .image {
+  width: 40px;
+}
+.contents .upload-box .drag-file .message {
+  margin-bottom: 0;
+}
+.contents .upload-box .drag-file .preview {
+  display: none;
+  position: absolute;
+  left: 0;
+  height: 0;
+  width: 100%;
+  height: 100%;
+}
+.contents .upload-box .file-label {
+  margin-top: 0px;
+  background-color: #5b975b;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  width: 40%;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.contents .upload-box .file {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .contents {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+  }
+  .contents .upload-box {
+    width: 100%;
+    box-sizing: border-box;
+    margin-right: 0;
+  }
+  .contents .upload-box .drag-file {
+    height: 150px;
+  }
+  .contents .files {
+    width: 100%;
+    box-sizing: border-box;
+    margin-right: 0;
+    overflow: initial;
+  }
+}
+
+.menuForm {
+	width:100%; 
+	height:100%;
+   display: flex;
+   justify-content: space-between;
+
+}
+
+
+.selectedMenu.list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.selectedMenu.list li {
+    margin-bottom: 10px; /* Adjust as needed to add spacing between li elements */
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+}
+
+.selectedMenu.list input {
+    border: none;
+    background-color: transparent;
+    margin-right: 10px; /* Adjust as needed to add spacing between input elements */
+}
+
+.selectedMenu.list button {
+    border: none;
+    border-radius: 5px;
+    background-color: #a080c0;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.selectedMenu.list button:hover {
+    background-color: #804080;
+}
 
 </style>
 
@@ -116,11 +266,40 @@
 
   <!-- 모달 창 영역 -->
 	<div id="menuModal" class="modal">
-	    <div class="modal-content">
+	    <div class="menu modal-content">
 	    	<span class="close" id="closeModalBtn">&times;</span>
-	    	
-	    	<form name="menuForm" id="menuForm" method="multipart/form-data" style="width:100%; height:100%;">
+	        <h2>메뉴 등록</h2>
+	    	<form class="menuForm" name="menuForm" id="menuForm" method="multipart/form-data">
 	    		<input name="selectedItem" id="selectedItem" style="display:none;">
+
+		    	<div class="input-group mb-3" style="width:70%">
+<!-- 				  <input type="file" name="menuImage" class="form-control" id="inputGroupFile02" /> -->
+<!-- 				  <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
+<!-- 				  <div style="width:100%; height: 115px;"> -->
+<!-- 				 	 <img id="preview" src="" alt="Image Preview" style="width:auto; height: 100%; margin: 0 auto 0 auto; display: none;"> -->
+<!-- 				  </div> -->
+				  
+				  <div id="root">
+				  <div class="contents">
+				    <div class="upload-box">
+				      <div id="drop-file" class="drag-file">
+				        <img src="https://img.icons8.com/pastel-glyph/2x/image-file.png" alt="파일 아이콘" class="image" >
+				        <p class="message">드래그하여 메뉴 이미지 추가</p>
+				        <img src="" alt="미리보기 이미지" class="preview">
+				      </div>
+				      
+				      <div style="margin-top:30px; width:100%">
+				      <label class="file-label" for="chooseFile">Choose File</label>
+				      <input class="file" id="chooseFile" type="file" onchange="dropFile.handleFiles(this.files)" accept="image/png, image/jpeg, image/gif">
+				      <label type="button" class="file-label">Delete</label>
+				      </div>
+
+				    </div>
+				  </div>
+				</div>
+				</div>
+		    	<div class="input-group mb-3" style="display: inline;">
+	    		
 				<select class="form-select" aria-label="Default select example" style="width:100%">
 				  <option selected value="N">메뉴 카테고리 선택</option>
 				  
@@ -143,7 +322,7 @@
   						</thead>
   						
 						<tbody class="menu" id="tbody">
-					  		<tr id="menu-item" style="display: none;">
+					  		<tr id="menu-item" style="display: none;background-color:'';">
 					  			<td class="category">음료</td>
 					  			<td class="menuId">아이디</td>
 					  			<td class="menuName">코카콜라</td>
@@ -153,16 +332,28 @@
  						</tbody>
 				  	</table>
 				  </div> 
-					
-		    	<div class="input-group mb-3">
-				  <input type="file" name="menuImage" class="form-control" id="inputGroupFile02" />
-				  <label class="input-group-text" for="inputGroupFile02">Upload</label>
-				  <div style="width:100%; height: 115px;">
-				 	 <img id="preview" src="" alt="Image Preview" style="width:auto; height: 100%; margin: 0 auto 0 auto; display: none;">
-				  </div>
+				  
+				  <div class="selectedMenu">
+				      <ul class="selectedItem">
+				         <li>상품코드 <input type="text" class="selectedItem selectedCode" disabled></li>
+				         <li>상품이름 <input type="text" class="selectedItem selectedName" disabled></li>
+				         <li>판매가격 <input type="text" class="selectedItem selectedPrice" ></li>
+				         <li><input type="file" name="menuImage" class="form-control" id="inputGroupFile02" style="display:none;"/></li>
+				         <li><button class="addMenuIntoList" type="button">추가</button></li>
+				      </ul>
+				   </div>
+				   
+   				  <div class="selectedMenu list">
+				      <ul>
+				         <li class=""><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
+				         <li><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
+				         <li><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
+				      </ul>
+				   </div>
+				  
+					<button class="btn btn-outline-dark mt-auto" id="addMenuBnt" type="button">메뉴등록</button>
 				</div>
-			    <button class="btn btn-outline-dark mt-auto" id="addMenuBnt" type="button">메뉴등록</button>
-	    	
+
 	    	</form>
 	    
 	    </div>
@@ -233,4 +424,77 @@
           $(this).text(parseInt($(this).attr('value')).toLocaleString() + '원');
       })
   });
+  
+  function DropFile(dropAreaId, fileListId) {
+	  let dropArea = document.getElementById(dropAreaId);
+	  let fileList = document.getElementById(fileListId);
+
+	  function preventDefaults(e) {
+	    e.preventDefault();
+	    e.stopPropagation();
+	  }
+
+	  function highlight(e) {
+	    preventDefaults(e);
+	    dropArea.classList.add("highlight");
+	  }
+
+	  function unhighlight(e) {
+	    preventDefaults(e);
+	    dropArea.classList.remove("highlight");
+	  }
+
+	  function handleDrop(e) {
+	    unhighlight(e);
+	    let dt = e.dataTransfer;
+	    let files = dt.files;
+	    
+	    // Update the second file input with the selected file
+	    $('#inputGroupFile02')[0].files = files;
+
+	    // Additional logic or handling if needed
+	    console.log('Selected file:', files);
+	    
+	    handleFiles(files);
+
+	    const fileList = document.getElementById(fileListId);
+	    if (fileList) {
+	      fileList.scrollTo({ top: fileList.scrollHeight });
+	    }
+	  }
+
+	  function handleFiles(files) {
+	    files = [...files];
+	    // files.forEach(uploadFile);
+	    files.forEach(previewFile);
+	  }
+
+	  function previewFile(file) {
+	    console.log(file);
+	    renderFile(file);
+	  }
+
+	  function renderFile(file) {
+	    let reader = new FileReader();
+	    reader.readAsDataURL(file);
+	    reader.onloadend = function () {
+	      let img = dropArea.getElementsByClassName("preview")[0];
+	      img.src = reader.result;
+	      img.style.display = "block";
+	    };
+	  }
+
+	  dropArea.addEventListener("dragenter", highlight, false);
+	  dropArea.addEventListener("dragover", highlight, false);
+	  dropArea.addEventListener("dragleave", unhighlight, false);
+	  dropArea.addEventListener("drop", handleDrop, false);
+
+	  return {
+	    handleFiles
+	  };
+	}
+
+	const dropFile = new DropFile("drop-file", "files");
+	
+
   </script>

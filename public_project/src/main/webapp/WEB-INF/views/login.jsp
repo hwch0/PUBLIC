@@ -229,33 +229,46 @@
 document.addEventListener('DOMContentLoaded', function() {
     var urlParams = new URLSearchParams(window.location.search);
     var exception = urlParams.get('exception');
+    
+    console.log(urlParams);
+    console.log(exception);
 
     if (exception === 'failLogin') {
-    	 swal("Error","비밀번호가 틀렸습니다.",'warning');
+    	swal({
+		  title: "Error",
+		  text: "비밀번호가 틀렸습니다.",
+		  icon: "warning",
+		}).then((value) => {
+		  if (value) {
+			 location.href = "/";
+		  }
+		});
+    	/*  swal("Error","비밀번호가 틀렸습니다.",'warning'); */
     } else if (exception === 'loginLock'){
-    	swal("Error","잠긴 계정입니다.",'warning');
+    	/* swal("Error","잠긴 계정입니다.",'warning'); */
+    	swal({
+		  title: "Error",
+		  text: "잠긴 계정입니다.",
+		  icon: "warning",
+		}).then((value) => {
+		  if (value) {
+			 location.href = "/";
+		  }
+		});
     }
 });
 </script>
 
 <script>
-
-
 // 잔여시간 없음
 window.addEventListener('DOMContentLoaded', (event) => {
     const showPaymentContent = ${showPaymentContent};
-    var urlParams = new URLSearchParams(window.location.search);
-    var exception = urlParams.get('exception');
 //     const userId = "${userId}";
 //     $('.getUserId').text(userId);
     
     if (!showPaymentContent) {
         document.querySelector('.login_content').style.display ="none";
         document.querySelector('.payment_content').style.display = 'block';
-    }
-    
-    if (exception === 'failLogin') {
-        alert('로그인에 실패했습니다. 이유: ' + exception);
     }
 });
 

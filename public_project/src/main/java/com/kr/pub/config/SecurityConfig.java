@@ -50,7 +50,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/user/**").hasAnyAuthority("RT001", "RT004")
-                .requestMatchers("/admin/**").hasAnyAuthority("RT004")
+				.requestMatchers("/admin/**").hasAnyAuthority("RT004")
                 .anyRequest().permitAll())
             .formLogin(formLogin -> formLogin
                 .loginPage("/loginForm")
@@ -75,4 +75,8 @@ public class SecurityConfig {
 
         return http.build();
     }
+    public static void main(String [] args) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		System.out.println("admin" + encoder.encode("1234"));
+	}
 }

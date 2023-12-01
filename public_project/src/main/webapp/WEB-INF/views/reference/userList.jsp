@@ -155,7 +155,7 @@
 			        <th style="width: 135px;">회원아이디</th>
 			        <th style="width: 120px;">회원이름</th>
 			        <th style="width: 142px;">전화번호</th>
-			        <th style="width: 115px;">휴먼계정여부</th>
+			        <th style="width: 115px;">휴면계정여부</th>
 			        <th style="width: 80px;">잠금여부</th>
 			        <th style="width: 130px;">SNS 로그인 여부</th>
 			        <th style="width: 130px;">회원가입 일자</th>

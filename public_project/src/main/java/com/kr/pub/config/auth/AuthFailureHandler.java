@@ -8,13 +8,10 @@ import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import com.kr.pub.dao.UserDAO;
-import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.UserService;
 
 import jakarta.servlet.ServletException;
@@ -28,6 +25,8 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 	@Autowired
 	private UserDAO userDAO;
 	
+	@Autowired
+	private UserService userService;
 	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
@@ -45,11 +44,12 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
               System.out.println(username);
 
               userDAO.failLogin(username);
-              userDAO.updateRole(username);
+              userService.updateRole(username);
               
               int loginFailures = userDAO.getLoginFailures(username);
+              String userRole = userDAO.getUserRole(username);
               
-              if(loginFailures >= 3) {
+              if(userRole.equals("RT003")) {
             	  msg = "loginLock";
               } else {
             	  msg = "failLogin";

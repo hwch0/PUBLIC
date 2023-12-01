@@ -77,7 +77,7 @@
 }
 
 .selectedMenu li {
-    margin-right: 10px; /* Adjust as needed to add spacing between li elements */
+    margin-right: 0 1px 0 1px; /* Adjust as needed to add spacing between li elements */
     display: flex;
     font-size: 10px;
 }
@@ -85,7 +85,11 @@
 	width: 60%;
 }
 
-
+.selectedMenu.list div {
+overflow-y: auto;  /* 내용이 초과할 경우 수직 스크롤 표시 */
+display: inline-view;
+font-size: 10px;
+}
 
 .menu-category {
    position: absolute;
@@ -184,15 +188,18 @@
   width: 100%;
   height: 100%;
 }
-.contents .upload-box .file-label {
+.file-label {
   margin-top: 0px;
-  background-color: #5b975b;
+  background-color: #7b3dae;
   color: #fff;
   text-align: center;
   padding: 10px 0;
   width: 40%;
   border-radius: 6px;
   cursor: pointer;
+}
+.file-label:hover {
+  background-color: #450877;
 }
 .contents .upload-box .file {
   display: none;
@@ -225,6 +232,7 @@
 	height:100%;
    display: flex;
    justify-content: space-between;
+   margin-top:20px;
 
 }
 
@@ -243,7 +251,7 @@
 	<div id="menuModal" class="modal">
 	    <div class="menu modal-content">
 	    	<span class="close" id="closeModalBtn">&times;</span>
-	        <h2>메뉴 등록</h2>
+	        <h5 style="margin-top:20px;">메뉴 등록</h5>
 	    	<form class="menuForm" name="menuForm" id="menuForm" method="multipart/form-data">
 	    		<input name="selectedItem" id="selectedItem" style="display:none;">
 
@@ -266,7 +274,7 @@
 				      <div style="margin-top:30px; width:100%">
 				      <label class="file-label" for="chooseFile">Choose File</label>
 				      <input class="file" id="chooseFile" type="file" onchange="dropFile.handleFiles(this.files)" accept="image/png, image/jpeg, image/gif">
-				      <label type="button" class="file-label">Delete</label>
+				      <label type="button" id="resetBnt" class="file-label">Reset</label>
 				      </div>
 
 				    </div>
@@ -275,7 +283,7 @@
 				</div>
 		    	<div class="input-group mb-3" style="display: inline;">
 	    		
-				<select class="form-select" aria-label="Default select example" style="width:100%">
+				<select class="form-select" aria-label="Default select example" style="width:100%;">
 				  <option selected value="N">메뉴 카테고리 선택</option>
 				  
 				 <c:forEach var="category" items="${menuCategory}">
@@ -284,25 +292,23 @@
 				</select>   
 				
 			  <div class="menuSelectList">
-				  	<table class="menuSelectListBody" style="width:100%; height:100%; table-layout: fixed;">
+				  	<table class="menuSelectListBody" style="width:100%; height:245px; table-layout: fixed;">
 				  	
 	  					<thead>
 	  						<tr>
 				  			<th style="width: 20%;">카테고리</th>
 				  			<th style="width: 10%;">코드</th>
-				  			<th style="width: 30%;">메뉴</th>
+				  			<th style="width: 50%;">메뉴</th>
 				  			<th style="width: 20%;">가격</th>
-				  			<th style="width: 20%;">선택</th>
 	  						</tr>
   						</thead>
   						
-						<tbody class="menu" id="tbody">
+						<tbody class="menu" id="tbody" style="height:100%">
 					  		<tr id="menu-item" style="display: none;background-color:'';">
 					  			<td class="category">음료</td>
 					  			<td class="menuId">아이디</td>
 					  			<td class="menuName">코카콜라</td>
 					  			<td class="menuPrice">2000</td>
-					  			<td class="menuChecked" name="menuChecked"><input type="checkbox" id="checkedBox" name="checkedBox"></td>
 					  		</tr> 
  						</tbody>
 				  	</table>
@@ -314,22 +320,24 @@
 				         <li>상품이름 <input type="text" class="selectedItem selectedName" disabled></li>
 				         <li>판매가격 <input type="text" class="selectedItem selectedPrice" ></li>
 				         <li><input type="file" name="menuImage" class="form-control" id="inputGroupFile02" style="display:none;"/></li>
-				         <li><button class="addMenuIntoList" type="button">추가</button></li>
+   				         <li><img src="/images/plus-button.png" class="addMenuIntoList" style="height:20px"/></li>
 				      </ul>
 				   </div>
 				   
-   				  <div class="selectedMenu list">
-				      <ul>
-<!-- 				         <li class=""><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
-				         <li><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li>
-				         <li><input value="상품이름"><input value="상품가격"><button type="button">삭제</button></li> -->
-				      </ul>
+   				  <div class="selectedMenu list" style="height:50px; margin-top:10px;">
+
 				   </div>
 				  
-					<button class="btn btn-outline-dark mt-auto" id="addMenuBnt" type="button">메뉴등록</button>
+					<!-- <button class="btn btn-outline-dark mt-auto" id="addMenuBnt" type="button">메뉴등록</button> -->
+					<label type="button" id="addMenuBnt" class="file-label">메뉴등록</label>
 				</div>
 
 	    	</form>
+	    	
+	    	<form name="formData" id="formData" method="multipart/form-data" style="display: none;">
+	    	</form>
+	    	
+
 	    
 	    </div>
    </div>
@@ -470,33 +478,62 @@
 	}
 
 	const dropFile = new DropFile("drop-file", "files");
-	
-    $(document).ready(function() {
-        $('.addMenuIntoList').on('click', function() {
-            // "selectedName"과 "selectedPrice"에서 값을 가져오기
-			var nameValue = $('.selectedName').val();
-			var priceValue = $('.selectedPrice').val();
-			
-			// nameValue와 priceValue로 태그를 생성
-			var tag = $('<tag title="' + nameValue + ' ' + priceValue + '원" contenteditable="false" spellcheck="false" tabindex="-1" class="tagify__tag tagify--noAnim" value="' + nameValue + ' ' + priceValue + '원"><x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x><div><span class="tagify__tag-text">' + nameValue + ' ' + priceValue + '원</span></div></tag>');
-			
-			// 생성한 태그를 ".selectedMenu.list ul"에 추가
-			$('.selectedMenu.list ul').append($('<li>').append(tag));
-            
-            //var newLi = $('<li><input class="tag-input" value="' + nameValue + ' ' + priceValue + '원"></li>');
-            
-            // "selectedMenu list"의 ul에 새로운 li 요소 추가
-            $('.selectedMenu.list ul').append(newLi);
 
-            // Tagify 초기화
-            /* var input = newLi.find('.tag-input')[0];
-            new Tagify(input); */
+	// "remove tag" 클릭 시 해당 태그 제거
+	$('.selectedMenu.list').on('click', '.tagify__tag__removeBtn', function() {
+	    // 리스트에서 태그를 제거합니다
+	    const removedTag = $(this).closest('tag');
+	    removedTag.remove();
+	    
+	    // removedId를 가져옴
+	    const removedId = removedTag.attr('id');
 
-            // 선택적으로 입력값을 지우거나 새로운 요소를 추가한 후에 다른 작업 수행 가능
-            $('.selectedName').val('');
-            $('.selectedPrice').val('');
+	    // removedId와 동일한 값을 itemIdList에서 찾아 삭제
+	    const removedIndex = itemIdList.indexOf(removedId);
+	    if (removedIndex !== -1) {
+	        itemIdList.splice(removedIndex, 1);
+	    }
+
+	    // removedIndex 위치에 있는 파일 객체를 fileList에서 삭제
+	    fileList.splice(removedIndex, 1);
+	});
+    
+    
+    
+    $('#addMenuBnt').on('click', function() {
+        // .selectedMenu.list의 내용을 formData로 담기
+        var formData = new FormData();
+
+        //fileList.forEach((myFile) => formData.append("imageFile", myFile));
+        for (var i = 0; i < itemIdList.length; i++) {
+		    var itemId = itemIdList[i];
+		    var file = fileList[i];
+		
+		    formData.append(itemId, file);
+		}
+        
+        // "/admin/addMenu"로 전송
+        const url = "/admin/addMenu";
+	    console.log("formData >>> " + formData);
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status) {
+                swal(data.message); 
+                console.log(data.menu);
+                displayMenuList2(data.menu);
+            } else {
+                swal("추가된 메뉴가 없습니다.", "", "warning"); 
+            	
+            }
+            removeSelectedInfo();
         });
     });
-	
+
+
+    
 
   </script>

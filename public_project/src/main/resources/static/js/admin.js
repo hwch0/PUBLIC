@@ -236,12 +236,22 @@ const fileList = [];
 const itemIdList = [];
 $('.addMenuIntoList').on('click', () =>{
 	 if (!$('.form-control')[0].files[0]) {
-        swal("이미지를 선택해주세요", "" ,"warning");
+		Swal.fire({
+			  title: "이미지를 선택해주세요",
+			  text: "",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});        
         $('.selectedName').val('');
         $('.selectedPrice').val('');
         $('.selectedCode').val('');
     } else if( !$('.selectedItem.selectedCode').val()){
-        swal("등록할 상품을 선택해주세요", "" ,"warning");
+		Swal.fire({
+			  title: "등록할 상품을 선택해주세요",
+			  text: "",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});   
 	} else {
 		        // "selectedName", "selectedPrice", "selectedCode"에서 값을 가져오기
         var nameValue = $('.selectedName').val();
@@ -251,7 +261,12 @@ $('.addMenuIntoList').on('click', () =>{
 
         
         if(isRemovedIdExist) {
-			swal("이미 추가된 상품입니다.", "" ,"warning");
+			Swal.fire({
+			  title: "이미 추가된 상품입니다.",
+			  text: "",
+			  icon: "error",
+			  confirmButtonText: "확인",
+			});   
 		} else {
 			  // nameValue, priceValue, codeValue를 "tag"라는 데이터 객체로 생성
         var tag = $('<tag name="tag" id="' + codeValue + '" title="' + nameValue + ' ' + priceValue + '원" contenteditable="false" spellcheck="false" tabindex="-1" class="tagify__tag tagify--noAnim" value="' + nameValue + ' ' + priceValue + '원">' +
@@ -327,32 +342,36 @@ $('#resetBnt').on('click', () =>{
 
 /* 메뉴 삭제 (menu_checked : Y => N) */
 function deleteMenu(element) {
-	
-	swal({
-	  title: "메뉴를 삭제하시겠습니까?",
-	  icon: "warning",
-	  buttons: true,
-	  dangerMode: true,
-	})
-	.then((willDelete) => {
-	  if (willDelete) {
-		let menuId = element.getAttribute('menuId');
-		let imgId = element.getAttribute('imgId');
-    	let url = "/admin/deleteMenu/" + menuId +'/'+imgId; // menuId = item테이블의 item_id
-		myFetch(url, {mothod: "GET"}, data => {
-			if(data.status) {
-			    swal(data.message, {
-			      icon: "success",
-			    });
-				// 메뉴판에서 해당 메뉴 삭제하는 코드 추가
-			    element.closest('.col.mb-5').remove();
-			}
-		})
-	  } 
-	  /*else {
-	    swal("Your imaginary file is safe!");
-	  }*/
-	});
+
+Swal.fire({
+    title: "메뉴를 삭제하시겠습니까?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "삭제",
+    cancelButtonText: "취소",
+    focusCancel: true,
+    dangerMode: true,
+}).then((result) => {
+    if (result.isConfirmed) {
+        let menuId = element.getAttribute('menuId');
+        let imgId = element.getAttribute('imgId');
+        let url = "/admin/deleteMenu/" + menuId + '/' + imgId; // menuId = item테이블의 item_id
+
+        myFetch(url, { method: "GET" }, (data) => {
+            if (data.status) {
+                Swal.fire({
+                    title: "성공",
+                    text: data.message,
+                    icon: "success",
+                });
+                // 메뉴판에서 해당 메뉴 삭제하는 코드 추가
+                element.closest('.col.mb-5').remove();
+            }
+        });
+    }
+});
 }
 
 /* 첨부파일 이벤트 핸들러 */
@@ -368,7 +387,12 @@ $(document).on("change", ".form-control", function(){
         }
         reader.readAsDataURL(selectedFile);
     } else {
-        swal("이미지 파일을 선택하세요");
+		Swal.fire({
+			  title: "이미지 파일을 선택하세요.",
+			  text: "",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});
         $(this).val(""); // 파일 입력 내용 지우기
         preView.src = ""; // 미리보기 이미지 제거
     }

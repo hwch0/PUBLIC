@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="/css/user.css">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="/plugins/jquery/jquery.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 <style>
@@ -234,11 +234,12 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log(exception);
 
     if (exception === 'failLogin') {
-    	swal({
-		  title: "Error",
-		  text: "비밀번호가 틀렸습니다.",
-		  icon: "warning",
-		}).then((value) => {
+		Swal.fire({
+			  title: "비밀번호가 틀렸습니다.",
+			  text: "다시 확인해 주세요.",
+			  icon: "error",
+			  confirmButtonText: "확인",
+			}).then((value) => {
 		  if (value) {
 			 location.href = "/";
 		  }
@@ -246,11 +247,12 @@ document.addEventListener('DOMContentLoaded', function() {
     	/*  swal("Error","비밀번호가 틀렸습니다.",'warning'); */
     } else if (exception === 'loginLock'){
     	/* swal("Error","잠긴 계정입니다.",'warning'); */
-    	swal({
-		  title: "Error",
-		  text: "잠긴 계정입니다.",
-		  icon: "warning",
-		}).then((value) => {
+   			Swal.fire({
+			  title: "잠긴 계정입니다.",
+			  text: "관리자에게 문의해주세요.",
+			  icon: "error",
+			  confirmButtonText: "확인",
+			}).then((value) => {
 		  if (value) {
 			 location.href = "/";
 		  }
@@ -294,20 +296,22 @@ $('.li_paymethod li').on('click', function(e) {
     .then((rs) => rs.json())
     .then((json) =>{
         if (json.rs == "success") {
-        	 swal({
-			  title: "Success!",
-			  text: "충전이 정상적으로 처리되었습니다.",
-			  icon: "success",
-			}).then((value) => {
+   			Swal.fire({
+    			  title: "충전이 정상적으로 처리되었습니다.",
+    			  text: "감사합니다.",
+    			  icon: "success",
+    			  confirmButtonText: "확인",
+    			}).then((value) => {
 			  if (value) {
 				 location.href = "/";
 			  }
 			});
         } else {
-        	swal({
-  			  title: "Error",
-  			  text: "충전이 정삭적으로 처리되지 않았습니다.",
-  			  icon: "warning",
+   			Swal.fire({
+  			  title: "충전이 정상적으로 처리되지 않았습니다.",
+  			  text: "관리자에게 문의 해주세요.",
+  			  icon: "error",
+  			  confirmButtonText: "확인",
   			}).then((value) => {
   			  if (value) {
   				 location.href = "/";
@@ -380,7 +384,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function failLogin() {
-    swal("Error", "잔여시간이 없습니다.", 'success');
+		Swal.fire({
+			  title: "잔여 시간이 없습니다.",
+			  text: "충전해 주세요.",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			})
 }
 </script>
 

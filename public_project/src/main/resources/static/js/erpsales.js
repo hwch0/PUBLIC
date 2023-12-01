@@ -150,12 +150,12 @@ function orderSearch(){
 	const select = $('.orderSelect').val();
 	const selectOrder = $('input[name="orderOption"]:checked').val();
 	
-	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ===''){
-		swal({
-			  title: "경고!",
+	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ===''){			
+		Swal.fire({
+			  title: "경고!!",
 			  text: "조회 조건을 입력 해주세요!!",
 			  icon: "warning",
-			  button: "확인",
+			  confirmButtonText: "확인",
 			});
 		return;
 	}
@@ -220,11 +220,11 @@ function salesSearch(){
 	const unameValue = $('.userName').val();
 	
 	if(!startDateValue && !endDateValue && paymentidValue === '' && orderIdValue === '' && unameValue === ''){		
-		swal({
-			  title: "경고!",
+		Swal.fire({
+			  title: "경고!!",
 			  text: "조회 조건을 입력 해주세요!!",
 			  icon: "warning",
-			  button: "확인",
+			  confirmButtonText: "확인",
 			});
 		
 		return;
@@ -464,7 +464,12 @@ $('#searchSalesBnt').on('click', () => {
 				rownum++;
 			})
 		} else {
-			swal("Error",data.salesSearch,"error");
+			Swal.fire({
+			  title: "Error",
+			  text: data.salesSearch,
+			  icon: "error",
+			  confirmButtonText: "확인",
+			});
 		}
 	})
 })
@@ -500,8 +505,12 @@ $(document).on('click', '#tbody tr', function () {
 
 $('#selectSalesCodeBnt').on('click', () => {
 	if($('#modalSalesCode').val() ==="" || $('#modalSalesCode').val() === null) {
-		//alert("매출 전표를 선택해주세요");
-		swal("경고!!", "매출 전표를 선택해주세요.","warning");
+		Swal.fire({
+			  title: "경고!!",
+			  text: "매출 전표를 선택해주세요.",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});
 	} else {
 		$('#salesCode').val($('#modalSalesCode').val());
 		resetModal();

@@ -151,7 +151,12 @@ function orderSearch(){
 	const selectOrder = $('input[name="orderOption"]:checked').val();
 	
 	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ===''){
-		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+		swal({
+			  title: "경고!",
+			  text: "조회 조건을 입력 해주세요!!",
+			  icon: "warning",
+			  button: "확인",
+			});
 		return;
 	}
 	
@@ -214,8 +219,14 @@ function salesSearch(){
 	const orderIdValue = $('.orderCode').val();
 	const unameValue = $('.userName').val();
 	
-	if(!startDateValue && !endDateValue && paymentidValue === '' && orderIdValue === '' && unameValue === ''){
-		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+	if(!startDateValue && !endDateValue && paymentidValue === '' && orderIdValue === '' && unameValue === ''){		
+		swal({
+			  title: "경고!",
+			  text: "조회 조건을 입력 해주세요!!",
+			  icon: "warning",
+			  button: "확인",
+			});
+		
 		return;
 	}
 	

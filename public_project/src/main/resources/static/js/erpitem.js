@@ -27,6 +27,7 @@ function upload() {
                         title: "성공",
                         text: result.message,
                         icon: "success",
+                        button: "확인",
                     }).then(function () {
                         // 성공 시 페이지 새로고침
                         location.reload(true);
@@ -298,9 +299,12 @@ $(document).ready(function() {
 $(document).ready(function() {
 
     $("#insertBnt").on("click", function() {
-
-        swal("등록이 완료 되었습니다.","","success");
-
+		swal({
+			  title: "등록이 완료 되었습니다.",
+			  text: "",
+			  icon: "success",
+			  button: "확인",
+			});
         $(".modal").removeClass("on");
     });
 });
@@ -375,7 +379,12 @@ function statusSearch() {
 	const selectedStatus = $('input[name="status"]:checked').val();
 	
 	if(!startDateValue && !endDateValue && codeValue === '' && selectedStatus === '' && nameValue === ''){
-		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+			swal({
+			  title: "경고!!",
+			  text: "조회 조건을 입력 해주세요.",
+			  icon: "warning",
+			  button: "확인",
+			});
 		return;
 	}
 		
@@ -442,7 +451,12 @@ function searchData() {
 	const stockValue = $('.itemSituation').val();
 	
 	if (!startDateValue && !endDateValue && nameValue === '' && selectValue === '' && stockValue === '') {
-	    swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+		swal({
+			  title: "경고!!",
+			  text: "조회 조건을 입력 해주세요.",
+			  icon: "warning",
+			  button: "확인",
+			});
 	    return;
 	}
 	

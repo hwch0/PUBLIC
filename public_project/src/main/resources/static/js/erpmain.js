@@ -47,9 +47,14 @@ $(document).ready(() => {
         const diffInMilliseconds = Math.abs(selectedEndDate - selectedStartDate);
         const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24));
 
-        if (diffInDays > 90) {
-			swal("Error","최대 3개월을 넘어서 검색을 할 수 없습니다.!!", "error");
-
+        if (diffInDays > 90) {			
+		Swal.fire({
+			  title: "Error!!",
+			  text: "최대 3개월을 넘어서 검색을 할 수 없습니다.!!",
+			  icon: "error",
+			  confirmButtonText: "확인",
+			});
+			
             $('#' + id).val('');
             $('#' + endDateID).val('');
 

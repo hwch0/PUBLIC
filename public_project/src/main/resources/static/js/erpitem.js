@@ -21,24 +21,26 @@ function upload() {
                 contentType: false,
                 processData: false,
                 success: function (result) {
-                    console.log("result 확인1: ", result)
+                    console.log("result 확인1: ", result);
                     // 성공 시 SweetAlert를 사용하여 알림 표시
-                    swal({
+                    Swal.fire({
                         title: "성공",
                         text: result.message,
                         icon: "success",
-                    }).then(function () {
+                        confirmButtonText: "확인",
+                    }).then((result) => {
                         // 성공 시 페이지 새로고침
-                        location.reload(true);
-                    });
-                },
-                error: function (request, status, error) {
-                    console.log("error");
-                    // 에러 시 SweetAlert를 사용하여 에러 알림 표시
-                    swal({
-                        title: "에러",
-                        text: "code: " + request.status + "\n" + "message : " + request.responseText + "\n" + "error: " + error,
-                        icon: "error",
+                        if (result.isConfirmed) {
+                            location.reload(true);
+                        }
+                    }).catch((error) => {
+                        console.log("error");
+                        // 에러 시 SweetAlert를 사용하여 에러 알림 표시
+                        Swal.fire({
+                            title: "에러",
+                            text: "code: " + error.status + "\n" + "message : " + error.responseText + "\n" + "error: " + error,
+                            icon: "error",
+                        });
                     });
                 }
             });
@@ -298,9 +300,12 @@ $(document).ready(function() {
 $(document).ready(function() {
 
     $("#insertBnt").on("click", function() {
-
-        swal("등록이 완료 되었습니다.","","success");
-
+		Swal.fire({
+			  title: "등록이 완료 되었습니다.",
+			  text: "",
+			  icon: "success",
+			  confirmButtonText: "확인",
+			});
         $(".modal").removeClass("on");
     });
 });
@@ -375,7 +380,12 @@ function statusSearch() {
 	const selectedStatus = $('input[name="status"]:checked').val();
 	
 	if(!startDateValue && !endDateValue && codeValue === '' && selectedStatus === '' && nameValue === ''){
-		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+		Swal.fire({
+			  title: "경고!!",
+			  text: "조회 조건을 입력 해주세요.",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});
 		return;
 	}
 		
@@ -442,10 +452,15 @@ function searchData() {
 	const stockValue = $('.itemSituation').val();
 	
 	if (!startDateValue && !endDateValue && nameValue === '' && selectValue === '' && stockValue === '') {
-	    swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+		Swal.fire({
+			  title: "경고!!",
+			  text: "조회 조건을 입력 해주세요.",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});
 	    return;
 	}
-	
+
     LoadingWithMask('/images/loading.gif');
     
 	const searchParams = {

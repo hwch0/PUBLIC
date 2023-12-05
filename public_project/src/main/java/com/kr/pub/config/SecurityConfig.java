@@ -72,8 +72,9 @@ public class SecurityConfig {
 
         return http.build();
     }
-    public static void main(String [] args) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		System.out.println("admin" + encoder.encode("1234"));
-	}
+	/*
+	 * public static void main(String [] args) { BCryptPasswordEncoder encoder = new
+	 * BCryptPasswordEncoder(); System.out.println("admin" +
+	 * encoder.encode("1234")); }
+	 */
 }

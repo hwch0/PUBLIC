@@ -73,7 +73,7 @@
 
                         <td class="tr_th">상태 구분</td>
                         <td  class="changePadding"style="padding: 0 30px;">
-						    <label style="font-size: 13px"><input type="radio" name="orderOption" value="all" checked> 모두 보기</label>
+						    <label style="font-size: 13px"><input type="radio" name="orderOption" value="" checked> 모두 보기</label>
                             <label style="font-size: 13px"><input type="radio" name="orderOption" value="PC이용"> PC이용</label>
 						    <label style="font-size: 13px"><input type="radio" name="orderOption" value="메뉴주문"> 메뉴주문</label>
                         </td>
@@ -111,17 +111,15 @@
                     	<td class="order-data" data-order="${order['quantity']}">${order['quantity']} EA</td>
                     	<td>₩<fmt:formatNumber value="${order['price']}" /></td>
                     	<td>${order['paymentMethod']}</td>
-                    	<td style="color: ${order['paymentStatus'] eq '판매' ? 'blue' : order['paymentStatus'] eq '주문취소' ? 'red' : 'black'}">
-                    		${order['paymentStatus']}</td>
+                    	<td class="orderStatus ${order['paymentStatus']}">${order['paymentStatus']}</td>
                     </tr>
                     </c:forEach>
                  </tbody>                 
                 <tbody class="total-row" style="background-color: #FFDCDC;">
 				      <tr>
 			            <td style="width: 452px; font-weight: bold; text-align: center;">합계</td>
-			            <td style="width: 84px; text-align: center;" id="TotalQuantity"></td>
-			            <td style="width: 369px; text-align: center;" id="orderTotalPrice">
-			                ₩<span id="formOrderTotalPrice"></span>
+			            <td style="width: 454px; text-align: center;" id="orderTotalPrice">
+			                <span id="formOrderTotalPrice"></span>
 			            </td>
        				 </tr>
 				</tbody>

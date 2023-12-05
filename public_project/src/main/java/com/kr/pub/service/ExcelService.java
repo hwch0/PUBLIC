@@ -216,16 +216,16 @@ public class ExcelService {
 	}
 	
 	public String itemTypeCode(String itemType) {
-		String itemTypeCode = "";
-		
-		if("상품".equals(itemType)) {
-			itemTypeCode = "IT001";
-		}else if ("비품".equals(itemTypeCode)) {
-			itemTypeCode = "IT003";
-		}else if ("소모품".equals(itemTypeCode)) {
-			itemTypeCode = "IT004";
-		}
-		return itemTypeCode;
+	    String itemTypeCode = "";
+	    
+	    if ("상품".equals(itemType)) {
+	        itemTypeCode = "IT001";
+	    } else if ("비품".equals(itemType)) {
+	        itemTypeCode = "IT003";
+	    } else if ("소모품".equals(itemType)) {
+	        itemTypeCode = "IT004";
+	    }
+	    return itemTypeCode;
 	}
 	
 	//업로드용 excel 시트

@@ -46,12 +46,11 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		Cookie cookie = new Cookie("userId", userInfo.getUserId());
 		System.out.println(cookie);
         response.addCookie(cookie);
-		
+        String msg ;
 			
 		for (GrantedAuthority role : authentication.getAuthorities()) {
 		     if (role.getAuthority().contains("RT004")) {
 		    	 url = "/admin";
-		    	 
 		     } else if (role.getAuthority().contains("RT001")) {
 			    if(userInfo.getRemainingTime() > 0) {	
 		    	 	try {
@@ -60,20 +59,27 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+		    	 	
 			    	url = "/user/main";
+			    	
 			    } else {
 			    	System.out.println("잔여시간 없음");
 			    	url ="/recharge";
 			    }
+		     } else if(role.getAuthority().contains("RT003")){
+		    	 msg = "loginLock";
+		    	 url = "/loginForm?error=true&exception=" + msg;
 		     } else {
 		    	 url = "/";
 		     }
 		  }
-      
-		
+			/*
+			 * request.setAttribute("loginSuccess", true);
+			 */
+		 
         setDefaultTargetUrl(url);
-        
+
         super.onAuthenticationSuccess(request, response, authentication);
     }
-    
+
 }

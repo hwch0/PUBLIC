@@ -38,7 +38,7 @@
         <div class="hd hd_rgt">
             <div class="btn_grp">
                 <ul>
-                    <li class="on"><a href="javascript:void(0);">알림</a></li>
+                    <li><a href="javascript:void(0);">알림</a></li>
                     <li><a href="javascript:void(0);">채팅</a></li>
                     <li><a href="javascript:void(0);">좌석</a></li>
                     <li><a href="javascript:void(0);">대시보드</a></li>

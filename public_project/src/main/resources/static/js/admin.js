@@ -70,6 +70,30 @@ function displayMenuList(menuList) {
 	})
 }
 
+function displayMenuList2(menuListData) {
+	menuListData.forEach((menu, index) => {
+		const cardDate = menu;
+		const menuListContainer  = $('.menuList');
+		const cardItem = $('#cardItem').clone();
+		cardItem.find('img').attr('src', '/image/download/' + cardDate.IMG_ID);
+		cardItem.find('.fw-bolder.menuName').text(cardDate.ITEM_NAME);
+		
+		let menuPrice = parseInt(cardDate.SELLING_PRICE).toLocaleString() + '원';
+		
+		cardItem.find('.fw-bolder.menuPrice').text(menuPrice);
+		cardItem.find('#deleteMenuBnt').attr('menuId', cardDate.ITEM_ID);
+		cardItem.find('#deleteMenuBnt').attr('imgId', cardDate.IMG_ID);
+		cardItem.attr('menuCategory', cardDate.MENU_CATEGORY_CODE);
+		cardItem.show();
+		
+		//	menuList.prepend(cardItem);
+		menuListContainer.children().eq(index + 1).after(cardItem);
+		menuModal.removeClass('on'); 
+	})
+	
+	console.log("menuList>>> " + menuList);
+}
+
 
 function showCategory(num) {
 	
@@ -159,14 +183,123 @@ $('#closeModalBtn').on('click', () => {
     $('#inputGroupFile02').val('');
     $('#preview').attr('src', '');
     $('#preview').css('display', 'none');
+	removeSelectedInfo();
 	 
 	 menuModal.removeClass('on');  
 });
 
+function removeSelectedInfo() {
+    $('.selectedName').val('');
+    $('.selectedPrice').val('');
+    $('.selectedCode').val('');
+    $('#inputGroupFile02')[0].files = null;
+    $('.preview')[0].src = "";
+    $('.preview').css('display','none');
+    $('.selectedMenu.list').empty();
+}
+
+/* 메뉴 행 선택 이벤트 */
+var previousClickedRow = null;
+let selectedItem = $('.selectedItem');
+$(document).on('click', '#tbody tr', function () {
+	console.log(" >>> " + $(this).find('.menuId').text());
+     if (previousClickedRow !==null && 
+     (previousClickedRow.find('.menuId').text() == $(this).find('.menuId').text())) {
+		previousClickedRow.css('background-color', '');
+		 $(this).css('background-color', '');
+		 previousClickedRow = null;
+		 salesCode.val("");
+		 
+	} else {
+	    // 이전에 클릭한 행의 배경색을 원래대로 복원
+	    if (previousClickedRow !== null) {
+	        previousClickedRow.css('background-color', '');
+	    } 
+	    // 새로 클릭한 행의 배경색 변경
+	    $(this).css('background-color', '#e6e6fa');
+	
+	    // 현재 클릭한 행을 이전에 클릭한 행으로 저장
+	    previousClickedRow = $(this);
+	
+	    // 해당 행의 paymentId 값을 가져와서 콘솔에 출력
+	    var currentItemId = $(this).find('.menuId').text();
+	    console.log("currentItemId >> " + currentItemId);
+	    selectedItem.find('.selectedCode').val($(this).find('.menuId').text());
+	    selectedItem.find('.selectedName').val($(this).find('.menuName').text());
+	    selectedItem.find('.selectedPrice').val($(this).find('.menuPrice').text());
+		
+	}
+
+});
+
+const fileList = [];
+const itemIdList = [];
+$('.addMenuIntoList').on('click', () =>{
+	 if (!$('.form-control')[0].files[0]) {
+		Swal.fire({
+			  title: "이미지를 선택해주세요",
+			  text: "",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});        
+        $('.selectedName').val('');
+        $('.selectedPrice').val('');
+        $('.selectedCode').val('');
+    } else if( !$('.selectedItem.selectedCode').val()){
+		Swal.fire({
+			  title: "등록할 상품을 선택해주세요",
+			  text: "",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});   
+	} else {
+		        // "selectedName", "selectedPrice", "selectedCode"에서 값을 가져오기
+        var nameValue = $('.selectedName').val();
+        var priceValue = $('.selectedPrice').val();
+        var codeValue = $('.selectedCode').val();
+        const isRemovedIdExist = itemIdList.includes(codeValue);
+
+        
+        if(isRemovedIdExist) {
+			Swal.fire({
+			  title: "이미 추가된 상품입니다.",
+			  text: "",
+			  icon: "error",
+			  confirmButtonText: "확인",
+			});   
+		} else {
+			  // nameValue, priceValue, codeValue를 "tag"라는 데이터 객체로 생성
+        var tag = $('<tag name="tag" id="' + codeValue + '" title="' + nameValue + ' ' + priceValue + '원" contenteditable="false" spellcheck="false" tabindex="-1" class="tagify__tag tagify--noAnim" value="' + nameValue + ' ' + priceValue + '원">' +
+            '<x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>' +
+            '<div><span class="tagify__tag-text">' + nameValue + ' ' + priceValue + '원</span></div></tag>');
+		
+        var file = $('<input type="file" name="imageFile" class="insertedImage">')
+       var itemInfo = $('<input class="insertedItem" name="selectedItem" value='+ codeValue+ '>')
+         file[0].files = $('#inputGroupFile02')[0].files;
+		fileList.push($('#inputGroupFile02')[0].files[0]);
+		itemIdList.push(codeValue);
+        console.log(">>>> " + $('#inputGroupFile02')[0].files[0].name);
+        // "tag"를 ".selectedMenu.list ul"에 추가
+        $('.selectedMenu.list').append(tag);
+
+        // 선택적으로 입력값을 지우거나 새로운 요소를 추가한 후에 다른 작업 수행 가능
+        $('.selectedName').val('');
+        $('.selectedPrice').val('');
+        $('.selectedCode').val('');
+        $('#inputGroupFile02')[0].files = null;
+        $('.preview')[0].src = "";
+        $('.preview').css('display','none');
+		}
+	}
+})
+
+$('#resetBnt').on('click', () =>{
+	    removeSelectedInfo();
+})
 
 
 /* 메뉴 등록 (menu_checked : N => Y) */
-$("#addMenuBnt").on("click", () => {
+/*$("#addMenuBnt").on("click", () => {
 	// 체크된 tr의 menuId 클래스명을 가진 요소의 텍스트 값을 저장할 배열을 만듭니다.
 	let checkedMenuIds = [];
 	
@@ -205,36 +338,40 @@ $("#addMenuBnt").on("click", () => {
 			}
 		})
 	}
-})
+})*/
 
 /* 메뉴 삭제 (menu_checked : Y => N) */
 function deleteMenu(element) {
-	
-	swal({
-	  title: "메뉴를 삭제하시겠습니까?",
-	  icon: "warning",
-	  buttons: true,
-	  dangerMode: true,
-	})
-	.then((willDelete) => {
-	  if (willDelete) {
-		let menuId = element.getAttribute('menuId');
-		let imgId = element.getAttribute('imgId');
-    	let url = "/admin/deleteMenu/" + menuId +'/'+imgId; // menuId = item테이블의 item_id
-		myFetch(url, {mothod: "GET"}, data => {
-			if(data.status) {
-			    swal(data.message, {
-			      icon: "success",
-			    });
-				// 메뉴판에서 해당 메뉴 삭제하는 코드 추가
-			    element.closest('.col.mb-5').remove();
-			}
-		})
-	  } 
-	  /*else {
-	    swal("Your imaginary file is safe!");
-	  }*/
-	});
+
+Swal.fire({
+    title: "메뉴를 삭제하시겠습니까?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "삭제",
+    cancelButtonText: "취소",
+    focusCancel: true,
+    dangerMode: true,
+}).then((result) => {
+    if (result.isConfirmed) {
+        let menuId = element.getAttribute('menuId');
+        let imgId = element.getAttribute('imgId');
+        let url = "/admin/deleteMenu/" + menuId + '/' + imgId; // menuId = item테이블의 item_id
+
+        myFetch(url, { method: "GET" }, (data) => {
+            if (data.status) {
+                Swal.fire({
+                    title: "성공",
+                    text: data.message,
+                    icon: "success",
+                });
+                // 메뉴판에서 해당 메뉴 삭제하는 코드 추가
+                element.closest('.col.mb-5').remove();
+            }
+        });
+    }
+});
 }
 
 /* 첨부파일 이벤트 핸들러 */
@@ -250,7 +387,12 @@ $(document).on("change", ".form-control", function(){
         }
         reader.readAsDataURL(selectedFile);
     } else {
-        swal("이미지 파일을 선택하세요");
+		Swal.fire({
+			  title: "이미지 파일을 선택하세요.",
+			  text: "",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});
         $(this).val(""); // 파일 입력 내용 지우기
         preView.src = ""; // 미리보기 이미지 제거
     }

@@ -179,7 +179,12 @@ $('#orderList').on('click', '.served', function(e) {
 	ajaxResponse("POST", "/order/served", params)
 		.then(function(response) {
 			if(response.result){
-				swal("서빙 완료!", "정상적으로 처리되었습니다.", "success");
+			Swal.fire({
+			  title: "서빙 완료!",
+			  text: "정상적으로 처리되었습니다.",
+			  icon: "success",
+			  confirmButtonText: "확인",
+			});
 				$(e.currentTarget).parent().parent().prev().remove();
 				$(e.currentTarget).parent().parent().remove();
 			}

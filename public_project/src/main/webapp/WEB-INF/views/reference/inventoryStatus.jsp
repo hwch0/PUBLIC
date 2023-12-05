@@ -63,7 +63,7 @@
                     <tr>
                       <td class="tr_th">구분 상세</td>
                         <td style="padding: 0 30px;">
-						    <label style="font-size: 13px"><input type="radio" name="status" value="all" checked> 모두 보기</label>
+						    <label style="font-size: 13px"><input type="radio" name="status" value="" checked> 모두 보기</label>
                             <label style="font-size: 13px"><input type="radio" name="status" value="입고"> 입고</label>
 						    <label style="font-size: 13px"><input type="radio" name="status" value="출고"> 출고</label>
                         </td>
@@ -104,8 +104,7 @@
 							<td>${status['ITEM_ID']}</td>
 							<td>${status['ITEM_NAME']}</td>
 							<td>${status['STATUSDATE']}</td>
-							<td style="color: ${status['INCDEC'] eq '입고' ? 'blue' : status['INCDEC'] eq '출고' ? 'red' : 'black'}">
-							${status['INCDEC']}</td>
+							<td class="statusIncdec ${status['INCDEC']}">${status['INCDEC']}</td>
 							<td class="status-stock" data-status="${status['STOCK']}">${status['STOCK']} EA</td>
 							<td>₩<fmt:formatNumber value="${status['PRICE']}" /></td>
 							<td>₩<fmt:formatNumber value="${status['STOCK'] * status['PRICE']}" /></td>
@@ -115,13 +114,9 @@
                  
    				<tbody class="total-row" style="background-color: #FFDCDC;">
 				      <tr>
-			            <td style="width: 604px; font-weight: bold; text-align: center;">합계</td>
-			            <td style="width: 73px; text-align: center;" id="statusTotalStock"></td>
-			            <td style="width: 107px; text-align: center;" id="statusTotalPrice">
-			                <span id="form-status-TotalPrice"></span>
-			            </td>
-			            <td style="width: 121px; text-align: center;" id="statusTotalPrices">
-			                <span id="form-status-TotalPrices"></span>
+			            <td style="width: 604px; font-weight: bold; text-align: center;">총 금액 합계</td>
+			            <td style="width: 303px; text-align: center;" id="statusTotalPrice">
+			                 <span id="form-status-TotalPrice"></span>
 			            </td>
        				 </tr>
 				</tbody>

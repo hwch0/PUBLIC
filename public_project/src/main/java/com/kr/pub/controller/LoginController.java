@@ -66,8 +66,10 @@ public class LoginController {
 
 		model.addAttribute("error", error);
 		model.addAttribute("exception", exception);
+		
 		return "login";
 	}
+	
 	
 	// 잔여시간 없음
 	@GetMapping("/recharge")

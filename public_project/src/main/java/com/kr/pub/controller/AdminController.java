@@ -4,8 +4,12 @@ package com.kr.pub.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +22,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.kr.pub.dto.ImageDTO;
+import com.kr.pub.dto.MenuDTO;
 import com.kr.pub.dto.OrderListDTO;
 import com.kr.pub.dto.UserDTO;
 import com.kr.pub.service.AdminService;
@@ -72,19 +80,47 @@ public class AdminController {
 		return "/admin/adminLayout";
 	}
 	
+//	@ResponseBody
+//	@PostMapping("/addMenu")
+//	public Map<String, Object> addMenu(MultipartHttpServletRequest multipartRequest, HttpServletResponse res) throws IOException {
+//		System.out.println("AdminController addMenu");
+//		Map<String,Object> result = new HashMap<>();
+//		String itemId = multipartRequest.getParameter("selectedItem");
+//		ImageDTO image = imageService.imageProcess(multipartRequest);
+//		image.setItemId(itemId);
+//		boolean status = imageService.insertImage(image);
+//		
+//		result.put("status", status);
+//		result.put("message", status ? "메뉴가 등록 되었습니다." : "메뉴 등록 중 오류 발생");
+//		result.put("menu",  status ? adminService.getMenu(itemId) : "");
+//		return result;
+//	}
 	@ResponseBody
 	@PostMapping("/addMenu")
 	public Map<String, Object> addMenu(MultipartHttpServletRequest multipartRequest, HttpServletResponse res) throws IOException {
 		System.out.println("AdminController addMenu");
 		Map<String,Object> result = new HashMap<>();
-		String itemId = multipartRequest.getParameter("selectedItem");
-		ImageDTO image = imageService.imageProcess(multipartRequest);
-		image.setItemId(itemId);
-		boolean status = imageService.insertImage(image);
+		List<Map<String, Object>> menuList = new ArrayList<>();
+        // 된다 리스트안에 모여있음
+		System.out.println("\n================\n");
+		Map<String, List<MultipartFile>> paramMap = multipartRequest.getMultiFileMap();
+		for (Entry<String, List<MultipartFile>> entry : paramMap.entrySet()) {
+			MultipartFile file = entry.getValue().get(0);
+			
+			System.out.println(entry.getKey());
+			System.out.println(file.getOriginalFilename());
+			
+			String itemId = entry.getKey();
+			ImageDTO image = imageService.imageProcess(file);
+			image.setItemId(itemId);
+			menuList.add(imageService.insertImage2(image));
+		}
 		
+		boolean status = menuList.size() >0;
 		result.put("status", status);
 		result.put("message", status ? "메뉴가 등록 되었습니다." : "메뉴 등록 중 오류 발생");
-		result.put("menu",  status ? adminService.getMenu(itemId) : "");
+		result.put("menu",  status ? menuList : "");
+		System.out.println("result >>> " + result);
 		return result;
 	}
 	

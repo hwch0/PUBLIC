@@ -42,30 +42,21 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function orderTotals(){
-	let totalStock = 0;
 	let totalPrice = 0;
 	
 	const rows = document.querySelectorAll("#orderTbody tr");
 	rows.forEach(function (row){
-		const stockElement = row.querySelector(".order-data");
-		const stock = stockElement ? parseInt(stockElement.dataset.order) : 0;
 		
 		const priceElement = row.querySelector("td:nth-child(6)");
 		const priceString = priceElement ? priceElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
 		const price = priceString !== "-" ? parseFloat(priceString) : 0;
-		
-		totalStock += isNaN(stock) ? 0 : stock;
+
 		totalPrice += isNaN(price) ? 0 : price;
 	});
-	
-	  const totaTotalQuantity = document.getElementById("TotalQuantity");
-	  if(totaTotalQuantity){
-	  	totaTotalQuantity.innerText = totalStock.toLocaleString() + ' EA';
-	  }
-	  
+
 	  const formOrderTotalPrice = document.getElementById("formOrderTotalPrice");
 	  if(formOrderTotalPrice){
-	  	formOrderTotalPrice.innerText = totalPrice.toLocaleString();
+	  	formOrderTotalPrice.innerText = totalPrice.toLocaleString()+ ' 원';
 	  }
 }
 
@@ -75,31 +66,21 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function salesTotals() {
-    let totalPrice = 0;
     let totalNetProfit = 0;
 
     const rows = document.querySelectorAll("#paymTbody tr");
     rows.forEach(function (row) {
-		const priceElement = row.querySelector("td:nth-child(7)");
-        const priceString = priceElement ? priceElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
-        const price = priceString !== "-" ? parseFloat(priceString) : 0;
 
 		const netProfitElement = row.querySelector("td:nth-child(8)");
         const netProfitString = netProfitElement ? netProfitElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
         const netProfit = netProfitString !== "-" ? parseFloat(netProfitString) : 0;
 
-        totalPrice += isNaN(price) ? 0 : price;
         totalNetProfit += isNaN(netProfit) ? 0 : netProfit;
     });
-
-    const fromSalesTotalPrice = document.getElementById("salesTotalPrice");
-    if(fromSalesTotalPrice){
-    	fromSalesTotalPrice.innerText = '₩' + totalPrice.toLocaleString();
-    }
-
+    
     const fromSalesTotalNetProfit = document.getElementById("formNetProfitTotalPrices");
     if(fromSalesTotalNetProfit){
-    	fromSalesTotalNetProfit.innerText = totalNetProfit.toLocaleString();
+    	fromSalesTotalNetProfit.innerText = totalNetProfit.toLocaleString()+ ' 원';
     }
 }
 
@@ -169,8 +150,13 @@ function orderSearch(){
 	const select = $('.orderSelect').val();
 	const selectOrder = $('input[name="orderOption"]:checked').val();
 	
-	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ==='all'){
-		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ===''){			
+		Swal.fire({
+			  title: "경고!!",
+			  text: "조회 조건을 입력 해주세요!!",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});
 		return;
 	}
 	
@@ -193,21 +179,22 @@ function orderSearch(){
 
 			$('#orderTbody').empty();
 			
+			let row = "";
+			const intl = new Intl.NumberFormat();
 			$.each(data.orderSearch, function(index, order){
 								
-			let row = '<tr>' +
-				'<td>' + (order['index'] || '') + '</td>' +
-		            '<td onclick="orderDetail(\'' + order['orderId'] + '\')" class="clickable-cell">' + order['orderId'] + '</td>' +
-		            '<td>' + order['orderDate'] + '</td>' +
-		            '<td>' + order['type'] + '</td>' +
-		            '<td class="order-data" data-order="' + order['quantity'] + ' EA">' + order['quantity'] + ' EA</td>' +
-		            '<td>₩' + new Intl.NumberFormat().format(order['price']) + '</td>' +
-		            '<td>' + order['paymentMethod'] + '</td>' +
-		            '<td style="color: ' + (order['paymentStatus'] === '판매' ? 'blue' : order['paymentStatus'] === '주문취소' ? 'red' : 'black')
-		             + '">' + order['paymentStatus'] + '</td>' +
+			 row += '<tr>' +
+				'<td>' + (order.index || '') + '</td>' +
+		            '<td onclick="orderDetail(\'' + order.orderId + '\')" class="clickable-cell">' + order.orderId + '</td>' +
+		            '<td>' + order.orderDate + '</td>' +
+		            '<td>' + order.type + '</td>' +
+		            '<td class="order-data" data-order="' + order.quantity + ' EA">' + order.quantity + ' EA</td>' +
+		            '<td>₩' + intl.format(order.price) + '</td>' +
+		            '<td>' + order.paymentMethod + '</td>' +
+		            '<td class="orderStatus ' + order.paymentStatus + '">' + order.paymentStatus + '</td>' +
 		            '</tr>';
-				$('#orderTbody').append(row);
 			});
+				$('#orderTbody').append(row);
 			
 			addEmptyRowsToTable('#orderTbody');
 			
@@ -230,10 +217,16 @@ function salesSearch(){
 	const endDateValue = $('#endDate').val();
 	const paymentidValue = $('#salesCode').val();
 	const orderIdValue = $('.orderCode').val();
-	const unmeValue = $('.userName').val();
+	const unameValue = $('.userName').val();
 	
-	if(!startDateValue && !endDateValue && paymentidValue === '' && orderIdValue === '' && unmeValue === ''){
-		swal("경고!!", "조회 조건을 입력 해주세요.", 'warning');
+	if(!startDateValue && !endDateValue && paymentidValue === '' && orderIdValue === '' && unameValue === ''){		
+		Swal.fire({
+			  title: "경고!!",
+			  text: "조회 조건을 입력 해주세요!!",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});
+		
 		return;
 	}
 	
@@ -244,7 +237,7 @@ function salesSearch(){
 		endDate: $('#endDate').val().replace(/\//g, '-'),
 		paymentId: $('#salesCode').val(),
 		orderId: $('.orderCode').val(),
-		unme: $('.userName').val()		
+		uname: $('.userName').val()		
 	};
 	
 	$.ajax({
@@ -256,29 +249,23 @@ function salesSearch(){
 
 			$('#paymTbody').empty();
 			
+			let row = "";
+			const intl = new Intl.NumberFormat();
 			$.each(data.salesSearch, function(index, sales){
-				let color;
-				if (sales['type'] === 'PC이용'){
-					color = '#87CEEB';
-				} else if (sales['type'] === '메뉴주문'){
-					color = '#70594d';
-				}else{
-					color = 'black';
-				}
-								
-		let row = '<tr>' +
-			'<td>' + (sales['index'] || '') + '</td>' +
-                    '<td>' + sales['paymentId'] + '</td>' +
-                    '<td>' + sales['orderId'] + '</td>' +
-                    '<td>' + sales['paymentDate'] + '</td>' +
-                    '<td>' + sales['uname'] + '</td>' +
-                    '<td style="color: ' + color + '">' + sales['type'] + '</td>' +
-                    '<td>₩' + new Intl.NumberFormat().format(sales['price']) + '</td>' +
-                    '<td>₩' + new Intl.NumberFormat().format(sales['netProfit']) + '</td>' +
+			
+				row += '<tr>' +
+			'<td>' + (sales.index || '') + '</td>' +
+                    '<td>' + sales.paymentId + '</td>' +
+                    '<td>' + sales.orderId + '</td>' +
+                    '<td>' + sales.paymentDate + '</td>' +
+                    '<td>' + sales.uname + '</td>' +
+                    '<td class="paymType ' + sales.type + '">' + sales.type + '</td>' +
+                    '<td>₩' + intl.format(sales.price) + '</td>' +
+                    '<td>₩' + intl.format(sales.netProfit) + '</td>' +
                     '</tr>';
 			
-				$('#paymTbody').append(row);
 			});
+				$('#paymTbody').append(row);
 			
 			addEmptyRowsToTable('#paymTbody');
 			
@@ -295,7 +282,8 @@ function salesSearch(){
 
 //주문 내역 정렬
 $(document).ready(function () {
-	const originalRows = $('.orderSortable').closest('table').find('tbody:first > tr').toArray();
+	let originalRows = $('#orderTbody').closest('table').find('tbody:first > tr').toArray();
+	
     $('.orderSortable').click(function () {
         const table = $(this).closest('table');
         const index = $(this).index();
@@ -307,6 +295,7 @@ $(document).ready(function () {
         } else if ($(this).hasClass('desc')) {
             $(this).removeClass('desc');
             $(this).addClass('reset');
+            originalRows = $('#orderTbody').find('tr').toArray().sort(comparator(0));
             rows = originalRows;
         }else{
 			$(this).addClass('asc');
@@ -319,7 +308,6 @@ $(document).ready(function () {
 		}
 		
 		table.find('.orderSortable').not(this).removeClass('asc desc reset');
-
         table.find('tbody:first').empty().append(rows);
     });
 
@@ -354,7 +342,7 @@ $(document).ready(function () {
 
 //매출 내역 정렬
 $(document).ready(function () {
-	const originalRows = $('.salesSortable').closest('table').find('tbody:first > tr').toArray();
+	let originalRows = $('#paymTbody').closest('table').find('tbody:first > tr').toArray();
 	
     $('.salesSortable').click(function () {
         const table = $(this).closest('table');
@@ -367,6 +355,7 @@ $(document).ready(function () {
         } else if ($(this).hasClass('desc')) {
             $(this).removeClass('desc');
             $(this).addClass('reset');
+            originalRows = $('#paymTbody').find('tr').toArray().sort(comparator(0));
             rows = originalRows;
         }else{
 			$(this).addClass('asc');
@@ -411,6 +400,15 @@ $(document).ready(function () {
     }
 });
 
+function comparator(index) {
+    return function (a, b) {
+        const valA = $(a).find('td').eq(index).text();
+        const valB = $(b).find('td').eq(index).text();
+         
+        return isNaN(valA) || isNaN(valB) ? valA.localeCompare(valB) : valA - valB;
+    };
+}
+
 /* 매출전표 검색 모달창 */
 const erpModal = $('#erpModal');
 $('#paymCodeFide').on('click', () => {
@@ -427,15 +425,15 @@ $('#searchSalesBnt').on('click', () => {
 	const salesList = $('#tbody');
 	const salesItem = $('#sales-item');
 	
-	const formData = {
-		startDate: $('#startDate').val().replace(/\//g, '-'),
-		endDate: $('#endDate').val().replace(/\//g, '-'),
+	const modelData = {
+		startDate: $('#startDate3').val().replace(/\//g, '-'),
+		endDate: $('#endDate3').val().replace(/\//g, '-'),
 		code: $('.salesType').val(),
-		paymentId: $('.paymName').val(),
-		orderId: $('.orderCode').val(),
-		uname:$('.userName').val()		
+		paymentId: $('#modalSalesCode').val(),
+		orderId: $('#modelCode').val(),
+		uname:$('#modelName').val()		
 	};
-	
+	console.log("데이터확인: ", modelData);
 	const getSalesListUrl = '/erp/salesSearch';
 	
 	fetch(getSalesListUrl, {
@@ -443,7 +441,7 @@ $('#searchSalesBnt').on('click', () => {
 		 headers: {
     'Content-Type': 'application/json',
   },
-		body: JSON.stringify(formData),
+		body: JSON.stringify(modelData),
 	})
 	.then((response) => response.json())
 	.then((data) => {
@@ -466,7 +464,12 @@ $('#searchSalesBnt').on('click', () => {
 				rownum++;
 			})
 		} else {
-			alert(data.salesSearch)
+			Swal.fire({
+			  title: "Error",
+			  text: data.salesSearch,
+			  icon: "error",
+			  confirmButtonText: "확인",
+			});
 		}
 	})
 })
@@ -502,7 +505,12 @@ $(document).on('click', '#tbody tr', function () {
 
 $('#selectSalesCodeBnt').on('click', () => {
 	if($('#modalSalesCode').val() ==="" || $('#modalSalesCode').val() === null) {
-		alert("매출 전표를 선택해주세요");
+		Swal.fire({
+			  title: "경고!!",
+			  text: "매출 전표를 선택해주세요.",
+			  icon: "warning",
+			  confirmButtonText: "확인",
+			});
 	} else {
 		$('#salesCode').val($('#modalSalesCode').val());
 		resetModal();

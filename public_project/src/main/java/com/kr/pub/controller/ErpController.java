@@ -106,6 +106,9 @@ public class ErpController {
 	@PostMapping("/salesSearch")
 	@ResponseBody
 	public Map<String, Object> salesSearch(@RequestBody ErpDTO search, HttpSession session) throws Exception{
+		
+		long tick = System.nanoTime();
+		
 		Map<String, Object> salesSearch = new HashMap<>();
 		
 		List<Map<String, Object>> salesResult = erpService.salesSearch(search);
@@ -114,12 +117,17 @@ public class ErpController {
 		
 		salesSearch.put("salesSearch", salesResult);
 		
-		return salesSearch;
+		tick = System.nanoTime() - tick;
+	     System.out.println("Controller 조회 조건 시간 확인 = " + tick);
+	     
+	     return salesSearch;
 	}
 	
 	//매출 내역, 주문 내역
 	@GetMapping("/sales")
 	public String sales(Model model) throws Exception {
+		
+		long tick = System.nanoTime();
 		
 		List<Map<String, Object>> paymentList = erpService.salesList();
 		List<Map<String, Object>> orderList = erpService.orderList();
@@ -127,6 +135,8 @@ public class ErpController {
 		model.addAttribute("sales", paymentList);
 		model.addAttribute("order", orderList);
 
+		tick = System.nanoTime() - tick;
+	     System.out.println("Controller 리스트 시간 확인 = " + tick);
 		return "/reference/salesLayout";
 	}
 	
@@ -165,7 +175,6 @@ public class ErpController {
 		
 		model.addAttribute("stock", itemList);
 		model.addAttribute("status", statusList);
-		
 		return "/reference/stockLayout";
 	}
 	

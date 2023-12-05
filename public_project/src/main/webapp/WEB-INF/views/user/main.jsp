@@ -16,7 +16,7 @@
 <script src="/plugins/jquery/jquery.min.js"></script>
 <link rel="stylesheet" href="/css/clientChat.css">
 <script type="text/javascript" src="/mqtt/mqtt.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <body>
 <%-- <input type="hidden" id="userInfo" value="${map.rs}"> --%>

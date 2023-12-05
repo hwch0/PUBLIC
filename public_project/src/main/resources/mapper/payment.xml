@@ -32,29 +32,34 @@
 	
 	<!-- 매출 내역 -->
 	<select id="salesSearch" resultType="java.util.Map">
-	SELECT
-	    p.PAYMENT_ID AS "paymentId",
-	    o.ORDER_ID AS "orderId",
-	    TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') AS "paymentDate",
-	    u.UNAME AS "uname",
-	    cc.TYPE AS "type",
+    select 
+	    "paymentId",
+	    "orderId",
+	    "paymentDate",
+	    "uname",
+	    "type",
 	    oh.PRICE AS "price",
 	    oh.PRICE - (oh.PRICE * 0.10) AS "netProfit"
-	FROM
-	    payment p
-	JOIN
-	    orders o ON p.ORDER_ID = o.ORDER_ID
-	JOIN
-	    users u ON o.USER_ID = u.USER_ID
-	JOIN
-	    order_history oh ON o.ORDER_ID = oh.ORDER_ID
-	JOIN
-	    common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
+		from (
+		   SELECT
+		       p.PAYMENT_ID AS "paymentId",
+		       o.ORDER_ID AS "orderId",
+		       TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') AS "paymentDate",
+		       u.UNAME AS "uname",
+		       cc.TYPE AS "type"
+		   FROM
+		       payment p
+		   JOIN
+		       orders o ON p.ORDER_ID = o.ORDER_ID
+		   JOIN
+		       users u ON o.USER_ID = u.USER_ID
+		   JOIN
+		       common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
 	 WHERE
 	    1=1
 	    <!-- startDate, endDate -->
 	    <if test="startDate != null and startDate != ''">
-	       AND p.PAYMENT_DATE BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+	       AND p.PAYMENT_DATE BETWEEN TO_DATE(#{startDate} || ' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#{endDate} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
 	    </if>
 	   	<!-- paymName -->
 	   	<if test="paymentId != null and paymentId != '' ">
@@ -65,49 +70,51 @@
 	   		AND o.ORDER_ID = #{orderId}
 	   	</if>
 	   	<!-- unme -->
-	   	 <if test="unme != null and unme != '' ">
-	   	 	AND u.UNAME LIKE '%' || #{unme} || '%'
+	   	 <if test="uname != null and uname != '' ">
+	   	 	AND u.UNAME LIKE '%' || #{uname} || '%'
 	   	 </if>	   	 
 	   	 <!-- code -->
-		<if test="code == 'PT001'">
-		    AND cc.CODE = 'PT001'
-		</if>
-		<if test="code == 'PT002'">
-		    AND cc.CODE = 'PT002'
-		</if>
-		<if test="code == 'PT003'">
-		    AND cc.CODE = 'PT003'
-		</if>
-		<if test="code == 'PT004'">
-		    AND cc.CODE = 'PT004'
-		</if>
-	ORDER BY
-	    p.PAYMENT_DATE DESC, p.PAYMENT_ID DESC
+      <if test="code != null and code != ''">
+          AND cc.CODE = #{code}
+      </if>
+		) m           
+		   inner join order_history oh ON oh.ORDER_ID = "orderId" 
+		   ORDER BY
+		       "paymentDate" DESC, "paymentId" DESC
 	</select>
 
-
 	<select id="salesList" resultType="java.util.Map">
-		SELECT
-		    p.PAYMENT_ID AS "paymentId",
-		    o.ORDER_ID AS "orderId",
-		    TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') AS "paymentDate",
-		    u.UNAME AS "uname",
-		    cc.TYPE AS "type",
+		SELECT 
+		    "paymentId",
+		    "orderId",
+		    "paymentDate",
+		    "uname",
+		    "type",
 		    oh.PRICE AS "price",
 		    oh.PRICE - (oh.PRICE * 0.10) AS "netProfit"
-		FROM
-		    payment p
-		JOIN
-		    orders o ON p.ORDER_ID = o.ORDER_ID
-		JOIN
-		    users u ON o.USER_ID = u.USER_ID
-		JOIN
-		    order_history oh ON o.ORDER_ID = oh.ORDER_ID
-		JOIN
-		    common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
-		 WHERE
-	   	 	to_char(p.PAYMENT_DATE,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
-		ORDER BY p.PAYMENT_ID DESC
+		FROM (
+		    SELECT
+		        p.PAYMENT_ID AS "paymentId",
+		        o.ORDER_ID AS "orderId",
+		        TO_CHAR(p.PAYMENT_DATE, 'YYYY-MM-DD') AS "paymentDate",
+		        u.UNAME AS "uname",
+		        cc.TYPE AS "type"
+		    FROM
+		        payment p
+		    JOIN
+		        orders o ON p.ORDER_ID = o.ORDER_ID
+		    JOIN
+		        users u ON o.USER_ID = u.USER_ID
+		    JOIN
+		        common_code cc ON p.PAYMENT_TYPE_CODE = cc.CODE
+		    WHERE
+		        1=1
+		        AND p.PAYMENT_DATE BETWEEN TRUNC(sysdate) AND TRUNC(sysdate) + (1 - 1/24/60/60)
+		) m           
+		INNER JOIN 
+		    order_history oh ON oh.ORDER_ID = m."orderId" 
+		ORDER BY
+		    "paymentDate" DESC, "paymentId" DESC
 	</select>
 
 </mapper>

@@ -314,5 +314,20 @@ public class UserService {
 	        itemDAO.updateItemStock(orderHistory);
 	    }
 	}
+	
+	public void failLogin(String username) {
+        userDAO.failLogin(username);
+    }
 
+    public void updateRole(String username) {
+    	String userRole = userDAO.getUserRole(username);
+    	System.out.println("사용자 롤 " + userRole);
+    	int loginFailures = userDAO.getLoginFailures(username);
+
+        if (loginFailures >= 3) {
+        	if(userRole.equals("RT001")) {
+        		userDAO.updateRole(username);
+        	}
+        }
+    }
 }

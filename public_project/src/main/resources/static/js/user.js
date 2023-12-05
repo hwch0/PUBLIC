@@ -48,6 +48,10 @@ function navBtn(element) {
             $("#chattingBtn").removeClass('on');
             $("#orderBtn22").removeClass('on');
             $('.addCart ul li').remove();
+            $('.addCart').addClass('empty');
+            $('.menu-total-price').css('display', 'none');
+            $('.scroll').css('display', 'none');
+            $('.menu-total-price em').text('0');
         } else if (thisNavLi.attr('id') === 'chattingBtn') {
 			$('.cont-modal-wrap').hide();
             $(".cont-bot-wrap, .chat-wrap").css('display', 'block');
@@ -57,6 +61,10 @@ function navBtn(element) {
             $('#chattingBtn').toggleClass('on');
             $("#orderBtn22").removeClass('on');
             $('.addCart ul li').remove();
+            $('.addCart').addClass('empty');
+            $('.menu-total-price em').text('0');
+             $('.menu-total-price').css('display', 'none');
+             $('.scroll').css('display', 'none');
             removeTimeAll();
         }
 
@@ -126,7 +134,12 @@ function updateRemainingTime(userIdValue) {
               remainingTime = remainingTime - Math.floor(durationTime / 1000);
               updateCountdown(remainingTime);
           } else {
-             swal("Error","잔여시간이 없습니다.",'success');
+ 			Swal.fire({
+			  title: "Error!",
+			  text: "잔여시간이 없습니다.",
+			  icon: "error",
+			  confirmButtonText: "확인",
+			});
                  location.href = "/user";
           } 
       })
@@ -193,7 +206,7 @@ window.onload = function() {
                $("#chatList").append(
                   `<li class="you">
                <div class="entete">
-                  <h2>${chat.sender}</h2>
+                  <h2>카운터</h2>
                   </div>
                   <div class="message-wrap">
                     <div class="triangle"></div>
@@ -389,7 +402,12 @@ function orderBtn(){
         $(".modal-payment").show();
         $(".modal-paymentList").show();
     } else {
-		swal("Error","장바구니가 비어있습니다.",'warning');
+		Swal.fire({
+		  title: "Error",
+		  text: "장바구니가 비어있습니다.",
+		  icon: "error",
+		  confirmButtonText: "확인",
+		});
     }
 }
 
@@ -423,7 +441,7 @@ function order() {
     $('.addCart ul li').each(function () {
         const itemId = $(this).find('.itemId').text(); 
         const quantity = $(this).find('.food-option .optionNum').data('option-num');
-        const itemPrice = $(this).find('.food-price').text();
+        const itemPrice = $(this).find('.food-price.off').text();
         const itemTotalPrice = itemPrice * quantity;
 
         cartItems.push({ itemId: itemId, quantity: quantity, price: itemTotalPrice });
@@ -442,7 +460,12 @@ function order() {
         data: JSON.stringify(param),
         success: function(response) {
             if (response.rs == 'true') {
-                swal("Success!","주문이 정상적으로 처리되었습니다.",'success');
+        Swal.fire({
+            title: "Success!",
+            text: "주문이 정상적으로 처리되었습니다.",
+            icon: "success",
+            confirmButtonText: "확인",
+        });
                 $('.addCart ul').empty();
                 $(".modal-payment").hide();
             $(".modal-order").hide();
@@ -453,7 +476,12 @@ function order() {
                     receiver: "admin"
                 }));
             } else {
-                swal("Error","주문이 정삭적으로 처리되지 않았습니다.",'warning');
+        Swal.fire({
+            title: "Error!",
+            text: "주문이 정삭적으로 처리되지 않았습니다.",
+            icon: "error",
+            confirmButtonText: "확인",
+        });
             }
         },
         error: function(error) {
@@ -584,10 +612,12 @@ function recharge() {
                     type: "CHARGE",
                     receiver: "admin"
                 }));
-                swal({
-				  title: "Success!",
-				  text: "주문이 정상적으로 처리되었습니다.",
+
+		    Swal.fire({
+				  title: "충전이 완료 되었습니다!",
+				  text: "",
 				  icon: "success",
+				  confirmButtonText: "확인",
 				}).then((value) => {
 				  if (value) {
 				    window.location.reload();
@@ -595,7 +625,12 @@ function recharge() {
 				});
                  
             } else {
-                swal("Error","주문이 정상적으로 처리되었습니다.",'warring');
+		    Swal.fire({
+				  title: "충전 중 오류가 발생했습니다. ",
+				  text: "관리자에게 문의해 주세요.",
+				  icon: "error",
+				  confirmButtonText: "확인",
+				});
             }
         },
         error: function(error) {

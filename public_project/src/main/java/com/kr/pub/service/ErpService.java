@@ -78,7 +78,7 @@ public class ErpService {
 		List<Map<String, Object>> orderList = orderDAO.erpOrderSearch(params);
 		
 		indexList(orderList);
-		System.out.println("서비스 확인: " + params);
+
 		return orderList;
 	}
 	
@@ -94,28 +94,33 @@ public class ErpService {
 	
 	//매출 내역 조회
 	public List<Map<String, Object>> salesSearch(ErpDTO search) throws Exception{
+		
+		long tick = System.nanoTime();
 		Map<String, Object> params = new HashMap<>();
 		
 		params.put("startDate", search.getStartDate());
 		params.put("endDate", search.getEndDate());
 		params.put("paymentId", search.getPaymentId());
 		params.put("orderId", search.getOrderId());
-		params.put("unme", search.getUnme());
+		params.put("uname", search.getUname());
 		params.put("code", search.getCode());
-		
+		System.out.println("데이터 확인: " + params);
 		List<Map<String, Object>> salesList = paymentDAO.salesSearch(params);
-		System.out.println("서비스 확인1: " + params);
-		indexList(salesList);
 		
+		tick = System.nanoTime() - tick;
+	    System.out.println("Service 조회 내역 시간 확인 = " + tick);
+		indexList(salesList);
+			      
 		return salesList;
 	}
 	
 	//매출 내역
 	public List<Map<String, Object>> salesList() throws Exception{
-		
+		long tick = System.nanoTime();
 		
 		List<Map<String, Object>> paymentList = paymentDAO.salesList();
-
+		tick = System.nanoTime() - tick;
+	    System.out.println("Service 리스트 시간 확인 = " + tick);
 		indexList(paymentList);
 		
 		return paymentList;
@@ -135,8 +140,6 @@ public class ErpService {
         
 		indexList(statusList);
 		
-
-		System.out.println("서비스 확인1 : " + params);
             return statusList;      
     }
 	

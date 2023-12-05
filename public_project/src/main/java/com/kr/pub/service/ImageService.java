@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +49,80 @@ public class ImageService {
 		return true;
 	}
 	
+	public Map<String, Object> insertImage2(ImageDTO image) {
+		imageDAO.insertImage(image);
+		
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>" + image.getImgId());
+		
+		MenuDTO menu = MenuDTO.builder()
+						.itemId(image.getItemId())
+						.imgId(image.getImgId())
+						.build();
+		menuDAO.updateMenu(menu);
+		return menuDAO.getMenu(image.getItemId());
+	}
+	
 	public ImageDTO imageProcess(MultipartHttpServletRequest multipartRequests) throws IOException {
 		CURR_IMAGE_REPO_PATH  = (String) servletContext.getAttribute("newPath");
 		ImageDTO newFile = new ImageDTO();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy\\MM\\dd");
         String today = dateFormat.format(new Date());
         
+            //MultipartFile mFile = multipartRequests.getFile("menuImage");
             MultipartFile mFile = multipartRequests.getFile("menuImage");
+            String originalFileName = mFile.getOriginalFilename(); // 파일명.jpg
+            
+            String fileExtension = "";
+            int lastDotIndex = originalFileName.lastIndexOf(".");
+            if (lastDotIndex > 0) {
+                fileExtension = originalFileName.substring(lastDotIndex + 1);
+            }
+            
+            String contentType = "image/" + fileExtension;
+
+            if (mFile.getSize() != 0) {
+                String uuid = UUID.randomUUID().toString();
+                String savePath = CURR_IMAGE_REPO_PATH;
+                // String savePath = CURR_IMAGE_REPO_PATH + "\\" + today;
+                String saveFileName = uuid;
+                
+                File file = new File(savePath, saveFileName);
+                
+                newFile = ImageDTO.builder()
+                		.imgNameOrg(originalFileName)
+                		//.imgNameReal("\\" + today+ "\\" +saveFileName)
+                		.imgNameReal(saveFileName)
+                		.length(mFile.getSize())
+                		.contentType(contentType)
+                		.build();
+                		
+
+                if (!file.exists()) {
+                    if (file.getParentFile().mkdirs()) {
+                        file.createNewFile();
+                    }
+                }
+                
+                System.out.println("originalFileName" + " : " + originalFileName);
+                System.out.println("fileNameOrg" + " : " + originalFileName);
+                System.out.println("fileNameReal" + " : " + saveFileName);
+                System.out.println("length" + " : " + file.length());
+                System.out.println("contentType " + fileExtension);
+                System.out.println();
+                mFile.transferTo(file);
+            }
+            
+        	return newFile;
+	}
+	
+	public ImageDTO imageProcess(MultipartFile fileData) throws IOException {
+		CURR_IMAGE_REPO_PATH  = (String) servletContext.getAttribute("newPath");
+		ImageDTO newFile = new ImageDTO();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy\\MM\\dd");
+        String today = dateFormat.format(new Date());
+        
+            //MultipartFile mFile = multipartRequests.getFile("menuImage");
+            MultipartFile mFile = fileData;
             String originalFileName = mFile.getOriginalFilename(); // 파일명.jpg
             
             String fileExtension = "";

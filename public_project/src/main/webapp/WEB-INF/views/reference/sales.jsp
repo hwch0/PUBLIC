@@ -90,7 +90,7 @@
                     <th style="width: 110px;" class="sortable salesSortable" data-sort="회원이름">회원 이름</th>
                     <th style="width: 98px;">구분 상태</th>
                     <th style="width: 121px;" class="amount-cell">매출액</th>
-                    <th style="width: 143px;" class="amount-cell">순이익</th>
+                    <th style="width: 143px;" class="amount-cell">순매출액</th>
                 </thead>
 
                 <tbody class="paymTbody paymScroll" id="paymTbody" varStatus="loop">
@@ -102,17 +102,7 @@
                    			<td>${paym['orderId']}</td>
                    			<td>${paym['paymentDate']}</td>
                    			<td>${paym['uname']}</td>
-                   			<c:choose>
-					            <c:when test="${paym['type'] == 'PC이용'}">
-					                <td style="color: #87CEEB">${paym['type']}</td>
-					            </c:when>
-					            <c:when test="${paym['type'] == '메뉴주문'}">
-					                <td style="color: #70594d">${paym['type']}</td>
-					            </c:when>
-					            <c:otherwise>
-					                <td style="color: black">${paym['type']}</td>
-					            </c:otherwise>
-					        </c:choose>
+                   			<td class="paymType ${paym['type']}">${paym['type']}</td>
                    			<td>₩<fmt:formatNumber value="${paym['price']}" /></td>
                    			<td>₩<fmt:formatNumber value="${paym['netProfit']}" /></td>
                    		</tr>
@@ -121,12 +111,10 @@
                  
    				<tbody class="total-row" style="background-color: #FFDCDC;">
 				      <tr>
-			            <td style="width: 641px; font-weight: bold; text-align: center;">합계</td>
-			            <td style="width: 121px; text-align: center;" id="salesTotalPrice">
-			                <span id="salesTotalPrice"></span>
-			            </td>
-			            <td style="width: 144px; text-align: center;" id="netProfitTotalPrices">
-			                ₩<span id="formNetProfitTotalPrices"></span>
+			            <td style="width: 543px; font-weight: bold; text-align: center;">순 매출 합계</td>
+
+			            <td style="width: 364px; text-align: center;" id="netProfitTotalPrices">
+			                <span id="formNetProfitTotalPrices"></span>
 			            </td>
        				 </tr>
 				</tbody> 
@@ -155,7 +143,7 @@
                        <td class="tr_th">매출 일자</td>
 			            <td style="padding:0 10px; text-align: center;" colspan='3' >
 						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
-						        <input type="text" class="form-control" id="startDate" name="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
+						        <input type="text" class="form-control" id="startDate3" name="startDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -164,7 +152,7 @@
 						    <div style="display: inline-block; margin: 0 50px;">~</div>
 						    
 						    <div class="input-group date" style="display: inline-block; vertical-align: middle;">
-						        <input type="text" class="form-control" id="endDate" name="endDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
+						        <input type="text" class="form-control" id="endDate3" name="endDate" readonly style="background-color: #d3d3d3; color: black; font-weight: bold;">
 						        <span class="input-group-addon datepicker-icon" style="display: table-cell;">
 						            <img src="/images/calendar.png" alt="아이콘" style="width: 10px;">
 						        </span>
@@ -176,7 +164,7 @@
                         <td class="tr_th">매출 유형</td>
                         <td style="padding: 0 30px;">
                             <select class="salesType" name="select" style="height:25px; margin-left:0px; width:200px;">
-                                <option selected>전체</option>
+                                <option value="">전체</option>
                                 <option value="PT001">PC이용</option>
                                 <option value="PT002">메뉴주문</option>
                                 <option value="PT003">기타</option>
@@ -194,12 +182,12 @@
                     <tr>
                         <td class="tr_th">주문 전표</td>
                         <td style="padding: 0 30px;">
-                        	<input type="text" class="orderCode" name="orderId">                       	
+                        	<input type="text" class="orderCode" id="modelCode" name="orderId">                       	
                         </td>
 
                         <td class="tr_th">회원 이름</td>
                         <td style="padding: 0 30px;">
-                        	<input type="text" class="userName" name="unme">                       	
+                        	<input type="text" class="userName" id="modelName" name="unme">                       	
                         </td>
                     </tr>
                 </table>

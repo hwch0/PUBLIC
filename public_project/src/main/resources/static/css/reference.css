@@ -962,8 +962,8 @@ span.orderDetail {
 }
 
 .refresh-button:hover {
-    background-color: #e0e0e0; 
-    cursor: pointer;
+    transform: rotate(360deg);
+    transition: transform 1s ease;
 }
 
 /* 조회 버튼 */
@@ -1254,4 +1254,50 @@ span.orderDetail {
 .statusTbody td:nth-child(3):hover {
     white-space: normal;
     max-width: none;
+}
+
+/*paym 색상 변경*/
+.paymType{
+	font-weight: bold;
+}
+
+.paymType.PC이용{
+	color: #87CEEB;
+}
+
+.paymType.메뉴주문{
+	color: #70594d;
+}
+
+.itemStyle{
+	font-weight: bold;
+}
+.itemStyle.양호{
+	color: green;
+}
+.itemStyle.부족{
+	color: #e59c00;
+}
+.itemStyle.품절{
+	color: red;
+}
+
+.statusIncdec{
+	font-weight: bold;
+}
+.statusIncdec.입고{
+	color: blue;
+}
+.statusIncdec.출고{
+	color: red;
+}
+
+.orderStatus{
+	font-weight: bold;
+}
+.orderStatus.판매{
+	color: blue;
+}
+.orderStatus.판매취소{
+	color: red;
 }

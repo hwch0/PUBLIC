@@ -69,16 +69,18 @@ function salesTotals() {
     let totalNetProfit = 0;
 
     const rows = document.querySelectorAll("#paymTbody tr");
+    const fromSalesTotalNetProfit = document.getElementById("formNetProfitTotalPrices");
+
+    
     rows.forEach(function (row) {
 
 		const netProfitElement = row.querySelector("td:nth-child(8)");
-        const netProfitString = netProfitElement ? netProfitElement.innerText.trim().replace("₩", "").replace(",", "") : '-';
+        const netProfitString = netProfitElement ? netProfitElement.textContent.trim().substring(1).replace(",", "") : '-';
         const netProfit = netProfitString !== "-" ? parseFloat(netProfitString) : 0;
 
         totalNetProfit += isNaN(netProfit) ? 0 : netProfit;
     });
     
-    const fromSalesTotalNetProfit = document.getElementById("formNetProfitTotalPrices");
     if(fromSalesTotalNetProfit){
     	fromSalesTotalNetProfit.innerText = totalNetProfit.toLocaleString()+ ' 원';
     }
@@ -152,8 +154,8 @@ function orderSearch(){
 	
 	if(!startDateValue && !endDateValue && orderIdValue === '' && select === '' && selectOrder ===''){			
 		Swal.fire({
-			  title: "경고!!",
-			  text: "조회 조건을 입력 해주세요!!",
+			  title: "조회 조건을 입력 해주세요!!",
+			  text: "",
 			  icon: "warning",
 			  confirmButtonText: "확인",
 			});
@@ -221,8 +223,8 @@ function salesSearch(){
 	
 	if(!startDateValue && !endDateValue && paymentidValue === '' && orderIdValue === '' && unameValue === ''){		
 		Swal.fire({
-			  title: "경고!!",
-			  text: "조회 조건을 입력 해주세요!!",
+			  title: "조회 조건을 입력 해주세요!!",
+			  text: "",
 			  icon: "warning",
 			  confirmButtonText: "확인",
 			});
@@ -506,8 +508,8 @@ $(document).on('click', '#tbody tr', function () {
 $('#selectSalesCodeBnt').on('click', () => {
 	if($('#modalSalesCode').val() ==="" || $('#modalSalesCode').val() === null) {
 		Swal.fire({
-			  title: "경고!!",
-			  text: "매출 전표를 선택해주세요.",
+			  title: "매출 전표를 선택해주세요.",
+			  text: "",
 			  icon: "warning",
 			  confirmButtonText: "확인",
 			});

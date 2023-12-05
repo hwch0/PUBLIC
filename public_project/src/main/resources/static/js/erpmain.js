@@ -49,8 +49,8 @@ $(document).ready(() => {
 
         if (diffInDays > 90) {			
 		Swal.fire({
-			  title: "Error!!",
-			  text: "최대 3개월을 넘어서 검색을 할 수 없습니다.!!",
+			  title: "경고!!",
+			  text: "최대 3개월을 넘어서 검색을 할 수 없습니다!!",
 			  icon: "error",
 			  confirmButtonText: "확인",
 			});

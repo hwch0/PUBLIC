@@ -1,17 +1,14 @@
 // 엑셀 업로드
 function upload() {
-    // SweetAlert를 사용하여 업로드 여부 확인
-    swal({
+    Swal.fire({
         title: "파일 업로드",
         text: "파일을 업로드하시겠습니까?",
         icon: "info",
-        buttons: {
-            cancel: "취소",
-            confirm: "확인",
-        },
-    }).then((willUpload) => {
-        // 사용자가 확인을 선택한 경우
-        if (willUpload) {
+        showCancelButton: true,
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+    }).then((result) => {
+        if (result.isConfirmed) {
             const formData = new FormData(document.getElementById("excelUploadForm"));
 
             $.ajax({
@@ -22,20 +19,17 @@ function upload() {
                 processData: false,
                 success: function (result) {
                     console.log("result 확인1: ", result);
-                    // 성공 시 SweetAlert를 사용하여 알림 표시
                     Swal.fire({
                         title: "성공",
                         text: result.message,
                         icon: "success",
                         confirmButtonText: "확인",
                     }).then((result) => {
-                        // 성공 시 페이지 새로고침
                         if (result.isConfirmed) {
                             location.reload(true);
                         }
                     }).catch((error) => {
                         console.log("error");
-                        // 에러 시 SweetAlert를 사용하여 에러 알림 표시
                         Swal.fire({
                             title: "에러",
                             text: "code: " + error.status + "\n" + "message : " + error.responseText + "\n" + "error: " + error,
@@ -47,8 +41,6 @@ function upload() {
         }
     });
 }
-
-
 
 //품목 코드 리스트 가져오기
 function statusCodeList() {
@@ -272,7 +264,12 @@ function statusInsert(){
 		data: JSON.stringify(param),
 		dataType: "json",
 		success: function(json){
-			swal(json.message,"", "success");
+			Swal.fire({
+			  title: json.message,
+			  text: "",
+			  icon: "success",
+			  confirmButtonText: "확인",
+			});
 			statusModel.dialog("close");
 		},
 	});
@@ -381,8 +378,8 @@ function statusSearch() {
 	
 	if(!startDateValue && !endDateValue && codeValue === '' && selectedStatus === '' && nameValue === ''){
 		Swal.fire({
-			  title: "경고!!",
-			  text: "조회 조건을 입력 해주세요.",
+			  title: "조회 조건을 입력 해주세요.",
+			  text: "",
 			  icon: "warning",
 			  confirmButtonText: "확인",
 			});
@@ -453,8 +450,8 @@ function searchData() {
 	
 	if (!startDateValue && !endDateValue && nameValue === '' && selectValue === '' && stockValue === '') {
 		Swal.fire({
-			  title: "경고!!",
-			  text: "조회 조건을 입력 해주세요.",
+			  title: "조회 조건을 입력 해주세요.",
+			  text: "",
 			  icon: "warning",
 			  confirmButtonText: "확인",
 			});
